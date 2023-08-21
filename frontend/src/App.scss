@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,700;1,300;1,400&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+:root {
+    --primay-color: #ff671d;
+}
+
+
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+
+//Header
+.Header_Navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+
+    .navbar_header {
+        margin: 0 auto;
+    }
+
+    .btn_signIn {
+        align-items: center;
+        margin-right: 60px;
+        justify-content: center;
+    }
+
+    .btn_signIn:hover {
+        span {
+            color: #ff671d;
+        }
+
+        color:#ff671d;
+    }
+
+
+    .btn_signUp {
+        margin-right: 30px;
+        border: 2px solid var(--primay-color);
+        padding: 10px;
+        width: 180px;
+        text-align: center;
+        border-radius: 30px;
+    }
+
+    .btn_signUp:hover {
+        background-color: #333;
+
+        span {
+            color: #fff;
+        }
+    }
+
+    .navbar_header li {
+        margin-right: 20px;
+
+        a {
+            font-weight: 500;
+        }
+    }
+
+    .navbar_header li:hover {
+        background-color: rgba(242, 230, 230, 0.981);
+        border-radius: 20px;
+
+        a {
+            color: var(--primay-color);
+        }
+    }
+
+
+}
+
+//Footer
+.footer {
+    height: fit-content;
+
+    .top_footer {
+        border-top: 1px solid #ccc;
+        height: 300px;
+        padding-top: 30px;
+    }
+
+    .right_footer {
+        justify-content: space-between;
+    }
+
+    .contact_footer>p:hover {
+        cursor: pointer;
+        color: var(--primay-color);
+    }
+
+    .contact_footer>p {
+        color: #595a5b;
+        opacity: 0.7;
+    }
+}
+
+//Button Back to Top
+#btn-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    background-color: var(--primay-color);
+    border-color: transparent;
+}
+
+
+//Buton Back Previous
+.btn_back {
+    font-size: 30px;
+    position: absolute;
+    top: 17px;
+    left: 41px;
+    width: 47px;
+    opacity: 0.7;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn_back:hover {
+    cursor: pointer;
+    color: var(--primay-color);
+}
+
+
+//Validation Input
+.form_input_handle{
+    p {
+
+        font-size:15px;
+        color: #fb035a;
+        margin-top: 10px;
+        text-align: left;
+    }
+
+    p::before {
+        font-size:15px;
+        display: inline;
+        content: "⚠ ";
+    }
+}

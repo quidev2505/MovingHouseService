@@ -1,0 +1,135 @@
+import { Link } from "react-router-dom";
+// import { useSelector,useDispatch } from "react-redux";
+// import { logOut } from "../redux/apiRequest";
+// import { useNavigate } from "react-router-dom";
+// import { createAxios } from "../../createInstance";
+// import { logOutSuccess } from "../../redux/authSlice";
+
+//Icon
+import { FaRegUser } from "react-icons/fa6";
+
+const NavBar = () => {
+  // const user = useSelector((state) => state.auth.login.currentUser);
+  // const dispatch = useDispatch();
+  // // const id = user?._id;
+  // const navigate = useNavigate();
+  // // const accessToken = user?.accessToken;
+  // // let axiosJWT = createAxios(user, dispatch, logOutSuccess);
+
+  // const handleLogout = () => {
+  //   logOut(navigate, dispatch);
+  //   console.log("da nan");
+  // };
+
+  return (
+    <div className="Header_Navbar">
+      <nav
+        className="navbar navbar-expand-lg navbar-light"
+        style={{ padding: "20px 60px", height: "90px", backgroundColor:"#fff" }}
+      >
+        <div className="container-fluid">
+          <a className="navbar-brand" href="#" style={{marginLeft:"29px"}}>
+            <img src="./img/logo_main.png" style={{width:"fit-content", height:"30px"}}/>
+          </a>
+
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0 navbar_header">
+              <li className="nav-item">
+                <a className="nav-link" aria-current="page" href="#">
+                  Trang chủ
+                </a>
+              </li>
+
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle dropdown_header"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Giá dịch vụ
+                </a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Bảng giá chi tiết
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Nhận báo giá
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li className="nav-item">
+                <a className="nav-link" href="#">
+                  Blog
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a className="nav-link" href="#">
+                  Liên hệ
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a className="nav-link" href="#">
+                  (+84)907532754
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="content_right d-flex fw-bold">
+            <div className="btn_signIn d-flex">
+              <FaRegUser></FaRegUser>
+              <span style={{ marginLeft: "10px" }}>
+                <Link
+                  to="/login"
+                  style={{
+                    marginRight: "10px",
+                    textDecoration: "none",
+                    color: "black",
+                  }}
+                >
+                  <span>Đăng nhập</span>
+                </Link>
+              </span>
+            </div>
+            <div className="btn_signUp" style={{cursor:"pointer"}}>
+              <Link
+                to="/register"
+                style={{
+                  marginRight: "10px",
+                  textDecoration: "none",
+                  color: "black",
+                }}
+              >
+                <span>Đăng ký</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  );
+};
+
+export default NavBar;
