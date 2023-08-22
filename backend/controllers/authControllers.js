@@ -8,23 +8,28 @@ const authControllers = {
     //Register
     registerUser: async (req, res) => {
         try {
+            //Check Duplicated Account
+            let checkDuplicated = await User.findOne({ email: req.body.email });
+            if(checkDuplicated){
+                return res.status(404).json("AlreadyUseEmail");
+            }
+
             const salt = await bcrypt.genSalt(10);
             const hashed = await bcrypt.hash(req.body.password, salt);
 
             //Create new user
             const newUser = await new User({
-                username: req.body.username,
+                fullname: req.body.fullname,
                 email: req.body.email,
-                password: hashed,
-                full_name: req.body.full_name,
                 phonenumber: req.body.phonenumber,
-                address: req.body.address
+                password: hashed
             });
 
             //Save to DB
             const user = await newUser.save();
             res.status(200).json(user);
         } catch (err) {
+            console.log(req.body)
             res.status(500).json(err);
         }
     },
@@ -38,7 +43,7 @@ const authControllers = {
             },
             process.env.JWT_ACCESS_KEY,
             {
-                expiresIn: "20s"
+                expiresIn: "10d"
             }
         );
     },
@@ -59,10 +64,10 @@ const authControllers = {
     //Login
     loginUser: async (req, res) => {
         try {
-            const user = await User.findOne({ username: req.body.username })
+            const user = await User.findOne({ email: req.body.email })
 
             if (!user) {
-                return res.status(404).json("Wrong Username !");
+                return res.status(404).json("Wrong Email !");
             }
 
             //Compare password
@@ -105,17 +110,17 @@ const authControllers = {
     requestRefreshToken: async (req, res) => {
         //Take refresh token from user
         const refreshToken = await req.cookies.refreshToken;
-        if(!refreshToken)
+        if (!refreshToken)
             return res.status(401).json("You are not authenticated");
 
         console.log('Mang luc yeu cau refresh token :', arrayRefreshToken)
 
-        if(!arrayRefreshToken.includes(refreshToken)){
+        if (!arrayRefreshToken.includes(refreshToken)) {
             return res.status(401).json("Refresh token is not valid");
         }
 
-        jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user)=>{
-            if(err){
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
+            if (err) {
                 console.log(err)
             }
 
@@ -132,7 +137,7 @@ const authControllers = {
                 sameSite: "strict",
             })
 
-            res.status(200).json({accessToken: newAccessToken})
+            res.status(200).json({ accessToken: newAccessToken })
         })
     },
 

@@ -90,14 +90,14 @@ function Register() {
                             style={{ fontSize: "17px", borderRadius: "3px" }}
                             {...register("fullname", {
                               required: true,
-                              minLength: 12,
+                              minLength: 10,
                             })}
                           />
                           {errors?.fullname?.type === "required" && (
                             <p>Họ và tên không được để trống !</p>
                           )}
                           {errors?.fullname?.type === "minLength" && (
-                            <p>Họ và tên ít nhất 12 kí tự</p>
+                            <p>Họ và tên ít nhất 10 kí tự</p>
                           )}
                         </div>
 

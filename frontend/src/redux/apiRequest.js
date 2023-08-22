@@ -3,6 +3,10 @@ import {
     loginFailed, loginStart, loginSuccess, registerStart, registerSuccess, registerFailed, logOutSuccess
 } from "./authSlice";
 
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+import 'sweetalert2/src/sweetalert2.scss'
+
 import {
     getUserStart,
     getUserSuccess,
@@ -13,9 +17,24 @@ export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
         const res = await axios.post("/v1/auth/login", user);
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Đăng nhập thành công !',
+            showConfirmButton: false,
+            timer: 1000
+        })
         dispatch(loginSuccess(res.data));
         navigate("/");
     } catch (err) {
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: 'Đăng nhập thất bại',
+            text: 'Sai email hoặc mật khẩu',
+            showConfirmButton: false,
+            timer: 1000
+        })
         dispatch(loginFailed());
     }
 }
@@ -23,11 +42,40 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerStart())
     try {
-        await axios.post("/v1/auth/register", user);
-        dispatch(registerSuccess());
-        navigate("/login");
+        await axios.post("/v1/auth/register", user).then(() => {
+            dispatch(registerSuccess());
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Đăng ký tài khoản thành công !',
+                text: 'Hãy tiến hành đăng nhập !',
+                showConfirmButton: false,
+                timer: 1000
+            })
+            navigate("/login");
+        })
     } catch (err) {
         console.log(err)
+        if (err.response.data === 'AlreadyUseEmail') {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Email đã được sử dụng',
+                text: 'Hãy nhập một email mới',
+                showConfirmButton: false,
+                timer: 1000
+            })
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Đăng ký tài khoản thất bại !',
+                text: 'Hãy thử lại sau...',
+                showConfirmButton: false,
+                timer: 1000
+            })
+        }
+
         dispatch(registerFailed());
     }
 }

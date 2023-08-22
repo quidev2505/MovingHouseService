@@ -33,7 +33,7 @@ function Login() {
 
   const onSubmit = (data) => {
     const newUser = {
-      username: data.email,
+      email: data.email,
       password: data.password,
     };
 

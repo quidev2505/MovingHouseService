@@ -1,17 +1,11 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-    username:{
-        type:String,
-        required:true,
-        minlngth: 6,
-        maxlength: 20,
-        unique:true
-    },
-    password:{
-        type:String,
-        required:true,
-        minlength: 6
+    fullname: {
+        type: String,
+        required: true,
+        minlength: 10,
+        maxlength: 30,
     },
     email: {
         type: String,
@@ -20,23 +14,16 @@ const userSchema = new mongoose.Schema({
         maxlength: 50,
         unique: true
     },
-    full_name: {
-        type: String,
-        required: true,
-        minlength: 10,
-        maxlength: 30,
-    },
     phonenumber: {
         type: String,
         required: true,
-        minlength: 6,
-        maxlength: 20,
+        minlength: 10,
+        maxlength: 11,
     },
-    address: {
-        type: String,
-        required: true,
-        minlength: 15,
-        maxlength: 50,
+    password:{
+        type:String,
+        required:true,
+        minlength: 8,
     },
     role:{
         type:String,
