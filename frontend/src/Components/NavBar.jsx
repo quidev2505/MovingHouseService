@@ -18,7 +18,6 @@ const NavBar = () => {
 
   const handleLogout = () => {
     logOut(navigate, dispatch);
-    console.log("da nan");
   };
 
 
@@ -115,11 +114,15 @@ const NavBar = () => {
                   style={{ cursor: "pointer" }}
                 >
                   {/* //Đi đến trang cá nhân */}
-                  <div className="col btn_info_user" style={{ color: "green" }}>
+                  <div
+                    className="col btn_info_user"
+                    style={{ color: "#ff8268" }}
+                  >
                     <FaCircleUser></FaCircleUser>
                   </div>
                   <div style={{ border: "1px solid #ff8268" }}></div>
-                  <div className="col btn_logout" style={{ color: "red" }}>
+                  {/* Đăng xuất */}
+                  <div className="col btn_logout" style={{ color: "red" }} onClick={()=>handleLogout()}>
                     <FiLogOut></FiLogOut>
                   </div>
                 </div>

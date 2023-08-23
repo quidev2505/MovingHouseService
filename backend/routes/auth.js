@@ -15,4 +15,13 @@ router.post("/refresh", authControllers.requestRefreshToken)
 //Log out
 router.post("/logout", middlewareController.verifyToken, authControllers.userLogout)
 
+//Forgot_password
+router.post("/forgotPassword", authControllers.forgotPassword);
+
+//Verify_OTP
+router.post("/verify_otp", authControllers.verifyOTP);
+
+//Change Password
+router.post("/changePassword", authControllers.changePassword);
+
 module.exports = router;

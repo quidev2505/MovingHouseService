@@ -12,12 +12,14 @@ function LineHeader() {
         }}
       >
         Chúng tôi mang đến sự lựa chọn hợp lý nhất cho bạn !
-        <span className='fw-bold'>
-        &nbsp; Dịch vụ dọn nhà
-        chuyên nghiệp hàng đầu.{" "}
+        <span className="fw-bold">
+          &nbsp; Dịch vụ dọn nhà chuyên nghiệp hàng đầu.{" "}
         </span>
-        <Link to="/register" style={{ textDecoration: "none", color: "#ff671d" }}>
-          Đăng ký sử dụng ngay
+        <Link
+          to="/userManage"
+          style={{ textDecoration: "none", color: "#ff671d" }}
+        >
+          Đặt lịch ngay bây giờ !
         </Link>
       </p>
     </div>

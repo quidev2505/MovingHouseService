@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema({
         required:true,
         minlength: 8,
     },
+    otp_code:{
+        type:String,
+        maxLength:4,
+        default:'null'
+    },
     role:{
         type:String,
         default: 'user'

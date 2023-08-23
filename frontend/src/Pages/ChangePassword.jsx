@@ -1,18 +1,27 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { loginUser } from "../redux/apiRequest";
+// import { useDispatch } from "react-redux";
+// import { loginUser } from "../redux/apiRequest";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import BackPrevious from "../Components/BackPrevious";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import axios from "axios";
+
 import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-function Login() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+function ChangePasword() {
+  const nav = useNavigate();
   const [isActive, setIsActive] = useState(true);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    let OTP_USER = JSON.parse(localStorage.getItem("otp_user"));
+    //Get from localstorage
+    if (!OTP_USER) {
+      nav("/forgot_password");
+    }
+  }, []);
 
   useEffect(() => {
     setIsActive(false);
@@ -31,13 +40,39 @@ function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const newUser = {
-      email: data.email,
-      password: data.password,
-    };
+  const onSubmit = async (data) => {
+    let email_local = JSON.parse(localStorage.getItem("otp_user"));
 
-    loginUser(newUser, dispatch, navigate);
+    const email_otp = email_local;
+    const new_password = data.password;
+
+    await axios
+      .post("/v1/auth/changePassword", { email_otp, new_password })
+      .then((data) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Đổi mật khẩu thành công !",
+          text: "Hãy đi đến đăng nhập",
+          showConfirmButton: false,
+          timer: 1700,
+        });
+        console.log(data);
+        nav("/login");
+      })
+      .catch((e) => {
+        console.log(e);
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Đổi mật khẩu thất bại !",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        nav("/");
+      });
+
+    localStorage.removeItem("otp_user");
   };
 
   return (
@@ -58,7 +93,7 @@ function Login() {
                   >
                     <LoadingOverlayComponent status={isActive}>
                       {/* btn back */}
-                      <BackPrevious path="/" />
+                      {/* <BackPrevious path="/" /> */}
                       <div className="card-body p-5 text-center">
                         {/* //Img icon */}
                         <img
@@ -71,30 +106,15 @@ function Login() {
                             marginBottom: "15px",
                           }}
                         />
-                        <div className="form-outline mb-4  form_input_handle">
-                          <input
-                            type="email"
-                            id="email"
-                            className="form-control form-control-lg"
-                            placeholder="Email"
-                            style={{ fontSize: "17px", borderRadius: "3px" }}
-                            {...register("email", {
-                              required: true,
-                              minLength: 5,
-                              pattern:
-                                /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
-                            })}
-                          />
-                          {errors?.email?.type === "required" && (
-                            <p>Email không được để trống !</p>
-                          )}
-                          {errors?.email?.type === "minLength" && (
-                            <p>Email chưa đủ kí tự !</p>
-                          )}
-                          {errors?.email?.type === "pattern" && (
-                            <p>Email chưa đúng định dạng !</p>
-                          )}
-                        </div>
+                        <h3
+                          style={{
+                            textAlign: "center",
+                            marginTop: "5px",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          Nhập vào mật khẩu mới
+                        </h3>
                         <div className="input-group mb-3 form-outline mb-4 form_input_handle">
                           <input
                             type="text"
@@ -140,23 +160,6 @@ function Login() {
                           )}
                         </div>
 
-                        {/* //Quên mật khẩu */}
-                        <div
-                          className="form-check d-flex justify-content-end mb-4"
-                          style={{ color: "#f16622", marginTop: "-10px" }}
-                        >
-                          <Link
-                            to="/forgot_password"
-                            style={{
-                              color: "#f16622",
-                              textDecoration: "none",
-                              userSelect: "none",
-                            }}
-                          >
-                            Quên mật khẩu ?
-                          </Link>
-                        </div>
-
                         <button
                           className="btn btn-lg"
                           type="submit"
@@ -172,47 +175,8 @@ function Login() {
                             fontWeight: "500",
                           }}
                         >
-                          Đăng nhập
+                          Xác nhận
                         </button>
-
-                        <p style={{ color: "#b7c5d6", userSelect: "none" }}>
-                          HOẶC
-                        </p>
-
-                        <button
-                          className="btn btn-lg"
-                          type="submit"
-                          style={{
-                            height: "54px",
-                            width: "100%",
-                            backgroundColor: "#4285f4",
-                            color: "white",
-                            marginTop: "-3px",
-                            borderRadius: "5px",
-                            fontSize: "17px",
-                            marginBottom: "17px",
-                            fontWeight: "500",
-                          }}
-                        >
-                          <i className="fab fa-google me-2" />
-                          Đăng nhập với Google
-                        </button>
-
-                        <p style={{ color: "#9297a7", userSelect: "none" }}>
-                          Đây là lần đầu tiên bạn sử dụng Fastmove ?
-                          <span style={{ color: "#f16622 " }}>
-                            &nbsp;
-                            <Link
-                              to="/register"
-                              style={{
-                                textDecoration: "none",
-                                color: "#f16622 ",
-                              }}
-                            >
-                              Hãy tạo ngay một tài khoản mới.
-                            </Link>
-                          </span>
-                        </p>
                       </div>
                     </LoadingOverlayComponent>
                   </div>
@@ -226,4 +190,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ChangePasword;

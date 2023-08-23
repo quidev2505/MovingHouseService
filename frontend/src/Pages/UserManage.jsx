@@ -5,7 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { getAllUsers } from "../redux/apiRequest";
 // import axios from "axios";
 import { loginSuccess } from "../redux/authSlice";
-import {createAxios} from "../createInstance"
+import { createAxios } from "../createInstance";
+
+//Toast
+import { Toast } from "../Components/ToastColor";
 
 function UserManage() {
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -14,7 +17,7 @@ function UserManage() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let axiosJWT = createAxios(user, dispatch, loginSuccess)
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   // const refreshToken = async () => {
   //   try {
@@ -51,6 +54,11 @@ function UserManage() {
   useEffect(() => {
     //Cố tình viết đường dẫn vào
     if (!user) {
+      Toast.fire({
+        icon: "info",
+        title: "Bạn chưa đăng nhập",
+        text: "Hãy đăng nhập để đặt lịch !",
+      });
       navigate("/login");
     }
 

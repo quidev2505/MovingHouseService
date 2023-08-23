@@ -23,7 +23,7 @@ function Footer() {
               src="./img/moving-truck.png"
               width="100px"
               height="100px"
-            ></img>
+             alt=""></img>
           </div>
           <div>
             <p className="fw-bold" style={{ color: "#6994f4" }}>
@@ -35,7 +35,7 @@ function Footer() {
               <p>Liên hệ hỗ trợ</p>
             </div>
 
-            <img src="./img/route.png" width="100px" height="100px"></img>
+            <img src="./img/route.png" width="100px" height="100px" alt=""></img>
           </div>
           <div>
             <p className="fw-bold" style={{ color: "#6994f4" }}>
@@ -46,7 +46,7 @@ function Footer() {
               <p>Chính Sách Cookie</p>
               <p>Điều Khoản và Điều Kiện</p>
             </div>
-            <img src="./img/moving.png" width="100px" height="100px"></img>
+            <img src="./img/moving.png" width="100px" height="100px" alt=""></img>
           </div>
         </div>
       </div>
@@ -70,6 +70,7 @@ function Footer() {
             width="50px"
             height="50px"
             style={{ marginTop: "10px" }}
+            alt=""
           ></img>
         </p>
       </div>

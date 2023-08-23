@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require("nodemailer");
+const OTP = require('one-time-password')
 
 let arrayRefreshToken = []
 
@@ -10,7 +12,7 @@ const authControllers = {
         try {
             //Check Duplicated Account
             let checkDuplicated = await User.findOne({ email: req.body.email });
-            if(checkDuplicated){
+            if (checkDuplicated) {
                 return res.status(404).json("AlreadyUseEmail");
             }
 
@@ -29,6 +31,7 @@ const authControllers = {
             const user = await newUser.save();
             res.status(200).json(user);
         } catch (err) {
+            console.log('error')
             console.log(req.body)
             res.status(500).json(err);
         }
@@ -88,7 +91,7 @@ const authControllers = {
                 const refreshToken = authControllers.generateRefreshToken(user);
 
                 arrayRefreshToken.push(refreshToken)
-                console.log('mang luc moi dang nhap', arrayRefreshToken)
+                // console.log('mang luc moi dang nhap', arrayRefreshToken)
 
                 res.cookie("refreshToken", refreshToken, {
                     httpOnly: true,
@@ -146,6 +149,100 @@ const authControllers = {
         res.clearCookie("refreshToken");
         arrayRefreshToken = await arrayRefreshToken.filter(token => token !== req.cookies.refreshToken);
         res.status(200).json("Loged out !");
+    },
+
+    //Verify Token OTP
+    verifyOTP: async (req, res) => {
+        let email_otp = req.body.email_input;
+        let otp_input = req.body.otp_input;
+
+        //Get Data from User DB
+        let dataUser = await User.findOne({ email: email_otp });
+        //Get OTP in DB
+        let OTP_DB = dataUser.otp_code;
+
+        if (otp_input !== OTP_DB) {
+            res.status(404).json('Tokenisnotvalid');
+        }
+
+        res.status(200).json('Tokenistrue');
+    },
+
+
+    //ChangePassword
+    changePassword: async (req, res) => {
+        let email_otp = req.body.email_otp;
+        let new_password = req.body.new_password;
+
+        const salt = await bcrypt.genSalt(10);
+        const hashed = await bcrypt.hash(new_password, salt);
+
+        //Get Data from User DB
+        let dataUser = await User.findOne({ email: email_otp });
+
+        //Update New Password
+        if (dataUser) {
+            await User.findByIdAndUpdate(dataUser._id, { password: hashed }).then((data) => {
+                res.status(200).json('Successful Change Password !')
+
+            }).catch((e) => {
+                res.status(504).json('Change Password Fail !')
+    
+            })
+        }
+
+    },
+
+    //Forgot password
+    forgotPassword: async (req, res) => {
+        let email_otp = req.body.email_input;
+
+        //Get _id from User DB
+        let get_id = await User.findOne({ email: email_otp });
+
+        //Generator OTP
+        // A base32-encoded key.
+        const dummyKey = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+
+        // Derive a 6-digit, time-based token from 'dummyKey'.
+        const token = OTP.generate(dummyKey);
+
+        //Update OTP into DB User
+        if (get_id) {
+            await User.findByIdAndUpdate(get_id._id, { otp_code: token });
+        }
+
+        //Check Email is already register
+        let checkExistEmailRegister = await User.findOne({ email: email_otp });
+        if (checkExistEmailRegister) {
+            //Nodemailer - Send email !
+            const transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: "quidev2505@gmail.com",
+                    pass: process.env.PASS_GGMAIL
+                }
+            });
+
+            const mailOptions = {
+                from: "quidev2505@gmail.com",
+                to: `${email_otp}`,
+                subject: " 🚚 [FastMove]",
+                html: `Mã OTP 6 số để khôi phục mật khẩu của bạn là : <h1 style="color:red">${token}</h1>`
+            }
+
+            //Nodemailer 
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error)
+                } else {
+                    console.log("Email sent:" + info.response);
+                }
+            })
+            res.status(200).json('Send Email Successfully !');
+        } else {
+            res.status(404).json('NotRegisterEmail');
+        }
     }
 }
 

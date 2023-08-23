@@ -7,23 +7,26 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 import 'sweetalert2/src/sweetalert2.scss'
 
+
 import {
     getUserStart,
     getUserSuccess,
     getUserFailed
 } from "./userSlice"
 
+import { Toast } from "../Components/ToastColor";
+
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
+
     try {
         const res = await axios.post("/v1/auth/login", user);
-        Swal.fire({
-            position: 'center',
+        await Toast.fire({
             icon: 'success',
-            title: 'Đăng nhập thành công !',
-            showConfirmButton: false,
-            timer: 1000
+            title: 'Đăng nhập thành công',
+            text: "Hãy đặt đơn hàng đầu tiên đi nào !"
         })
+
         dispatch(loginSuccess(res.data));
         navigate("/");
     } catch (err) {
@@ -97,8 +100,22 @@ export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
 export const logOut = async (navigate, dispatch) => {
     // dispatch(logOutStart());
     // console.log('Token luc logout'+accessToken)
-    navigate("/login")
-    dispatch(logOutSuccess())
+    Swal.fire({
+        title: 'Bạn muốn đăng xuất khỏi tài khoản?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xác nhận'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            navigate("/login")
+            dispatch(logOutSuccess())
+        }
+    })
+
+
+
     // try {
     //     await axiosJWT.post("/v1/auth/logout", id, {
     //         headers: { token: `Bearer ${accessToken}` },
