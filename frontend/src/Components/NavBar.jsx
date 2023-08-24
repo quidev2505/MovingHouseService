@@ -20,7 +20,6 @@ const NavBar = () => {
     logOut(navigate, dispatch);
   };
 
-
   return (
     <div className="Header_Navbar">
       <nav
@@ -55,14 +54,14 @@ const NavBar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 navbar_header">
               <li className="nav-item">
-                <a className="nav-link" aria-current="page" href="#">
+                <Link to="/" className="nav-link">
                   Trang chủ
-                </a>
+                </Link>
               </li>
 
               <li className="nav-item dropdown">
                 <a
-                  className="nav-link dropdown-toggle dropdown_header"
+                  className="nav-link dropdown-toggle dropdown_header giadichvu_dropdown"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -73,12 +72,12 @@ const NavBar = () => {
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
-                    <a className="dropdown-item" href="#">
+                    <a className="dropdown-item giadichvu_item" href="#">
                       Bảng giá chi tiết
                     </a>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
+                    <a className="dropdown-item giadichvu_item" href="#">
                       Nhận báo giá
                     </a>
                   </li>
@@ -114,15 +113,20 @@ const NavBar = () => {
                   style={{ cursor: "pointer" }}
                 >
                   {/* //Đi đến trang cá nhân */}
-                  <div
+                  <Link
+                    to="/userManage"
                     className="col btn_info_user"
-                    style={{ color: "#ff8268" }}
+                    style={{ textDecoration: "none", color: "#ff8268" }}
                   >
                     <FaCircleUser></FaCircleUser>
-                  </div>
+                  </Link>
                   <div style={{ border: "1px solid #ff8268" }}></div>
                   {/* Đăng xuất */}
-                  <div className="col btn_logout" style={{ color: "red" }} onClick={()=>handleLogout()}>
+                  <div
+                    className="col btn_logout"
+                    style={{ color: "red" }}
+                    onClick={() => handleLogout()}
+                  >
                     <FiLogOut></FiLogOut>
                   </div>
                 </div>

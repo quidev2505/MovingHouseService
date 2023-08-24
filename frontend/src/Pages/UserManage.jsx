@@ -13,7 +13,7 @@ import { Toast } from "../Components/ToastColor";
 function UserManage() {
   const user = useSelector((state) => state.auth.login?.currentUser);
 
-  const alluser = useSelector((state) => state.user.users?.allUsers);
+  // const alluser = useSelector((state) => state.user.users?.allUsers);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ function UserManage() {
   return (
     <>
       <h2>Đây là trang quản lý người dùng đã đăng nhập</h2>
-      <div>{alluser && alluser[2].username}</div>
+      
     </>
   );
 }

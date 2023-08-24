@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,700;1,300;1,400&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,700;1,300;1,400&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Roboto+Condensed:ital,wght@0,300;0,700;1,300;1,400&family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 :root {
     --primay-color: #ff671d;
@@ -10,7 +12,7 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Lato', sans-serif;
     // overflow-x:hidden;
 }
 
@@ -22,6 +24,20 @@
     left: 0;
     right: 0;
     z-index: 100;
+
+    .navbar_header li:hover a {
+        color: black !important;
+    }
+
+    .navbar_header li a:hover {
+        color: var(--primay-color) !important;
+    }
+
+    // .dropdown-item:active {
+    //     color: var(--bs-dropdown-link-active-color);
+    //     text-decoration: none;
+    //     background-color: var(--primay-color);
+    // }
 
     .navbar_header {
         margin: 0 auto;

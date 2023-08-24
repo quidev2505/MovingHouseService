@@ -2,11 +2,14 @@ import React from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+
 const Home = () => {
   return (
     <>
       <Header />
-      <div style={{ height: "20000px" }}>
+      <div style={{ height: "fit-content" }}>
         {/* First_service */}
         <div
           className="provide_service row"
@@ -35,7 +38,9 @@ const Home = () => {
                 border: "2px solid #ccc",
                 padding: "10px",
                 borderRadius: "10px",
-                backgroundColor: "black",
+                // background: "rgb(11,6,4)",
+                background:
+                  "radial-gradient(circle, rgba(11,6,4,0.8492647058823529) 33%, rgba(85,81,78,0.9557072829131653) 74%)",
                 width: "570px",
               }}
             >
@@ -149,24 +154,26 @@ const Home = () => {
                   role="tabpanel"
                   aria-labelledby="pills-home-tab"
                 >
-                  <h6>Dịch vụ chuyển nhà - Nội thành</h6>
+                  <h6 style={{ fontSize: "18px", fontWeight: "800" }}>
+                    Dịch vụ chuyển nhà - Nội thành
+                  </h6>
                   <div>
                     <div>
-                      <span>1 tài xế</span>
-                      <br />
-                      <span>1 tài xế</span>
-                      <br />
-                      <span>1 tài xế</span>
-                      <br />
-                      <span>1 tài xế</span>
+                      <ul>
+                        <li>Xe tải: 1 tấn/ 1.5 tấn/ 2 tấn</li>
+                        <li>Ít nhất 2 người bốc vác</li>
+                        <li>Áp dụng trong vòng 60km</li>
+                      </ul>
                     </div>
-                    <button
-                      type="button"
-                      class="btn"
-                      style={{ backgroundColor: "#e16d2a", color: "white" }}
-                    >
-                      Đặt dịch vụ ngay
-                    </button>
+                    <div style={{textAlign:"right"}}>
+                      <button
+                        type="button"
+                        class="btn"
+                        style={{ backgroundColor: "#e16d2a", color: "white" }}
+                      >
+                        Đặt dịch vụ ngay
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -219,7 +226,6 @@ const Home = () => {
             padding: "10px 15px",
             marginTop: "50px",
             justifyContent: "space-between",
-            marginBottom: "10px",
           }}
         >
           <div
@@ -637,7 +643,15 @@ const Home = () => {
           }}
         >
           <div className="container">
-            <h1 style={{ fontSize: "55px" }}>Các loại xe có sẵn</h1>
+            <h1
+              style={{
+                fontSize: "48px",
+                fontWeight: "900",
+                lineHeight: "72px",
+              }}
+            >
+              Các loại xe có sẵn
+            </h1>
             <h5 style={{ marginBottom: "30px" }}>
               Chúng tôi cung cấp nhiều loại xe từ xe bán tải 4×4 đến xe tải 5
               tấn. Bạn có thể lựa chọn loại xe tùy theo nhu cầu của mình.
@@ -653,60 +667,60 @@ const Home = () => {
               >
                 <button
                   class="nav-link active"
-                  id="v-pills-home-tab"
+                  id="v-pills-loai_1-tab"
                   data-bs-toggle="pill"
-                  data-bs-target="#v-pills-home"
+                  data-bs-target="#v-pills-loai_1"
                   type="button"
                   role="tab"
-                  aria-controls="v-pills-home"
+                  aria-controls="v-pills-loai_1"
                   aria-selected="true"
                 >
                   Xe Bán Tải
                 </button>
                 <button
                   class="nav-link"
-                  id="v-pills-profile-tab"
+                  id="v-pills-loai_2-tab"
                   data-bs-toggle="pill"
-                  data-bs-target="#v-pills-profile"
+                  data-bs-target="#v-pills-loai_2"
                   type="button"
                   role="tab"
-                  aria-controls="v-pills-profile"
+                  aria-controls="v-pills-loai_2"
                   aria-selected="false"
                 >
                   Xe Van 500 kg
                 </button>
                 <button
                   class="nav-link"
-                  id="v-pills-disabled-tab"
+                  id="v-pills-loai_3-tab"
                   data-bs-toggle="pill"
-                  data-bs-target="#v-pills-disabled"
+                  data-bs-target="#v-pills-loai_3"
                   type="button"
                   role="tab"
-                  aria-controls="v-pills-disabled"
+                  aria-controls="v-pills-loai_3"
                   aria-selected="false"
                 >
                   Xe Van 1000 kg
                 </button>
                 <button
                   class="nav-link"
-                  id="v-pills-messages-tab"
+                  id="v-pills-loai_4-tab"
                   data-bs-toggle="pill"
-                  data-bs-target="#v-pills-messages"
+                  data-bs-target="#v-pills-loai_4"
                   type="button"
                   role="tab"
-                  aria-controls="v-pills-messages"
+                  aria-controls="v-pills-loai_4"
                   aria-selected="false"
                 >
                   Xe tải 500 kg
                 </button>
                 <button
                   class="nav-link"
-                  id="v-pills-settings-tab"
+                  id="v-pills-loai_5-tab"
                   data-bs-toggle="pill"
-                  data-bs-target="#v-pills-settings"
+                  data-bs-target="#v-pills-loai_5"
                   type="button"
                   role="tab"
-                  aria-controls="v-pills-settings"
+                  aria-controls="v-pills-loai_5"
                   aria-selected="false"
                 >
                   Xe tải 1000 kg
@@ -714,12 +728,12 @@ const Home = () => {
 
                 <button
                   class="nav-link"
-                  id="v-pills-settings-tab"
+                  id="v-pills-loai_6-tab"
                   data-bs-toggle="pill"
-                  data-bs-target="#v-pills-settings"
+                  data-bs-target="#v-pills-loai_6"
                   type="button"
                   role="tab"
-                  aria-controls="v-pills-settings"
+                  aria-controls="v-pills-loai_6"
                   aria-selected="false"
                 >
                   Xe tải 1500 kg
@@ -727,12 +741,12 @@ const Home = () => {
 
                 <button
                   class="nav-link"
-                  id="v-pills-settings-tab"
+                  id="v-pills-loai_7-tab"
                   data-bs-toggle="pill"
-                  data-bs-target="#v-pills-settings"
+                  data-bs-target="#v-pills-loai_7"
                   type="button"
                   role="tab"
-                  aria-controls="v-pills-settings"
+                  aria-controls="v-pills-loai_7"
                   aria-selected="false"
                 >
                   Xe tải 2000 kg
@@ -740,70 +754,317 @@ const Home = () => {
 
                 <button
                   class="nav-link"
-                  id="v-pills-settings-tab"
+                  id="v-pills-loai_8-tab"
                   data-bs-toggle="pill"
-                  data-bs-target="#v-pills-settings"
+                  data-bs-target="#v-pills-loai_8"
                   type="button"
                   role="tab"
-                  aria-controls="v-pills-settings"
+                  aria-controls="v-pills-loai_8"
                   aria-selected="false"
                 >
                   Xe tải 2500 kg
                 </button>
               </div>
+              {/* Content Info Right */}
               <div
                 class="tab-content"
                 id="v-pills-tabContent"
                 style={{ marginLeft: "80px", width: "100%" }}
               >
                 <div
-                  class="tab-pane fade show active d-flex row"
+                  class="tab-pane fade show active  row"
                   id="v-pills-home"
                   role="tabpanel"
                   aria-labelledby="v-pills-home-tab"
                   tabindex="0"
                 >
-                  <div
-                    className="col"
-                    style={{
-                      backgroundColor: "#fff",
-                      height: "580px",
-                      marginRight: "20px",
-                      borderRadius: "10px",
-                      padding: "25px 15px",
-                    }}
-                  >
-                    <img src="./img/choose_1.png" class="img-fluid" alt="..." />
-                  </div>
-                  <div
-                    className="col"
-                    style={{
-                      backgroundColor: "#fff",
-                      borderRadius: "10px",
-                      padding: "25px 20px",
-                    }}
-                  >
-                    <h4>Xe Bán Tải</h4>
-                    <p>Số khối: 1 CBM</p>
-                    <p>Kích thước: 140cm x 150cm x 50cm</p>
-                    <br></br>
-                    <br></br>
-                    <h4>Tải trọng gần đúng:</h4>
-                    <p>Washing machine (x1)</p>
-                    <p>Washing machine (x1)</p>
-                    <p>Washing machine (x1)</p>
-                    <p>Washing machine (x1)</p>
-                    <p>Washing machine (x1)</p>
+                  <div className="d-flex">
+                    <div
+                      className="col"
+                      style={{
+                        backgroundColor: "#fff",
+                        height: "580px",
+                        marginRight: "20px",
+                        borderRadius: "10px",
+                        padding: "25px 15px",
+                      }}
+                    >
+                      <img
+                        src="./img/choose_1.png"
+                        class="img-fluid"
+                        alt="..."
+                      />
+                    </div>
+                    <div
+                      className="col"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "10px",
+                        padding: "25px 20px",
+                      }}
+                    >
+                      <h4 style={{ fontSize: "20px", fontWeight: "900" }}>
+                        Xe Bán Tải
+                      </h4>
+                      <span style={{ fontSize: "18px", fontWeight: "400" }}>
+                        Trọng lượng tối đa: 500kg
+                      </span>
+                      <p style={{ fontSize: "18px", fontWeight: "400" }}>
+                        Kích cỡ hàng hóa tối đa: 140cm x 150cm x 50cm
+                      </p>
+                      <p style={{ fontSize: "18px", fontWeight: "400" }}>
+                        Phù hợp cho: Giao hàng hóa số lượng nhiều, hàng to cồng
+                        kềnh không thể vừa với cốp xe ô tô nhưng không yêu cầu
+                        sức chứa to như xe tải. Linh hoạt và không bị ảnh hưởng
+                        bởi thời gian cấm tải.
+                      </p>
+                      <br></br>
+                      <p style={{ fontSize: "20px", fontWeight: "900" }}>
+                        Tải trọng gần đúng:
+                      </p>
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Máy giặt (X1){" "}
+                        </span>
+                      </div>
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Tủ nhỏ (X1){" "}
+                        </span>
+                      </div>
+
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Tủ lạnh 1 cửa (X1){" "}
+                        </span>
+                      </div>
+
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Bàn ăn (X1){" "}
+                        </span>
+                      </div>
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Sofa 1 chỗ ngồi (X1){" "}
+                        </span>
+                      </div>
+
+                      <p
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "700",
+                          marginTop: "20px",
+                        }}
+                      >
+                        * Chỉ một trong số món đồ kể trên là phù hợp với chiếc
+                        xe này.
+                      </p>
+                    </div>
                   </div>
                 </div>
+
                 <div
-                  class="tab-pane fade"
+                  class="tab-pane fade row"
                   id="v-pills-profile"
                   role="tabpanel"
                   aria-labelledby="v-pills-profile-tab"
                   tabindex="0"
                 >
-                  ...
+                  <div className="d-flex">
+                    <div
+                      className="col"
+                      style={{
+                        backgroundColor: "#fff",
+                        height: "580px",
+                        marginRight: "20px",
+                        borderRadius: "10px",
+                        padding: "25px 15px",
+                      }}
+                    >
+                      <img
+                        src="./img/choose_1.png"
+                        class="img-fluid"
+                        alt="..."
+                      />
+                    </div>
+                    <div
+                      className="col"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "10px",
+                        padding: "25px 20px",
+                      }}
+                    >
+                      <h4 style={{ fontSize: "20px", fontWeight: "900" }}>
+                        Xe Bán Tải
+                      </h4>
+                      <span style={{ fontSize: "18px", fontWeight: "400" }}>
+                        Trọng lượng tối đa: 500kg
+                      </span>
+                      <p style={{ fontSize: "18px", fontWeight: "400" }}>
+                        Kích cỡ hàng hóa tối đa: 140cm x 150cm x 50cm
+                      </p>
+                      <p style={{ fontSize: "18px", fontWeight: "400" }}>
+                        Phù hợp cho: Giao hàng hóa số lượng nhiều, hàng to cồng
+                        kềnh không thể vừa với cốp xe ô tô nhưng không yêu cầu
+                        sức chứa to như xe tải. Linh hoạt và không bị ảnh hưởng
+                        bởi thời gian cấm tải.
+                      </p>
+                      <br></br>
+                      <p style={{ fontSize: "20px", fontWeight: "900" }}>
+                        Tải trọng gần đúng:
+                      </p>
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Máy giặt (X1){" "}
+                        </span>
+                      </div>
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Tủ nhỏ (X1){" "}
+                        </span>
+                      </div>
+
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Tủ lạnh 1 cửa (X1){" "}
+                        </span>
+                      </div>
+
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Bàn ăn (X1){" "}
+                        </span>
+                      </div>
+                      <div className="d-flex" style={{ alignItems: "center" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleInfo}
+                          style={{ color: "#f47c0b" }}
+                        />
+                        <span
+                          style={{
+                            fontSize: "18px",
+                            fontWeight: "400",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          {" "}
+                          Sofa 1 chỗ ngồi (X1){" "}
+                        </span>
+                      </div>
+
+                      <p
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "700",
+                          marginTop: "20px",
+                        }}
+                      >
+                        * Chỉ một trong số món đồ kể trên là phù hợp với chiếc
+                        xe này.
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div
                   class="tab-pane fade"
