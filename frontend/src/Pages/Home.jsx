@@ -217,8 +217,9 @@ const Home = () => {
           style={{
             backgroundColor: "#f9f9f9",
             padding: "10px 15px",
-            marginTop: "17px",
+            marginTop: "50px",
             justifyContent: "space-between",
+            marginBottom: "10px",
           }}
         >
           <div
@@ -243,6 +244,7 @@ const Home = () => {
                   height: "80px",
                   borderRadius: "50%",
                   backgroundColor: "black",
+                  border: "5px solid #e16c27 ",
                 }}
               ></img>
             </div>
@@ -277,14 +279,16 @@ const Home = () => {
                   height: "80px",
                   borderRadius: "50%",
                   backgroundColor: "black",
-                  objectPosition:"center"
+                  objectPosition: "center",
+                  border: "5px solid #e16c27 ",
                 }}
               ></img>
             </div>
             <div className="item_content col">
-              <h4>02. Thực hiện đặt dịch vụ</h4>
+              <h4>02. Xác nhận đặt dịch vụ</h4>
               <p style={{ marginTop: "-8px", color: "#b7b7b7" }}>
-                Bằng cách xác nhận đặt lịch trực tuyến, bạn sẽ thấy được đơn hàng trong khung điều khiển.
+                Bằng cách xác nhận đặt lịch trực tuyến, bạn sẽ thấy được đơn
+                hàng trong khung điều khiển.
               </p>
             </div>
           </div>
@@ -311,13 +315,15 @@ const Home = () => {
                   height: "80px",
                   borderRadius: "50%",
                   backgroundColor: "black",
+                  border: "5px solid #e16c27 ",
                 }}
               ></img>
             </div>
             <div className="item_content col">
               <h4>03. Thực hiện vận chuyển</h4>
               <p style={{ marginTop: "-8px", color: "#b7b7b7" }}>
-                Với đội ngũ dọn nhà có nhiều năm kinh nghiệm, việc vận chuyển sẽ diễn ra nhanh chóng
+                Với đội ngũ dọn nhà có nhiều năm kinh nghiệm, việc vận chuyển sẽ
+                diễn ra nhanh chóng
               </p>
             </div>
           </div>
@@ -344,19 +350,493 @@ const Home = () => {
                   height: "80px",
                   borderRadius: "50%",
                   backgroundColor: "black",
+                  border: "5px solid #e16c27 ",
                 }}
               ></img>
             </div>
             <div className="item_content col">
               <h4>04. Thanh toán và nghiệm thu</h4>
               <p style={{ marginTop: "-8px", color: "#b7b7b7" }}>
-                Thực hiện thanh toán toàn bộ phí dịch vụ và đền bù thiệt hại nếu có.
+                Thực hiện thanh toán toàn bộ phí dịch vụ và đền bù thiệt hại nếu
+                có.
               </p>
             </div>
           </div>
         </div>
 
         {/* End Second Service */}
+
+        {/* Start Third Service */}
+        <div
+          className="why_choose_us flex"
+          style={{ backgroundColor: "#eeeeee", height: "650px" }}
+        >
+          <div
+            className="container d-flex"
+            style={{
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <h3>Tại sao lại chọn dịch vụ chúng tôi ?</h3>
+            <p style={{ margin: "30px 0 50px 0" }}>
+              Rất đơn giản ! Chỉ cần làm theo các bước sau để sẵn sàng cho kế
+              hoạch vận chuyển !
+            </p>
+            <div className="row" style={{ width: "77%" }}>
+              <div
+                className="col d-flex"
+                style={{
+                  width: "323px",
+                  height: "386px",
+                  flexDirection: "column",
+                  backgroundColor: "#fff",
+                  alignItems: "center",
+                  padding: "40px 20px",
+                  borderTop: "5px solid #e16c27",
+                  marginRight: "30px",
+                }}
+              >
+                <img
+                  src="./img/procurement.png"
+                  class="img-thumbnail"
+                  alt="..."
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    borderRadius: "50%",
+                    backgroundColor: "#e16c27 ",
+                  }}
+                ></img>
+
+                <h5 style={{ marginTop: "15px", marginBottom: "25px" }}>
+                  Báo giá tức thì
+                </h5>
+
+                <p style={{ textAlign: "center" }}>
+                  Mức giá mà bạn thấy trên giá của chúng tôi mà bạn sẽ phải trả
+                  vì đã bao gồm tất cả các khoản phí. Sẽ chỉ phải trả thêm phí
+                  nếu đồ đạc của bạn không vừa với xe tải như đã đặt hàng và
+                  phải thực hiện chuyến đi thứ hai.
+                </p>
+              </div>
+
+              <div
+                className="col d-flex"
+                style={{
+                  width: "323px",
+                  height: "386px",
+                  flexDirection: "column",
+                  backgroundColor: "#fff",
+                  alignItems: "center",
+                  padding: "40px 20px",
+                  borderTop: "5px solid #e16c27",
+                  marginRight: "30px",
+                }}
+              >
+                <img
+                  src="./img/group.png"
+                  class="img-thumbnail"
+                  alt="..."
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    borderRadius: "50%",
+                    backgroundColor: "#e16c27 ",
+                  }}
+                ></img>
+
+                <h5 style={{ marginTop: "15px", marginBottom: "25px" }}>
+                  Đội ngũ giàu kinh nghiệm
+                </h5>
+
+                <p style={{ textAlign: "center" }}>
+                  Chúng tôi quan tâm đến sự tỉ mỉ và chính xác trong công việc.
+                  Đây là một nỗ lực mới khi công nghệ ngày càng phát triển và
+                  nhằm đảm bảo nhu cầu của khách hàng.
+                </p>
+              </div>
+
+              <div
+                className="col d-flex"
+                style={{
+                  width: "323px",
+                  height: "386px",
+                  flexDirection: "column",
+                  backgroundColor: "#fff",
+                  alignItems: "center",
+                  padding: "40px 20px",
+                  borderTop: "5px solid #e16c27",
+                }}
+              >
+                <img
+                  src="./img/tech-support.png"
+                  class="img-thumbnail"
+                  alt="..."
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    borderRadius: "50%",
+                    backgroundColor: "#e16c27 ",
+                  }}
+                ></img>
+
+                <h5 style={{ marginTop: "15px", marginBottom: "25px" }}>
+                  Dịch vụ chuyên nghiệp
+                </h5>
+
+                <p style={{ textAlign: "center" }}>
+                  Chúng tôi sẽ cố gắng hết sức để cung cấp dịch vụ chuyên nghiệp
+                  và chất lượng cho tất cả khách hàng. Đảm bảo rằng chúng tôi sẽ
+                  đáp ứng mọi yêu cầu của khách hàng. Bạn chắc chắn sẽ không bao
+                  giờ hối tiếc khi trải nghiệm với chúng tôi.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* End Third Service */}
+
+        {/* Start four Service */}
+        <div
+          className="reply_customer container"
+          style={{ height: "570px", padding: "100px", textAlign: "center" }}
+        >
+          <h1 style={{ marginBottom: "60px" }}>Phản hồi từ phía khách hàng</h1>
+          <div>
+            <div
+              id="carouselExampleIndicators"
+              className="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div className="carousel-inner">
+                <div className="carousel-item active">
+                  <img
+                    src="./img/choose_2.png"
+                    alt="..."
+                    style={{
+                      borderRadius: "50%",
+                      width: "50px",
+                      height: "50px",
+                      border: "2px solid #e16c27",
+                      marginBottom: "50px",
+                      boxShadow: "5px 1px 1px #ccc",
+                    }}
+                  />
+
+                  <p
+                    style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
+                  >
+                    "Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Unde officiis iusto ab, a similique ipsam voluptatem enim,
+                    tempora iure nostrum, quod nemo corrupti earum? Atque
+                    praesentium cumque tempore ab hic?""
+                  </p>
+
+                  <p style={{ marginTop: "50px", fontWeight: "bold" }}>
+                    Người dùng kkk
+                  </p>
+                </div>
+
+                <div className="carousel-item active">
+                  <img
+                    src="./img/choose_2.png"
+                    alt="..."
+                    style={{
+                      borderRadius: "50%",
+                      width: "50px",
+                      height: "50px",
+                      border: "2px solid #e16c27",
+                      marginBottom: "50px",
+                      boxShadow: "5px 1px 1px #ccc",
+                    }}
+                  />
+
+                  <p
+                    style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
+                  >
+                    "Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Unde officiis iusto ab, a similique ipsam voluptatem enim,
+                    tempora iure nostrum, quod nemo corrupti earum? Atque
+                    praesentium cumque tempore ab hic?""
+                  </p>
+
+                  <p style={{ marginTop: "50px", fontWeight: "bold" }}>
+                    Người dùng kkk
+                  </p>
+                </div>
+
+                <div className="carousel-item active">
+                  <img
+                    src="./img/choose_2.png"
+                    alt="..."
+                    style={{
+                      borderRadius: "50%",
+                      width: "50px",
+                      height: "50px",
+                      border: "2px solid #e16c27",
+                      marginBottom: "50px",
+                      boxShadow: "5px 1px 1px #ccc",
+                    }}
+                  />
+
+                  <p
+                    style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
+                  >
+                    "Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Unde officiis iusto ab, a similique ipsam voluptatem enim,
+                    tempora iure nostrum, quod nemo corrupti earum? Atque
+                    praesentium cumque tempore ab hic?""
+                  </p>
+
+                  <p style={{ marginTop: "50px", fontWeight: "bold" }}>
+                    Người dùng kkk
+                  </p>
+                </div>
+              </div>
+              <button
+                className="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev"
+              >
+                <span
+                  className="carousel-control-prev-icon"
+                  aria-hidden="true"
+                  style={{ backgroundColor: "#e16c27", borderRadius: "50%" }}
+                />
+                <span className="visually-hidden">Previous</span>
+              </button>
+              <button
+                className="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next"
+              >
+                <span
+                  className="carousel-control-next-icon"
+                  aria-hidden="true"
+                  style={{ backgroundColor: "#e16c27", borderRadius: "50%" }}
+                />
+                <span className="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* End Four Service */}
+
+        {/* Start Five Service */}
+        <div
+          className="type_of_vehicle"
+          style={{
+            height: "850px",
+            padding: "80px",
+            backgroundColor: "#f8f9ff ",
+          }}
+        >
+          <div className="container">
+            <h1 style={{ fontSize: "55px" }}>Các loại xe có sẵn</h1>
+            <h5 style={{ marginBottom: "30px" }}>
+              Chúng tôi cung cấp nhiều loại xe từ xe bán tải 4×4 đến xe tải 5
+              tấn. Bạn có thể lựa chọn loại xe tùy theo nhu cầu của mình.
+            </h5>
+
+            {/* Info each vehicle */}
+            <div class="d-flex align-items-start">
+              <div
+                class="nav flex-column nav-pills me-3 tab_trai_type"
+                id="v-pills-tab"
+                role="tablist"
+                aria-orientation="vertical"
+              >
+                <button
+                  class="nav-link active"
+                  id="v-pills-home-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-home"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-home"
+                  aria-selected="true"
+                >
+                  Xe Bán Tải
+                </button>
+                <button
+                  class="nav-link"
+                  id="v-pills-profile-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-profile"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-profile"
+                  aria-selected="false"
+                >
+                  Xe Van 500 kg
+                </button>
+                <button
+                  class="nav-link"
+                  id="v-pills-disabled-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-disabled"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-disabled"
+                  aria-selected="false"
+                >
+                  Xe Van 1000 kg
+                </button>
+                <button
+                  class="nav-link"
+                  id="v-pills-messages-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-messages"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-messages"
+                  aria-selected="false"
+                >
+                  Xe tải 500 kg
+                </button>
+                <button
+                  class="nav-link"
+                  id="v-pills-settings-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-settings"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-settings"
+                  aria-selected="false"
+                >
+                  Xe tải 1000 kg
+                </button>
+
+                <button
+                  class="nav-link"
+                  id="v-pills-settings-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-settings"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-settings"
+                  aria-selected="false"
+                >
+                  Xe tải 1500 kg
+                </button>
+
+                <button
+                  class="nav-link"
+                  id="v-pills-settings-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-settings"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-settings"
+                  aria-selected="false"
+                >
+                  Xe tải 2000 kg
+                </button>
+
+                <button
+                  class="nav-link"
+                  id="v-pills-settings-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-settings"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-settings"
+                  aria-selected="false"
+                >
+                  Xe tải 2500 kg
+                </button>
+              </div>
+              <div
+                class="tab-content"
+                id="v-pills-tabContent"
+                style={{ marginLeft: "80px", width: "100%" }}
+              >
+                <div
+                  class="tab-pane fade show active d-flex row"
+                  id="v-pills-home"
+                  role="tabpanel"
+                  aria-labelledby="v-pills-home-tab"
+                  tabindex="0"
+                >
+                  <div
+                    className="col"
+                    style={{
+                      backgroundColor: "#fff",
+                      height: "580px",
+                      marginRight: "20px",
+                      borderRadius: "10px",
+                      padding: "25px 15px",
+                    }}
+                  >
+                    <img src="./img/choose_1.png" class="img-fluid" alt="..." />
+                  </div>
+                  <div
+                    className="col"
+                    style={{
+                      backgroundColor: "#fff",
+                      borderRadius: "10px",
+                      padding: "25px 20px",
+                    }}
+                  >
+                    <h4>Xe Bán Tải</h4>
+                    <p>Số khối: 1 CBM</p>
+                    <p>Kích thước: 140cm x 150cm x 50cm</p>
+                    <br></br>
+                    <br></br>
+                    <h4>Tải trọng gần đúng:</h4>
+                    <p>Washing machine (x1)</p>
+                    <p>Washing machine (x1)</p>
+                    <p>Washing machine (x1)</p>
+                    <p>Washing machine (x1)</p>
+                    <p>Washing machine (x1)</p>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="v-pills-profile"
+                  role="tabpanel"
+                  aria-labelledby="v-pills-profile-tab"
+                  tabindex="0"
+                >
+                  ...
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="v-pills-disabled"
+                  role="tabpanel"
+                  aria-labelledby="v-pills-disabled-tab"
+                  tabindex="0"
+                >
+                  ...
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="v-pills-messages"
+                  role="tabpanel"
+                  aria-labelledby="v-pills-messages-tab"
+                  tabindex="0"
+                >
+                  ...
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="v-pills-settings"
+                  role="tabpanel"
+                  aria-labelledby="v-pills-settings-tab"
+                  tabindex="0"
+                >
+                  ...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* End Five Service */}
       </div>
       <Footer />
     </>

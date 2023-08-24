@@ -175,7 +175,7 @@
 }
 
 
-.form_otp input{
+.form_otp input {
     width: 50px !important;
     height: 40px;
     border-radius: 5px;
@@ -183,8 +183,8 @@
     margin-left: 5px;
 }
 
-.loginGoogle iframe{
-    margin:0 auto !important;
+.loginGoogle iframe {
+    margin: 0 auto !important;
 }
 
 
@@ -224,6 +224,20 @@
 
 
 // Home
-.nav-pills .nav-link.active{
+.nav-pills .nav-link.active {
     background-color: var(--primay-color) !important;
+}
+
+.tab_trai_type button {
+    width: 256px;
+    height: 64px;
+    margin-bottom: 10px;
+}
+
+.tab_trai_type .nav-link {
+    width: 256px;
+    height: 64px;
+    background-color: #e2e3e8;
+    color: #98999a;
+    font-weight: bold;
 }
