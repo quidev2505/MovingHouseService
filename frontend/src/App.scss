@@ -11,6 +11,7 @@
     padding: 0;
     margin: 0;
     font-family: 'Roboto', sans-serif;
+    // overflow-x:hidden;
 }
 
 
@@ -182,6 +183,10 @@
     margin-left: 5px;
 }
 
+.loginGoogle iframe{
+    margin:0 auto !important;
+}
+
 
 // Notification Color
 .colored-toast.swal2-icon-success {
@@ -214,4 +219,11 @@
 
 .colored-toast .swal2-html-container {
     color: white;
+}
+
+
+
+// Home
+.nav-pills .nav-link.active{
+    background-color: var(--primay-color) !important;
 }

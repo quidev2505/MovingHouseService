@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../redux/apiRequest";
+import { loginUser, loginUserWithGoogle } from "../redux/apiRequest";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -8,11 +8,21 @@ import BackPrevious from "../Components/BackPrevious";
 import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+//Oauth Google
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
+
+// import { useGoogleLogin } from "@react-oauth/google";
+
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(true);
   const [visible, setVisible] = useState(false);
+
+  // const login = useGoogleLogin({
+  //   onSuccess: (tokenResponse) => console.log(tokenResponse),
+  // });
 
   useEffect(() => {
     setIsActive(false);
@@ -139,7 +149,6 @@ function Login() {
                             </p>
                           )}
                         </div>
-
                         {/* //Quên mật khẩu */}
                         <div
                           className="form-check d-flex justify-content-end mb-4"
@@ -156,7 +165,6 @@ function Login() {
                             Quên mật khẩu ?
                           </Link>
                         </div>
-
                         <button
                           className="btn btn-lg"
                           type="submit"
@@ -174,11 +182,10 @@ function Login() {
                         >
                           Đăng nhập
                         </button>
-
                         <p style={{ color: "#b7c5d6", userSelect: "none" }}>
                           HOẶC
                         </p>
-
+{/* 
                         <button
                           className="btn btn-lg"
                           type="submit"
@@ -193,12 +200,42 @@ function Login() {
                             marginBottom: "17px",
                             fontWeight: "500",
                           }}
+                          onClick={() => login()}
                         >
                           <i className="fab fa-google me-2" />
                           Đăng nhập với Google
-                        </button>
+                        </button> */}
 
-                        <p style={{ color: "#9297a7", userSelect: "none" }}>
+                        {/* Login with google */}
+                        <div className="loginGoogle">
+                          <GoogleOAuthProvider clientId="111676382550-rum66le23duruqii92dv781tf40sd0sb.apps.googleusercontent.com">
+                            <GoogleLogin
+                              onSuccess={(credentialResponse) => {
+                                var decoded = jwt_decode(
+                                  credentialResponse.credential
+                                );
+
+                                const newUser = {
+                                  email: decoded.email,
+                                  fullname: decoded.name,
+                                  id: decoded.sub,
+                                  role: "user",
+                                };
+
+                                loginUserWithGoogle(
+                                  newUser,
+                                  dispatch,
+                                  navigate
+                                );
+                              }}
+                              onError={() => {
+                                console.log("Login Failed");
+                              }}
+                            />
+                          </GoogleOAuthProvider>
+                        </div>
+
+                        <p style={{ color: "#9297a7", userSelect: "none", marginTop:"20px" }}>
                           Đây là lần đầu tiên bạn sử dụng Fastmove ?
                           <span style={{ color: "#f16622 " }}>
                             &nbsp;

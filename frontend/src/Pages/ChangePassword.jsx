@@ -21,6 +21,7 @@ function ChangePasword() {
     if (!OTP_USER) {
       nav("/forgot_password");
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

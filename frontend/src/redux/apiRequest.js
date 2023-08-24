@@ -8,6 +8,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
 
 
+
+
 import {
     getUserStart,
     getUserSuccess,
@@ -26,7 +28,7 @@ export const loginUser = async (user, dispatch, navigate) => {
             title: 'Đăng nhập thành công',
             text: "Hãy đặt đơn hàng đầu tiên đi nào !"
         })
-
+        console.log(res.data);
         dispatch(loginSuccess(res.data));
         navigate("/");
     } catch (err) {
@@ -41,6 +43,35 @@ export const loginUser = async (user, dispatch, navigate) => {
         dispatch(loginFailed());
     }
 }
+
+
+export const loginUserWithGoogle = async (user, dispatch, navigate) => {
+    dispatch(loginStart());
+
+    try {
+        const res = await axios.post("/v1/auth/loginWithGoogle", user);
+        await Toast.fire({
+            icon: 'success',
+            title: 'Đăng nhập thành công',
+            text: "Hãy đặt đơn hàng đầu tiên đi nào !"
+        })
+
+        dispatch(loginSuccess(res.data));
+        navigate("/");
+    } catch (err) {
+        console.log(err)
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: 'Đăng nhập thất bại',
+            text: 'Sai email hoặc mật khẩu',
+            showConfirmButton: false,
+            timer: 1000
+        })
+        dispatch(loginFailed());
+    }
+}
+
 
 export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerStart())

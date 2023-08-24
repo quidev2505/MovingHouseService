@@ -109,6 +109,40 @@ const authControllers = {
         }
     },
 
+
+    //Login with google
+    loginWithGoogle: async (req, res) => {
+        const user = req.body
+        const email = user.email;
+        const fullname = user.fullname;
+        const id = user.id;
+        const role = user.role;
+        try {
+            //Tạo Access Token
+            const accessToken = authControllers.generateAccessToken(user);
+
+            //Tạo Refresh Token
+            const refreshToken = authControllers.generateRefreshToken(user);
+
+            arrayRefreshToken.push(refreshToken)
+            // console.log('mang luc moi dang nhap', arrayRefreshToken)
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: false,
+                path: "/",
+                sameSite: "strict",
+            })
+
+
+            res.status(200).json({ email, fullname, id, role, accessToken });
+        }
+        catch (err) {
+            console.log(err)
+            res.status(500).json(err);
+        }
+    },
+
     //Yêu cầu
     requestRefreshToken: async (req, res) => {
         //Take refresh token from user
@@ -187,7 +221,7 @@ const authControllers = {
 
             }).catch((e) => {
                 res.status(504).json('Change Password Fail !')
-    
+
             })
         }
 

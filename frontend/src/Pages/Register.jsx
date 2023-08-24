@@ -201,7 +201,7 @@ function Register() {
                           )}
                         </div>
 
-                        <div style={{ textAlign: "left" }}>
+                        <div style={{ textAlign: "left", marginTop:"30px" }}>
                           Bằng cách nhấp vào Đăng ký bên dưới, bạn đã đọc toàn
                           bộ văn bản và đồng ý với
                           <span style={{ color: "#f16622" }}>
