@@ -19,7 +19,7 @@ const Home = () => {
             className="left-container col-lg-4"
             style={{ position: "absolute", left: "100px", top: "50px" }}
           >
-            <h1 style={{ fontSize: "25px" }}>
+            <h1 style={{ fontSize: "25px", fontWeight:"600" }}>
               Đặt lịch dọn nhà nhanh chóng và tiện lợi.
             </h1>
             <h1
@@ -27,6 +27,7 @@ const Home = () => {
                 color: "#e16d2a",
                 fontSize: "70px",
                 marginBottom: "30px",
+                fontWeight:"500"
               }}
             >
               Chỉ với 1 Click

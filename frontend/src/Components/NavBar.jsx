@@ -31,13 +31,13 @@ const NavBar = () => {
         }}
       >
         <div className="container-fluid">
-          <a className="navbar-brand" href="#" style={{ marginLeft: "29px" }}>
+          <Link to="/" className="nav-link" style={{ marginLeft: "29px" }}>
             <img
               alt=""
               src="./img/logo_main.png"
               style={{ width: "fit-content", height: "30px" }}
             />
-          </a>
+          </Link>
 
           <button
             className="navbar-toggler"
@@ -97,9 +97,9 @@ const NavBar = () => {
               </li>
 
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link to="/contact" className="nav-link">
                   Liên hệ
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link">(+84) 907532754</a>

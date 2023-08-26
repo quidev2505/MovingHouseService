@@ -35,10 +35,13 @@ function ServicePrice() {
       <Header />
       {/* Công cụ tra cứu giá cước thuê xe tải - Start Service Search Price Hire Lorry*/}
       <div className="tool_search_price_hireLorry">
-        <div className="imgService container d-flex">
+        <div
+          className="imgService container d-flex"
+          style={{ alignItems: "center", justifyContent: "center" }}
+        >
           <h1
             className="col-lg-4"
-            style={{ fontSize: "80px", fontWeight: "900" }}
+            style={{ fontSize: "80px", fontWeight: "600" }}
           >
             Giá dịch vụ dọn nhà
           </h1>
@@ -191,20 +194,28 @@ function ServicePrice() {
         </div>
       </div>
 
-      <div className="table_container" style={{ backgroundColor: "#eaecfd", marginBottom:"-20px" }}>
+      <div
+        className="table_container"
+        style={{
+          backgroundColor: "#eaecfd",
+          marginBottom: "-20px",
+          clipPath:
+            "polygon(16% 4%, 28% 4%, 49% 6%, 65% 3%, 85% 3%, 100% 9%, 100% 100%, 0 100%, 0 11%)",
+        }}
+      >
         <div className="container">
           <h6
             style={{
               fontWeight: "600",
               fontSize: "20px",
               margin: "20px",
-              paddingTop: "15px",
+              paddingTop: "30px",
             }}
           >
             1. Giá cước thuê xe tải chuyển nhà
           </h6>
           <table
-            class="table table-hover"
+            class="table table-hover  table-bordered border-warning"
             style={{ border: "1px solid transparent" }}
           >
             <thead>
@@ -325,7 +336,7 @@ function ServicePrice() {
         className="table_container "
         style={{ backgroundColor: "#eaecfd", marginBottom: "-20px" }}
       >
-        <div className="container">
+        <div className="container" style={{ paddingBottom: "4px" }}>
           <h6
             style={{
               fontWeight: "600",
@@ -338,7 +349,7 @@ function ServicePrice() {
           </h6>
           <table
             class="table table-hover  table-bordered border-warning"
-            style={{ border: "1px solid transparent",    paddingBottom: "4px" }}
+            style={{ border: "1px solid transparent", paddingBottom: "4px" }}
           >
             <thead>
               <tr>
