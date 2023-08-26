@@ -59,7 +59,13 @@ const NavBar = () => {
                 </Link>
               </li>
 
-              <li className="nav-item dropdown">
+              <li className="nav-item">
+                <Link to="/service_price" className="nav-link">
+                  Giá dịch vụ
+                </Link>
+              </li>
+
+              {/* <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle dropdown_header giadichvu_dropdown"
                   href="#"
@@ -82,7 +88,7 @@ const NavBar = () => {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
 
               <li className="nav-item">
                 <a className="nav-link" href="#">

@@ -7,6 +7,7 @@ import UserManage from './Pages/UserManage';
 import ForgotPassword from './Pages/ForgotPassword';
 import ChangePassword from './Pages/ChangePassword';
 import VerifyOTP from './Pages/VerifyOTP';
+import ServicePrice from './Pages/ServicePrice';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/verify_otp" element={<VerifyOTP />} />
         <Route path="/change_password" element={<ChangePassword />} />
         <Route path="/userManage" element={<UserManage />} />
+        <Route path="/service_price" element={<ServicePrice />} />
       </Routes>
     </>
   );
