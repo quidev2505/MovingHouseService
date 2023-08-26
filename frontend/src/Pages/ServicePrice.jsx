@@ -1,16 +1,35 @@
-import React from "react";
+import { React, useState } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
 // Ant Design
-import { InputNumber } from "antd";
+import { InputNumber, Button, Alert } from "antd";
 
 //Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleRight } from "@fortawesome/free-solid-svg-icons";
 
-
 function ServicePrice() {
+  //Loading
+  const [loadings, setLoadings] = useState([]);
+  //Set Hide or appear
+  const [hide, setHide] = useState("none");
+
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+      setHide("block");
+    }, 2000);
+  };
   return (
     <>
       <Header />
@@ -44,7 +63,7 @@ function ServicePrice() {
               marginTop: "20px",
             }}
           >
-            <h1>Công cụ tính giá cước thuê xe tải</h1>
+            <h2>Công cụ tính giá cước thuê xe tải</h2>
           </div>
           <div
             className="container_Input_result row container"
@@ -52,41 +71,316 @@ function ServicePrice() {
               border: "1px solid #e16c27",
               borderRadius: "5px",
               padding: "10px",
-              margin:"10px 0"
+              margin: "10px 0",
             }}
           >
-            <div>
-              <div className="d-flex">
-                <h5 style={{ color: "#e16c27" }}>
-                  Nhập vào số Kilomet cần vận chuyển: &nbsp;
-                </h5>
-                <div className="col left_input">
-                  <InputNumber
-                    min={1}
-                    max={99999}
-                    defaultValue={1}
-                    placeholder="Số km..."
-                  />
+            <div className="d-flex">
+              <div className="d-flex" style={{ flexDirection: "column" }}>
+                <div className="d-flex">
+                  <h5 style={{ color: "#e16c27" }}>
+                    Nhập vào số Kilomet cần vận chuyển: &nbsp;
+                  </h5>
+                  <div className="col left_input">
+                    <InputNumber
+                      min={1}
+                      max={99999}
+                      defaultValue={1}
+                      placeholder="Số km..."
+                    />
+                  </div>
+                </div>
+
+                <p style={{ fontStyle: "italic" }}>
+                  Lưu ý: Từ 45km trở lên sẽ được tính là xe đường dài
+                </p>
+              </div>
+
+              <div style={{ lineHeight: "72px", margin: "0 70px" }}>
+                <FontAwesomeIcon
+                  icon={faCircleRight}
+                  style={{ color: "#e16c27", fontSize: "30px", margin: "" }}
+                />
+              </div>
+
+              <div className="d-flex" style={{ flexDirection: "column" }}>
+                <div className="d-flex" style={{ flexDirection: "column" }}>
+                  <h5 style={{ color: "#e16c27" }}>
+                    Chọn loại trọng tải: &nbsp;
+                  </h5>
+                  <div className="col left_input">
+                    <select className="select_xe">
+                      <option value="xebantai">Xe bán tải</option>
+                      <option value="xevan_500">Xe Van 500 kg</option>
+                      <option value="xevan_1000">Xe Van 1000 kg</option>
+                      <option value="xetai_500">Xe tải 500kg</option>
+                      <option value="xetai_1000">Xe tải 1000 kg</option>
+                      <option value="xetai_1500">Xe tải 1500 kg</option>
+                      <option value="xetai_2000">Xe tải 2000 kg</option>
+                      <option value="xetai_2500">Xe tải 2500 kg</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              <p style={{ fontStyle: "italic" }}>
-                Lưu ý: Từ 45km trở lên sẽ được tính là xe đường dài
-              </p>
+              <div style={{ lineHeight: "72px", margin: "0 70px" }}>
+                <FontAwesomeIcon
+                  icon={faCircleRight}
+                  style={{ color: "#e16c27", fontSize: "30px", margin: "" }}
+                />
+              </div>
+
+              <div style={{ lineHeight: "72px" }}>
+                <Button
+                  style={{
+                    backgroundColor: "#e16c27",
+                    fontWeight: "700",
+                    width: "300px",
+                  }}
+                  type="primary"
+                  loading={loadings[0]}
+                  onClick={() => enterLoading(0)}
+                >
+                  Tính giá cước
+                </Button>
+              </div>
             </div>
 
-            <div>
-              <FontAwesomeIcon
-                icon={faCircleRight}
-                style={{ color: "#e16c27" }}
-              />
+            <div
+              className="right_result"
+              style={{
+                display: hide,
+                backgroundColor: "#fffbe6",
+                padding: "10px",
+                border: "1px solid #e16c27",
+                borderRadius: "5px",
+              }}
+            >
+              <h2>Kết quả:</h2>
+              <p>Giá cước ước tính cho xe 1.5 Tấn chạy 23Km là 595.000 VNĐ</p>
             </div>
-
-            <div className="right_result"></div>
           </div>
         </div>
       </div>
       {/* End Service Search Price Hire Lorry */}
+
+      {/* Start Price List */}
+      <div className="price_list container">
+        <Alert
+          style={{ fontWeight: "600", fontSize: "20px", textAlign: "center" }}
+          message="Giá chuyển nhà trọn gói = Cước thuê xe tải + Phí bốc xếp + Chi phí khác (nếu có)"
+          type="error"
+        />
+
+        <div className="tablePrice">
+          <div
+            className="header_toold-flex"
+            style={{
+              backgroundColor: "#e16c27",
+              color: "#fff",
+              height: "70px",
+              borderRadius: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "20px",
+              flexDirection: "column",
+            }}
+          >
+            <h2>Bảng giá dịch vụ dọn nhà</h2>
+          </div>
+        </div>
+      </div>
+
+      <div className="table_container" style={{ backgroundColor: "#eaecfd", marginBottom:"-20px" }}>
+        <div className="container">
+          <h6
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              margin: "20px",
+              paddingTop: "15px",
+            }}
+          >
+            1. Giá cước thuê xe tải chuyển nhà
+          </h6>
+          <table
+            class="table table-hover"
+            style={{ border: "1px solid transparent" }}
+          >
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Xe bán tải</th>
+                <th scope="col">Xe van 500 kg</th>
+                <th scope="col">Xe van 1000 kg</th>
+                <th scope="col">Xe tải 500 kg</th>
+                <th scope="col">Xe tải 1000 kg</th>
+                <th scope="col">Xe tải 1500 kg</th>
+                <th scope="col">Xe tải 2000 kg</th>
+                <th scope="col">Xe tải 2500 kg</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Giá cước ban đầu - 10km</th>
+                <td>124.000 VNĐ/Km</td>
+                <td>124.000 VNĐ/Km</td>
+                <td>165.200 VNĐ/Km</td>
+                <td>124.000 VNĐ/Km</td>
+                <td>165.200 VNĐ/Km</td>
+                <td>247.860 VNĐ/Km</td>
+                <td>289.400 VNĐ/Km</td>
+                <td>395.280 VNĐ/Km</td>
+              </tr>
+              <tr>
+                <th scope="row">Từ 11km đến 45km</th>
+                <td>6.480 VNĐ/Km</td>
+                <td>6.480 VNĐ/Km</td>
+                <td>7.560 VNĐ/Km</td>
+                <td>6.480 VNĐ/Km</td>
+                <td>7.560 VNĐ/Km</td>
+                <td>7.560 VNĐ/Km</td>
+                <td>7.560 VNĐ/Km</td>
+                <td>10.260 VNĐ/Km</td>
+              </tr>
+              <tr>
+                <th scope="row">Từ 45km trở lên</th>
+                <td>5.400 VNĐ/Km</td>
+                <td>5.400 VNĐ/Km</td>
+                <td>5.940 VNĐ/Km</td>
+                <td>5.400 VNĐ/Km</td>
+                <td>5.940 VNĐ/Km</td>
+                <td>6.480 VNĐ/Km</td>
+                <td>6.480 VNĐ/Km</td>
+                <td>7.560 VNĐ/Km</td>
+              </tr>
+              <tr>
+                <th scope="row">Phí chờ</th>
+                <td>64.500 VNĐ/Km</td>
+                <td>64.500 VNĐ/Km</td>
+                <td>64.500 VNĐ/Km</td>
+                <td>64.500 VNĐ/Km</td>
+                <td>120.000 VNĐ/Km</td>
+                <td>120.000 VNĐ/Km</td>
+                <td>200.000 VNĐ/Km</td>
+                <td>200.000 VNĐ/Km</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        className="table_container "
+        style={{ backgroundColor: "#eaecfd", marginBottom: "-20px" }}
+      >
+        <div className="container">
+          <h6
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              margin: "20px",
+              paddingTop: "15px",
+            }}
+          >
+            2. Phí bốc xếp đồ đạc
+          </h6>
+          <table
+            class="table table-hover  table-bordered border-warning"
+            style={{ border: "1px solid transparent" }}
+          >
+            <thead>
+              <tr>
+                <th scope="col">Loại xe</th>
+                <th scope="col">Phí bốc xếp 2 đầu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Xe tải 500kg</td>
+                <td>108.000 VNĐ</td>
+              </tr>
+              <tr>
+                <td>Xe tải 1.000kg</td>
+                <td>140.000 VNĐ</td>
+              </tr>
+              <tr>
+                <td>Xe tải 1.500kg</td>
+                <td>200.000 VNĐ</td>
+              </tr>
+              <tr>
+                <td>Xe tải 2.0000kg</td>
+                <td>324.000 VNĐ</td>
+              </tr>
+              <tr>
+                <td>Xe tải 2.5000kg</td>
+                <td>540.000 VNĐ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        className="table_container "
+        style={{ backgroundColor: "#eaecfd", marginBottom: "-20px" }}
+      >
+        <div className="container">
+          <h6
+            style={{
+              fontWeight: "600",
+              fontSize: "20px",
+              margin: "20px",
+              paddingTop: "15px",
+            }}
+          >
+            3. Chi phí chuyển nhà khác (nếu có)
+          </h6>
+          <table
+            class="table table-hover  table-bordered border-warning"
+            style={{ border: "1px solid transparent",    paddingBottom: "4px" }}
+          >
+            <thead>
+              <tr>
+                <th scope="col" colSpan="2">
+                  Chi phí khác (nếu có)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Thùng Carton (60x40x35 cm)</td>
+                <td>20.000 VNĐ/Thùng</td>
+              </tr>
+              <tr>
+                <td>Màng PE bọc lót đồ đạc</td>
+                <td>Miễn phí</td>
+              </tr>
+              <tr>
+                <td>Công tháo ráp máy lạnh</td>
+                <td>Tháo: 100.000 VNĐ + Ráp: 100.000 VNĐ</td>
+              </tr>
+              <tr>
+                <td>Tháo ráp đồ đạc nội thất</td>
+                <td>Tùy thuộc vào đồ đạc và số lượng</td>
+              </tr>
+              <tr>
+                <td>Bốc xếp đồ đạc cầu thang bộ</td>
+                <td>Tùy số lượng đồ đạc và số tầng lầu</td>
+              </tr>
+              <tr>
+                <td>Kéo đồ đạc vào hẻm nhỏ</td>
+                <td>Tùy số lượng đồ đạc và khoảng cách hẻm</td>
+              </tr>
+              <tr>
+                <td>Kéo đồ đạc vào hầm chung cư</td>
+                <td>Tùy số lượng đồ đạc và khoảng cách hầm</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {/* End Price List */}
       <Footer />
     </>
   );
