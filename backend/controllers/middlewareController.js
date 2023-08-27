@@ -4,7 +4,7 @@ const middlewareController = {
     //verifyToken
     verifyToken: (req, res, next) => {
         const token = req.headers.token;
-        console.log('Token ne cac ban:'+token)
+        // console.log('Token ne cac ban:'+token)
         if (token) {
             //Bearer 123456789
             const accessToken = token.split(" ")[1];

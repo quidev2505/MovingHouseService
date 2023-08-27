@@ -654,7 +654,7 @@ const Home = () => {
               Các loại xe có sẵn
             </h1>
             <h5 style={{ marginBottom: "30px" }}>
-              Chúng tôi cung cấp nhiều loại xe từ xe bán tải 4×4 đến xe tải 5
+              Chúng tôi cung cấp nhiều loại xe từ xe bán tải 4×4 đến xe tải 2.5
               tấn. Bạn có thể lựa chọn loại xe tùy theo nhu cầu của mình.
             </h5>
 

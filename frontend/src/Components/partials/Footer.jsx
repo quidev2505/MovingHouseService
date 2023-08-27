@@ -1,6 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { Link } from "react-router-dom";
+
 
 function Footer() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="footer container">
       <div className="top_footer d-flex">
@@ -15,7 +20,11 @@ function Footer() {
             </p>
             <div className="contact_footer">
               <p>Cá nhân</p>
-              <p>Bảng Giá Dịch Vụ</p>
+              <p>
+                <Link to="/service_price" className="nav-link">
+                  Bảng giá dịch vụ
+                </Link>
+              </p>
               <p>Câu hỏi thường gặp</p>
             </div>
 
@@ -23,19 +32,33 @@ function Footer() {
               src="./img/moving-truck.png"
               width="100px"
               height="100px"
-             alt=""></img>
+              alt=""
+            ></img>
           </div>
           <div>
             <p className="fw-bold" style={{ color: "#6994f4" }}>
               Thông tin
             </p>
             <div className="contact_footer">
-              <p>Về chúng tôi</p>
+              <p>
+                <Link to="/" className="nav-link">
+                  Về chúng tôi
+                </Link>
+              </p>
               <p>Blog</p>
-              <p>Liên hệ hỗ trợ</p>
+              <p>
+                <Link to="/contact" className="nav-link">
+                  Liên hệ hỗ trợ
+                </Link>
+              </p>
             </div>
 
-            <img src="./img/route.png" width="100px" height="100px" alt=""></img>
+            <img
+              src="./img/swap_house.png"
+              width="100px"
+              height="100px"
+              alt=""
+            ></img>
           </div>
           <div>
             <p className="fw-bold" style={{ color: "#6994f4" }}>
@@ -46,7 +69,12 @@ function Footer() {
               <p>Chính Sách Cookie</p>
               <p>Điều Khoản và Điều Kiện</p>
             </div>
-            <img src="./img/moving.png" width="100px" height="100px" alt=""></img>
+            <img
+              src="./img/moving.png"
+              width="100px"
+              height="100px"
+              alt=""
+            ></img>
           </div>
         </div>
       </div>
@@ -59,7 +87,7 @@ function Footer() {
           alignItems: "center",
           paddingTop: "15px",
           color: "#77848f",
-          fontWeight:"bold",
+          fontWeight: "bold",
           fontSize: "13px",
         }}
       >

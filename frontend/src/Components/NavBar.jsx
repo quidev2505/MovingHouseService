@@ -91,9 +91,9 @@ const NavBar = () => {
               </li> */}
 
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link to="/blog" className="nav-link">
                   Blog
-                </a>
+                </Link>
               </li>
 
               <li className="nav-item">
@@ -102,7 +102,9 @@ const NavBar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link">(+84) 907532754</a>
+                <Link to="/" className="nav-link">
+                  (+84) 907532754
+                </Link>
               </li>
             </ul>
           </div>

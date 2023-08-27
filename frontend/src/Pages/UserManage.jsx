@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 // import jwt_decode from "jwt-decode";
 import { getAllUsers } from "../redux/apiRequest";
 // import axios from "axios";
@@ -8,7 +8,7 @@ import { loginSuccess } from "../redux/authSlice";
 import { createAxios } from "../createInstance";
 
 //Toast
-import { Toast } from "../Components/ToastColor";
+// import { Toast } from "../Components/ToastColor";
 
 function UserManage() {
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -16,7 +16,7 @@ function UserManage() {
   // const alluser = useSelector((state) => state.user.users?.allUsers);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   // const refreshToken = async () => {
@@ -53,14 +53,14 @@ function UserManage() {
 
   useEffect(() => {
     //Cố tình viết đường dẫn vào
-    if (!user) {
-      Toast.fire({
-        icon: "info",
-        title: "Bạn chưa đăng nhập",
-        text: "Hãy đăng nhập để đặt lịch !",
-      });
-      navigate("/login");
-    }
+    // if (!user) {
+    //   Toast.fire({
+    //     icon: "info",
+    //     title: "Bạn chưa đăng nhập",
+    //     text: "Hãy đăng nhập để đặt lịch !",
+    //   });
+    //   navigate("/login");
+    // }
 
     if (user?.accessToken) {
       getAllUsers(user?.accessToken, dispatch, axiosJWT);

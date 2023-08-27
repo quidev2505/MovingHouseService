@@ -185,7 +185,7 @@ function Login() {
                         <p style={{ color: "#b7c5d6", userSelect: "none" }}>
                           HOẶC
                         </p>
-{/* 
+                        {/* 
                         <button
                           className="btn btn-lg"
                           type="submit"
@@ -235,7 +235,13 @@ function Login() {
                           </GoogleOAuthProvider>
                         </div>
 
-                        <p style={{ color: "#9297a7", userSelect: "none", marginTop:"20px" }}>
+                        <p
+                          style={{
+                            color: "#9297a7",
+                            userSelect: "none",
+                            marginTop: "20px",
+                          }}
+                        >
                           Đây là lần đầu tiên bạn sử dụng Fastmove ?
                           <span style={{ color: "#f16622 " }}>
                             &nbsp;

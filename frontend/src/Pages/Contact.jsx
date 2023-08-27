@@ -13,8 +13,11 @@ function Contact() {
   return (
     <>
       <Header />
-      <div className="topContact" style={{marginBottom:"130px"}}>
-        <div className="imgService container d-flex" style={{alignItems:"center", justifyContent:"center"}}>
+      <div className="topContact" style={{ marginBottom: "95px" }}>
+        <div
+          className="imgService container d-flex"
+          style={{ alignItems: "center", justifyContent: "center" }}
+        >
           <h1
             className="col-lg-3"
             style={{ fontSize: "90px", fontWeight: "600" }}
@@ -22,7 +25,7 @@ function Contact() {
             Liên hệ hỗ trợ
           </h1>
           <img
-            src="./img/lienhe.jpg"
+            src="./img/lh.jpg"
             class="img-fluid col-lg"
             alt="..."
             style={{ height: "300px", width: "100%", objectFit: "cover" }}
@@ -30,7 +33,7 @@ function Contact() {
         </div>
       </div>
 
-      <div className="bottom_contact" style={{ marginBottom:"200px" }}>
+      <div className="bottom_contact" style={{ marginBottom: "200px" }}>
         <div className="container d-flex">
           <div className="col text-center" style={{ marginRight: "20px" }}>
             <FontAwesomeIcon
@@ -47,9 +50,10 @@ function Contact() {
               Hỗ trợ dịch vụ
             </h4>
             <p style={{ fontSize: "15px" }}>
+              Bạn đang có thắc mắc về giá cả và quy trình dọn nhà ? <br />
               Hãy liên hệ với Dịch vụ chăm sóc khách hàng của chúng tôi tại{" "}
-              <span>mục Chat</span> tại đơn hàng của bạn để được bộ phận tư vấn
-              cụ thể.
+              <span className="fw-bold">mục Chat</span> nằm trong đơn hàng của
+              bạn.
             </p>
           </div>
           <div className="col text-center" style={{ marginRight: "20px" }}>
@@ -66,9 +70,13 @@ function Contact() {
             >
               Chatbot
             </h4>
-            <p>
-              Khi cần tư vấn về dịch vụ dọn nhà, chatbot sẽ đưa ra các gợi ý và
-              thông tin liên quan đến câu hỏi của bạn về dịch vụ của chúng tôi.
+            <p style={{ fontSize: "15px" }}>
+              Chatbot ...Calling...Calling !
+              <p>
+                Cùng trò chuyện để đưa ra gợi ý chọn dịch vụ dọn nhà tiết kiệm
+                nhất cho bạn ! Hãy nhấn vào biểu tượng Chat nằm bên dưới góc
+                phải.
+              </p>
             </p>
           </div>
           <div className="col text-center">
@@ -85,9 +93,9 @@ function Contact() {
             >
               Văn phòng chúng tôi
             </h4>
-            <p style={{ textAlign: "left" }}>
-              <span className="fw-bold">Tại Cần Thơ:</span> Khu II, Đ. 3 Tháng
-              2, Xuân Khánh, Ninh Kiều, Cần Thơ
+            <p style={{ textAlign: "center",fontSize: "15px" }}>
+              <span className="fw-bold">Tại Cần Thơ</span> <br/>Khu II, Đ. 3 Tháng
+              2, Xuân Khánh, Ninh Kiều, Cần Thơ.
             </p>
           </div>
         </div>
