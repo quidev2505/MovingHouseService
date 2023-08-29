@@ -17,8 +17,8 @@ import PageNotFound from './Pages/PageNotFound';
 
 
 //Import Trang Admin
-import Admin from './Pages/Admin/Admin';
 import ProtectRoutesAdmin from './Pages/ProtectRoutesAdmin';
+import DashBoardAdmin from './Pages/Admin/DashBoardAdmin';
 
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
         {/* Bảo vệ Route Admin*/}
         <Route element={<ProtectRoutesAdmin />}>
           {/* Trang Admin  */}
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<DashBoardAdmin />} />
         </Route>
       
       
