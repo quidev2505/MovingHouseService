@@ -8,6 +8,8 @@ import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useNavigate } from "react-router-dom";
 
+
+
 function VerifyOTP() {
   const [isActive, setIsActive] = useState(true);
   const [otp, setOtp] = useState("");

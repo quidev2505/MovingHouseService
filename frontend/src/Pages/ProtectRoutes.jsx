@@ -6,9 +6,17 @@ const useAuth = () => {
   const check_user_login = useSelector(
     (state) => state.auth.login?.currentUser
   );
-    // console.log(check_user_login)
 
-  const check = check_user_login !== null
+  if (!check_user_login) {
+    return false;
+  }
+
+  let check = false;
+
+  if (check_user_login.role === "user") {
+    check = true;
+  }
+  // const check = check_user_login !== null
   // console.log(check)
   const user = { loggedIn: check === true };
   return user && user.loggedIn;

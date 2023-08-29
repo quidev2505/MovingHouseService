@@ -28,9 +28,27 @@ export const loginUser = async (user, dispatch, navigate) => {
             title: 'Đăng nhập thành công',
             text: "Hãy đặt đơn hàng đầu tiên đi nào !"
         })
-        console.log(res.data);
+
+        let role_check = res.data.role;
+        switch (role_check) {
+            case 'user':
+                navigate("/");
+                break;
+            case 'admin':
+                //Email: admin@gmail.com
+                //Password: Admin@123
+                navigate("/admin");
+                break;
+            default:
+                await Toast.fire({
+                    icon: 'error',
+                    title: 'Đăng nhập không thành công',
+                    text: "Hãy thử đăng nhập lại !"
+                })
+        }
+
         dispatch(loginSuccess(res.data));
-        navigate("/");
+
     } catch (err) {
         Swal.fire({
             position: 'center',

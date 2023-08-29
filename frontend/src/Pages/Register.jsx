@@ -8,6 +8,7 @@ import BackPrevious from "../Components/BackPrevious";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+
 function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

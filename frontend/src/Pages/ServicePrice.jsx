@@ -9,6 +9,7 @@ import { InputNumber, Button, Alert } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleRight } from "@fortawesome/free-solid-svg-icons";
 
+
 function ServicePrice() {
   //Loading
   const [loadings, setLoadings] = useState([]);

@@ -113,7 +113,7 @@ const NavBar = () => {
             <>
               <div className="content_right d-flex fw-bold">
                 <div className="btn_signIn d-flex">
-                  Xin chào,&nbsp;
+                  Xin chào, &nbsp;
                   <span style={{ color: "#ff8268 " }}>{user.fullname}</span>
                 </div>
                 <div

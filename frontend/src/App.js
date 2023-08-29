@@ -16,6 +16,11 @@ import ProtectRoutes from './Pages/ProtectRoutes'
 import PageNotFound from './Pages/PageNotFound';
 
 
+//Import Trang Admin
+import Admin from './Pages/Admin/Admin';
+import ProtectRoutesAdmin from './Pages/ProtectRoutesAdmin';
+
+
 function App() {
 
   return (
@@ -32,11 +37,20 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
 
-        {/* Bảo vệ Route */}
+        {/* Bảo vệ Route Client */}
         <Route element={<ProtectRoutes />}>
+          {/* Trang User  */}
           <Route path="/userManage" element={<UserManage />} />
         </Route>
 
+
+        {/* Bảo vệ Route Admin*/}
+        <Route element={<ProtectRoutesAdmin />}>
+          {/* Trang Admin  */}
+          <Route path="/admin" element={<Admin />} />
+        </Route>
+      
+      
         {/* Trang không tìm thấy */}
         <Route path="*" element={<PageNotFound />} />
 
