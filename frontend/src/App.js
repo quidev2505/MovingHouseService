@@ -1,4 +1,5 @@
 import './App.scss';
+
 import { Routes, Route } from 'react-router-dom'
 import Home from './Pages/Home';
 import Login from "./Pages/Login"
@@ -18,7 +19,10 @@ import PageNotFound from './Pages/PageNotFound';
 
 //Import Trang Admin
 import ProtectRoutesAdmin from './Pages/ProtectRoutesAdmin';
-import DashBoardAdmin from './Pages/Admin/DashBoardAdmin';
+
+
+import DashBoard from './Pages/Admin/PagesAdmin/Dashboard';
+import Order from "./Pages/Admin/PagesAdmin/Order";
 
 
 function App() {
@@ -47,7 +51,10 @@ function App() {
         {/* Bảo vệ Route Admin*/}
         <Route element={<ProtectRoutesAdmin />}>
           {/* Trang Admin  */}
-          <Route path="/admin" element={<DashBoardAdmin />} />
+            {/* Route With Item ComponentAdmin */}
+              <Route path="/admin/dashboard" element={<DashBoard />}/>
+              <Route path="/admin/order" element={<Order />}/>
+            {/* End of Route */}
         </Route>
       
       

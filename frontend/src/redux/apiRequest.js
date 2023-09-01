@@ -37,7 +37,7 @@ export const loginUser = async (user, dispatch, navigate) => {
             case 'admin':
                 //Email: admin@gmail.com
                 //Password: Admin@123
-                navigate("/admin");
+                navigate("/admin/dashboard");
                 break;
             default:
                 await Toast.fire({

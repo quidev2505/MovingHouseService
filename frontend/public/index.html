@@ -30,6 +30,8 @@
   <title>React App</title>
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+
+
   <style>
     #preloader {
       background: #fff url('./img/loading_page.gif') no-repeat center center;
@@ -46,6 +48,7 @@
       z-index: 999;
     }
   </style>
+
 
 </head>
 
@@ -69,8 +72,12 @@
 
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
+      
     -->
-  <script>
+
+
+
+  <script defer>
     //BTN Scroll Back to Top
     //Get the button
     let mybutton = document.getElementById("btn-back-to-top");
@@ -83,6 +90,7 @@
 
       function scrollFunction() {
         if (
+          // When the user scrolls down 20px from the top of the document, show the button
           document.body.scrollTop > 20 ||
           document.documentElement.scrollTop > 20
         ) {
@@ -98,13 +106,9 @@
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
       }
+
     }
-
-    // When the user scrolls down 20px from the top of the document, show the button
   </script>
-
-
-
 
 </body>
 
