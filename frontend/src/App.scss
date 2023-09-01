@@ -285,13 +285,19 @@
 
 //Admin
 .HeaderAdmin {
-    height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height:60px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding:20px 10px;
-
+    padding:25px 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 1px 0.5px 3px #ccc;
+    background-color: white;
+    z-index: 999;
 }
 
 .FooterAdmin {
@@ -307,5 +313,51 @@
     flex:1;
     justify-content: flex-start;
     align-items: flex-start;
+    margin-top: 60px;
+    width: 100%;
 }
 
+.PageContent{
+    padding:24px;
+    width: 100%;
+    background-color: #fafafb;
+    border-radius: 10px;
+    height:100vh;
+}
+
+.dash_board{
+    background-color: rgb(223, 194, 29);
+}
+
+
+.SideMenuAdmin{
+    height: 100vh;
+}
+
+.btn_collapse{
+    position: absolute;
+    top:10px;
+    left: 275px;
+    z-index: 999;
+    border: none;
+    font-size: 20px;
+    outline: none;
+}
+
+.btn_collapse:hover{
+    color:#e16c27 !important;
+    border: transparent;
+    cursor: pointer;
+}
+
+.img_avatar{
+    border-radius: 70% !important;
+    object-fit: cover;
+    border:1px solid red;
+    width: 50px;
+    height: 50px;
+}
+
+.container_info_admin{
+    margin:10px 20px;
+}

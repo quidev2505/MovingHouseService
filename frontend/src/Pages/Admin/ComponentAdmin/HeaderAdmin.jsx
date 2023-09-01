@@ -1,25 +1,70 @@
-import React from 'react'
-import {Badge, Image, Space, Typography} from 'antd';
-import {BellFilled, MailOutlined} from "@ant-design/icons";
-
+import React from "react";
+import { Badge, Space } from "antd";
+import { BellFilled } from "@ant-design/icons";
+import { Dropdown } from "antd";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../../redux/apiRequest";
+import { useNavigate } from "react-router-dom";
 
 function HeaderAdmin() {
+  const items = [
+    {
+      label: "Thông tin cá nhân",
+      key: "0",
+    },
+    {
+      label: "Đăng xuất",
+      key: "1",
+    },
+  ];
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const onClick = ({ key }) => {
+    // console.log('da nhấn' + key)
+    if (key === '1') {
+      // console.log('da nhan dang xuất')
+      logOut(navigate, dispatch);
+    }
+  };
   return (
     <div className="HeaderAdmin">
-      <Image width={200} src="/img/logo_main.png"></Image>
-      <Typography.Title style={{ marginTop: "15px" }}>
-        FastMove Admin DashBoard
-      </Typography.Title>
-      <Space>
-        <Badge count={10} dot>
-          <MailOutlined style={{ fontSize: 24 }} />
+      <img
+        className="img-fluid"
+        src="/img/logo_main.png"
+        style={{ width: "130px", height: "34px", objectFit: "contain" }}
+        alt=""
+      ></img>
+
+      <Space style={{ cursor: "pointer" }}>
+        <Badge count={2}>
+          <BellFilled style={{ fontSize: 20 }} />
         </Badge>
-        <Badge count={20}>
-          <BellFilled style={{ fontSize: 24 }} />
-        </Badge>
+
+        <Dropdown
+          menu={{
+            items,
+            onClick,
+          }}
+          trigger={["click"]}
+        >
+          <div>
+            <Space>
+              <div className="container_info_admin d-flex">
+                <img
+                  src="/img/buoc1.png"
+                  class="img-thumbnail img_avatar"
+                  alt="..."
+                ></img>
+              </div>
+            </Space>
+          </div>
+        </Dropdown>
       </Space>
     </div>
   );
 }
 
-export default HeaderAdmin
+export default HeaderAdmin;

@@ -1,23 +1,16 @@
 import React from "react";
-import { Space } from "antd";
-import HeaderAdmin from "../ComponentAdmin/HeaderAdmin";
-import SideMenuAdmin from "../ComponentAdmin/SideMenuAdmin";
+import LayoutAdmin from "../ComponentAdmin/LayoutAdmin";
 import FooterAdmin from "../ComponentAdmin/FooterAdmin";
 
 function DashBoard() {
   return (
     <>
-      <div
-        className="d-flex"
-        style={{ flexDirection: "column", height: "100vh" }}
-      >
-        <HeaderAdmin />
-        <Space className="SideMenuAndPageContent">
-          <SideMenuAdmin></SideMenuAdmin>
-          <div>DashBoard</div>
-        </Space>
+      <LayoutAdmin>
+        <div className="dash_board">
+          <h2>Đây là trang Dashboard</h2>
+        </div>
         <FooterAdmin />
-      </div>
+      </LayoutAdmin>
     </>
   );
 }

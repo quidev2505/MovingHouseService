@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu, Button } from "antd";
+import { Menu} from "antd";
 import {
   AppstoreOutlined,
   ShoppingCartOutlined,
@@ -27,41 +27,37 @@ function SideMenuAdmin() {
 
   const [collapsed, setCollapsed] = useState(false);
 
-
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
 
-  const handleNavigate = (e) => {
 
-    navigate(e);
-  };
 
   return (
-    <div class="SideMenuAdmin d-flex">
+    <div class="SideMenuAdmin d-flex" style={{width: !collapsed ? '256px' : '80px',  paddingTop:"20px"}}>
       <Menu
-        // className="menu_item"
-        // selectable="true"
-        // defaultSelectedKeys={items[0].key}
+        className="menu_item"
+        selectable="true"
+        defaultSelectedKeys={[items[0].key]}
         // // // defaultOpenKeys={["sub1"]} //Mở các tab con bên dưới
-        // mode="inline"
-        // theme="dark"
-        onClick={(item) => {
-          handleNavigate(item.key);
+        mode="inline"
+        theme="light"
+        onClick={({key}) => {
+          navigate(key)
         }}
         inlineCollapsed={collapsed}
         items={items}
       />
 
-      <Button
-        type="primary"
+      <div
+        className="btn_collapse"
         onClick={toggleCollapsed}
         style={{
-          marginBottom: 16,
+          marginBottom: 20,
         }}
       >
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
+      </div>
     </div>
   );
 }

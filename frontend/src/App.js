@@ -51,13 +51,13 @@ function App() {
         {/* Bảo vệ Route Admin*/}
         <Route element={<ProtectRoutesAdmin />}>
           {/* Trang Admin  */}
-            {/* Route With Item ComponentAdmin */}
-              <Route path="/admin/dashboard" element={<DashBoard />}/>
-              <Route path="/admin/order" element={<Order />}/>
-            {/* End of Route */}
+          {/* Route With Item ComponentAdmin */}
+          <Route path="/admin/dashboard" element={<DashBoard />} />
+          <Route path="/admin/order" element={<Order />} />
+          {/* End of Route */}
         </Route>
-      
-      
+
+
         {/* Trang không tìm thấy */}
         <Route path="*" element={<PageNotFound />} />
 
