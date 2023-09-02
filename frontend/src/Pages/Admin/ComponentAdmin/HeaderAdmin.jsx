@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function HeaderAdmin() {
   const items = [
     {
-      label: "Thông tin cá nhân",
+      label: "Đổi mật khẩu",
       key: "0",
     },
     {
@@ -27,6 +27,8 @@ function HeaderAdmin() {
     if (key === '1') {
       // console.log('da nhan dang xuất')
       logOut(navigate, dispatch);
+    }else if(key === '0'){
+      navigate('/admin/change_password');
     }
   };
   return (

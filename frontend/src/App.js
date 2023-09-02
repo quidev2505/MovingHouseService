@@ -20,10 +20,20 @@ import PageNotFound from './Pages/PageNotFound';
 //Import Trang Admin
 import ProtectRoutesAdmin from './Pages/ProtectRoutesAdmin';
 
+//Import danh mục Admin
+import DashBoardAdmin from './Pages/Admin/PagesAdmin/DashboardAdmin';
+import OrderAdmin from "./Pages/Admin/PagesAdmin/OrderAdmin";
+import ItemContainerAdmin from './Pages/Admin/PagesAdmin/ItemContainerAdmin';
+import GetquoteAdmin from './Pages/Admin/PagesAdmin/GetquoteAdmin';
+import BlogAdmin from './Pages/Admin/PagesAdmin/BlogAdmin';
+import DriverAdmin from './Pages/Admin/PagesAdmin/DriverAdmin';
+import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
+import AdministratorAdmin from './Pages/Admin/PagesAdmin/Administrator';
+import ServiceAdmin from './Pages/Admin/PagesAdmin/ServiceAdmin';
+import VehicleAdmin from './Pages/Admin/PagesAdmin/VehicleAdmin';
 
-import DashBoard from './Pages/Admin/PagesAdmin/Dashboard';
-import Order from "./Pages/Admin/PagesAdmin/Order";
-
+//Import trong Setting Admin
+import ChangePasswordAdmin  from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
 
 function App() {
 
@@ -52,8 +62,20 @@ function App() {
         <Route element={<ProtectRoutesAdmin />}>
           {/* Trang Admin  */}
           {/* Route With Item ComponentAdmin */}
-          <Route path="/admin/dashboard" element={<DashBoard />} />
-          <Route path="/admin/order" element={<Order />} />
+          <Route path="/admin/dashboard" element={<DashBoardAdmin />} />
+          <Route path="/admin/service" element={<ServiceAdmin />} />
+          <Route path="/admin/vehicle" element={<VehicleAdmin />} />
+          <Route path="/admin/blog" element={<BlogAdmin />} />
+          <Route path="/admin/item_container" element={<ItemContainerAdmin />} />
+          <Route path="/admin/get_quote" element={<GetquoteAdmin />} />
+          <Route path="/admin/order" element={<OrderAdmin />} />
+          <Route path="/admin/driver" element={<DriverAdmin />} />
+          <Route path="/admin/service_support" element={<ServiceSupportAdmin />} />
+          <Route path="/admin/administrator" element={<AdministratorAdmin />} />
+
+          {/* In Setting Admin */}
+          <Route path="/admin/change_password" element={<ChangePasswordAdmin />} />
+
           {/* End of Route */}
         </Route>
 

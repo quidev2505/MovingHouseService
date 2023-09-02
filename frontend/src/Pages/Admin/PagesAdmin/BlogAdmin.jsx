@@ -1,14 +1,16 @@
 import React from "react";
 import LayoutAdmin from "../ComponentAdmin/LayoutAdmin";
 
-function Order() {
+function BlogAdmin() {
   return (
     <>
       <LayoutAdmin>
-        <h2>Đây là trang Order</h2>
+        <div className="blog_admin">
+          <h2>Blog</h2>
+        </div>
       </LayoutAdmin>
     </>
   );
 }
 
-export default Order;
+export default BlogAdmin;

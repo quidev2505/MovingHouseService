@@ -1,17 +1,16 @@
 import React from "react";
 import LayoutAdmin from "../ComponentAdmin/LayoutAdmin";
 
-
-function DashBoard() {
+function ItemContainerAdmin() {
   return (
     <>
       <LayoutAdmin>
-        <div className="dash_board">
-          <h2>Dashboard</h2>
+        <div className="item_container_admin">
+          <h2>ItemContainer</h2>
         </div>
       </LayoutAdmin>
     </>
   );
 }
 
-export default DashBoard;
+export default ItemContainerAdmin;

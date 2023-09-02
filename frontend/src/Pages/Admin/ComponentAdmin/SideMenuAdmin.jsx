@@ -1,12 +1,20 @@
-import React, { useState } from "react";
-import { Menu} from "antd";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from "@ant-design/icons";
+import React, { useState} from "react";
+import { Menu } from "antd";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-import { FcBarChart, FcHome, FcAutomotive } from "react-icons/fc";
+import {
+  FcBarChart,
+  FcHome,
+  FcAutomotive,
+  FcNews,
+  FcDeployment,
+  FcSurvey,
+  FcPaid,
+  FcInTransit,
+  FcFaq,
+  FcBusinessman,
+} from "react-icons/fc";
 
 function SideMenuAdmin() {
   const navigate = useNavigate();
@@ -21,34 +29,77 @@ function SideMenuAdmin() {
     {
       label: "Dịch vụ",
       icon: <FcHome />,
-      key: "/admin/order",
+      key: "/admin/service",
     },
     {
       label: "Phương tiện",
       icon: <FcAutomotive />,
       key: "/admin/vehicle",
     },
+    {
+      label: "Blog",
+      icon: <FcNews />,
+      key: "/admin/blog",
+    },
+    {
+      label: "Vật dụng",
+      icon: <FcDeployment />,
+      key: "/admin/item_container",
+    },
+    {
+      label: "Báo giá",
+      icon: <FcSurvey />,
+      key: "/admin/get_quote",
+    },
+    {
+      label: "Đơn hàng",
+      icon: <FcPaid />,
+      key: "/admin/order",
+    },
+    {
+      label: "Tài xế",
+      icon: <FcInTransit />,
+      key: "/admin/driver",
+    },
+    {
+      label: "Hỗ trợ dịch vụ",
+      icon: <FcFaq />,
+      key: "/admin/service_support",
+    },
+    {
+      label: "Quản trị viên",
+      icon: <FcBusinessman />,
+      key: "/admin/administrator",
+    },
   ];
 
   const [collapsed, setCollapsed] = useState(false);
+  // const [defautlKey, setDefaultKey] = useState(items[0].key);
+
+  let defaultkey = localStorage.getItem('menu');
+  if (!defaultkey) {
+    defaultkey = localStorage.setItem('menu', items[0].key);
+  }
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
 
-
-
   return (
-    <div class="SideMenuAdmin d-flex" style={{width: !collapsed ? '256px' : '80px',  paddingTop:"20px"}}>
+    <div
+      class="SideMenuAdmin d-flex"
+      style={{ width: !collapsed ? "256px" : "80px", paddingTop: "20px" }}
+    >
       <Menu
         className="menu_item fw-bold"
         selectable="true"
-        defaultSelectedKeys={[items[0].key]}
-        // // // defaultOpenKeys={["sub1"]} //Mở các tab con bên dưới
+        defaultSelectedKeys={[defaultkey]}
         mode="inline"
         theme="light"
-        onClick={({key}) => {
-          navigate(key)
+        onClick={(e) => {
+          localStorage.setItem('menu', e.key)
+          navigate(e.key);
+          
         }}
         inlineCollapsed={collapsed}
         items={items}
