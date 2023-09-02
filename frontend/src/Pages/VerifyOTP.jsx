@@ -9,7 +9,6 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useNavigate } from "react-router-dom";
 
 
-
 function VerifyOTP() {
   const [isActive, setIsActive] = useState(true);
   const [otp, setOtp] = useState("");
@@ -79,6 +78,7 @@ function VerifyOTP() {
                           marginBottom: "5px",
                         }}
                       />
+
                       <h3 style={{ textAlign: "center", marginTop: "17px" }}>
                         Nhập vào mã OTP gồm 6 số
                       </h3>

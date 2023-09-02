@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Menu} from "antd";
 import {
-  AppstoreOutlined,
-  ShoppingCartOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+
+import { FcBarChart, FcHome, FcAutomotive } from "react-icons/fc";
 
 function SideMenuAdmin() {
   const navigate = useNavigate();
@@ -14,14 +14,19 @@ function SideMenuAdmin() {
   //Link Route
   const items = [
     {
-      label: "Dashboard",
-      icon: <AppstoreOutlined />,
+      label: "Thống kê",
+      icon: <FcBarChart />,
       key: "/admin/dashboard",
     },
     {
-      label: "Order",
-      icon: <ShoppingCartOutlined />,
+      label: "Dịch vụ",
+      icon: <FcHome />,
       key: "/admin/order",
+    },
+    {
+      label: "Phương tiện",
+      icon: <FcAutomotive />,
+      key: "/admin/vehicle",
     },
   ];
 
@@ -36,7 +41,7 @@ function SideMenuAdmin() {
   return (
     <div class="SideMenuAdmin d-flex" style={{width: !collapsed ? '256px' : '80px',  paddingTop:"20px"}}>
       <Menu
-        className="menu_item"
+        className="menu_item fw-bold"
         selectable="true"
         defaultSelectedKeys={[items[0].key]}
         // // // defaultOpenKeys={["sub1"]} //Mở các tab con bên dưới

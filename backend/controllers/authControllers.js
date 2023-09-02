@@ -5,6 +5,7 @@ const nodemailer = require("nodemailer");
 const OTP = require('one-time-password')
 
 let arrayRefreshToken = []
+let arrayOTP = [];
 
 const authControllers = {
     //Register
@@ -185,7 +186,7 @@ const authControllers = {
         res.status(200).json("Loged out !");
     },
 
-    //Verify Token OTP
+    //Verify Token OTP (2)
     verifyOTP: async (req, res) => {
         let email_otp = req.body.email_input;
         let otp_input = req.body.otp_input;
@@ -203,7 +204,7 @@ const authControllers = {
     },
 
 
-    //ChangePassword
+    //ChangePassword (3)
     changePassword: async (req, res) => {
         let email_otp = req.body.email_otp;
         let new_password = req.body.new_password;
@@ -214,8 +215,9 @@ const authControllers = {
         //Get Data from User DB
         let dataUser = await User.findOne({ email: email_otp });
 
-        //Update New Password
+        //Update New Password When user input new password
         if (dataUser) {
+            await User.findByIdAndUpdate(dataUser._id, { otp_code: 'null' })
             await User.findByIdAndUpdate(dataUser._id, { password: hashed }).then((data) => {
                 res.status(200).json('Successful Change Password !')
 
@@ -227,7 +229,7 @@ const authControllers = {
 
     },
 
-    //Forgot password
+    //Forgot password (1)
     forgotPassword: async (req, res) => {
         let email_otp = req.body.email_input;
 
@@ -273,6 +275,8 @@ const authControllers = {
                     console.log("Email sent:" + info.response);
                 }
             })
+
+
             res.status(200).json('Send Email Successfully !');
         } else {
             res.status(404).json('NotRegisterEmail');

@@ -7,6 +7,8 @@ import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useNavigate } from "react-router-dom";
 
+import { Toast } from "../Components/ToastColor";
+
 
 function ForgotPassword() {
   const [isActive, setIsActive] = useState(true);
@@ -28,10 +30,18 @@ function ForgotPassword() {
     await axios
       .post("/v1/auth/forgotPassword", { email_input })
       .then((data) => {
+          Toast.fire({
+            icon: 'success',
+            title: 'Gửi mã OTP thành công !',
+            text: "Hãy vào hòm thư gmail để kiểm tra."
+        })
+
         //Success Sending
         nav("/verify_otp");
         localStorage.setItem('otp_user', JSON.stringify(email_input));
         // console.log(data);
+
+
       })
       .catch((e) => {
         Swal.fire({

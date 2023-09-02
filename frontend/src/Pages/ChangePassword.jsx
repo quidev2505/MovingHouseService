@@ -115,7 +115,7 @@ function ChangePasword() {
                             marginBottom: "20px",
                           }}
                         >
-                          Nhập vào mật khẩu mới
+                          Cài đặt lại mật khẩu
                         </h3>
                         <div className="input-group mb-3 form-outline mb-4 form_input_handle">
                           <input

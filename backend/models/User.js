@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     },
     otp_code:{
         type:String,
-        maxLength:4,
+        maxLength:6,
         default:'null'
     },
     role:{

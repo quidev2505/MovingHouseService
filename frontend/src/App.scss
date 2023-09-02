@@ -325,10 +325,6 @@
     height:100vh;
 }
 
-.dash_board{
-    background-color: rgb(223, 194, 29);
-}
-
 
 .SideMenuAdmin{
     height: 100vh;
@@ -360,4 +356,14 @@
 
 .container_info_admin{
     margin:10px 20px;
+}
+
+.ant-menu-item-selected{
+    background-color:rgba(235, 123, 38, 0.9) !important;
+    color:white !important;
+}
+
+
+.ant-menu-item{
+    margin:15px 0 !important;
 }
