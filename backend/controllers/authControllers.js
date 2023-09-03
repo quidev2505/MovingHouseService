@@ -5,7 +5,6 @@ const nodemailer = require("nodemailer");
 const OTP = require('one-time-password')
 
 let arrayRefreshToken = []
-let arrayOTP = [];
 
 const authControllers = {
     //Register
@@ -43,7 +42,6 @@ const authControllers = {
         return jwt.sign(
             {
                 id: user.id,
-                role: user.role
             },
             process.env.JWT_ACCESS_KEY,
             {
@@ -56,7 +54,6 @@ const authControllers = {
     generateRefreshToken: (user) => {
         return jwt.sign({
             id: user.id,
-            role: user.role,
         },
             process.env.JWT_REFRESH_KEY,
             {
@@ -117,7 +114,6 @@ const authControllers = {
         const email = user.email;
         const fullname = user.fullname;
         const id = user.id;
-        const role = user.role;
         try {
             //Tạo Access Token
             const accessToken = authControllers.generateAccessToken(user);
@@ -136,7 +132,7 @@ const authControllers = {
             })
 
 
-            res.status(200).json({ email, fullname, id, role, accessToken });
+            res.status(200).json({ email, fullname, id, accessToken });
         }
         catch (err) {
             console.log(err)

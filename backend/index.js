@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config()
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
+const adminRoute = require('./routes/admin');
 var cookieParser = require('cookie-parser')
 
 //Cors
@@ -38,6 +39,9 @@ app.use(cookieParser())
 //API - Routes
 app.use("/v1/auth", authRoute);
 app.use("/v1/user", userRoute);
+
+//Admin Route
+app.use("/v1/admin", adminRoute);
 
 
 //Middleware Test First

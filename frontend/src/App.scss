@@ -4,9 +4,9 @@
 
 :root {
     --primay-color: #ff671d;
+    --second-color:#e16c27;
+    --text-color:#3b4d6c;
 }
-
-
 
 * {
     box-sizing: border-box;
@@ -373,14 +373,32 @@
 }
 
 .hieuung3d {
-    transform: perspective(75em) rotateX(18deg);
-    box-shadow: rgba(22, 31, 39, 0.42) 0px 60px 123px -25px,
-        rgba(19, 26, 32, 0.08) 0px 35px 75px -35px;
-    border-radius: 10px;
-    border: 1px solid;
-    border-color: rgb(213, 220, 226) rgb(213, 220, 226) rgb(184, 194, 204);
-    width: fit-content;
-    padding: 10px;
-    box-shadow: 0px 4px 8px 2px #ccc;
-    border: 3px solid #e39b55;
+    // box-shadow: rgba(22, 31, 39, 0.42) 0px 60px 123px -25px,
+    //     rgba(19, 26, 32, 0.08) 0px 35px 75px -35px;
+    // border-radius: 50px;
+    // border: 1px solid;
+    // border-color: rgb(213, 220, 226) rgb(213, 220, 226) rgb(184, 194, 204);
+    // width: fit-content;
+    // padding: 12px;
+    // border: 3px solid #e39b55;
+    // overflow: hidden;
+    // margin-bottom: 3px;
+    // background-color: var(--second-color);
+    // color:black;
+    // height: 55px;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    color:var(--text-color);
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.bottom_css_content{
+    border-radius:10px;
+    background-color: #ffffff;
+    color: var(--text-color);
+    box-shadow: 1px 1px 1px 1px #ccc;
+    padding: 20px 20px;
 }

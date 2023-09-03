@@ -3,17 +3,17 @@ import { useSelector } from "react-redux";
 import { Toast } from "../Components/ToastColor";
 
 const useAuth = () => {
-  const check_user_login = useSelector(
-    (state) => state.auth.login?.currentUser
+  const check_admin_login = useSelector(
+    (state) => state.admin.login?.currentAdmin
   );
-  
-  if(!check_user_login){
+
+  if(!check_admin_login){
     return false;
   }
 
   let check = false;
 
-  if (check_user_login.role === "admin") {
+  if (check_admin_login) {
     check = true;
   }
   //   const check = check_user_login !== null;

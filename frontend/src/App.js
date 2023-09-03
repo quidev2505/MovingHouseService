@@ -20,6 +20,9 @@ import PageNotFound from './Pages/PageNotFound';
 //Import Trang Admin
 import ProtectRoutesAdmin from './Pages/ProtectRoutesAdmin';
 
+//Trang đăng nhập Admin
+import LoginAdmin from "./Pages/Admin/PagesAdmin/LoginAdmin";
+
 //Import danh mục Admin
 import DashBoardAdmin from './Pages/Admin/PagesAdmin/DashboardAdmin';
 import OrderAdmin from "./Pages/Admin/PagesAdmin/OrderAdmin";
@@ -58,7 +61,11 @@ function App() {
         </Route>
 
 
-        {/* Bảo vệ Route Admin*/}
+        {/* Trang đăng nhập dành cho quản trị viên */}
+        <Route path="/admin/login" element={<LoginAdmin />} />
+
+
+        {/* Bảo vệ Route Admin - Quản trị viên*/}
         <Route element={<ProtectRoutesAdmin />}>
           {/* Trang Admin  */}
           {/* Route With Item ComponentAdmin */}
@@ -74,7 +81,7 @@ function App() {
           <Route path="/admin/administrator" element={<AdministratorAdmin />} />
 
           {/* In Setting Admin */}
-          <Route path="/admin/change_password" element={<ChangePasswordAdmin />} />
+          <Route path="/admin/change_password/:id" element={<ChangePasswordAdmin />} />
 
           {/* End of Route */}
         </Route>

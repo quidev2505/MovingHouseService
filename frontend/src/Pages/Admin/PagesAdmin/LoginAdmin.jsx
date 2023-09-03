@@ -1,28 +1,17 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { loginUser, loginUserWithGoogle } from "../redux/apiRequest";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import BackPrevious from "../Components/BackPrevious";
-import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
+import LoadingOverlayComponent from "../../../Components/LoadingOverlayComponent";
+import { loginAdmin } from "../../../redux/apiRequest";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
-//Oauth Google
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import jwt_decode from "jwt-decode";
-
-// import { useGoogleLogin } from "@react-oauth/google";
-
-function Login() {
+function LoginAdmin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(true);
   const [visible, setVisible] = useState(false);
-
-  // const login = useGoogleLogin({
-  //   onSuccess: (tokenResponse) => console.log(tokenResponse),
-  // });
 
   useEffect(() => {
     setIsActive(false);
@@ -42,12 +31,12 @@ function Login() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const newUser = {
-      email: data.email,
+    const newAdmin = {
+      username: data.username,
       password: data.password,
     };
 
-    loginUser(newUser, dispatch, navigate);
+    loginAdmin(newAdmin, dispatch, navigate);
   };
 
   return (
@@ -68,41 +57,49 @@ function Login() {
                   >
                     <LoadingOverlayComponent status={isActive}>
                       {/* btn back */}
-                      <BackPrevious path="/" />
                       <div className="card-body p-5 text-center">
                         {/* //Img icon */}
-                        <img
-                          src="./img/logo_main.png"
-                          alt="anh_logo"
+                        <div style={{ textAlign: "left" }}>
+                          <img
+                            src="/img/logo_main.png"
+                            alt="anh_logo"
+                            style={{
+                              width: "105px",
+                              height: "58px",
+                              objectFit: "contain",
+                              margiBottom: "13px",
+                              marginTop: "-44px",
+                            }}
+                          />
+                        </div>
+
+                        <h2
                           style={{
-                            width: "213px",
-                            height: "64px",
-                            objectFit: "contain",
-                            marginBottom: "15px",
+                            fontWeight: "600",
+                            fontSize: "35px",
+                            color: "#e16c27 ",
+                            marginBottom:"15px"
                           }}
-                        />
+                        >
+                          ADMIN LOGIN
+                        </h2>
                         <div className="form-outline mb-4  form_input_handle">
                           <input
-                            type="email"
-                            id="email"
+                            type="text"
+                            id="username"
                             className="form-control form-control-lg"
-                            placeholder="Email"
+                            placeholder="Tên đăng nhập"
                             style={{ fontSize: "17px", borderRadius: "3px" }}
-                            {...register("email", {
+                            {...register("username", {
                               required: true,
                               minLength: 5,
-                              pattern:
-                                /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
                             })}
                           />
-                          {errors?.email?.type === "required" && (
-                            <p>Email không được để trống !</p>
+                          {errors?.username?.type === "required" && (
+                            <p>Tên đăng nhập không được để trống !</p>
                           )}
-                          {errors?.email?.type === "minLength" && (
-                            <p>Email chưa đủ kí tự !</p>
-                          )}
-                          {errors?.email?.type === "pattern" && (
-                            <p>Email chưa đúng định dạng !</p>
+                          {errors?.username?.type === "minLength" && (
+                            <p>Tên đăng nhập chưa đủ kí tự !</p>
                           )}
                         </div>
                         <div className="input-group mb-3 form-outline mb-4 form_input_handle">
@@ -115,8 +112,6 @@ function Login() {
                             {...register("password", {
                               required: true,
                               minLength: 8,
-                              pattern:
-                                /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/,
                             })}
                           />
 
@@ -141,12 +136,6 @@ function Login() {
                           )}
                           {errors?.password?.type === "minLength" && (
                             <p>Mật khẩu phải ít nhất là 8 kí tự !</p>
-                          )}
-                          {errors?.password?.type === "pattern" && (
-                            <p>
-                              Mật khẩu phải ít nhất 1 chữ cái viết hoa, 1 chữ số
-                              và kí tự đặc biệt !
-                            </p>
                           )}
                         </div>
                         {/* //Quên mật khẩu */}
@@ -182,79 +171,6 @@ function Login() {
                         >
                           Đăng nhập
                         </button>
-                        <p style={{ color: "#b7c5d6", userSelect: "none" }}>
-                          HOẶC
-                        </p>
-                        {/* 
-                        <button
-                          className="btn btn-lg"
-                          type="submit"
-                          style={{
-                            height: "54px",
-                            width: "100%",
-                            backgroundColor: "#4285f4",
-                            color: "white",
-                            marginTop: "-3px",
-                            borderRadius: "5px",
-                            fontSize: "17px",
-                            marginBottom: "17px",
-                            fontWeight: "500",
-                          }}
-                          onClick={() => login()}
-                        >
-                          <i className="fab fa-google me-2" />
-                          Đăng nhập với Google
-                        </button> */}
-
-                        {/* Login with google */}
-                        <div className="loginGoogle">
-                          <GoogleOAuthProvider clientId="111676382550-rum66le23duruqii92dv781tf40sd0sb.apps.googleusercontent.com">
-                            <GoogleLogin
-                              onSuccess={(credentialResponse) => {
-                                var decoded = jwt_decode(
-                                  credentialResponse.credential
-                                );
-
-                                const newUser = {
-                                  email: decoded.email,
-                                  fullname: decoded.name,
-                                  id: decoded.sub,
-                                };
-
-                                loginUserWithGoogle(
-                                  newUser,
-                                  dispatch,
-                                  navigate
-                                );
-                              }}
-                              onError={() => {
-                                console.log("Login Failed");
-                              }}
-                            />
-                          </GoogleOAuthProvider>
-                        </div>
-
-                        <p
-                          style={{
-                            color: "#9297a7",
-                            userSelect: "none",
-                            marginTop: "20px",
-                          }}
-                        >
-                          Đây là lần đầu tiên bạn sử dụng Fastmove ?
-                          <span style={{ color: "#f16622 " }}>
-                            &nbsp;
-                            <Link
-                              to="/register"
-                              style={{
-                                textDecoration: "none",
-                                color: "#f16622 ",
-                              }}
-                            >
-                              Hãy tạo ngay một tài khoản mới.
-                            </Link>
-                          </span>
-                        </p>
                       </div>
                     </LoadingOverlayComponent>
                   </div>
@@ -268,4 +184,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginAdmin;

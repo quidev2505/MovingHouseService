@@ -11,11 +11,11 @@ const useAuth = () => {
     return false;
   }
 
-  let check = false;
+  let check = true;
 
-  if (check_user_login.role === "user") {
-    check = true;
-  }
+  // if (check_user_login.role === "user") {
+  //   check = true;
+  // }
   // const check = check_user_login !== null
   // console.log(check)
   const user = { loggedIn: check === true };

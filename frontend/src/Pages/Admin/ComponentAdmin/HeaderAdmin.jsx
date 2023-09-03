@@ -3,10 +3,15 @@ import { Badge, Space } from "antd";
 import { BellFilled } from "@ant-design/icons";
 import { Dropdown } from "antd";
 import { useDispatch } from "react-redux";
-import { logOut } from "../../../redux/apiRequest";
+import { logOutAdmin } from "../../../redux/apiRequest";
 import { useNavigate } from "react-router-dom";
 
+import { useSelector } from "react-redux";
+
 function HeaderAdmin() {
+  const check_admin_login = useSelector(
+    (state) => state.admin.login?.currentAdmin
+  );
   const items = [
     {
       label: "Đổi mật khẩu",
@@ -24,11 +29,11 @@ function HeaderAdmin() {
 
   const onClick = ({ key }) => {
     // console.log('da nhấn' + key)
-    if (key === '1') {
+    if (key === "1") {
       // console.log('da nhan dang xuất')
-      logOut(navigate, dispatch);
-    }else if(key === '0'){
-      navigate('/admin/change_password');
+      logOutAdmin(navigate, dispatch);
+    } else if (key === "0") {
+      navigate(`/admin/change_password/${check_admin_login._id}`);
     }
   };
   return (

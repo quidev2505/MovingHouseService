@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import userReducer from "./userSlice";
+import adminReducer from "./adminSlice";
 
 //Redux Persist lưu trữ Store trong LocalStorage
 import {
@@ -24,7 +25,8 @@ const persistConfig = {
 //Redux Store
 const rootReducer = combineReducers({
     auth: authReducer,
-    user: userReducer
+    user: userReducer,
+    admin: adminReducer,
 })
 
 //Redux Persist

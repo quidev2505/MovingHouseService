@@ -8,9 +8,9 @@ function VehicleAdmin() {
     <>
       <LayoutAdmin>
         <div className="vehicle_admin">
-          <TopCssContent>
-            <h2>Vehicles</h2>
-          </TopCssContent>
+            <TopCssContent>
+              <h2>Vehicles</h2>
+            </TopCssContent>
         </div>
       </LayoutAdmin>
     </>

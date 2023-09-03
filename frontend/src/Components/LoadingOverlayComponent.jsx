@@ -2,6 +2,7 @@ import React from "react";
 import LoadingOverlay from "react-loading-overlay";
 
 function LoadingOverlayComponent(props) {
+  LoadingOverlay.propTypes = undefined;
   return (
     <LoadingOverlay
       active={props.status}

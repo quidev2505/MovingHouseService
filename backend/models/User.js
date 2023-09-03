@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-    fullname: {
+    username: {
         type: String,
         required: true,
         minlength: 10,
@@ -30,9 +30,13 @@ const userSchema = new mongoose.Schema({
         maxLength:6,
         default:'null'
     },
-    role:{
+    status: {
+        type:Boolean,
+        default: true
+    },
+    avatar: {
         type:String,
-        default: 'user'
+        default: 'null'
     }
 }, {timestamps: true})
 

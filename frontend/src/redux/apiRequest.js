@@ -3,6 +3,10 @@ import {
     loginFailed, loginStart, loginSuccess, registerStart, registerSuccess, registerFailed, logOutSuccess
 } from "./authSlice";
 
+import {
+    loginAdminFailed, loginAdminStart, loginAdminSuccess, logOutAdminSuccess
+} from "./adminSlice";
+
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 import 'sweetalert2/src/sweetalert2.scss'
@@ -28,24 +32,25 @@ export const loginUser = async (user, dispatch, navigate) => {
             title: 'Đăng nhập thành công',
             text: "Hãy đặt đơn hàng đầu tiên đi nào !"
         })
+        navigate("/");
 
-        let role_check = res.data.role;
-        switch (role_check) {
-            case 'user':
-                navigate("/");
-                break;
-            case 'admin':
-                //Email: admin@gmail.com
-                //Password: Admin@123
-                navigate("/admin/dashboard");
-                break;
-            default:
-                await Toast.fire({
-                    icon: 'error',
-                    title: 'Đăng nhập không thành công',
-                    text: "Hãy thử đăng nhập lại !"
-                })
-        }
+        // let role_check = res.data.role;
+        // switch (role_check) {
+        //     case 'user':
+        //         navigate("/");
+        //         break;
+        //     case 'admin':
+        //         //Email: admin@gmail.com
+        //         //Password: Admin@123
+        //         navigate("/admin/dashboard");
+        //         break;
+        //     default:
+        //         await Toast.fire({
+        //             icon: 'error',
+        //             title: 'Đăng nhập không thành công',
+        //             text: "Hãy thử đăng nhập lại !"
+        //         })
+        // }
 
         dispatch(loginSuccess(res.data));
 
@@ -59,6 +64,34 @@ export const loginUser = async (user, dispatch, navigate) => {
             timer: 1000
         })
         dispatch(loginFailed());
+    }
+}
+
+export const loginAdmin = async (admin, dispatch, navigate) => {
+    dispatch(loginAdminStart());
+
+    try {
+        const res = await axios.post("/v1/admin/login", admin);
+        await Toast.fire({
+            icon: 'success',
+            title: 'Đăng nhập thành công',
+            text: "Tiến hành vào giao diện quản trị Admin!"
+        })
+        
+        dispatch(loginAdminSuccess(res.data));
+        navigate("/admin/dashboard");
+
+
+    } catch (err) {
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: 'Đăng nhập thất bại',
+            text: 'Sai tên đăng nhập hoặc mật khẩu',
+            showConfirmButton: false,
+            timer: 1000
+        })
+        dispatch(loginAdminFailed());
     }
 }
 
@@ -160,6 +193,7 @@ export const logOut = async (navigate, dispatch) => {
         if (result.isConfirmed) {
             navigate("/login")
             dispatch(logOutSuccess())
+            dispatch(logOutAdminSuccess())
         }
     })
 
@@ -176,4 +210,23 @@ export const logOut = async (navigate, dispatch) => {
     //     console.log(err)
     //     dispatch(logOutFailed());
     // }
+}
+
+
+export const logOutAdmin = async (navigate, dispatch) => {
+    // dispatch(logOutStart());
+    // console.log('Token luc logout'+accessToken)
+    Swal.fire({
+        title: 'Bạn muốn đăng xuất khỏi tài khoản?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xác nhận'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            navigate("/admin/login")
+            dispatch(logOutAdminSuccess())
+        }
+    })
 }
