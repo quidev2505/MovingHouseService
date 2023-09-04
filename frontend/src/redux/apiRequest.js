@@ -72,17 +72,18 @@ export const loginAdmin = async (admin, dispatch, navigate) => {
 
     try {
         const res = await axios.post("/v1/admin/login", admin);
+
         await Toast.fire({
             icon: 'success',
             title: 'Đăng nhập thành công',
             text: "Tiến hành vào giao diện quản trị Admin!"
         })
         
-        dispatch(loginAdminSuccess(res.data));
         navigate("/admin/dashboard");
-
+        dispatch(loginAdminSuccess(res.data));
 
     } catch (err) {
+        console.log(err)
         Swal.fire({
             position: 'center',
             icon: 'warning',

@@ -4,8 +4,8 @@
 
 :root {
     --primay-color: #ff671d;
-    --second-color:#e16c27;
-    --text-color:#3b4d6c;
+    --second-color: #e16c27;
+    --text-color: #3b4d6c;
 }
 
 * {
@@ -320,7 +320,7 @@
 .PageContent {
     padding: 24px;
     width: 100%;
-    background-color: #fafafb;
+    background-color: #f0f2f5;
     border-radius: 10px;
     height: 100vh;
 }
@@ -389,16 +389,34 @@
     // display: flex;
     // align-items: center;
     // justify-content: center;
-    color:var(--text-color);
+    color: var(--text-color);
     font-weight: 700;
     font-size: 16px;
     margin-top: 10px;
 }
 
-.bottom_css_content{
-    border-radius:10px;
+.bottom_css_content {
+    border-radius: 10px;
     background-color: #ffffff;
     color: var(--text-color);
-    box-shadow: 1px 1px 1px 1px #ccc;
+    box-shadow: 0px 1px 2px 1px #ccc;
     padding: 20px 20px;
+}
+
+.ant-breadcrumb-link>a {
+    text-decoration: none;
+}
+
+//ChangePassword Admin page
+.change_password_visible {
+    display: flex;
+    justify-content: flex-end;
+    border-radius: 50%;
+    padding: 10px;
+    width: fit-content;
+    float: right;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background-color: #f0f2f5;
+
 }

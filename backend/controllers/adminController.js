@@ -7,18 +7,19 @@ const adminController = {
             const admin_account = await Admin.findOne({ username: req.body.username });
 
             if (!admin_account) {
-                res.status(403).json('Wrong username');
+                return res.status(403).json('Wrong username');
             }
 
             const password_input = req.body.password;
-
-
-            if (password_input === admin_account.password && admin_account) {
+            if (password_input === admin_account.password) {
                 const { password, ...others } = admin_account._doc;
-                res.status(200).json(others)
+                return res.status(200).json(others)
+            }else{
+                return res.status(404).json('Wrong password');
             }
-        } catch (e) {
-            res.status(505).json(e);
+        } catch (err) {
+            console.log(err)
+            return res.status(500).json(err);
         }
     },
 
