@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
     otp_code:{
         type:String,
         maxLength:6,
-        default:'null'
+        default:null
     },
     status: {
         type:Boolean,
@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type:String,
-        default: 'null'
+        default: null
     }
 }, {timestamps: true})
 

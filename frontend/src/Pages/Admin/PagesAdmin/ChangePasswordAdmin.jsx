@@ -32,14 +32,18 @@ function ChangePasswordAdmin() {
     let btnVisible_2 = document.querySelector("#password_new");
     let btnVisible_3 = document.querySelector("#password_reinput");
 
-    if (btnVisible_1.type === "text" && btnVisible_2.type === 'text' && btnVisible_3.type === 'text') {
+    if (
+      btnVisible_1.type === "text" &&
+      btnVisible_2.type === "text" &&
+      btnVisible_3.type === "text"
+    ) {
       btnVisible_1.type = "password";
       btnVisible_2.type = "password";
       btnVisible_3.type = "password";
     } else {
-        btnVisible_1.type = "text";
-        btnVisible_2.type = "text";
-        btnVisible_3.type = "text";
+      btnVisible_1.type = "text";
+      btnVisible_2.type = "text";
+      btnVisible_3.type = "text";
     }
   }, [visible]);
 
@@ -111,6 +115,9 @@ function ChangePasswordAdmin() {
             <Breadcrumb
               routes={[
                 {
+                  title: "Admin",
+                },
+                {
                   title: <Link to="/admin/dashboard">Tài khoản</Link>,
                   key: "Dashboard",
                 },
@@ -121,17 +128,16 @@ function ChangePasswordAdmin() {
             />
           </div>
 
-          <TopCssContent>
-            <p>Đổi mật khẩu</p>
-          </TopCssContent>
-
           <BottomCssContent>
+            <TopCssContent>
+              <p>Đổi mật khẩu</p>
+            </TopCssContent>
             <form
               onSubmit={handleSubmit(onSubmit)}
               style={{ width: "50%", margin: "0 auto" }}
             >
               <LoadingOverlayComponent status={isActive}>
-                <div className="card-body p-5 text-center">
+                <div className="card-body p-3 text-center">
                   <div className="form-outline mb-4  form_input_handle">
                     <div
                       className="change_password_visible"

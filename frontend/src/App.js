@@ -32,7 +32,10 @@ import BlogAdmin from './Pages/Admin/PagesAdmin/BlogAdmin';
 import DriverAdmin from './Pages/Admin/PagesAdmin/DriverAdmin';
 import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
 import AdministratorAdmin from './Pages/Admin/PagesAdmin/Administrator';
-import ServiceAdmin from './Pages/Admin/PagesAdmin/ServiceAdmin';
+// ServiceAdmin
+import ServiceAdmin from './Pages/Admin/PagesAdmin/Service/ServiceAdmin';
+import AddService from './Pages/Admin/PagesAdmin/Service/AddService';
+
 import VehicleAdmin from './Pages/Admin/PagesAdmin/VehicleAdmin';
 
 //Import trong Setting Admin
@@ -70,7 +73,10 @@ function App() {
           {/* Trang Admin  */}
           {/* Route With Item ComponentAdmin */}
           <Route path="/admin/dashboard" element={<DashBoardAdmin />} />
+          {/* Service Admin CRUD */}
           <Route path="/admin/service" element={<ServiceAdmin />} />
+          <Route path="/admin/service/add" element={<AddService />} />
+
           <Route path="/admin/vehicle" element={<VehicleAdmin />} />
           <Route path="/admin/blog" element={<BlogAdmin />} />
           <Route path="/admin/item_container" element={<ItemContainerAdmin />} />
