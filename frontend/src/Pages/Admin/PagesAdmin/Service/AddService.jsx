@@ -19,11 +19,11 @@ import axios from "axios";
 function AddService() {
   const navigate = useNavigate();
 
-  const oriTargetKeys = mockDataProcess
-    .filter((item) => Number(item.key) % 3 > 1)
-    .map((item) => item.key);
+  // const oriTargetKeys = mockDataProcess
+  //   .filter((item) => Number(item.key) % 3 > 1)
+  //   .map((item) => item.key);
 
-  const [targetKeys, setTargetKeys] = useState(oriTargetKeys);
+  const [targetKeys, setTargetKeys] = useState([]);
   const [selectedKeys, setSelectedKeys] = useState([]);
 
   const handleChange = (newTargetKeys, direction, moveKeys) => {
@@ -42,11 +42,11 @@ function AddService() {
     // console.log("target:", e.target);
   };
 
-  const oriTargetKeysBonus = mockDataBonus
-    .filter((item) => Number(item.key) % 3 > 1)
-    .map((item) => item.key);
+  // const oriTargetKeysBonus = mockDataBonus
+  //   .filter((item) => Number(item.key) % 3 > 1)
+  //   .map((item) => item.key);
 
-  const [targetKeysBonus, setTargetKeysBonus] = useState(oriTargetKeysBonus);
+  const [targetKeysBonus, setTargetKeysBonus] = useState([]);
   const [selectedKeysBonus, setSelectedKeysBonus] = useState([]);
 
   const handleChangeBonus = (newTargetKeysBonus, direction, moveKeys) => {
@@ -86,22 +86,41 @@ function AddService() {
   }
 
   const onSubmit = async (data) => {
+    const arrProcess = [];
+    const arrBonus = [];
+
+    targetKeys.forEach((item, index) => {
+      mockDataProcess.forEach((item1, index) => {
+        if (item === item1.key) {
+          arrProcess.push(item1.title);
+        }
+      });
+    });
+
+    targetKeysBonus.forEach((item, index) => {
+      mockDataBonus.forEach((item1, index) => {
+        if (item === item1.key) {
+          arrBonus.push(item1.title);
+        }
+      });
+    });
+
     try {
-      if (image && targetKeys && targetKeysBonus) {
+      if (image && arrProcess.length > 0 && arrBonus.length > 0) {
         const dataService = {
           name: data.service_name,
           vehicle: data.vehicle_type,
           needPeople: data.need_people,
           distance: data.distance,
           price: data.service_price,
-          process: targetKeys,
-          bonus: targetKeysBonus,
+          process: arrProcess,
+          bonus: arrBonus,
           image: image,
           warranty_policy: data.warranty_policy,
           suitable_for: data.suitable_for,
         };
 
-        console.log(dataService)
+
 
         await axios
           .post(`/v1/service/add_service`, dataService)
@@ -110,9 +129,8 @@ function AddService() {
               position: "center",
               icon: "success",
               title: "Thêm dịch vụ thành công!",
-              text: "Dữ liệu nhập chưa đủ !",
               showConfirmButton: false,
-              timer: 1300,
+              timer: 1200,
             });
 
             navigate("/admin/service");
@@ -144,12 +162,13 @@ function AddService() {
         position: "center",
         icon: "error",
         title: "Thêm dịch vụ thất bại!",
-        text: "Vui lòng thực hiện lại !",
+        text: "Vui lòng thực hiện lại ! - Có thể dung lượng ảnh quá lớn !",
         showConfirmButton: false,
         timer: 1000,
       });
     }
   };
+
   return (
     <>
       <LayoutAdmin>
@@ -174,11 +193,10 @@ function AddService() {
             <TopCssContent>
               <p>Thêm dịch vụ</p>
             </TopCssContent>
-
             <div>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row">
-                  <div className="col-5">
+                  <div className="col-4">
                     <h4 style={{ color: "#e88b27" }}>Thông tin chính</h4>
                     <div style={{ marginBottom: "5px" }}>
                       <label
@@ -313,25 +331,66 @@ function AddService() {
                       </div>
                     </div>
 
-                    <button
-                      type="submit"
-                      style={{
-                        backgroundColor: "#344767",
-                        color: "white",
-                        float: "right",
-                        marginBottom: "12px",
-                        width: "fit-content",
-                        height: "50px",
-                        padding: "5px",
-                        borderRadius: "5px",
-                      }}
-                    >
-                      Xác nhận
-                    </button>
+                    {/* Chính sách bảo hành      */}
+                    <div style={{ marginBottom: "5px" }}>
+                      <label
+                        htmlFor="warranty_policy"
+                        className="label-color"
+                        style={{ marginBottom: "5px" }}
+                      >
+                        Chính sách bảo hành
+                      </label>
+                      <div className="form-outline mb-3  form_input_handle">
+                        <input
+                          type="text"
+                          id="warranty_policy"
+                          className="form-control form-control-lg"
+                          placeholder="Nhập vào chính sách..."
+                          style={{
+                            fontSize: "17px",
+                            borderRadius: "3px",
+                          }}
+                          {...register("warranty_policy", {
+                            required: true,
+                          })}
+                        />
+                        {errors?.warranty_policy?.type === "required" && (
+                          <p>Không được để trống !</p>
+                        )}
+                      </div>
+                    </div>
+                    {/* Phù hợp cho */}
+                    <div style={{ marginBottom: "5px" }}>
+                      <label
+                        htmlFor="suitable_for"
+                        className="label-color"
+                        style={{ marginBottom: "5px" }}
+                      >
+                        Phù hợp
+                      </label>
+                      <div className="form-outline mb-3  form_input_handle">
+                        <input
+                          type="text"
+                          id="suitable_for"
+                          className="form-control form-control-lg"
+                          placeholder="Phù hợp với loại nào..."
+                          style={{
+                            fontSize: "17px",
+                            borderRadius: "3px",
+                          }}
+                          {...register("suitable_for", {
+                            required: true,
+                          })}
+                        />
+                        {errors?.suitable_for?.type === "required" && (
+                          <p>Không được để trống !</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
                   {/* Thông tin khác */}
-                  <div className="col">
+                  <div className="col-8">
                     <h4 style={{ color: "#e88b27" }}>Thông tin khác</h4>
                     {/* Image */}
                     <div>
@@ -342,12 +401,13 @@ function AddService() {
                       >
                         Hình ảnh &nbsp;
                       </label>
-
+                      <br />
                       <input
                         accept="image/"
                         type="file"
                         onChange={convertToBase64}
                       />
+                      <br />
                       {image === "" || image === null ? (
                         ""
                       ) : (
@@ -409,62 +469,21 @@ function AddService() {
                       </label>
                     </div>
 
-                    {/* Chính sách bảo hành      */}
-                    <div style={{ marginBottom: "5px" }}>
-                      <label
-                        htmlFor="warranty_policy"
-                        className="label-color"
-                        style={{ marginBottom: "5px" }}
-                      >
-                        Chính sách bảo hành
-                      </label>
-                      <div className="form-outline mb-3  form_input_handle">
-                        <input
-                          type="text"
-                          id="warranty_policy"
-                          className="form-control form-control-lg"
-                          placeholder="Nhập vào chính sách..."
-                          style={{
-                            fontSize: "17px",
-                            borderRadius: "3px",
-                          }}
-                          {...register("warranty_policy", {
-                            required: true,
-                          })}
-                        />
-                        {errors?.warranty_policy?.type === "required" && (
-                          <p>Không được để trống !</p>
-                        )}
-                      </div>
-                    </div>
-                    {/* Phù hợp cho */}
-                    <div style={{ marginBottom: "5px" }}>
-                      <label
-                        htmlFor="suitable_for"
-                        className="label-color"
-                        style={{ marginBottom: "5px" }}
-                      >
-                        Phù hợp
-                      </label>
-                      <div className="form-outline mb-3  form_input_handle">
-                        <input
-                          type="text"
-                          id="suitable_for"
-                          className="form-control form-control-lg"
-                          placeholder="Phù hợp với loại nào..."
-                          style={{
-                            fontSize: "17px",
-                            borderRadius: "3px",
-                          }}
-                          {...register("suitable_for", {
-                            required: true,
-                          })}
-                        />
-                        {errors?.suitable_for?.type === "required" && (
-                          <p>Không được để trống !</p>
-                        )}
-                      </div>
-                    </div>
+                    <button
+                      type="submit"
+                      style={{
+                        backgroundColor: "#344767",
+                        color: "white",
+                        float: "left",
+                        marginBottom: "12px",
+                        width: "fit-content",
+                        height: "50px",
+                        padding: "5px",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      Xác nhận
+                    </button>
                   </div>
                 </div>
               </form>

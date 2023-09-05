@@ -4,7 +4,6 @@ import TopCssContent from "./TopCssContent";
 import BottomCssContent from "./BottomCssContent";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import LoadingOverlayComponent from "../../../Components/LoadingOverlayComponent";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -20,14 +19,12 @@ import { logOutAdminSuccess } from "../../../redux/adminSlice";
 import axios from "axios";
 
 function ChangePasswordAdmin() {
-  const [isActive, setIsActive] = useState(true);
   const [visible, setVisible] = useState(false);
   const params = useParams();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setIsActive(false);
     let btnVisible_1 = document.querySelector("#password_current");
     let btnVisible_2 = document.querySelector("#password_new");
     let btnVisible_3 = document.querySelector("#password_reinput");
@@ -136,92 +133,90 @@ function ChangePasswordAdmin() {
               onSubmit={handleSubmit(onSubmit)}
               style={{ width: "50%", margin: "0 auto" }}
             >
-              <LoadingOverlayComponent status={isActive}>
-                <div className="card-body p-3 text-center">
-                  <div className="form-outline mb-4  form_input_handle">
-                    <div
-                      className="change_password_visible"
-                      id="basic-addon1"
-                      onClick={() => setVisible(!visible)}
-                    >
-                      {visible ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>}
-                    </div>
-                    <input
-                      type="text"
-                      id="password_current"
-                      className="form-control form-control-lg"
-                      placeholder="Nhập mật khẩu hiện tại"
-                      style={{ fontSize: "17px", borderRadius: "3px" }}
-                      {...register("password_current", {
-                        required: true,
-                        minLength: 8,
-                      })}
-                    />
-                    {errors?.password_current?.type === "required" && (
-                      <p>Mật khẩu không được để trống !</p>
-                    )}
-                    {errors?.password_current?.type === "minLength" && (
-                      <p>Mật khẩu nhập chưa đủ kí tự !</p>
-                    )}
-                  </div>
-                  <div className="form-outline mb-4  form_input_handle">
-                    <input
-                      type="text"
-                      id="password_new"
-                      className="form-control form-control-lg"
-                      placeholder="Nhập mật khẩu mới"
-                      style={{ fontSize: "17px", borderRadius: "3px" }}
-                      {...register("password_new", {
-                        required: true,
-                        minLength: 8,
-                      })}
-                    />
-                    {errors?.password_new?.type === "required" && (
-                      <p>Mật khẩu không được để trống !</p>
-                    )}
-                    {errors?.password_new?.type === "minLength" && (
-                      <p>Mật khẩu nhập chưa đủ kí tự !</p>
-                    )}
-                  </div>
-                  <div className="form-outline mb-4  form_input_handle">
-                    <input
-                      type="text"
-                      id="password_reinput"
-                      className="form-control form-control-lg"
-                      placeholder="Nhập lại mật khẩu mới"
-                      style={{ fontSize: "17px", borderRadius: "3px" }}
-                      {...register("password_reinput", {
-                        required: true,
-                        minLength: 8,
-                      })}
-                    />
-                    {errors?.password_reinput?.type === "required" && (
-                      <p>Mật khẩu không được để trống !</p>
-                    )}
-                    {errors?.password_reinput?.type === "minLength" && (
-                      <p>Mật khẩu nhập chưa đủ kí tự !</p>
-                    )}
-                  </div>
-
-                  <button
-                    className="btn btn-lg"
-                    type="submit"
-                    style={{
-                      height: "54px",
-                      width: "100%",
-                      backgroundColor: "#f16622",
-                      color: "white",
-                      marginTop: "5px",
-                      borderRadius: "5px",
-                      fontSize: "17px",
-                      marginBottom: "10px",
-                      fontWeight: "500",
-                    }}
+              <div className="card-body p-3 text-center">
+                <div className="form-outline mb-4  form_input_handle">
+                  <div
+                    className="change_password_visible"
+                    id="basic-addon1"
+                    onClick={() => setVisible(!visible)}
                   >
-                    Xác nhận
-                  </button>
+                    {visible ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>}
+                  </div>
+                  <input
+                    type="text"
+                    id="password_current"
+                    className="form-control form-control-lg"
+                    placeholder="Nhập mật khẩu hiện tại"
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    {...register("password_current", {
+                      required: true,
+                      minLength: 8,
+                    })}
+                  />
+                  {errors?.password_current?.type === "required" && (
+                    <p>Mật khẩu không được để trống !</p>
+                  )}
+                  {errors?.password_current?.type === "minLength" && (
+                    <p>Mật khẩu nhập chưa đủ kí tự !</p>
+                  )}
                 </div>
-              </LoadingOverlayComponent>
+                <div className="form-outline mb-4  form_input_handle">
+                  <input
+                    type="text"
+                    id="password_new"
+                    className="form-control form-control-lg"
+                    placeholder="Nhập mật khẩu mới"
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    {...register("password_new", {
+                      required: true,
+                      minLength: 8,
+                    })}
+                  />
+                  {errors?.password_new?.type === "required" && (
+                    <p>Mật khẩu không được để trống !</p>
+                  )}
+                  {errors?.password_new?.type === "minLength" && (
+                    <p>Mật khẩu nhập chưa đủ kí tự !</p>
+                  )}
+                </div>
+                <div className="form-outline mb-4  form_input_handle">
+                  <input
+                    type="text"
+                    id="password_reinput"
+                    className="form-control form-control-lg"
+                    placeholder="Nhập lại mật khẩu mới"
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    {...register("password_reinput", {
+                      required: true,
+                      minLength: 8,
+                    })}
+                  />
+                  {errors?.password_reinput?.type === "required" && (
+                    <p>Mật khẩu không được để trống !</p>
+                  )}
+                  {errors?.password_reinput?.type === "minLength" && (
+                    <p>Mật khẩu nhập chưa đủ kí tự !</p>
+                  )}
+                </div>
+
+                <button
+                  className="btn btn-lg"
+                  type="submit"
+                  style={{
+                    height: "54px",
+                    width: "100%",
+                    backgroundColor: "#f16622",
+                    color: "white",
+                    marginTop: "5px",
+                    borderRadius: "5px",
+                    fontSize: "17px",
+                    marginBottom: "10px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Xác nhận
+                </button>
+              </div>
             </form>
           </BottomCssContent>
         </div>

@@ -12,14 +12,17 @@ const serviceSchema = new mongoose.Schema({
     needPeople: {
         type: Number,
         required: true
+        // Tùy thuộc vào số lượng đồ đạc và quãng đường di chuyển nếu là 0
     },
     distance: {
         type: String,
         required: true
+        // Tùy thuộc vào yêu cầu của khách hàng
     },
     price: {
         type: Number,
         required: true
+        // Nếu là 0 thì sẽ Tùy thuộc vào nhu cầu và yêu cầu của khách hàng
     },
     status: {
         type: Boolean,

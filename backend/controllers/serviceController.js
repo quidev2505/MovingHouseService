@@ -14,12 +14,12 @@ const serviceController = {
                 price: req.body.price,
                 status: req.body.status,
                 process: req.body.process,
-                bonus: req.body.bonus,         
+                bonus: req.body.bonus,
                 image: req.body.image,
                 warranty_policy: req.body.warranty_policy,
                 suitable_for: req.body.suitable_for
             })
-            console.log(service_data)
+
 
             //Đưa dữ liệu vào DB
             const data_result = await service_data.save();
@@ -37,7 +37,7 @@ const serviceController = {
     //Read
     readService: async (req, res) => {
         try {
-            const data_service = await Service.findAll();
+            const data_service = await Service.find();
 
             if (data_service) {
                 res.status(200).json(data_service);

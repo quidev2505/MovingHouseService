@@ -10,9 +10,9 @@ router.post('/add_service', serviceController.createService);
 router.get('/list_service', serviceController.readService);
 
 //Update
-router.put('/update_service', serviceController.updateService);
+router.put('/update_service/:id', serviceController.updateService);
 
 //Delete
-router.delete('/delete_service', serviceController.deleteService);
+router.delete('/delete_service/:id', serviceController.deleteService);
 
 module.exports = router;

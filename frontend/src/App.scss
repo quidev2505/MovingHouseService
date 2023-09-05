@@ -413,5 +413,17 @@
 }
 
 .ant-transfer-list{
-    width:fit-content !important;
+    width:370px !important;
+    font-weight: 500;
+}
+
+::placeholder {
+    color: rgb(70, 95, 144,0.7) !important;
+    /* Firefox */
+}
+
+.ant-btn{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }

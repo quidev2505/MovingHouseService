@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Badge, Space } from "antd";
 import { BellFilled } from "@ant-design/icons";
 import { Dropdown } from "antd";
 import { useDispatch } from "react-redux";
 import { logOutAdmin } from "../../../redux/apiRequest";
 import { useNavigate } from "react-router-dom";
-
+import { Skeleton } from "antd";
 import { useSelector } from "react-redux";
 
 function HeaderAdmin() {
@@ -36,6 +36,13 @@ function HeaderAdmin() {
       navigate(`/admin/change_password/${check_admin_login._id}`);
     }
   };
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // react-hooks/exhaustive-deps;
+    setLoading(false);
+  }, []);
   return (
     <div className="HeaderAdmin">
       <img
@@ -60,11 +67,13 @@ function HeaderAdmin() {
           <div>
             <Space>
               <div className="container_info_admin d-flex">
-                <img
-                  src="/img/buoc1.png"
-                  class="img-thumbnail img_avatar"
-                  alt="..."
-                ></img>
+                <Skeleton loading={loading} avatar style={{marginTop:"80px"}}>
+                  <img
+                    src="/img/buoc1.png"
+                    class="img-thumbnail img_avatar"
+                    alt="..."
+                  ></img>
+                </Skeleton>
               </div>
             </Space>
           </div>

@@ -23,6 +23,23 @@ export const mockDataProcess = [
     key: 6,
     title: "Vận chuyển đồ đạc bằng xe tải",
   },
+  {
+    key: 7,
+    title: "Hỗ trợ khách hàng dọn dẹp nhà cũ",
+  },
+  {
+    key: 8,
+    title: "Hỗ trợ khách hàng lắp đặt đồ dùng điện tử, điện lạnh",
+  },
+  {
+    key: 9,
+    title: "Tư vấn khách hàng về các gói dịch vụ chuyển nhà",
+  },
+  {
+    key: 10,
+    title:
+      "Hỗ trợ khách hàng giải quyết các vấn đề phát sinh trong quá trình vận chuyển",
+  },
 ];
 
 export const mockDataBonus = [
@@ -37,5 +54,21 @@ export const mockDataBonus = [
   {
     key: 3,
     title: "Bảo hiểm đồ đạc",
+  },
+  {
+    key: 4,
+    title: "Vận chuyển thú cưng",
+  },
+  {
+    key: 5,
+    title: "Vận chuyển cây cảnh",
+  },
+  {
+    key: 6,
+    title: "Vận chuyển đồ đạc đặc biệt",
+  },
+  {
+    key: 7,
+    title: "Vận chuyển đồ đạc đi nước ngoài",
   },
 ];
