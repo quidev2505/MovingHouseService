@@ -1,13 +1,108 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
+import { Tabs, Avatar } from "antd";
 
+import axios from "axios";
 
 const Home = () => {
+  const [dataSource, setDataSource] = useState([]);
+
+  const get_service = async () => {
+    await axios
+      .get(`/v1/service/list_service`)
+      .then((data) => {
+        let data_solve = data.data;
+        const data_service = [];
+        data_solve &&
+          data_solve.forEach((item) => {
+            const ob_service = {
+              key: item._id,
+              label: (
+                <Avatar
+                  size={60}
+                  src={
+                    <img
+                      src={item.image}
+                      alt="avatar"
+                      style={{
+                        backgroundColor: "white",
+                      }}
+                    />
+                  }
+                />
+              ),
+              children: (
+                <>
+                  <h6
+                    style={{
+                      fontSize: "18px",
+                      fontWeight: "800",
+                      color: "#e16d2a",
+                    }}
+                  >
+                    Dịch vụ {item.name.toLowerCase()}
+                  </h6>
+                  <ul style={{ marginTop: "20px" }}>
+                    <li style={{ fontSize: "16px" }}>
+                      <span className="fw-bold">Giá gói dịch vụ: </span>
+                      {item.price === 0
+                        ? "Tùy thuộc vào số lượng đồ đạc và quãng đường di chuyển"
+                        : item.price.toLocaleString() + "đ"}
+                    </li>
+                    <li style={{ fontSize: "16px" }}>
+                      <span className="fw-bold">Xe tải sử dụng:</span>{" "}
+                      {item.vehicle}
+                    </li>
+                    <li style={{ fontSize: "16px" }}>
+                      <span className="fw-bold">Số lượng người khuân vác:</span>{" "}
+                      {item.needPeople === 0
+                        ? "Tùy thuộc vào số lượng đồ đạc và quãng đường di chuyển"
+                        : item.needPeople}
+                    </li>
+                    <li style={{ fontSize: "16px" }}>
+                      <span className="fw-bold">Quảng đường áp dụng:</span>{" "}
+                      {item.distance === "0"
+                        ? "Tùy thuộc vào yêu cầu của khách hàng"
+                        : item.distance}
+                    </li>
+                  </ul>
+
+                  <div style={{ textAlign: "right" }}>
+                    <button
+                      type="button"
+                      class="btn"
+                      style={{ backgroundColor: "#e16d2a", color: "white" }}
+                    >
+                      Đặt dịch vụ ngay
+                    </button>
+                  </div>
+                </>
+              ),
+            };
+
+            data_service.push(ob_service);
+          });
+
+        setDataSource(data_service);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    get_service();
+  }, []);
+
+  const onChange = (key) => {
+    console.log(key);
+  };
+
   return (
     <>
       <Header />
@@ -19,24 +114,26 @@ const Home = () => {
         >
           <div
             className="left-container col-lg-4"
-            style={{ position: "absolute", left: "100px", top: "50px" }}
+            style={{ position: "absolute", left: "59px", top: "50px" }}
           >
-            <h1 style={{ fontSize: "25px", fontWeight:"600" }}>
+            <h1 style={{ fontSize: "25px", fontWeight: "600" }}>
               Đặt lịch dọn nhà nhanh chóng và tiện lợi.
             </h1>
             <h1
               style={{
                 color: "#e16d2a",
                 fontSize: "70px",
-                marginBottom: "30px",
-                fontWeight:"500"
+                marginBottom: "14px",
+                fontWeight: "500",
               }}
             >
               Chỉ với 1 Click
             </h1>
-
-            <div
-              className="board_service"
+            {/* Bảng nav lựa chọn dịch vụ */}
+            <Tabs
+              defaultActiveKey="1"
+              items={dataSource}
+              onChange={onChange}
               style={{
                 border: "2px solid #ccc",
                 padding: "10px",
@@ -46,165 +143,7 @@ const Home = () => {
                   "radial-gradient(circle, rgba(11,6,4,0.8492647058823529) 33%, rgba(85,81,78,0.9557072829131653) 74%)",
                 width: "570px",
               }}
-            >
-              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link active"
-                    id="pills-home-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-home"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-home"
-                    aria-selected="true"
-                  >
-                    <img
-                      src="./img/choose_1.png"
-                      class="img-thumbnail"
-                      alt="..."
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
-                      }}
-                    ></img>
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-profile-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-profile"
-                    aria-selected="false"
-                  >
-                    <img
-                      src="./img/choose_2.png"
-                      class="img-thumbnail"
-                      alt="..."
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
-                      }}
-                    ></img>
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-contact-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-contact"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-contact"
-                    aria-selected="false"
-                  >
-                    <img
-                      src="./img/choose_3.png"
-                      class="img-thumbnail"
-                      alt="..."
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
-                      }}
-                    ></img>
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-contact-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-hihi"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-hihi"
-                    aria-selected="false"
-                  >
-                    <img
-                      src="./img/choose_4.png"
-                      class="img-thumbnail"
-                      alt="..."
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
-                      }}
-                    ></img>
-                  </button>
-                </li>
-              </ul>
-
-              <div
-                class="tab-content"
-                id="pills-tabContent"
-                style={{
-                  backgroundColor: "white",
-                  borderRadius: "5px",
-                  padding: "10px",
-                }}
-              >
-                <div
-                  class="tab-pane fade show active"
-                  id="pills-home"
-                  role="tabpanel"
-                  aria-labelledby="pills-home-tab"
-                >
-                  <h6 style={{ fontSize: "18px", fontWeight: "800" }}>
-                    Dịch vụ chuyển nhà - Nội thành
-                  </h6>
-                  <div>
-                    <div>
-                      <ul>
-                        <li>Xe tải: 1 tấn/ 1.5 tấn/ 2 tấn</li>
-                        <li>Ít nhất 2 người bốc vác</li>
-                        <li>Áp dụng trong vòng 60km</li>
-                      </ul>
-                    </div>
-                    <div style={{textAlign:"right"}}>
-                      <button
-                        type="button"
-                        class="btn"
-                        style={{ backgroundColor: "#e16d2a", color: "white" }}
-                      >
-                        Đặt dịch vụ ngay
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="pills-profile"
-                  role="tabpanel"
-                  aria-labelledby="pills-profile-tab"
-                >
-                  Dịch vụ chuyển nhà - Liên tỉnh
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="pills-contact"
-                  role="tabpanel"
-                  aria-labelledby="pills-contact-tab"
-                >
-                  Dịch vụ chuyển nhà trọn gói
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="pills-hihi"
-                  role="tabpanel"
-                  aria-labelledby="pills-hihi-tab"
-                >
-                  Dịch vụ xử lý hàng
-                </div>
-              </div>
-            </div>
+            />
           </div>
 
           <div

@@ -66,11 +66,7 @@ function EditService() {
   const [dataService, setDataService] = useState({});
 
   //Validation form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const {  handleSubmit } = useForm();
 
   const [image, setImage] = useState("");
 
@@ -87,7 +83,9 @@ function EditService() {
     };
   }
 
-  const onSubmit = async (data) => {
+  const params = useParams();
+
+  const onSubmit = async () => {
     const arrProcess = [];
     const arrBonus = [];
 
@@ -99,6 +97,8 @@ function EditService() {
       });
     });
 
+    dataService.process = arrProcess;
+
     targetKeysBonus.forEach((item, index) => {
       mockDataBonus.forEach((item1, index) => {
         if (item === item1.key) {
@@ -107,72 +107,69 @@ function EditService() {
       });
     });
 
-    try {
-      if (image && arrProcess.length > 0 && arrBonus.length > 0) {
-        const dataService = {
-          name: data.service_name,
-          vehicle: data.vehicle_type,
-          needPeople: data.need_people,
-          distance: data.distance,
-          price: data.service_price,
-          process: arrProcess,
-          bonus: arrBonus,
-          image: image,
-          warranty_policy: data.warranty_policy,
-          suitable_for: data.suitable_for,
-        };
+    dataService.bonus = arrBonus;
+		dataService.image = image;
+    // setDataService({
+    //   ...dataService,
+    //   image: image,
+    // });
 
-        await axios
-          .post(`/v1/service/add_service`, dataService)
-          .then((data) => {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Thêm dịch vụ thành công!",
-              showConfirmButton: false,
-              timer: 1200,
-            });
+    const isKeyEmpty = (key) => {
+      return (
+        dataService[key] === undefined ||
+        dataService[key] === null ||
+        dataService[key] === ""
+      );
+    };
 
-            navigate("/admin/service");
-          })
-          .catch((e) => {
-            console.log(e);
-            Swal.fire({
-              position: "center",
-              icon: "error",
-              title: "Thêm dịch vụ thất bại!",
-              text: "Vui lòng thực hiện lại !",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-          });
-      } else {
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Thêm dịch vụ thất bại!",
-          text: "Dữ liệu nhập chưa đủ !",
-          showConfirmButton: false,
-          timer: 1000,
-        });
+    let check = true;
+
+    for (const key in dataService) {
+      if (isKeyEmpty(key)) {
+        check = false;
+        break;
       }
-    } catch (e) {
-      console.log(e);
+    }
+
+    if (check) {
+      await axios
+        .put(`/v1/service/update_service/${params.id}`, dataService)
+        .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Sửa dịch vụ thành công!",
+            showConfirmButton: false,
+            timer: 1200,
+          });
+
+					console.log(data.data)
+
+          navigate("/admin/service");
+        })
+        .catch((e) => {
+          console.log(e);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Sửa dịch vụ thất bại!",
+            text: "Vui lòng thực hiện lại - Dung lượng ảnh quá lớn !",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        });
+    } else {
       Swal.fire({
         position: "center",
         icon: "error",
-        title: "Thêm dịch vụ thất bại!",
-        text: "Vui lòng thực hiện lại ! - Có thể dung lượng ảnh quá lớn !",
+        title: "Sửa dịch vụ thất bại!",
+        text: "Dữ liệu nhập chưa đủ !",
         showConfirmButton: false,
         timer: 1000,
       });
     }
   };
 
-  const params = useParams();
-
-  const [arrProcess, setArrProcess] = useState([]);
-  const [arrBonus, setArrBonus] = useState([]);
   const getDetail_service = async () => {
     const id = params.id;
     await axios
@@ -183,7 +180,7 @@ function EditService() {
           name: data_detail_service.name,
           image: data_detail_service.image,
           vehicle: data_detail_service.vehicle,
-          needpeople: data_detail_service.needPeople,
+          needPeople: data_detail_service.needPeople,
           distance: data_detail_service.distance,
           price: data_detail_service.price,
           status: data_detail_service.status,
@@ -193,15 +190,41 @@ function EditService() {
           suitable_for: data_detail_service.suitable_for,
         };
 
-        const arrProcessMap = object_data.process.map((item) => (
-          <li>{item}</li>
-        ));
-        setArrProcess(arrProcessMap);
+        // setTargetKeys(1)
 
-        const arrBonusMap = object_data.bonus.map((item) => <li>{item}</li>);
-        setArrBonus(arrBonusMap);
+        //  targetKeys.forEach((item, index) => {
+        //    mockDataProcess.forEach((item1, index) => {
+        //      if (item === item1.key) {
+        //        arrProcess.push(item1.title);
+        //      }
+        //    });
+        //  });
 
+        const arrProcessKey = [];
+        const arrBonusKey = [];
+
+        object_data.process.forEach((item, index) => {
+          mockDataProcess.forEach((item1, index) => {
+            if (item === item1.title) {
+              arrProcessKey.push(item1.key);
+            }
+          });
+        });
+
+        object_data.bonus.forEach((item, index) => {
+          mockDataBonus.forEach((item1, index) => {
+            if (item === item1.title) {
+              arrBonusKey.push(item1.key);
+            }
+          });
+        });
+
+        setTargetKeys(arrProcessKey);
+        setTargetKeysBonus(arrBonusKey);
+
+        setImage(object_data.image);
         setDataService(object_data);
+        // console.log(dataService);
       })
       .catch((e) => {
         console.log(e);
@@ -252,9 +275,11 @@ function EditService() {
                       <div className="form-outline mb-3 form_input_handle">
                         <input
                           value={dataService.name}
-                          ref={register("service_name")}
                           onChange={(e) =>
-                            setDataService({ name: e.target.value })
+                            setDataService({
+                              ...dataService,
+                              name: e.target.value,
+                            })
                           }
                           type="text"
                           id="service_name"
@@ -262,9 +287,6 @@ function EditService() {
                           placeholder="Tên dịch vụ"
                           style={{ fontSize: "17px", borderRadius: "3px" }}
                         />
-                        {errors?.service_name?.type === "required" && (
-                          <p>Tên dịch vụ không được để trống !</p>
-                        )}
                       </div>
                     </div>
                     <div style={{ marginBottom: "5px" }}>
@@ -277,6 +299,13 @@ function EditService() {
                       </label>
                       <div className="form-outline mb-3  form_input_handle">
                         <input
+                          value={dataService.vehicle}
+                          onChange={(e) =>
+                            setDataService({
+                              ...dataService,
+                              vehicle: e.target.value,
+                            })
+                          }
                           type="text"
                           id="vehicle_type"
                           className="form-control form-control-lg"
@@ -295,6 +324,13 @@ function EditService() {
                       </label>
                       <div className="form-outline mb-3  form_input_handle">
                         <input
+                          value={dataService.price}
+                          onChange={(e) =>
+                            setDataService({
+                              ...dataService,
+                              price: e.target.value,
+                            })
+                          }
                           type="number"
                           id="service_price"
                           className="form-control form-control-lg"
@@ -317,6 +353,13 @@ function EditService() {
                       </label>
                       <div className="form-outline mb-3 form_input_handle">
                         <input
+                          value={dataService.needPeople}
+                          onChange={(e) =>
+                            setDataService({
+                              ...dataService,
+                              needPeople: e.target.value,
+                            })
+                          }
                           type="number"
                           id="need_people"
                           className="form-control form-control-lg"
@@ -339,6 +382,13 @@ function EditService() {
                       </label>
                       <div className="form-outline mb-3  form_input_handle">
                         <input
+                          value={dataService.distance}
+                          onChange={(e) =>
+                            setDataService({
+                              ...dataService,
+                              distance: e.target.value,
+                            })
+                          }
                           type="text"
                           id="distance"
                           className="form-control form-control-lg"
@@ -363,6 +413,13 @@ function EditService() {
                       </label>
                       <div className="form-outline mb-3  form_input_handle">
                         <input
+                          value={dataService.warranty_policy}
+                          onChange={(e) =>
+                            setDataService({
+                              ...dataService,
+                              warranty_policy: e.target.value,
+                            })
+                          }
                           type="text"
                           id="warranty_policy"
                           className="form-control form-control-lg"
@@ -385,6 +442,13 @@ function EditService() {
                       </label>
                       <div className="form-outline mb-3  form_input_handle">
                         <input
+                          value={dataService.suitable_for}
+                          onChange={(e) =>
+                            setDataService({
+                              ...dataService,
+                              suitable_for: e.target.value,
+                            })
+                          }
                           type="text"
                           id="suitable_for"
                           className="form-control form-control-lg"

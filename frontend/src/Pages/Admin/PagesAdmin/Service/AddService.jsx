@@ -180,10 +180,10 @@ function AddService() {
                   title: "Admin",
                 },
                 {
-                  title: <Link to="/admin/service">Dịch vụ</Link>,
+                  title: <Link to="/admin/service">Gói dịch vụ</Link>,
                 },
                 {
-                  title: "Thêm dịch vụ",
+                  title: "Thêm gói dịch vụ",
                 },
               ]}
             />

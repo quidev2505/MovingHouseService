@@ -19,12 +19,13 @@ import {
   EditOutlined,
   FolderViewOutlined,
   DeleteOutlined,
+  SwapOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
 
 function ServiceAdmin() {
-  const nav = useNavigate()
+  const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
 
   const columns = [
@@ -74,10 +75,24 @@ function ServiceAdmin() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) => (
-        <Tag color={status ? "green" : "volcano"} key={status}>
-          {status ? "Hoạt động" : "Tạm ngưng"}
-        </Tag>
+      render: (status, id) => (
+        <div className="d-flex">
+          <Tag color={status ? "green" : "volcano"} key={status}>
+            {status ? "Hoạt động" : "Tạm ngưng"}
+          </Tag>
+          <div
+            onClick={() => changeStatus(id, status)}
+            style={{
+              backgroundColor: "orange",
+              borderRadius: "50%",
+              padding: "5px",
+              display: "flex",
+              cursor: "pointer",
+            }}
+          >
+            <SwapOutlined style={{ color: "white", fontWeight: "bold" }} />
+          </div>
+        </div>
       ),
     },
     {
@@ -155,32 +170,81 @@ function ServiceAdmin() {
       });
   };
 
+  const changeStatus = (id, status) => {
+    let id_service = id.id;
+    Swal.fire({
+      title: "Bạn muốn thay đổi trạng thái dịch vụ này ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .patch(`/v1/service/update_one_field_service/${id_service}`, {status: !status} )
+            .then((data) => {
+              get_service();
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Thay đổi trạng thái dịch vụ thành công !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+            })
+            .catch((e) => {
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Thay đổi trạng thái dịch vụ thất bại !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+              console.log(e);
+            });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Thay đổi trạng thái dịch vụ thất bại !",
+          showConfirmButton: false,
+          timer: 1200,
+        });
+        console.log(e);
+      });
+  }
+
   useEffect(() => {
     get_service();
   }, []);
 
-  const delete_service =  (id) => {
+  const delete_service = (id) => {
     let id_service = id.id;
-        Swal.fire({
-          title: "Bạn muốn xóa dịch vụ này ?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Xác nhận",
-        }).then(async(result) =>{
-          if (result.isConfirmed) {
-            await axios
+    Swal.fire({
+      title: "Bạn muốn xóa dịch vụ này ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
             .delete(`/v1/service/delete_service/${id_service}`)
             .then((data) => {
-                  get_service();
-                    Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Xóa dịch vụ thành công!",
-                    showConfirmButton: false,
-                    timer: 1200,
-                  });
+              get_service();
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Xóa dịch vụ thành công!",
+                showConfirmButton: false,
+                timer: 1200,
+              });
             })
             .catch((e) => {
               Swal.fire({
@@ -192,17 +256,19 @@ function ServiceAdmin() {
               });
               console.log(e);
             });
-          }}).catch((e)=>{
-             Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "Xóa dịch vụ thất bại!",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-              console.log(e);
-          })
-}
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Xóa dịch vụ thất bại!",
+          showConfirmButton: false,
+          timer: 1200,
+        });
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -215,7 +281,7 @@ function ServiceAdmin() {
                   title: "Admin",
                 },
                 {
-                  title: "Dịch vụ",
+                  title: "Gói dịch vụ",
                 },
               ]}
             />
@@ -223,7 +289,7 @@ function ServiceAdmin() {
 
           <BottomCssContent>
             <TopCssContent>
-              <p>Dịch vụ</p>
+              <p>Gói dịch vụ</p>
               <Link to="/admin/service/add">
                 <Button
                   style={{
@@ -233,7 +299,7 @@ function ServiceAdmin() {
                     marginBottom: "15px",
                   }}
                 >
-                  + THÊM DỊCH VỤ
+                  + THÊM GÓI DỊCH VỤ
                 </Button>
               </Link>
             </TopCssContent>

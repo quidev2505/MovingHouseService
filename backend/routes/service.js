@@ -15,6 +15,9 @@ router.get('/list_service/:id', serviceController.readServiceDetail);
 //Update
 router.put('/update_service/:id', serviceController.updateService);
 
+//Update One Field
+router.patch('/update_one_field_service/:id', serviceController.updateOneFieldService);
+
 //Delete
 router.delete('/delete_service/:id', serviceController.deleteService);
 

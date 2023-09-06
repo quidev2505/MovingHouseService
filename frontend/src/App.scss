@@ -6,7 +6,7 @@
     --primay-color: #ff671d;
     --second-color: #e16c27;
     --text-color: #3b4d6c;
-    --text-second-color:#415384;
+    --text-second-color: #415384;
 }
 
 * {
@@ -366,10 +366,14 @@
 
 
 .ant-menu-item {
-    margin: 0px 0px 24px 0px !important;
+    margin: 0px 0px 15px 0px !important;
 }
 
 .ant-menu-title-content {
+    margin-left: 20px !important;
+}
+
+.ant-menu-item-group-list{
     margin-left: 20px !important;
 }
 
@@ -407,37 +411,43 @@
 }
 
 
-.label-color{
-    color:var(--text-second-color);
+.label-color {
+    color: var(--text-second-color);
     font-weight: 600;
 }
 
-.ant-transfer-list{
-    width:370px !important;
+.ant-transfer-list {
+    width: 370px !important;
     font-weight: 500;
 }
 
 ::placeholder {
-    color: rgb(70, 95, 144,0.7) !important;
+    color: rgb(70, 95, 144, 0.7) !important;
     /* Firefox */
 }
 
-.ant-btn{
+.ant-btn {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 }
 
-th.ant-table-cell{
-    background-color: rgb(237, 136, 59,0.8)!important;
+th.ant-table-cell {
+    background-color: rgb(237, 136, 59, 0.8) !important;
     color: white !important;
 }
 
 
-.icon_hover div:hover{
+.icon_hover div:hover {
     opacity: 0.6;
 }
 
-.ant-card-head-title{
-    color:#ed883b !important;
+.ant-card-head-title {
+    color: #ed883b !important;
+}
+
+.ant-tabs-content-holder {
+    background-color: white !important;
+    border-radius: 5px;
+    padding: 10px;
 }

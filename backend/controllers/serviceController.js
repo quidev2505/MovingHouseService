@@ -54,7 +54,7 @@ const serviceController = {
         try {
             const id = req.params.id;
 
-            const data_service = await Service.findOne({_id: id});
+            const data_service = await Service.findOne({ _id: id });
 
             if (data_service) {
                 res.status(200).json(data_service);
@@ -67,17 +67,49 @@ const serviceController = {
         }
     },
 
-    //Update
+    //Update All
     updateService: async (req, res) => {
         try {
             const id_service = req.params.id;
 
             const data_update_from_client = req.body;
 
+
             const data_service = await Service.findOne({ _id: id_service });
 
+
             if (data_service) {
-                const data_update = await Service.findByIdAndUpdate(id_service, { data_update_from_client })
+                const data_update = await Service.findByIdAndUpdate(id_service, data_update_from_client, { new: true })
+
+
+                if (data_update) {
+                    res.status(200).json('Update Success');
+                } else {
+                    res.status(501).json('Update Fail');
+                }
+            } else {
+                res.status(501).json('Update Fail');
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(501).json('Fail to update !');
+        }
+    },
+
+    //Update One Field
+    updateOneFieldService: async (req, res) => {
+        try {
+            const id_service = req.params.id;
+
+            const data_update_from_client = req.body;
+
+
+            const data_service = await Service.findOne({ _id: id_service });
+
+
+            if (data_service) {
+                const data_update = await Service.updateOne({ _id: id_service }, data_update_from_client, { new: true })
+
 
                 if (data_update) {
                     res.status(200).json('Update Success');

@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Menu } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -27,9 +27,18 @@ function SideMenuAdmin() {
       key: "/admin/dashboard",
     },
     {
+      type: "group",
       label: "Dịch vụ",
-      icon: <FcHome />,
-      key: "/admin/service",
+      children: [
+        {
+          label: "Gói dịch vụ",
+          icon: <FcHome />,
+          key: "/admin/service",
+        },
+        {
+          label: "Chi phí",
+        },
+      ],
     },
     {
       label: "Phương tiện",
@@ -76,9 +85,9 @@ function SideMenuAdmin() {
   const [collapsed, setCollapsed] = useState(false);
   // const [defautlKey, setDefaultKey] = useState(items[0].key);
 
-  let defaultkey = localStorage.getItem('menu');
+  let defaultkey = localStorage.getItem("menu");
   if (!defaultkey) {
-    defaultkey = localStorage.setItem('menu', items[0].key);
+    defaultkey = localStorage.setItem("menu", items[0].key);
   }
 
   const toggleCollapsed = () => {
@@ -97,9 +106,8 @@ function SideMenuAdmin() {
         mode="inline"
         theme="light"
         onClick={(e) => {
-          localStorage.setItem('menu', e.key)
+          localStorage.setItem("menu", e.key);
           navigate(e.key);
-          
         }}
         inlineCollapsed={collapsed}
         items={items}
