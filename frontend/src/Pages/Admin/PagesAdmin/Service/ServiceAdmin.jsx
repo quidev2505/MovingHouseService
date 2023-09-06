@@ -7,11 +7,13 @@ import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 
-import { Space, Table, Tag } from "antd";
+import { Space, Table, Tag, Image } from "antd";
 
-import Swal from 'sweetalert2/dist/sweetalert2.js'
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
-import 'sweetalert2/src/sweetalert2.scss'
+import "sweetalert2/src/sweetalert2.scss";
+
+import { useNavigate } from "react-router-dom";
 
 import {
   EditOutlined,
@@ -22,7 +24,7 @@ import {
 import axios from "axios";
 
 function ServiceAdmin() {
-  
+  const nav = useNavigate()
   const [dataSource, setDataSource] = useState([]);
 
   const columns = [
@@ -30,6 +32,16 @@ function ServiceAdmin() {
       title: "STT",
       dataIndex: "STT",
       key: "STT",
+    },
+    {
+      title: "Hình ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (image) => (
+        <td>
+          <Image width={80} src={image} />
+        </td>
+      ),
     },
     {
       title: "Tên dịch vụ",
@@ -54,7 +66,7 @@ function ServiceAdmin() {
       key: "distance",
       render: (distance) => (
         <td>
-          {distance === '0' ? "Tùy thuộc vào yêu cầu của khách hàng" : distance}
+          {distance === "0" ? "Tùy thuộc vào yêu cầu của khách hàng" : distance}
         </td>
       ),
     },
@@ -72,33 +84,35 @@ function ServiceAdmin() {
       title: "Thao tác",
       key: "action",
       render: (id) => (
-        <Space size="middle">
-          <Link
-            to="/admin/service/edit"
+        <Space size="middle" className="icon_hover">
+          <div
+            onClick={() => nav(`/admin/service/edit/${id.id}`)}
             style={{
               backgroundColor: "green",
               borderRadius: "50%",
               padding: "5px",
               display: "flex",
+              cursor: "pointer",
             }}
           >
             <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
-          </Link>
-          <Link
-            to="/admin/service/view"
+          </div>
+          <div
+            onClick={() => nav(`/admin/service/view/${id.id}`)}
             style={{
               backgroundColor: "blue",
               borderRadius: "50%",
               padding: "5px",
               display: "flex",
+              cursor: "pointer",
             }}
           >
             <FolderViewOutlined
               style={{ color: "white", fontWeight: "bold" }}
             />
-          </Link>
+          </div>
           <Link
-            onClick={()=>delete_service(id)}
+            onClick={() => delete_service(id)}
             style={{
               backgroundColor: "red",
               borderRadius: "50%",
@@ -123,9 +137,10 @@ function ServiceAdmin() {
           data_solve.forEach((item, index) => {
             const ob_service = {
               id: item._id,
+              image: item.image,
               STT: index + 1,
               service_name: item.name,
-              service_price: item.price.toLocaleString() + ' đ',
+              service_price: item.price.toLocaleString() + " đ",
               distance: item.distance,
               status: item.status,
             };
@@ -144,40 +159,50 @@ function ServiceAdmin() {
     get_service();
   }, []);
 
-  const delete_service = async(id) => {
+  const delete_service =  (id) => {
     let id_service = id.id;
-    await axios
-      .delete(`/v1/service/delete_service/${id_service}`).then((data)=>{
         Swal.fire({
-          title: 'Bạn muốn xóa dịch vụ này ?',
-          icon: 'warning',
+          title: "Bạn muốn xóa dịch vụ này ?",
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Xác nhận'
-        }).then((result) => {
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Xác nhận",
+        }).then(async(result) =>{
           if (result.isConfirmed) {
-              get_service()
+            await axios
+            .delete(`/v1/service/delete_service/${id_service}`)
+            .then((data) => {
+                  get_service();
+                    Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Xóa dịch vụ thành công!",
+                    showConfirmButton: false,
+                    timer: 1200,
+                  });
+            })
+            .catch((e) => {
               Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Xóa dịch vụ thành công!",
-                showConfirmButton: false,
-                timer: 1200,
-            });
-          }
-        })
-      }).catch((e)=>{
-         Swal.fire({
                 position: "center",
                 icon: "warning",
                 title: "Xóa dịch vụ thất bại!",
                 showConfirmButton: false,
                 timer: 1200,
+              });
+              console.log(e);
             });
-            console.log(e)
-      })
-  }
+          }}).catch((e)=>{
+             Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Xóa dịch vụ thất bại!",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+              console.log(e);
+          })
+}
 
   return (
     <>

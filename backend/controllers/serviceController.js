@@ -1,11 +1,11 @@
 const Service = require('../models/Service');
 
+
 const serviceController = {
     //CRUD 
     //Create
     createService: async (req, res) => {
         try {
-
             const service_data = await new Service({
                 name: req.body.name,
                 vehicle: req.body.vehicle,
@@ -49,6 +49,24 @@ const serviceController = {
             res.status(501).json('Fail to load data !');
         }
     },
+    //Detail Service
+    readServiceDetail: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const data_service = await Service.findOne({_id: id});
+
+            if (data_service) {
+                res.status(200).json(data_service);
+            } else {
+                res.status(501).json('Fail to load data !');
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(501).json('Fail to load data !');
+        }
+    },
+
     //Update
     updateService: async (req, res) => {
         try {

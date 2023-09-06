@@ -9,6 +9,9 @@ router.post('/add_service', serviceController.createService);
 //Read
 router.get('/list_service', serviceController.readService);
 
+//Read Service Detail
+router.get('/list_service/:id', serviceController.readServiceDetail);
+
 //Update
 router.put('/update_service/:id', serviceController.updateService);
 

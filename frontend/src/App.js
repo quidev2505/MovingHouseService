@@ -32,9 +32,12 @@ import BlogAdmin from './Pages/Admin/PagesAdmin/BlogAdmin';
 import DriverAdmin from './Pages/Admin/PagesAdmin/DriverAdmin';
 import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
 import AdministratorAdmin from './Pages/Admin/PagesAdmin/Administrator';
+
 // ServiceAdmin
 import ServiceAdmin from './Pages/Admin/PagesAdmin/Service/ServiceAdmin';
 import AddService from './Pages/Admin/PagesAdmin/Service/AddService';
+import ViewService from './Pages/Admin/PagesAdmin/Service/ViewService';
+import EditService from './Pages/Admin/PagesAdmin/Service/EditService';
 
 import VehicleAdmin from './Pages/Admin/PagesAdmin/VehicleAdmin';
 
@@ -76,6 +79,8 @@ function App() {
           {/* Service Admin CRUD */}
           <Route path="/admin/service" element={<ServiceAdmin />} />
           <Route path="/admin/service/add" element={<AddService />} />
+          <Route path="/admin/service/view/:id" element={<ViewService />} />
+          <Route path="/admin/service/edit/:id" element={<EditService />} />
 
           <Route path="/admin/vehicle" element={<VehicleAdmin />} />
           <Route path="/admin/blog" element={<BlogAdmin />} />
