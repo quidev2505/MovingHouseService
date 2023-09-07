@@ -44,9 +44,9 @@ import ServiceFeeAdmin from './Pages/Admin/PagesAdmin/Service/ServiceFeeAdmin';
 import AddServiceFee from './Pages/Admin/PagesAdmin/Service/AddServiceFee';
 import EditServiceFee from './Pages/Admin/PagesAdmin/Service/EditServiceFee';
 
-
-
-import VehicleAdmin from './Pages/Admin/PagesAdmin/VehicleAdmin';
+//VehicleAdmin
+import VehicleAdmin from './Pages/Admin/PagesAdmin/Vehicle/VehicleAdmin';
+import AddVehicle from './Pages/Admin/PagesAdmin/Vehicle/AddVehicle';
 
 //Import trong Setting Admin
 import ChangePasswordAdmin  from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
@@ -96,12 +96,15 @@ function App() {
           <Route path="/admin/service_fee/edit/:id" element={<EditServiceFee />} />
           {/* End Service_Fee Admin CRUD */}
 
-
           {/* End Service Admin CRUD */}
 
-          
-
+          {/* Vehicle_Admin CRUD */}
           <Route path="/admin/vehicle" element={<VehicleAdmin />} />
+          <Route path="/admin/vehicle/add" element={<AddVehicle />} />
+          {/* End  Vehicle_Admin CRUD */}
+
+
+
           <Route path="/admin/blog" element={<BlogAdmin />} />
           <Route path="/admin/item_container" element={<ItemContainerAdmin />} />
           <Route path="/admin/get_quote" element={<GetquoteAdmin />} />

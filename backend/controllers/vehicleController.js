@@ -18,7 +18,6 @@ const vehicleController = {
                 OnewayFloor_loadingFee: req.body.OnewayFloor_loadingFee,
                 Twoway_loadingFee: req.body.Twoway_loadingFee,
                 Oneway_loadingFee: req.body.Oneway_loadingFee,
-                return_fee: req.body.return_fee
             })
 
             //Đưa dữ liệu vào DB
@@ -26,14 +25,13 @@ const vehicleController = {
 
             if (DB_movingfee) {
                 const vehicle_data = await new Vehicle({
-                    name: req.body.name,
+                    vehicle_name: req.body.name,
                     brand: req.body.brand,
                     capacity: req.body.capacity,
                     status: req.body.status,
                     cago_size: req.body.cago_size,
                     suitable_for: req.body.suitable_for,
                     image: req.body.image,
-                    suitable_for: req.body.suitable_for,
                     movingFee_id: DB_movingfee.id
                 })
 
@@ -54,7 +52,7 @@ const vehicleController = {
     //Read
     readVehicle: async (req, res) => {
         try {
-            const data_service = await ServiceFee.find();
+            const data_service = await Vehicle.find();
 
             if (data_service) {
                 res.status(200).json(data_service);
@@ -71,7 +69,7 @@ const vehicleController = {
         try {
             const id = req.params.id;
 
-            const data_service = await ServiceFee.findOne({ _id: id });
+            const data_service = await Vehicle.findOne({ _id: id });
 
             if (data_service) {
                 res.status(200).json(data_service);
@@ -92,11 +90,11 @@ const vehicleController = {
             const data_update_from_client = req.body;
 
 
-            const data_service = await ServiceFee.findOne({ _id: id_service });
+            const data_service = await Vehicle.findOne({ _id: id_service });
 
 
             if (data_service) {
-                const data_update = await ServiceFee.findByIdAndUpdate(id_service, data_update_from_client, { new: true })
+                const data_update = await Vehicle.findByIdAndUpdate(id_service, data_update_from_client, { new: true })
 
 
                 if (data_update) {
@@ -121,11 +119,11 @@ const vehicleController = {
             const data_update_from_client = req.body;
 
 
-            const data_service = await ServiceFee.findOne({ _id: id_service });
+            const data_service = await Vehicle.findOne({ _id: id_service });
 
 
             if (data_service) {
-                const data_update = await ServiceFee.updateOne({ _id: id_service }, data_update_from_client, { new: true })
+                const data_update = await Vehicle.updateOne({ _id: id_service }, data_update_from_client, { new: true })
 
 
                 if (data_update) {
@@ -144,14 +142,23 @@ const vehicleController = {
     //Delete
     deleteVehicle: async (req, res) => {
         try {
-            const id_service = req.params.id;
+            const id_vehicle = req.params.id;
 
-            const check_delete = await ServiceFee.findByIdAndDelete(id_service);
-            if (check_delete) {
-                res.status(200).json('Delete Success');
-            } else {
-                res.status(501).json('Delete Fail');
+            const data_vehicle = await Vehicle.findOne({ _id: id_vehicle });
+
+            const id_moving_fee = data_vehicle.movingFee_id;
+
+            const check_delete_vehicle = await Vehicle.findByIdAndDelete(id_vehicle);
+
+            if (check_delete_vehicle) {
+                const check_delete_movingFee = await MovingFee.findByIdAndDelete(id_moving_fee);
+                if (check_delete_movingFee) {
+                    res.status(200).json('Delete Success');
+                } else {
+                    res.status(501).json('Delete Fail');
+                }
             }
+
         } catch (err) {
             console.log(err)
             res.status(501).json('Delete Fail');

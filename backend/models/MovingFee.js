@@ -36,11 +36,7 @@ const movingFeeSchema = new mongoose.Schema({
     Oneway_loadingFee:{
         type: Number,
         required: true
-    },
-    return_fee:{
-        type: Number,
-        required: true
-    }
+    },  
 }, { timestamps: true })
 
 module.exports = mongoose.model('MovingFee', movingFeeSchema);
