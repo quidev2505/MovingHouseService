@@ -40,8 +40,7 @@ function ServicePrice() {
       let arrDOMFee = data_service_fee.map((item, index) => (
         <tr>
           <td>{item.fee_name}</td>
-          <td>{item.price.toLocaleString()} đ</td>
-          <td>{item.unit}</td>
+          <td>{item.price.toLocaleString()} đ / {item.unit}</td>
         </tr>
       ));
 
@@ -154,7 +153,7 @@ function ServicePrice() {
                 />
               </div>
 
-              <div style={{ lineHeight: "72px" }}>
+              <div style={{ lineHeight: "72px", display:"flex", alignItems:"center" }}>
                 <Button
                   style={{
                     backgroundColor: "#e16c27",
@@ -377,7 +376,6 @@ function ServicePrice() {
               <tr>
                 <th>Tên chi phí</th>
                 <th>Giá</th>
-                <th>Đơn vị</th>
               </tr>
             </thead>
             <tbody>{dataFee}</tbody>

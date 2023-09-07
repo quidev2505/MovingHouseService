@@ -5,12 +5,15 @@ import Footer from "../Components/partials/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
+import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
+
 import { Tabs, Avatar } from "antd";
 
 import axios from "axios";
 
 const Home = () => {
   const [dataSource, setDataSource] = useState([]);
+  const [isActive, setIsActive] = useState(true);
 
   const get_service = async () => {
     await axios
@@ -96,6 +99,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setIsActive(false);
     get_service();
   }, []);
 
@@ -107,58 +111,61 @@ const Home = () => {
     <>
       <Header />
       <div style={{ height: "fit-content" }}>
-        {/* First_service */}
-        <div
-          className="provide_service row"
-          style={{ position: "relative", marginRight: "0px" }}
-        >
+        <LoadingOverlayComponent status={isActive}>
+          {/* First_service */}
           <div
-            className="left-container col-lg-4"
-            style={{ position: "absolute", left: "59px", top: "50px" }}
+            className="provide_service row"
+            style={{ position: "relative", marginRight: "0px" }}
           >
-            <h1 style={{ fontSize: "25px", fontWeight: "600" }}>
-              Đặt lịch dọn nhà nhanh chóng và tiện lợi.
-            </h1>
-            <h1
-              style={{
-                color: "#e16d2a",
-                fontSize: "70px",
-                marginBottom: "14px",
-                fontWeight: "500",
-              }}
+            <div
+              className="left-container col-lg-4"
+              style={{ position: "absolute", left: "59px", top: "50px" }}
             >
-              Chỉ với 1 Click
-            </h1>
-            {/* Bảng nav lựa chọn dịch vụ */}
-            <Tabs
-              defaultActiveKey="1"
-              items={dataSource}
-              onChange={onChange}
-              style={{
-                border: "2px solid #ccc",
-                padding: "10px",
-                borderRadius: "10px",
-                // background: "rgb(11,6,4)",
-                background:
-                  "radial-gradient(circle, rgba(11,6,4,0.8492647058823529) 33%, rgba(85,81,78,0.9557072829131653) 74%)",
-                width: "570px",
-              }}
-            />
-          </div>
+              <h1 style={{ fontSize: "25px", fontWeight: "600" }}>
+                Đặt lịch dọn nhà nhanh chóng và tiện lợi.
+              </h1>
+              <h1
+                style={{
+                  color: "#e16d2a",
+                  fontSize: "70px",
+                  marginBottom: "14px",
+                  fontWeight: "500",
+                }}
+              >
+                Chỉ với 1 Click
+              </h1>
 
-          <div
-            className="col-lg-8"
-            style={{ textAlign: "right", width: "100%" }}
-          >
-            <img
-              src="./img/background_home.png"
-              class="img-fluid"
-              alt="..."
-              style={{ height: "800px" }}
-            ></img>
+              {/* Bảng nav lựa chọn dịch vụ */}
+              <Tabs
+                defaultActiveKey="1"
+                items={dataSource}
+                onChange={onChange}
+                style={{
+                  border: "2px solid #ccc",
+                  padding: "10px",
+                  borderRadius: "10px",
+                  // background: "rgb(11,6,4)",
+                  background:
+                    "radial-gradient(circle, rgba(11,6,4,0.8492647058823529) 33%, rgba(85,81,78,0.9557072829131653) 74%)",
+                  width: "570px",
+                }}
+              />
+            </div>
+
+            <div
+              className="col-lg-8"
+              style={{ textAlign: "right", width: "100%" }}
+            >
+              <img
+                src="./img/background_home.png"
+                class="img-fluid"
+                alt="..."
+                style={{ height: "800px" }}
+              ></img>
+            </div>
           </div>
-        </div>
-        {/* End First_service */}
+          {/* End First_service */}
+        </LoadingOverlayComponent>
 
         {/* Second Service */}
         <div
