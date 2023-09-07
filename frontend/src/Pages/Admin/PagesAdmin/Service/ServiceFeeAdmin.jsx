@@ -7,7 +7,7 @@ import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 
-import { Space, Table, Tag, Image } from "antd";
+import { Space, Table, Tag } from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -15,16 +15,11 @@ import "sweetalert2/src/sweetalert2.scss";
 
 import { useNavigate } from "react-router-dom";
 
-import {
-  EditOutlined,
-  FolderViewOutlined,
-  DeleteOutlined,
-  SwapOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, SwapOutlined } from "@ant-design/icons";
 
 import axios from "axios";
 
-function ServiceAdmin() {
+function ServiceFeeAdmin() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
 
@@ -35,41 +30,22 @@ function ServiceAdmin() {
       key: "STT",
     },
     {
-      title: "Hình ảnh",
-      dataIndex: "image",
-      key: "image",
-      render: (image) => (
-        <td>
-          <Image width={80} src={image} />
-        </td>
-      ),
-    },
-    {
-      title: "Tên dịch vụ",
-      dataIndex: "service_name",
-      key: "service_name",
+      title: "Tên chi phí",
+      dataIndex: "service_fee_name",
+      key: "service_fee_name",
     },
     {
       title: "Giá tiền",
-      dataIndex: "service_price",
-      key: "service_price",
-      render: (service_price) => (
-        <td>
-          {service_price === "0 đ"
-            ? "Tùy thuộc vào nhu cầu và yêu cầu của khách hàng"
-            : service_price}
-        </td>
+      dataIndex: "service_fee_price",
+      key: "service_fee_price",
+      render: (service_fee_price) => (
+        <td>{service_fee_price === "0 đ" ? "Miễn phí" : service_fee_price}</td>
       ),
     },
     {
-      title: "Khoảng cách áp dụng",
-      dataIndex: "distance",
-      key: "distance",
-      render: (distance) => (
-        <td>
-          {distance === "0" ? "Tùy thuộc vào yêu cầu của khách hàng" : distance}
-        </td>
-      ),
+      title: "Đơn vị",
+      dataIndex: "unit",
+      key: "unit",
     },
     {
       title: "Trạng thái",
@@ -101,7 +77,7 @@ function ServiceAdmin() {
       render: (id) => (
         <Space size="middle" className="icon_hover">
           <div
-            onClick={() => nav(`/admin/service/edit/${id.id}`)}
+            onClick={() => nav(`/admin/service_fee/edit/${id.id}`)}
             style={{
               backgroundColor: "green",
               borderRadius: "50%",
@@ -111,20 +87,6 @@ function ServiceAdmin() {
             }}
           >
             <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
-          </div>
-          <div
-            onClick={() => nav(`/admin/service/view/${id.id}`)}
-            style={{
-              backgroundColor: "blue",
-              borderRadius: "50%",
-              padding: "5px",
-              display: "flex",
-              cursor: "pointer",
-            }}
-          >
-            <FolderViewOutlined
-              style={{ color: "white", fontWeight: "bold" }}
-            />
           </div>
           <Link
             onClick={() => delete_service(id)}
@@ -144,7 +106,7 @@ function ServiceAdmin() {
 
   const get_service = async () => {
     await axios
-      .get(`/v1/service/list_service`)
+      .get(`/v1/service_fee/list_service_fee`)
       .then((data) => {
         let data_solve = data.data;
         const data_service = [];
@@ -152,11 +114,10 @@ function ServiceAdmin() {
           data_solve.forEach((item, index) => {
             const ob_service = {
               id: item._id,
-              image: item.image,
               STT: index + 1,
-              service_name: item.name,
-              service_price: item.price.toLocaleString() + " đ",
-              distance: item.distance,
+              service_fee_name: item.fee_name,
+              service_fee_price: item.price.toLocaleString() + " đ",
+              unit: item.unit,
               status: item.status,
             };
 
@@ -173,7 +134,7 @@ function ServiceAdmin() {
   const changeStatus = (id, status) => {
     let id_service = id.id;
     Swal.fire({
-      title: "Bạn muốn thay đổi trạng thái dịch vụ này ?",
+      title: "Bạn muốn thay đổi trạng thái chi phí này ?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -183,13 +144,18 @@ function ServiceAdmin() {
       .then(async (result) => {
         if (result.isConfirmed) {
           await axios
-            .patch(`/v1/service/update_one_field_service/${id_service}`, {status: !status} )
+            .patch(
+              `/v1/service_fee/update_one_field_service_fee/${id_service}`,
+              {
+                status: !status,
+              }
+            )
             .then((data) => {
               get_service();
               Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Thay đổi trạng thái dịch vụ thành công !",
+                title: "Thay đổi trạng thái chi phí thành công !",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -198,7 +164,7 @@ function ServiceAdmin() {
               Swal.fire({
                 position: "center",
                 icon: "warning",
-                title: "Thay đổi trạng thái dịch vụ thất bại !",
+                title: "Thay đổi trạng thái chi phí thất bại !",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -210,13 +176,13 @@ function ServiceAdmin() {
         Swal.fire({
           position: "center",
           icon: "warning",
-          title: "Thay đổi trạng thái dịch vụ thất bại !",
+          title: "Thay đổi trạng thái chi phí thất bại !",
           showConfirmButton: false,
           timer: 1200,
         });
         console.log(e);
       });
-  }
+  };
 
   useEffect(() => {
     get_service();
@@ -225,7 +191,7 @@ function ServiceAdmin() {
   const delete_service = (id) => {
     let id_service = id.id;
     Swal.fire({
-      title: "Bạn muốn xóa dịch vụ này ?",
+      title: "Bạn muốn xóa chi phí này ?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -235,13 +201,13 @@ function ServiceAdmin() {
       .then(async (result) => {
         if (result.isConfirmed) {
           await axios
-            .delete(`/v1/service/delete_service/${id_service}`)
+            .delete(`/v1/service_fee/delete_service_fee/${id_service}`)
             .then((data) => {
               get_service();
               Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Xóa dịch vụ thành công!",
+                title: "Xóa chi phí thành công!",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -250,7 +216,7 @@ function ServiceAdmin() {
               Swal.fire({
                 position: "center",
                 icon: "warning",
-                title: "Xóa dịch vụ thất bại!",
+                title: "Xóa chi phí thất bại!",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -262,7 +228,7 @@ function ServiceAdmin() {
         Swal.fire({
           position: "center",
           icon: "warning",
-          title: "Xóa dịch vụ thất bại!",
+          title: "Xóa chi phí thất bại!",
           showConfirmButton: false,
           timer: 1200,
         });
@@ -281,7 +247,7 @@ function ServiceAdmin() {
                   title: "Admin",
                 },
                 {
-                  title: "Gói dịch vụ",
+                  title: "Chi phí",
                 },
               ]}
             />
@@ -289,8 +255,8 @@ function ServiceAdmin() {
 
           <BottomCssContent>
             <TopCssContent>
-              <p>Gói dịch vụ</p>
-              <Link to="/admin/service/add">
+              <p>Chi phí</p>
+              <Link to="/admin/service_fee/add">
                 <Button
                   style={{
                     backgroundColor: "#344767",
@@ -299,7 +265,7 @@ function ServiceAdmin() {
                     marginBottom: "15px",
                   }}
                 >
-                  + THÊM GÓI DỊCH VỤ
+                  + THÊM CHI PHÍ
                 </Button>
               </Link>
             </TopCssContent>
@@ -314,4 +280,4 @@ function ServiceAdmin() {
   );
 }
 
-export default ServiceAdmin;
+export default ServiceFeeAdmin;

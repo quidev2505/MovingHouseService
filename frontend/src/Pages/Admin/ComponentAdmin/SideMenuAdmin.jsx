@@ -14,6 +14,7 @@ import {
   FcInTransit,
   FcFaq,
   FcBusinessman,
+  FcMoneyTransfer
 } from "react-icons/fc";
 
 function SideMenuAdmin() {
@@ -37,6 +38,8 @@ function SideMenuAdmin() {
         },
         {
           label: "Chi phí",
+          icon: <FcMoneyTransfer/>,
+          key: "/admin/service_fee"
         },
       ],
     },

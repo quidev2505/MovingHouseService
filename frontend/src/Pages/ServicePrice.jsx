@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
@@ -8,7 +8,7 @@ import { InputNumber, Button, Alert } from "antd";
 //Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleRight } from "@fortawesome/free-solid-svg-icons";
-
+import axios from "axios";
 
 function ServicePrice() {
   //Loading
@@ -31,6 +31,27 @@ function ServicePrice() {
       setHide("block");
     }, 2000);
   };
+
+  const [dataFee, setDataFee] = useState([]);
+
+  const get_fee_service = async () => {
+    await axios.get(`/v1/service_fee/list_service_fee`).then((data) => {
+      let data_service_fee = data.data;
+      let arrDOMFee = data_service_fee.map((item, index) => (
+        <tr>
+          <td>{item.fee_name}</td>
+          <td>{item.price.toLocaleString()} đ</td>
+          <td>{item.unit}</td>
+        </tr>
+      ));
+
+      setDataFee(arrDOMFee);
+    });
+  };
+
+  useEffect(() => {
+    get_fee_service();
+  }, []);
   return (
     <>
       <Header />
@@ -354,41 +375,12 @@ function ServicePrice() {
           >
             <thead>
               <tr>
-                <th scope="col" colSpan="2">
-                  Chi phí khác (nếu có)
-                </th>
+                <th>Tên chi phí</th>
+                <th>Giá</th>
+                <th>Đơn vị</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Thùng Carton (60x40x35 cm)</td>
-                <td>20.000 VNĐ/Thùng</td>
-              </tr>
-              <tr>
-                <td>Màng PE bọc lót đồ đạc</td>
-                <td>Miễn phí</td>
-              </tr>
-              <tr>
-                <td>Công tháo ráp máy lạnh</td>
-                <td>Tháo: 100.000 VNĐ + Ráp: 100.000 VNĐ</td>
-              </tr>
-              <tr>
-                <td>Tháo ráp đồ đạc nội thất</td>
-                <td>Tùy thuộc vào đồ đạc và số lượng</td>
-              </tr>
-              <tr>
-                <td>Bốc xếp đồ đạc cầu thang bộ</td>
-                <td>Tùy số lượng đồ đạc và số tầng lầu</td>
-              </tr>
-              <tr>
-                <td>Kéo đồ đạc vào hẻm nhỏ</td>
-                <td>Tùy số lượng đồ đạc và khoảng cách hẻm</td>
-              </tr>
-              <tr>
-                <td>Kéo đồ đạc vào hầm chung cư</td>
-                <td>Tùy số lượng đồ đạc và khoảng cách hầm</td>
-              </tr>
-            </tbody>
+            <tbody>{dataFee}</tbody>
           </table>
         </div>
       </div>

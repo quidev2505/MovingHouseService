@@ -39,6 +39,13 @@ import AddService from './Pages/Admin/PagesAdmin/Service/AddService';
 import ViewService from './Pages/Admin/PagesAdmin/Service/ViewService';
 import EditService from './Pages/Admin/PagesAdmin/Service/EditService';
 
+//ServiceFeeAdmin
+import ServiceFeeAdmin from './Pages/Admin/PagesAdmin/Service/ServiceFeeAdmin';
+import AddServiceFee from './Pages/Admin/PagesAdmin/Service/AddServiceFee';
+import EditServiceFee from './Pages/Admin/PagesAdmin/Service/EditServiceFee';
+
+
+
 import VehicleAdmin from './Pages/Admin/PagesAdmin/VehicleAdmin';
 
 //Import trong Setting Admin
@@ -76,11 +83,23 @@ function App() {
           {/* Trang Admin  */}
           {/* Route With Item ComponentAdmin */}
           <Route path="/admin/dashboard" element={<DashBoardAdmin />} />
+
           {/* Service Admin CRUD */}
           <Route path="/admin/service" element={<ServiceAdmin />} />
           <Route path="/admin/service/add" element={<AddService />} />
           <Route path="/admin/service/view/:id" element={<ViewService />} />
           <Route path="/admin/service/edit/:id" element={<EditService />} />
+
+          {/* Service_Fee Admin CRUD */}
+          <Route path="/admin/service_fee" element={<ServiceFeeAdmin />} />
+          <Route path="/admin/service_fee/add" element={<AddServiceFee />} />
+          <Route path="/admin/service_fee/edit/:id" element={<EditServiceFee />} />
+          {/* End Service_Fee Admin CRUD */}
+
+
+          {/* End Service Admin CRUD */}
+
+          
 
           <Route path="/admin/vehicle" element={<VehicleAdmin />} />
           <Route path="/admin/blog" element={<BlogAdmin />} />
