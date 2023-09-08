@@ -16,7 +16,44 @@ function ServicePrice() {
   //Set Hide or appear
   const [hide, setHide] = useState("none");
 
-  const enterLoading = (index) => {
+  const [selectVehicle, setSelectVehicle] = useState("Xe bán tải");
+  const [distance, setDistance] = useState(1);
+
+  const onChangeDistance = (value) => {
+    setDistance(value);
+  };
+
+  const [total, setTotal] = useState(0);
+
+  const calculatePrice = async (distance, selectVehicle) => {
+    await axios
+      .post("/v1/vehicle/moving_fee", { name_vehicle: selectVehicle })
+      .then((data) => {
+        let total_price = 0;
+        if (distance < 10) {
+          total_price = data.data.priceFirst10km;
+        } else {
+          if (distance - 10 < 45) {
+            total_price =
+              data.data.priceFirst10km +
+              (distance - 10) * data.data.priceFrom11to45;
+          } else {
+            total_price =
+              data.data.priceFirst10km +
+              (distance - 10) * data.data.pricePer45km;
+          }
+        }
+
+        setTotal(total_price);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const enterLoading = async (index) => {
+    calculatePrice(distance, selectVehicle);
+
     setLoadings((prevLoadings) => {
       const newLoadings = [...prevLoadings];
       newLoadings[index] = true;
@@ -31,6 +68,10 @@ function ServicePrice() {
       setHide("block");
     }, 2000);
   };
+
+  useEffect(() => {
+    setHide("none");
+  }, [selectVehicle, distance]);
 
   const [dataFee, setDataFee] = useState([]);
 
@@ -53,6 +94,8 @@ function ServicePrice() {
   const [dataLoading, setDataLoading] = useState([]);
   const [dataHire, setDataHire] = useState([]);
 
+  const [weightType, setWeightType] = useState();
+
   const get_vehicle = async () => {
     await axios.get(`/v1/vehicle/list_movingFee`).then((data) => {
       let data_result = data.data;
@@ -66,6 +109,12 @@ function ServicePrice() {
           <td>{item.waiting_fee.toLocaleString()} đ</td>
         </tr>
       ));
+
+      let weightTypeSelect = data_result.map((item, index) => (
+        <option value={item.name}>{item.name}</option>
+      ));
+
+      setWeightType(weightTypeSelect);
 
       setDataHire(arrDOMHire);
 
@@ -142,6 +191,7 @@ function ServicePrice() {
                   </h5>
                   <div className="col left_input">
                     <InputNumber
+                      onChange={onChangeDistance}
                       min={1}
                       max={99999}
                       defaultValue={1}
@@ -155,7 +205,14 @@ function ServicePrice() {
                 </p>
               </div>
 
-              <div style={{ lineHeight: "72px", margin: "0 70px" }}>
+              <div
+                style={{
+                  lineHeight: "72px",
+                  margin: " 0px 70px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <FontAwesomeIcon
                   icon={faCircleRight}
                   style={{ color: "#e16c27", fontSize: "30px", margin: "" }}
@@ -168,21 +225,25 @@ function ServicePrice() {
                     Chọn loại trọng tải: &nbsp;
                   </h5>
                   <div className="col left_input">
-                    <select className="select_xe">
-                      <option value="xebantai">Xe bán tải</option>
-                      <option value="xevan_500">Xe Van 500 kg</option>
-                      <option value="xevan_1000">Xe Van 1000 kg</option>
-                      <option value="xetai_500">Xe tải 500kg</option>
-                      <option value="xetai_1000">Xe tải 1000 kg</option>
-                      <option value="xetai_1500">Xe tải 1500 kg</option>
-                      <option value="xetai_2000">Xe tải 2000 kg</option>
-                      <option value="xetai_2500">Xe tải 2500 kg</option>
+                    <select
+                      className="select_xe"
+                      onChange={(e) => setSelectVehicle(e.target.value)}
+                      value={selectVehicle}
+                    >
+                      {weightType}
                     </select>
                   </div>
                 </div>
               </div>
 
-              <div style={{ lineHeight: "72px", margin: "0 70px" }}>
+              <div
+                style={{
+                  lineHeight: "72px",
+                  margin: " 0px 70px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <FontAwesomeIcon
                   icon={faCircleRight}
                   style={{ color: "#e16c27", fontSize: "30px", margin: "" }}
@@ -191,7 +252,6 @@ function ServicePrice() {
 
               <div
                 style={{
-                  lineHeight: "72px",
                   display: "flex",
                   alignItems: "center",
                 }}
@@ -222,7 +282,10 @@ function ServicePrice() {
               }}
             >
               <h2>Kết quả:</h2>
-              <p>Giá cước ước tính cho xe 1.5 Tấn chạy 23Km là 595.000 VNĐ</p>
+              <p>
+                Giá cước ước tính cho xe {selectVehicle} chạy {distance} km là{" "}
+                <span className="fw-bold"> {total.toLocaleString()} đ</span>
+              </p>
             </div>
           </div>
         </div>

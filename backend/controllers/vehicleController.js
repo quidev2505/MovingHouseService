@@ -79,6 +79,21 @@ const vehicleController = {
             res.status(501).json('Fail to load data !');
         }
     },
+    getMoving_Price: async (req, res) => {
+        try {
+            const name = req.body;
+
+            const data_fee = await MovingFee.findOne({ name: name.name_vehicle });
+
+            if (data_fee) {
+                res.status(200).json(data_fee);
+            } else {
+                res.status(501).json('Fail to load data !');
+            }
+        } catch (err) {
+            res.status(501).json('Fail to load data !');
+        }
+    },
     // Detail Service
     readVehicleDetail: async (req, res) => {
         try {
@@ -146,9 +161,9 @@ const vehicleController = {
                 OnewayFloor_loadingFee: req.body.OnewayFloor_loadingFee,
                 Twoway_loadingFee: req.body.Twoway_loadingFee,
                 Oneway_loadingFee: req.body.Oneway_loadingFee,
-            }   
+            }
 
-            if(data_update_vehicle){
+            if (data_update_vehicle) {
                 const data_update_movingFee = await MovingFee.findByIdAndUpdate(data_update_vehicle.movingFee_id, moving_fee, { new: true })
                 if (data_update_movingFee) {
                     res.status(200).json('Update Success');
@@ -158,7 +173,7 @@ const vehicleController = {
             }
 
 
-           
+
         } catch (err) {
             console.log(err)
             res.status(501).json('Fail to update !');

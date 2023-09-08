@@ -114,7 +114,13 @@ const Home = () => {
               children: (
                 <div className="row">
                   <div className="col">
-                    <img src={item.image} width="500" height={207} style={{objectFit:"contain"}} alt="" />
+                    <img
+                      src={item.image}
+                      width="500"
+                      height={207}
+                      style={{ objectFit: "contain" }}
+                      alt=""
+                    />
                   </div>
                   <div
                     className="col"
@@ -125,7 +131,7 @@ const Home = () => {
                       alignItems: "flex-start",
                       justifyContent: "center",
                       flexDirection: "column",
-                      height:"227px"
+                      height: "227px",
                     }}
                   >
                     <p>Trọng lượng tối đa: {item.capacity}</p>
@@ -154,13 +160,10 @@ const Home = () => {
   return (
     <>
       <Header />
-      <div style={{ height: "fit-content" }}>
+      <div style={{ height: "fit-content", overflowX:"hidden" }}>
         <LoadingOverlayComponent status={isActive}>
           {/* First_service */}
-          <div
-            className="provide_service row"
-            style={{ position: "relative", marginRight: "0px" }}
-          >
+          <div className="provide_service row" style={{ position: "relative" }}>
             <div
               className="left-container col-lg-4"
               style={{ position: "absolute", left: "59px", top: "50px" }}
@@ -379,7 +382,9 @@ const Home = () => {
               height: "100%",
             }}
           >
-            <h3>Tại sao lại chọn dịch vụ chúng tôi ?</h3>
+            <h3 style={{ color: "#e16d2a " }}>
+              Tại sao lại chọn dịch vụ chúng tôi ?
+            </h3>
             <p style={{ margin: "30px 0 50px 0" }}>
               Rất đơn giản ! Chỉ cần làm theo các bước sau để sẵn sàng cho kế
               hoạch vận chuyển !
@@ -503,7 +508,9 @@ const Home = () => {
           className="reply_customer container"
           style={{ height: "570px", padding: "100px", textAlign: "center" }}
         >
-          <h1 style={{ marginBottom: "60px" }}>Phản hồi từ phía khách hàng</h1>
+          <h1 style={{ marginBottom: "60px", color: "#e16d2a " }}>
+            Phản hồi từ phía khách hàng
+          </h1>
           <div>
             <div
               id="carouselExampleIndicators"
@@ -513,7 +520,7 @@ const Home = () => {
               <div className="carousel-inner">
                 <div className="carousel-item active">
                   <img
-                    src="./img/choose_2.png"
+                    src="./img/person_1.png"
                     alt="..."
                     style={{
                       borderRadius: "50%",
@@ -528,20 +535,21 @@ const Home = () => {
                   <p
                     style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
                   >
-                    "Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Unde officiis iusto ab, a similique ipsam voluptatem enim,
-                    tempora iure nostrum, quod nemo corrupti earum? Atque
-                    praesentium cumque tempore ab hic?""
+                    "Tôi rất hài lòng với dịch vụ chuyển nhà của công ty. Đội
+                    ngũ nhân viên chuyên nghiệp, nhiệt tình, làm việc nhanh
+                    chóng, gọn gàng. Đồ đạc được đóng gói cẩn thận, không bị hư
+                    hỏng. Tôi sẽ giới thiệu dịch vụ này cho bạn bè và người thân
+                    của mình."
                   </p>
 
                   <p style={{ marginTop: "50px", fontWeight: "bold" }}>
-                    Người dùng kkk
+                    Anh Nguyễn Văn T
                   </p>
                 </div>
 
-                <div className="carousel-item active">
+                <div className="carousel-item">
                   <img
-                    src="./img/choose_2.png"
+                    src="./img/person_2.png"
                     alt="..."
                     style={{
                       borderRadius: "50%",
@@ -556,20 +564,19 @@ const Home = () => {
                   <p
                     style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
                   >
-                    "Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Unde officiis iusto ab, a similique ipsam voluptatem enim,
-                    tempora iure nostrum, quod nemo corrupti earum? Atque
-                    praesentium cumque tempore ab hic?""
+                    "Tôi đã sử dụng dịch vụ chuyển nhà của công ty nhiều lần và
+                    luôn cảm thấy hài lòng. Giá cả hợp lý, chất lượng dịch vụ
+                    tốt. Tôi sẽ tiếp tục sử dụng dịch vụ này trong tương lai."
                   </p>
 
                   <p style={{ marginTop: "50px", fontWeight: "bold" }}>
-                    Người dùng kkk
+                    Người dùng ẩn tên
                   </p>
                 </div>
 
-                <div className="carousel-item active">
+                <div className="carousel-item">
                   <img
-                    src="./img/choose_2.png"
+                    src="./img/person_3.png"
                     alt="..."
                     style={{
                       borderRadius: "50%",
@@ -584,14 +591,14 @@ const Home = () => {
                   <p
                     style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
                   >
-                    "Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Unde officiis iusto ab, a similique ipsam voluptatem enim,
-                    tempora iure nostrum, quod nemo corrupti earum? Atque
-                    praesentium cumque tempore ab hic?""
+                    "Tôi rất lo lắng khi chuyển nhà vì đồ đạc của tôi rất nhiều
+                    và giá trị. Tuy nhiên, sau khi sử dụng dịch vụ của công ty,
+                    tôi hoàn toàn yên tâm. Đồ đạc được vận chuyển cẩn thận,
+                    không bị hư hỏng. Tôi rất hài lòng với dịch vụ này."
                   </p>
 
                   <p style={{ marginTop: "50px", fontWeight: "bold" }}>
-                    Người dùng kkk
+                    Trần Văn K
                   </p>
                 </div>
               </div>
@@ -606,7 +613,7 @@ const Home = () => {
                   aria-hidden="true"
                   style={{ backgroundColor: "#e16c27", borderRadius: "50%" }}
                 />
-                <span className="visually-hidden">Previous</span>
+                <span className="visually-hidden">Lùi</span>
               </button>
               <button
                 className="carousel-control-next"
@@ -619,7 +626,7 @@ const Home = () => {
                   aria-hidden="true"
                   style={{ backgroundColor: "#e16c27", borderRadius: "50%" }}
                 />
-                <span className="visually-hidden">Next</span>
+                <span className="visually-hidden">Tiến tới</span>
               </button>
             </div>
           </div>

@@ -4,13 +4,18 @@ import { Routes, Route } from 'react-router-dom'
 import Home from './Pages/Home';
 import Login from "./Pages/Login"
 import Register from "./Pages/Register"
-import UserManage from './Pages/UserManage';
 import ForgotPassword from './Pages/ForgotPassword';
 import ChangePassword from './Pages/ChangePassword';
 import VerifyOTP from './Pages/VerifyOTP';
 import ServicePrice from './Pages/ServicePrice';
 import Contact from './Pages/Contact';
 import Blog from './Pages/Blog';
+
+
+//Trang quản lý User
+import BookingUser from './Pages/User/BookingUser';
+
+
 
 // Bảo vệ Route
 import ProtectRoutes from './Pages/ProtectRoutes'
@@ -71,7 +76,7 @@ function App() {
         {/* Bảo vệ Route Client */}
         <Route element={<ProtectRoutes />}>
           {/* Trang User  */}
-          <Route path="/userManage" element={<UserManage />} />
+          <Route path="/user/booking" element={<BookingUser />} />
         </Route>
 
 

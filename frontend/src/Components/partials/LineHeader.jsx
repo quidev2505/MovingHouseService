@@ -9,6 +9,8 @@ function LineHeader() {
           lineHeight: "44px",
           backgroundColor: "#f5f7f9",
           textAlign: "center",
+          position:"relative",
+          zIndex:"998"
         }}
       >
         Chúng tôi mang đến sự lựa chọn hợp lý nhất cho bạn !

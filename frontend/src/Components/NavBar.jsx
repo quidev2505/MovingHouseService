@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 // import { logOutSuccess } from "../../redux/authSlice";
 //Icon
 import { FaRegUser, FaCircleUser } from "react-icons/fa6";
+import {  Tooltip } from "antd";
 import { FiLogOut } from "react-icons/fi";
 
 const NavBar = () => {
@@ -122,22 +123,27 @@ const NavBar = () => {
                   style={{ cursor: "pointer" }}
                 >
                   {/* //Đi đến trang cá nhân */}
-                  <Link
-                    to="/userManage"
-                    className="col btn_info_user"
-                    style={{ textDecoration: "none", color: "#ff8268" }}
-                  >
-                    <FaCircleUser></FaCircleUser>
-                  </Link>
+                  <Tooltip placement="bottom" title={"Trang cá nhân"}>
+                    <Link
+                      to="/user/booking"
+                      className="col btn_info_user"
+                      style={{ textDecoration: "none", color: "#ff8268" }}
+                    >
+                      <FaCircleUser></FaCircleUser>
+                    </Link>
+                  </Tooltip>
+
                   <div style={{ border: "1px solid #ff8268" }}></div>
-                  {/* Đăng xuất */}
-                  <div
-                    className="col btn_logout"
-                    style={{ color: "red" }}
-                    onClick={() => handleLogout()}
-                  >
-                    <FiLogOut></FiLogOut>
-                  </div>
+                  <Tooltip placement="bottom" title={"Đăng xuất"}>
+                    {/* Đăng xuất */}
+                    <div
+                      className="col btn_logout"
+                      style={{ color: "red" }}
+                      onClick={() => handleLogout()}
+                    >
+                      <FiLogOut></FiLogOut>
+                    </div>
+                  </Tooltip>
                 </div>
               </div>
             </>

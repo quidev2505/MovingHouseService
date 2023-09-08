@@ -15,6 +15,9 @@ router.get('/list_movingFee', vehicleController.readMovingFee);
 // Read Service Detail
 router.get('/list_vehicle/:id', vehicleController.readVehicleDetail);
 
+//Get Moving Fee with name
+router.post("/moving_fee", vehicleController.getMoving_Price);
+
 //Read Moving Fee
 router.get("/moving_fee/:id", vehicleController.readMovingFeeDetail)
 
