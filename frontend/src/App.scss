@@ -373,11 +373,11 @@
     margin-left: 20px !important;
 }
 
-.ant-select-selector{
+.ant-select-selector {
     height: 43.5px !important;
 }
 
-.ant-menu-item-group-list{
+.ant-menu-item-group-list {
     margin-left: 20px !important;
 }
 
@@ -398,6 +398,11 @@
 
 .ant-breadcrumb-link>a {
     text-decoration: none;
+}
+
+.ant-modal-content {
+    width: 1300px;
+    margin-left: -450px;
 }
 
 //ChangePassword Admin page
@@ -455,3 +460,25 @@ th.ant-table-cell {
     border-radius: 5px;
     padding: 10px;
 }
+
+//Home
+.ant-tabs-content-holder {
+    height: fit-content;
+}
+
+
+.ant-tabs-tab-active {
+    background-color: orange !important;
+    padding: 10px !important;
+    border: 1px solid orange !important;
+    border-radius: 10px !important;
+    color: white !important;
+    font-size: 17px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    .ant-tabs-tab-btn {
+            color: white !important;
+        }
+}
+

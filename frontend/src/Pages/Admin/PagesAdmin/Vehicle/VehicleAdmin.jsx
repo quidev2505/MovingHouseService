@@ -7,7 +7,7 @@ import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 
-import { Space, Table, Tag, Image } from "antd";
+import { Space, Table, Tag, Image, Modal } from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -94,7 +94,7 @@ function VehicleAdmin() {
       render: (id) => (
         <Space size="middle" className="icon_hover">
           <div
-            onClick={() => nav(`/admin/service/edit/${id.id}`)}
+            onClick={() => nav(`/admin/vehicle/edit/${id.id}`)}
             style={{
               backgroundColor: "green",
               borderRadius: "50%",
@@ -106,7 +106,7 @@ function VehicleAdmin() {
             <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
           </div>
           <div
-            onClick={() => nav(`/admin/service/view/${id.id}`)}
+            onClick={() => view_detail_vehicle(id)}
             style={{
               backgroundColor: "blue",
               borderRadius: "50%",
@@ -147,8 +147,8 @@ function VehicleAdmin() {
               id: item._id,
               STT: index + 1,
               vehicle_name: item.vehicle_name,
-              brand:  item.brand,
-              capacity:item.capacity,
+              brand: item.brand,
+              capacity: item.capacity,
               status: item.status,
               cago_size: item.cago_size,
               suitable_for: item.suitable_for,
@@ -263,6 +263,89 @@ function VehicleAdmin() {
           showConfirmButton: false,
           timer: 1200,
         });
+        console.log(e);
+      });
+  };
+
+  const view_detail_vehicle = async (id) => {
+    const column_moving_fee = [
+      {
+        title: "Tên phương tiện",
+        dataIndex: "name",
+        key: "name",
+      },
+      {
+        title: "Giá đi 10km đầu tiên",
+        dataIndex: "priceFirst10km",
+        key: "priceFirst10km",
+      },
+      {
+        title: "Giá đi 11 - 45 km",
+        dataIndex: "priceFrom11to45",
+        key: "priceFrom11to45",
+      },
+      {
+        title: "Giá trên 45km",
+        dataIndex: "pricePer45km",
+        key: "pricePer45km",
+      },
+      {
+        title: "Phí chờ",
+        dataIndex: "waiting_fee",
+        key: "waiting_fee",
+      },
+      {
+        title: "Phí bốc xếp tầng lầu 2 chiều",
+        dataIndex: "TwowayFloor_loadingFee",
+        key: "TwowayFloor_loadingFee",
+      },
+      {
+        title: "Phí bốc xếp tầng lầu 1 chiều",
+        dataIndex: "OnewayFloor_loadingFee",
+        key: "OnewayFloor_loadingFee",
+      },
+      {
+        title: "Phí bốc xếp tầng trệt 2 chiều",
+        dataIndex: "Twoway_loadingFee",
+        key: "Twoway_loadingFee",
+      },
+      {
+        title: "Phí bốc xếp tầng trệt 1 chiều",
+        dataIndex: "Oneway_loadingFee",
+        key: "Oneway_loadingFee",
+      },
+    ];
+    await axios
+      .get(`/v1/vehicle/moving_fee/${id.id}`)
+      .then((data) => {
+        let data_result = data.data.movingFee_id;
+        console.log(data_result)
+        const objectMoving = {
+          name: data_result?.name,
+          priceFirst10km: data_result?.priceFirst10km.toLocaleString() +" đ",
+          priceFrom11to45: data_result?.priceFrom11to45.toLocaleString()+" đ",
+          pricePer45km: data_result?.pricePer45km.toLocaleString()+" đ",
+          waiting_fee: data_result?.waiting_fee.toLocaleString()+" đ",
+          TwowayFloor_loadingFee: data_result?.TwowayFloor_loadingFee.toLocaleString()+" đ",
+          OnewayFloor_loadingFee: data_result?.OnewayFloor_loadingFee.toLocaleString()+" đ",
+          Twoway_loadingFee: data_result?.Twoway_loadingFee.toLocaleString()+" đ",
+          Oneway_loadingFee: data_result?.Oneway_loadingFee.toLocaleString()+" đ",
+        };
+
+        const arrMoving = [objectMoving];
+
+
+        Modal.success({
+          title: "Thông tin phí di chuyển phương tiện",
+          content: (
+            <div>
+              <Table columns={column_moving_fee} dataSource={arrMoving} />
+            </div>
+          ),
+          onOk() {},
+        });
+      })
+      .catch((e) => {
         console.log(e);
       });
   };

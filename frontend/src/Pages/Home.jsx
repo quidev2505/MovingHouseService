@@ -98,9 +98,67 @@ const Home = () => {
       });
   };
 
+  const [dataVehicle, setDataVehicle] = useState([]);
+  const get_vehicle = async () => {
+    await axios
+      .get(`/v1/vehicle/list_vehicle`)
+      .then((data) => {
+        let data_solve = data.data;
+        // const data_service = [];
+        let data_arr =
+          data_solve &&
+          data_solve.map((item, index) => {
+            return {
+              label: item.vehicle_name,
+              key: index + 1,
+              children: (
+                <div className="row">
+                  <div className="col">
+                    <img src={item.image} width="500" height={207} style={{objectFit:"contain"}} />
+                  </div>
+                  <div
+                    className="col"
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: "500",
+                      display: "flex",
+                      alignItems: "flex-start",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      height:"227px"
+                    }}
+                  >
+                    <p>Trọng lượng tối đa: {item.capacity}</p>
+                    <p>Kích cỡ hàng hóa tối đa: {item.cago_size}</p>
+                    <p>Phù hợp cho: {item.suitable_for}</p>
+                  </div>
+                </div>
+              ),
+            };
+            //     };
+            // const ob_service = {
+            //   id: item._id,
+            //   STT: index + 1,
+            //   vehicle_name: item.vehicle_name,
+            //   brand: item.brand,
+            //   capacity: item.capacity,
+            //   status: item.status,
+            //   cago_size: item.cago_size,
+            //   suitable_for: item.suitable_for,
+            //   image: item.image,
+            // };
+
+            // data_service.push(ob_service);
+          });
+        setDataVehicle(data_arr);
+      })
+      .catch((e) => console.log(e));
+  };
+
   useEffect(() => {
     setIsActive(false);
     get_service();
+    get_vehicle();
   }, []);
 
   const onChange = (key) => {
@@ -586,7 +644,7 @@ const Home = () => {
         <div
           className="type_of_vehicle"
           style={{
-            height: "850px",
+            height: "fit-content",
             padding: "80px",
             backgroundColor: "#f8f9ff ",
           }}
@@ -602,448 +660,18 @@ const Home = () => {
               Các loại xe có sẵn
             </h1>
             <h5 style={{ marginBottom: "30px" }}>
-              Chúng tôi cung cấp nhiều loại xe từ xe bán tải 4×4 đến xe tải 2.5
-              tấn. Bạn có thể lựa chọn loại xe tùy theo nhu cầu của mình.
+              Chúng tôi cung cấp nhiều loại xe từ xe bán tải đến xe tải 2 tấn.
+              Bạn có thể lựa chọn loại xe tùy theo nhu cầu của mình.
             </h5>
 
-            {/* Info each vehicle */}
-            <div class="d-flex align-items-start">
-              <div
-                class="nav flex-column nav-pills me-3 tab_trai_type"
-                id="v-pills-tab"
-                role="tablist"
-                aria-orientation="vertical"
-              >
-                <button
-                  class="nav-link active"
-                  id="v-pills-loai_1-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-loai_1"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-loai_1"
-                  aria-selected="true"
-                >
-                  Xe Bán Tải
-                </button>
-                <button
-                  class="nav-link"
-                  id="v-pills-loai_2-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-loai_2"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-loai_2"
-                  aria-selected="false"
-                >
-                  Xe Van 500 kg
-                </button>
-                <button
-                  class="nav-link"
-                  id="v-pills-loai_3-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-loai_3"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-loai_3"
-                  aria-selected="false"
-                >
-                  Xe Van 1000 kg
-                </button>
-                <button
-                  class="nav-link"
-                  id="v-pills-loai_4-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-loai_4"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-loai_4"
-                  aria-selected="false"
-                >
-                  Xe tải 500 kg
-                </button>
-                <button
-                  class="nav-link"
-                  id="v-pills-loai_5-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-loai_5"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-loai_5"
-                  aria-selected="false"
-                >
-                  Xe tải 1000 kg
-                </button>
-
-                <button
-                  class="nav-link"
-                  id="v-pills-loai_6-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-loai_6"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-loai_6"
-                  aria-selected="false"
-                >
-                  Xe tải 1500 kg
-                </button>
-
-                <button
-                  class="nav-link"
-                  id="v-pills-loai_7-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-loai_7"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-loai_7"
-                  aria-selected="false"
-                >
-                  Xe tải 2000 kg
-                </button>
-
-                <button
-                  class="nav-link"
-                  id="v-pills-loai_8-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-loai_8"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-loai_8"
-                  aria-selected="false"
-                >
-                  Xe tải 2500 kg
-                </button>
-              </div>
-              {/* Content Info Right */}
-              <div
-                class="tab-content"
-                id="v-pills-tabContent"
-                style={{ marginLeft: "80px", width: "100%" }}
-              >
-                <div
-                  class="tab-pane fade show active  row"
-                  id="v-pills-home"
-                  role="tabpanel"
-                  aria-labelledby="v-pills-home-tab"
-                  tabindex="0"
-                >
-                  <div className="d-flex">
-                    <div
-                      className="col"
-                      style={{
-                        backgroundColor: "#fff",
-                        height: "580px",
-                        marginRight: "20px",
-                        borderRadius: "10px",
-                        padding: "25px 15px",
-                      }}
-                    >
-                      <img
-                        src="./img/choose_1.png"
-                        class="img-fluid"
-                        alt="..."
-                      />
-                    </div>
-                    <div
-                      className="col"
-                      style={{
-                        backgroundColor: "#fff",
-                        borderRadius: "10px",
-                        padding: "25px 20px",
-                      }}
-                    >
-                      <h4 style={{ fontSize: "20px", fontWeight: "900" }}>
-                        Xe Bán Tải
-                      </h4>
-                      <span style={{ fontSize: "18px", fontWeight: "400" }}>
-                        Trọng lượng tối đa: 500kg
-                      </span>
-                      <p style={{ fontSize: "18px", fontWeight: "400" }}>
-                        Kích cỡ hàng hóa tối đa: 140cm x 150cm x 50cm
-                      </p>
-                      <p style={{ fontSize: "18px", fontWeight: "400" }}>
-                        Phù hợp cho: Giao hàng hóa số lượng nhiều, hàng to cồng
-                        kềnh không thể vừa với cốp xe ô tô nhưng không yêu cầu
-                        sức chứa to như xe tải. Linh hoạt và không bị ảnh hưởng
-                        bởi thời gian cấm tải.
-                      </p>
-                      <br></br>
-                      <p style={{ fontSize: "20px", fontWeight: "900" }}>
-                        Tải trọng gần đúng:
-                      </p>
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Máy giặt (X1){" "}
-                        </span>
-                      </div>
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Tủ nhỏ (X1){" "}
-                        </span>
-                      </div>
-
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Tủ lạnh 1 cửa (X1){" "}
-                        </span>
-                      </div>
-
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Bàn ăn (X1){" "}
-                        </span>
-                      </div>
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Sofa 1 chỗ ngồi (X1){" "}
-                        </span>
-                      </div>
-
-                      <p
-                        style={{
-                          fontSize: "18px",
-                          fontWeight: "700",
-                          marginTop: "20px",
-                        }}
-                      >
-                        * Chỉ một trong số món đồ kể trên là phù hợp với chiếc
-                        xe này.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  class="tab-pane fade row"
-                  id="v-pills-profile"
-                  role="tabpanel"
-                  aria-labelledby="v-pills-profile-tab"
-                  tabindex="0"
-                >
-                  <div className="d-flex">
-                    <div
-                      className="col"
-                      style={{
-                        backgroundColor: "#fff",
-                        height: "580px",
-                        marginRight: "20px",
-                        borderRadius: "10px",
-                        padding: "25px 15px",
-                      }}
-                    >
-                      <img
-                        src="./img/choose_1.png"
-                        class="img-fluid"
-                        alt="..."
-                      />
-                    </div>
-                    <div
-                      className="col"
-                      style={{
-                        backgroundColor: "#fff",
-                        borderRadius: "10px",
-                        padding: "25px 20px",
-                      }}
-                    >
-                      <h4 style={{ fontSize: "20px", fontWeight: "900" }}>
-                        Xe Bán Tải
-                      </h4>
-                      <span style={{ fontSize: "18px", fontWeight: "400" }}>
-                        Trọng lượng tối đa: 500kg
-                      </span>
-                      <p style={{ fontSize: "18px", fontWeight: "400" }}>
-                        Kích cỡ hàng hóa tối đa: 140cm x 150cm x 50cm
-                      </p>
-                      <p style={{ fontSize: "18px", fontWeight: "400" }}>
-                        Phù hợp cho: Giao hàng hóa số lượng nhiều, hàng to cồng
-                        kềnh không thể vừa với cốp xe ô tô nhưng không yêu cầu
-                        sức chứa to như xe tải. Linh hoạt và không bị ảnh hưởng
-                        bởi thời gian cấm tải.
-                      </p>
-                      <br></br>
-                      <p style={{ fontSize: "20px", fontWeight: "900" }}>
-                        Tải trọng gần đúng:
-                      </p>
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Máy giặt (X1){" "}
-                        </span>
-                      </div>
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Tủ nhỏ (X1){" "}
-                        </span>
-                      </div>
-
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Tủ lạnh 1 cửa (X1){" "}
-                        </span>
-                      </div>
-
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Bàn ăn (X1){" "}
-                        </span>
-                      </div>
-                      <div className="d-flex" style={{ alignItems: "center" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleInfo}
-                          style={{ color: "#f47c0b" }}
-                        />
-                        <span
-                          style={{
-                            fontSize: "18px",
-                            fontWeight: "400",
-                            marginLeft: "20px",
-                          }}
-                        >
-                          {" "}
-                          Sofa 1 chỗ ngồi (X1){" "}
-                        </span>
-                      </div>
-
-                      <p
-                        style={{
-                          fontSize: "18px",
-                          fontWeight: "700",
-                          marginTop: "20px",
-                        }}
-                      >
-                        * Chỉ một trong số món đồ kể trên là phù hợp với chiếc
-                        xe này.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="v-pills-disabled"
-                  role="tabpanel"
-                  aria-labelledby="v-pills-disabled-tab"
-                  tabindex="0"
-                >
-                  ...
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="v-pills-messages"
-                  role="tabpanel"
-                  aria-labelledby="v-pills-messages-tab"
-                  tabindex="0"
-                >
-                  ...
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="v-pills-settings"
-                  role="tabpanel"
-                  aria-labelledby="v-pills-settings-tab"
-                  tabindex="0"
-                >
-                  ...
-                </div>
-              </div>
-            </div>
+            <Tabs
+              defaultActiveKey="1"
+              tabPosition="left"
+              style={{
+                height: 220,
+              }}
+              items={dataVehicle}
+            />
           </div>
         </div>
         {/* End Five Service */}

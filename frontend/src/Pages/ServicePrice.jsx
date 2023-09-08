@@ -40,7 +40,9 @@ function ServicePrice() {
       let arrDOMFee = data_service_fee.map((item, index) => (
         <tr>
           <td>{item.fee_name}</td>
-          <td>{item.price.toLocaleString()} đ / {item.unit}</td>
+          <td>
+            {item.price.toLocaleString()} đ / {item.unit}
+          </td>
         </tr>
       ));
 
@@ -48,8 +50,42 @@ function ServicePrice() {
     });
   };
 
+  const [dataLoading, setDataLoading] = useState([]);
+  const [dataHire, setDataHire] = useState([]);
+
+  const get_vehicle = async () => {
+    await axios.get(`/v1/vehicle/list_movingFee`).then((data) => {
+      let data_result = data.data;
+
+      let arrDOMHire = data_result.map((item, index) => (
+        <tr>
+          <td>{item.name}</td>
+          <td>{item.priceFirst10km.toLocaleString()} đ</td>
+          <td>{item.priceFrom11to45.toLocaleString()} đ</td>
+          <td>{item.pricePer45km.toLocaleString()} đ</td>
+          <td>{item.waiting_fee.toLocaleString()} đ</td>
+        </tr>
+      ));
+
+      setDataHire(arrDOMHire);
+
+      let arrDOMLoading = data_result.map((item, index) => (
+        <tr>
+          <td>{item.name}</td>
+          <td>{item.TwowayFloor_loadingFee.toLocaleString()} đ</td>
+          <td>{item.OnewayFloor_loadingFee.toLocaleString()} đ</td>
+          <td>{item.Twoway_loadingFee.toLocaleString()} đ</td>
+          <td>{item.Oneway_loadingFee.toLocaleString()} đ</td>
+        </tr>
+      ));
+
+      setDataLoading(arrDOMLoading);
+    });
+  };
+
   useEffect(() => {
     get_fee_service();
+    get_vehicle();
   }, []);
   return (
     <>
@@ -153,7 +189,13 @@ function ServicePrice() {
                 />
               </div>
 
-              <div style={{ lineHeight: "72px", display:"flex", alignItems:"center" }}>
+              <div
+                style={{
+                  lineHeight: "72px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <Button
                   style={{
                     backgroundColor: "#e16c27",
@@ -241,63 +283,14 @@ function ServicePrice() {
           >
             <thead>
               <tr>
-                <th scope="col"></th>
-                <th scope="col">Xe bán tải</th>
-                <th scope="col">Xe van 500 kg</th>
-                <th scope="col">Xe van 1000 kg</th>
-                <th scope="col">Xe tải 500 kg</th>
-                <th scope="col">Xe tải 1000 kg</th>
-                <th scope="col">Xe tải 1500 kg</th>
-                <th scope="col">Xe tải 2000 kg</th>
-                <th scope="col">Xe tải 2500 kg</th>
+                <th scope="col">Loại xe</th>
+                <th scope="col">Giá cước ban đầu - 10km</th>
+                <th scope="col">Từ 11km đến 45km</th>
+                <th scope="col">Từ 45km trở lên</th>
+                <th scope="col">Phí chờ</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Giá cước ban đầu - 10km</th>
-                <td>124.000 VNĐ/Km</td>
-                <td>124.000 VNĐ/Km</td>
-                <td>165.200 VNĐ/Km</td>
-                <td>124.000 VNĐ/Km</td>
-                <td>165.200 VNĐ/Km</td>
-                <td>247.860 VNĐ/Km</td>
-                <td>289.400 VNĐ/Km</td>
-                <td>395.280 VNĐ/Km</td>
-              </tr>
-              <tr>
-                <th scope="row">Từ 11km đến 45km</th>
-                <td>6.480 VNĐ/Km</td>
-                <td>6.480 VNĐ/Km</td>
-                <td>7.560 VNĐ/Km</td>
-                <td>6.480 VNĐ/Km</td>
-                <td>7.560 VNĐ/Km</td>
-                <td>7.560 VNĐ/Km</td>
-                <td>7.560 VNĐ/Km</td>
-                <td>10.260 VNĐ/Km</td>
-              </tr>
-              <tr>
-                <th scope="row">Từ 45km trở lên</th>
-                <td>5.400 VNĐ/Km</td>
-                <td>5.400 VNĐ/Km</td>
-                <td>5.940 VNĐ/Km</td>
-                <td>5.400 VNĐ/Km</td>
-                <td>5.940 VNĐ/Km</td>
-                <td>6.480 VNĐ/Km</td>
-                <td>6.480 VNĐ/Km</td>
-                <td>7.560 VNĐ/Km</td>
-              </tr>
-              <tr>
-                <th scope="row">Phí chờ</th>
-                <td>64.500 VNĐ/Km</td>
-                <td>64.500 VNĐ/Km</td>
-                <td>64.500 VNĐ/Km</td>
-                <td>64.500 VNĐ/Km</td>
-                <td>120.000 VNĐ/Km</td>
-                <td>120.000 VNĐ/Km</td>
-                <td>200.000 VNĐ/Km</td>
-                <td>200.000 VNĐ/Km</td>
-              </tr>
-            </tbody>
+            <tbody>{dataHire}</tbody>
           </table>
         </div>
       </div>
@@ -324,31 +317,13 @@ function ServicePrice() {
             <thead>
               <tr>
                 <th scope="col">Loại xe</th>
-                <th scope="col">Phí bốc xếp 2 đầu</th>
+                <th scope="col">Phí bốc xếp tầng lầu 2 chiều</th>
+                <th scope="col">Phí bốc xếp tầng lầu 1 chiều</th>
+                <th scope="col">Phí bốc xếp tầng trệt 2 chiều</th>
+                <th scope="col">Phí bốc xếp tầng trệt 1 chiều</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Xe tải 500kg</td>
-                <td>108.000 VNĐ</td>
-              </tr>
-              <tr>
-                <td>Xe tải 1.000kg</td>
-                <td>140.000 VNĐ</td>
-              </tr>
-              <tr>
-                <td>Xe tải 1.500kg</td>
-                <td>200.000 VNĐ</td>
-              </tr>
-              <tr>
-                <td>Xe tải 2.0000kg</td>
-                <td>324.000 VNĐ</td>
-              </tr>
-              <tr>
-                <td>Xe tải 2.5000kg</td>
-                <td>540.000 VNĐ</td>
-              </tr>
-            </tbody>
+            <tbody>{dataLoading}</tbody>
           </table>
         </div>
       </div>
