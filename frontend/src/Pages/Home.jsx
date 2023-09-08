@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 
@@ -114,7 +114,7 @@ const Home = () => {
               children: (
                 <div className="row">
                   <div className="col">
-                    <img src={item.image} width="500" height={207} style={{objectFit:"contain"}} />
+                    <img src={item.image} width="500" height={207} style={{objectFit:"contain"}} alt="" />
                   </div>
                   <div
                     className="col"
@@ -135,20 +135,6 @@ const Home = () => {
                 </div>
               ),
             };
-            //     };
-            // const ob_service = {
-            //   id: item._id,
-            //   STT: index + 1,
-            //   vehicle_name: item.vehicle_name,
-            //   brand: item.brand,
-            //   capacity: item.capacity,
-            //   status: item.status,
-            //   cago_size: item.cago_size,
-            //   suitable_for: item.suitable_for,
-            //   image: item.image,
-            // };
-
-            // data_service.push(ob_service);
           });
         setDataVehicle(data_arr);
       })

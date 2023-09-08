@@ -471,14 +471,21 @@ th.ant-table-cell {
     background-color: orange !important;
     padding: 10px !important;
     border: 1px solid orange !important;
-    border-radius: 10px !important;
+    border-radius: 10px 0 0 10px !important;
     color: white !important;
     font-size: 17px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+
     .ant-tabs-tab-btn {
-            color: white !important;
-        }
+        color: white !important;
+    }
 }
 
+
+.img_logo {
+    width: 155px !important;
+    object-fit: contain !important;
+    height: 152px !important;
+}

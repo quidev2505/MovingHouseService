@@ -34,8 +34,9 @@ const NavBar = () => {
           <Link to="/" className="nav-link" style={{ marginLeft: "29px" }}>
             <img
               alt=""
-              src="./img/logo_main.png"
+              src="./img/anh_logo.png"
               style={{ width: "fit-content", height: "30px" }}
+              className="img_logo"
             />
           </Link>
 
