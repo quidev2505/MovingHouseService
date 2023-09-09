@@ -114,7 +114,7 @@ const NavBar = () => {
           {user ? (
             <>
               <div className="content_right d-flex fw-bold">
-                <div className="btn_signIn d-flex">
+                <div className="btn_signIn d-flex" style={{flexDirection:"column"}}>
                   Xin chào, &nbsp;
                   <span style={{ color: "#ff8268 " }}>{user.fullname}</span>
                 </div>

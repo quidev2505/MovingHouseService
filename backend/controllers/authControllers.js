@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Customer = require('../models/Customer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
@@ -27,13 +28,43 @@ const authControllers = {
                 password: hashed
             });
 
+
             //Save to DB
             const user = await newUser.save();
-            res.status(200).json(user);
+
+            if (user) {
+                //Create new Customer
+                const avatar_API = `https://api.dicebear.com/7.x/avataaars/svg?seed=${req.body.fullname}`
+
+                const newCustomer = await new Customer({
+                    fullname: req.body.fullname,
+                    avatar: avatar_API
+                })
+                const customer = await newCustomer.save();
+                res.status(200).json(customer);
+            } else {
+                res.status(500).json('loi');
+
+            }
         } catch (err) {
-            console.log('error')
-            console.log(req.body)
+            console.log(err)
             res.status(500).json(err);
+        }
+    },
+
+    //Get Info Customer
+    getCustomer: async (req, res) => {
+        try {
+            const data_customer = await Customer.findOne({fullname: req.params.fullname});
+
+            console.log(data_customer)
+            if (data_customer) {    
+                res.status(200).json(data_customer)
+            } else {
+                res.status(500).json('Error');
+            }
+        } catch (e) {
+            console.log(e)
         }
     },
 

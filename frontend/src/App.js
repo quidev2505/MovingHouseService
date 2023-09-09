@@ -15,6 +15,8 @@ import Blog from './Pages/Blog';
 //Trang quản lý User
 import BookingUser from './Pages/User/PagesUser/Booking/BookingUser'
 import OrderUser from './Pages/User/PagesUser/Order/OrderUser'
+import DriverUser from './Pages/User/PagesUser/Driver/DriverUser'
+import InfoUser from './Pages/User/PagesUser/Info/InfoUser';
 
 
 
@@ -58,6 +60,7 @@ import EditVehicle from './Pages/Admin/PagesAdmin/Vehicle/EditVehicle';
 //Import trong Setting Admin
 import ChangePasswordAdmin  from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
 
+
 function App() {
 
   return (
@@ -79,6 +82,8 @@ function App() {
           {/* Trang User  */}
           <Route path="/user/booking" element={<BookingUser />} />
           <Route path="/user/order" element={<OrderUser />} />
+          <Route path="/user/driver" element={<DriverUser />} />
+          <Route path="/user/info_user" element={<InfoUser />} />
         </Route>
 
 
