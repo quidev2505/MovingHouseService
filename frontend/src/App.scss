@@ -24,7 +24,7 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
+    z-index: 999;
 
     .navbar_header li:hover a {
         color: black !important;
@@ -466,20 +466,21 @@ th.ant-table-cell {
     height: fit-content;
 }
 
-
-.ant-tabs-tab-active {
-    background-color: orange !important;
-    padding: 10px !important;
-    border: 1px solid orange !important;
-    border-radius: 10px 0 0 10px !important;
-    color: white !important;
-    font-size: 17px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    .ant-tabs-tab-btn {
+.HomePage {
+    .ant-tabs-tab-active {
+        background-color: orange !important;
+        padding: 10px !important;
+        border: 1px solid orange !important;
+        border-radius: 10px 0 0 10px !important;
         color: white !important;
+        font-size: 17px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        .ant-tabs-tab-btn {
+            color: white !important;
+        }
     }
 }
 
@@ -488,4 +489,38 @@ th.ant-table-cell {
     width: 155px !important;
     object-fit: contain !important;
     height: 152px !important;
+}
+
+
+// User Page
+.headerUser {
+    height: 55px;
+    border-bottom: 1px solid var(--primay-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: space-between;
+
+    .item_nav_user{
+        line-height: 50px;
+    }
+
+    .navBar_User {
+        margin-right: 70px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        color: #9b9797;
+        text-align: center;
+    }
+}
+
+.bookingUser, .orderUser{
+    margin-top: 55px;
+}
+
+.navbar_click {
+    border-bottom: 2px solid var(--primay-color);
 }

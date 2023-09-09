@@ -18,7 +18,7 @@ function LineHeader() {
           &nbsp; Dịch vụ dọn nhà chuyên nghiệp hàng đầu.{" "}
         </span>
         <Link
-          to="/userManage"
+          to="/user/booking"
           style={{ textDecoration: "none", color: "#ff671d" }}
         >
           Đặt lịch ngay bây giờ !

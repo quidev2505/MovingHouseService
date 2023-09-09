@@ -31,7 +31,7 @@ const NavBar = () => {
           backgroundColor: "#fff",
         }}
       >
-        <div className="container-fluid">
+        <div className="container-fluid" style={{height:"90px"}}>
           <Link to="/" className="nav-link" style={{ marginLeft: "29px" }}>
             <img
               alt=""

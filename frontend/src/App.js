@@ -13,7 +13,8 @@ import Blog from './Pages/Blog';
 
 
 //Trang quản lý User
-import BookingUser from './Pages/User/BookingUser';
+import BookingUser from './Pages/User/PagesUser/Booking/BookingUser'
+import OrderUser from './Pages/User/PagesUser/Order/OrderUser'
 
 
 
@@ -77,6 +78,7 @@ function App() {
         <Route element={<ProtectRoutes />}>
           {/* Trang User  */}
           <Route path="/user/booking" element={<BookingUser />} />
+          <Route path="/user/order" element={<OrderUser />} />
         </Route>
 
 

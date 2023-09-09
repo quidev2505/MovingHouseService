@@ -160,7 +160,7 @@ const Home = () => {
   return (
     <>
       <Header />
-      <div style={{ height: "fit-content", overflowX:"hidden" }}>
+      <div style={{ height: "fit-content", overflowX:"hidden" }} className="HomePage">
         <LoadingOverlayComponent status={isActive}>
           {/* First_service */}
           <div className="provide_service row" style={{ position: "relative" }}>
