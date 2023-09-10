@@ -10,8 +10,8 @@ import { useForm } from "react-hook-form";
 
 import { useNavigate } from "react-router-dom";
 
-// import Swal from "sweetalert2/dist/sweetalert2.js";
-// import axios from "axios";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import axios from "axios";
 
 //Nội dung bài Blog
 import { Editor } from "@tinymce/tinymce-react";
@@ -20,12 +20,12 @@ function AddBlog() {
   const navigate = useNavigate();
 
   const editorRef = useRef(null);
-  const [content, setContent] = useState()
+  const [content, setContent] = useState();
 
   const log = () => {
     if (editorRef.current) {
       let content_blog = editorRef.current.getContent();
-      setContent(content_blog)
+      setContent(content_blog);
     }
   };
 
@@ -54,69 +54,53 @@ function AddBlog() {
   const onSubmit = async (data) => {
     data.thumbnail = image;
     data.content = content;
-    console.log(data)
-    // try {
-    //   if (image) {
-    //     const dataVehicle = {
-    //       name: data.name,
-    //       brand: data.brand,
-    //       capacity: data.capacity,
-    //       cago_size: data.cago_size,
-    //       suitable_for: data.suitable_for,
-    //       image: image,
-    //       priceFirst10km: data.priceFirst10km,
-    //       priceFrom11to45: data.priceFrom11to45,
-    //       pricePer45km: data.pricePer45km,
-    //       waiting_fee: data.waiting_fee,
-    //       OnewayFloor_loadingFee: data.OnewayFloor_loadingFee,
-    //       Oneway_loadingFee: data.Oneway_loadingFee,
-    //       TwowayFloor_loadingFee: data.TwowayFloor_loadingFee,
-    //       Twoway_loadingFee: data.Twoway_loadingFee,
-    //     };
-    //     await axios
-    //       .post(`/v1/vehicle/add_vehicle`, dataVehicle)
-    //       .then((data) => {
-    //         Swal.fire({
-    //           position: "center",
-    //           icon: "success",
-    //           title: "Thêm phương tiện thành công!",
-    //           showConfirmButton: false,
-    //           timer: 1200,
-    //         });
-    //         navigate("/admin/vehicle");
-    //       })
-    //       .catch((e) => {
-    //         console.log(e);
-    //         Swal.fire({
-    //           position: "center",
-    //           icon: "error",
-    //           title: "Thêm  phương tiện thất bại!",
-    //           text: "Vui lòng thực hiện lại !",
-    //           showConfirmButton: false,
-    //           timer: 1000,
-    //         });
-    //       });
-    //   } else {
-    //     Swal.fire({
-    //       position: "center",
-    //       icon: "error",
-    //       title: "Thêm phương tiện thất bại!",
-    //       text: "Dữ liệu nhập chưa đủ !",
-    //       showConfirmButton: false,
-    //       timer: 1000,
-    //     });
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    //   Swal.fire({
-    //     position: "center",
-    //     icon: "error",
-    //     title: "Thêm phương tiện thất bại!",
-    //     text: "Vui lòng thực hiện lại ! - Có thể dung lượng ảnh quá lớn !",
-    //     showConfirmButton: false,
-    //     timer: 1000,
-    //   });
-    // }
+
+    try {
+      if (data) {
+        await axios
+          .post(`/v1/blog/create_blog`, data)
+          .then((data) => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Thêm blog thành công!",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+
+            navigate("/admin/blog");
+          })
+          .catch((e) => {
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: "Thêm blog thất bại!",
+              text: "Vui lòng thực hiện lại ! Dữ liệu nhập chưa đủ !",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          });
+      } else {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Thêm blog thất bại!",
+          text: "Vui lòng thực hiện lại ! Dữ liệu nhập chưa đủ !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Thêm blog thất bại!",
+        text: "Vui lòng thực hiện lại ! - Có thể dung lượng ảnh quá lớn !",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    }
   };
 
   return (
@@ -302,7 +286,7 @@ function AddBlog() {
                         color: "white",
                         float: "left",
                         marginBottom: "12px",
-                        marginTop:"20px",
+                        marginTop: "20px",
                         width: "fit-content",
                         height: "50px",
                         padding: "5px",

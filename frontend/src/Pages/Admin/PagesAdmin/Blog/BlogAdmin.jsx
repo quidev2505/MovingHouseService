@@ -15,6 +15,9 @@ import "sweetalert2/src/sweetalert2.scss";
 
 import { useNavigate } from "react-router-dom";
 
+import htmlReactParser from "html-react-parser";
+
+
 import {
   EditOutlined,
   FolderViewOutlined,
@@ -36,33 +39,28 @@ function BlogAdmin() {
     },
     {
       title: "Hình ảnh",
-      dataIndex: "image",
-      key: "image",
-      render: (image) => (
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      render: (thumbnail) => (
         <td>
-          <Image width={80} src={image} />
+          <Image width={80} src={thumbnail} />
         </td>
       ),
     },
     {
-      title: "Tên phương tiện",
-      dataIndex: "vehicle_name",
-      key: "vehicle_name",
+      title: "Tiêu đề",
+      dataIndex: "title",
+      key: "title",
     },
     {
-      title: "Thương hiệu xe",
-      dataIndex: "brand",
+      title: "Danh mục",
+      dataIndex: "category",
       key: "brand",
     },
     {
-      title: "Trọng lượng tối đa",
-      dataIndex: "capacity",
-      key: "capacity",
-    },
-    {
-      title: "Kích cỡ hàng hóa tối đa",
-      dataIndex: "cago_size",
-      key: "cago_size",
+      title: "Ngày đăng",
+      dataIndex: "post_date",
+      key: "post_date",
     },
     {
       title: "Trạng thái",
@@ -106,7 +104,7 @@ function BlogAdmin() {
             <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
           </div>
           <div
-            onClick={() => view_detail_vehicle(id)}
+            onClick={() => view_detail_blog(id)}
             style={{
               backgroundColor: "blue",
               borderRadius: "50%",
@@ -120,7 +118,7 @@ function BlogAdmin() {
             />
           </div>
           <Link
-            onClick={() => delete_service(id)}
+            onClick={() => delete_blog(id)}
             style={{
               backgroundColor: "red",
               borderRadius: "50%",
@@ -135,9 +133,9 @@ function BlogAdmin() {
     },
   ];
 
-  const get_vehicle = async () => {
+  const get_blog = async () => {
     await axios
-      .get(`/v1/vehicle/list_vehicle`)
+      .get(`/v1/blog/read_blog`)
       .then((data) => {
         let data_solve = data.data;
         const data_service = [];
@@ -146,13 +144,11 @@ function BlogAdmin() {
             const ob_service = {
               id: item._id,
               STT: index + 1,
-              vehicle_name: item.vehicle_name,
-              brand: item.brand,
-              capacity: item.capacity,
-              status: item.status,
-              cago_size: item.cago_size,
-              suitable_for: item.suitable_for,
-              image: item.image,
+              title: item.title,
+              category: item.category,
+              thumbnail: item.thumbnail,
+              post_date: item.post_date,
+              status:item.status
             };
 
             data_service.push(ob_service);
@@ -166,9 +162,9 @@ function BlogAdmin() {
   };
 
   const changeStatus = (id, status) => {
-    let id_service = id.id;
+    let id_blog = id.id;
     Swal.fire({
-      title: "Bạn muốn thay đổi trạng thái phương tiện này ?",
+      title: "Bạn muốn thay đổi trạng thái blog này ?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -178,15 +174,15 @@ function BlogAdmin() {
       .then(async (result) => {
         if (result.isConfirmed) {
           await axios
-            .patch(`/v1/vehicle/update_one_field_vehicle/${id_service}`, {
+            .patch(`/v1/blog/updateonefield_blog/${id_blog}`, {
               status: !status,
             })
             .then((data) => {
-              get_vehicle();
+              get_blog();
               Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Thay đổi trạng thái phương tiện thành công !",
+                title: "Thay đổi trạng thái blog thành công !",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -195,7 +191,7 @@ function BlogAdmin() {
               Swal.fire({
                 position: "center",
                 icon: "warning",
-                title: "Thay đổi trạng thái phương tiện thất bại !",
+                title: "Thay đổi trạng thái blog thất bại !",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -207,7 +203,7 @@ function BlogAdmin() {
         Swal.fire({
           position: "center",
           icon: "warning",
-          title: "Thay đổi trạng thái phương tiện thất bại !",
+          title: "Thay đổi trạng thái blog thất bại !",
           showConfirmButton: false,
           timer: 1200,
         });
@@ -216,11 +212,11 @@ function BlogAdmin() {
   };
 
   useEffect(() => {
-    get_vehicle();
+    get_blog();
   }, []);
 
-  const delete_service = (id) => {
-    let id_service = id.id;
+  const delete_blog = (id) => {
+    let id_blog = id.id;
     Swal.fire({
       title: "Bạn muốn xóa dịch vụ này ?",
       icon: "warning",
@@ -232,13 +228,13 @@ function BlogAdmin() {
       .then(async (result) => {
         if (result.isConfirmed) {
           await axios
-            .delete(`/v1/vehicle/delete_vehicle/${id_service}`)
+            .delete(`/v1/blog/delete_blog/${id_blog}`)
             .then((data) => {
-              get_vehicle();
+              get_blog();
               Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Xóa phương tiện thành công!",
+                title: "Xóa Blog thành công!",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -247,7 +243,7 @@ function BlogAdmin() {
               Swal.fire({
                 position: "center",
                 icon: "warning",
-                title: "Xóa phương tiện thất bại!",
+                title: "Xóa Blog thất bại!",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -259,7 +255,7 @@ function BlogAdmin() {
         Swal.fire({
           position: "center",
           icon: "warning",
-          title: "Xóa phương tiện thất bại!",
+          title: "Xóa Blog thất bại!",
           showConfirmButton: false,
           timer: 1200,
         });
@@ -267,83 +263,25 @@ function BlogAdmin() {
       });
   };
 
-  const view_detail_vehicle = async (id) => {
-    const column_moving_fee = [
-      {
-        title: "Tên phương tiện",
-        dataIndex: "name",
-        key: "name",
-      },
-      {
-        title: "Giá đi 10km đầu tiên",
-        dataIndex: "priceFirst10km",
-        key: "priceFirst10km",
-      },
-      {
-        title: "Giá đi 11 - 45 km",
-        dataIndex: "priceFrom11to45",
-        key: "priceFrom11to45",
-      },
-      {
-        title: "Giá trên 45km",
-        dataIndex: "pricePer45km",
-        key: "pricePer45km",
-      },
-      {
-        title: "Phí chờ",
-        dataIndex: "waiting_fee",
-        key: "waiting_fee",
-      },
-      {
-        title: "Phí bốc xếp tầng lầu 2 chiều",
-        dataIndex: "TwowayFloor_loadingFee",
-        key: "TwowayFloor_loadingFee",
-      },
-      {
-        title: "Phí bốc xếp tầng lầu 1 chiều",
-        dataIndex: "OnewayFloor_loadingFee",
-        key: "OnewayFloor_loadingFee",
-      },
-      {
-        title: "Phí bốc xếp tầng trệt 2 chiều",
-        dataIndex: "Twoway_loadingFee",
-        key: "Twoway_loadingFee",
-      },
-      {
-        title: "Phí bốc xếp tầng trệt 1 chiều",
-        dataIndex: "Oneway_loadingFee",
-        key: "Oneway_loadingFee",
-      },
-    ];
+  const view_detail_blog = async (id) => {
     await axios
-      .get(`/v1/vehicle/moving_fee/${id.id}`)
+      .get(`/v1/blog/view_detail_blog/${id.id}`)
       .then((data) => {
-        let data_result = data.data.movingFee_id;
-        console.log(data_result);
-        const objectMoving = {
-          name: data_result?.name,
-          priceFirst10km: data_result?.priceFirst10km.toLocaleString() + " đ",
-          priceFrom11to45: data_result?.priceFrom11to45.toLocaleString() + " đ",
-          pricePer45km: data_result?.pricePer45km.toLocaleString() + " đ",
-          waiting_fee: data_result?.waiting_fee.toLocaleString() + " đ",
-          TwowayFloor_loadingFee:
-            data_result?.TwowayFloor_loadingFee.toLocaleString() + " đ",
-          OnewayFloor_loadingFee:
-            data_result?.OnewayFloor_loadingFee.toLocaleString() + " đ",
-          Twoway_loadingFee:
-            data_result?.Twoway_loadingFee.toLocaleString() + " đ",
-          Oneway_loadingFee:
-            data_result?.Oneway_loadingFee.toLocaleString() + " đ",
+        let data_result = data.data;
+        // console.log(data_result);
+        const objectBlog = {
+            content: data_result.content,
+            // comment_blog_id :Array Tạm thời để đây mốt hiện comment lên
         };
 
-        const arrMoving = [objectMoving];
 
         Modal.success({
-          title: "Thông tin phí di chuyển phương tiện",
+          title: "Thông tin chi tiết Blog",
           content: (
-            <div>
-              <Table columns={column_moving_fee} dataSource={arrMoving} />
-            </div>
+            <>
+              <h3>Nội dung Blog: </h3>
+              <div>{htmlReactParser(objectBlog.content)}</div>
+            </>
           ),
           onOk() {},
         });
