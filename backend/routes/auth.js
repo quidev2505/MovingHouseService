@@ -27,7 +27,5 @@ router.post("/changePassword", authControllers.changePassword);
 //Login with google
 router.post("/loginWithGoogle", authControllers.loginWithGoogle);
 
-//Get Customer
-router.get('/get_customer_info/:fullname', authControllers.getCustomer);
 
 module.exports = router;

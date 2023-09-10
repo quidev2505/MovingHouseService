@@ -6,6 +6,7 @@ const adminRoute = require('./routes/admin');
 const serviceRoute = require('./routes/service');
 const serviceFeeRoute = require('./routes/service_fee');
 const vehicleRoute = require('./routes/vehicle');
+const customerRoute = require('./routes/customer');
 var cookieParser = require('cookie-parser')
 
 //Cors
@@ -54,6 +55,9 @@ app.use("/v1/service_fee", serviceFeeRoute);
 
 //Vehicle
 app.use("/v1/vehicle", vehicleRoute);
+
+//User Manager
+app.use("/v1/customer", customerRoute)
 
 //Middleware Test First
 app.get('/', (req, res) => {

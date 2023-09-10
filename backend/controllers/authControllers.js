@@ -52,22 +52,7 @@ const authControllers = {
         }
     },
 
-    //Get Info Customer
-    getCustomer: async (req, res) => {
-        try {
-            const data_customer = await Customer.findOne({fullname: req.params.fullname});
-
-            console.log(data_customer)
-            if (data_customer) {    
-                res.status(200).json(data_customer)
-            } else {
-                res.status(500).json('Error');
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    },
-
+ 
     //GENERATE ACCESS TOKEN
     generateAccessToken: (user) => {
         return jwt.sign(

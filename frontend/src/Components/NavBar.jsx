@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 // import { logOutSuccess } from "../../redux/authSlice";
 //Icon
 import { FaRegUser, FaCircleUser } from "react-icons/fa6";
-import {  Tooltip } from "antd";
+import {  Tooltip} from "antd";
 import { FiLogOut } from "react-icons/fi";
 
 const NavBar = () => {

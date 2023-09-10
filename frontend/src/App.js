@@ -36,7 +36,7 @@ import DashBoardAdmin from './Pages/Admin/PagesAdmin/DashboardAdmin';
 import OrderAdmin from "./Pages/Admin/PagesAdmin/OrderAdmin";
 import ItemContainerAdmin from './Pages/Admin/PagesAdmin/ItemContainerAdmin';
 import GetquoteAdmin from './Pages/Admin/PagesAdmin/GetquoteAdmin';
-import BlogAdmin from './Pages/Admin/PagesAdmin/BlogAdmin';
+
 import DriverAdmin from './Pages/Admin/PagesAdmin/DriverAdmin';
 import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
 import AdministratorAdmin from './Pages/Admin/PagesAdmin/Administrator';
@@ -57,8 +57,13 @@ import VehicleAdmin from './Pages/Admin/PagesAdmin/Vehicle/VehicleAdmin';
 import AddVehicle from './Pages/Admin/PagesAdmin/Vehicle/AddVehicle';
 import EditVehicle from './Pages/Admin/PagesAdmin/Vehicle/EditVehicle';
 
+//Blog Admin
+import BlogAdmin from './Pages/Admin/PagesAdmin/Blog/BlogAdmin';
+import AddBlog from './Pages/Admin/PagesAdmin/Blog/AddBlog';
+
 //Import trong Setting Admin
 import ChangePasswordAdmin  from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
+
 
 
 function App() {
@@ -118,8 +123,12 @@ function App() {
           {/* End  Vehicle_Admin CRUD */}
 
 
-
+          {/* Blog Admin CRUD */}
           <Route path="/admin/blog" element={<BlogAdmin />} />
+          <Route path="/admin/blog/add" element={<AddBlog />} />
+
+          {/* End Blog_Admin CRUD */}
+
           <Route path="/admin/item_container" element={<ItemContainerAdmin />} />
           <Route path="/admin/get_quote" element={<GetquoteAdmin />} />
           <Route path="/admin/order" element={<OrderAdmin />} />
