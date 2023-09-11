@@ -119,13 +119,16 @@ const vehicleController = {
 
             const data_service = await Vehicle.findOne({ _id: id });
 
-            const data_moving_fee = await data_service.populate('movingFee_id');
+            if (data_service) {
+                const data_moving_fee = await data_service.populate('movingFee_id');
 
-            if (data_moving_fee) {
-                res.status(200).json(data_moving_fee);
-            } else {
-                res.status(501).json('Fail to load data !');
+                if (data_moving_fee) {
+                    res.status(200).json(data_moving_fee);
+                } else {
+                    res.status(501).json('Fail to load data !');
+                }
             }
+
         } catch (err) {
             console.log(err)
             res.status(501).json('Fail to load data !');

@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 
 import htmlReactParser from "html-react-parser";
 
-
 import {
   EditOutlined,
   FolderViewOutlined,
@@ -92,7 +91,7 @@ function BlogAdmin() {
       render: (id) => (
         <Space size="middle" className="icon_hover">
           <div
-            onClick={() => nav(`/admin/vehicle/edit/${id.id}`)}
+            onClick={() => nav(`/admin/blog/edit/${id.id}`)}
             style={{
               backgroundColor: "green",
               borderRadius: "50%",
@@ -148,7 +147,7 @@ function BlogAdmin() {
               category: item.category,
               thumbnail: item.thumbnail,
               post_date: item.post_date,
-              status:item.status
+              status: item.status,
             };
 
             data_service.push(ob_service);
@@ -270,17 +269,28 @@ function BlogAdmin() {
         let data_result = data.data;
         // console.log(data_result);
         const objectBlog = {
-            content: data_result.content,
-            // comment_blog_id :Array Tạm thời để đây mốt hiện comment lên
+          content: data_result.content,
+          comment_blog_id: data_result.comment_blog_id,
         };
-
 
         Modal.success({
           title: "Thông tin chi tiết Blog",
           content: (
             <>
-              <h3>Nội dung Blog: </h3>
-              <div>{htmlReactParser(objectBlog.content)}</div>
+              <h5>Nội dung Blog: </h5>
+              <div className="content_blog_detail">
+                {htmlReactParser(objectBlog.content)}
+              </div>
+
+              <div>
+                <h5>Bình luận: </h5>
+                <p>
+                  Số lượng :{" "}
+                  <span className="fw-bold">
+                    {objectBlog.comment_blog_id.length}
+                  </span>
+                </p>
+              </div>
             </>
           ),
           onOk() {},

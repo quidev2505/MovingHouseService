@@ -34,7 +34,22 @@ const blogController = {
             res.status(501).json(e)
         }
     },
+    //update Blog 
+    updateBlog: async(req, res) => {
+        try{
+            const id = req.params.id;
+            const check_update = await Blog.findByIdAndUpdate(id, req.body);
 
+            if(check_update){
+                res.status(201).json('Update success')
+            }else{
+                res.status(501).json('Update fail')
+            }
+        }catch(e){
+            console.log(e)
+            res.status(501).json(e);
+        }
+    },
     //Read Blog -> Show Blog
     readBlog: async (req, res) => {
         try {

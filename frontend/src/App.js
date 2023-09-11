@@ -60,6 +60,7 @@ import EditVehicle from './Pages/Admin/PagesAdmin/Vehicle/EditVehicle';
 //Blog Admin
 import BlogAdmin from './Pages/Admin/PagesAdmin/Blog/BlogAdmin';
 import AddBlog from './Pages/Admin/PagesAdmin/Blog/AddBlog';
+import EditBlog from './Pages/Admin/PagesAdmin/Blog/EditBlog';
 
 //Import trong Setting Admin
 import ChangePasswordAdmin  from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
@@ -126,6 +127,7 @@ function App() {
           {/* Blog Admin CRUD */}
           <Route path="/admin/blog" element={<BlogAdmin />} />
           <Route path="/admin/blog/add" element={<AddBlog />} />
+          <Route path="/admin/blog/edit/:id" element={<EditBlog />} />
 
           {/* End Blog_Admin CRUD */}
 

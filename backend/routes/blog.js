@@ -10,6 +10,9 @@ router.get('/read_blog', blogController.readBlog)
 //Update one field Blog
 router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)
 
+//Update Blog
+router.put('/update_blog/:id', blogController.updateBlog)
+
 //Delete Blog
 router.delete('/delete_blog/:id', blogController.deleteBlog);
 
