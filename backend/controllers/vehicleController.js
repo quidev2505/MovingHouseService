@@ -1,6 +1,6 @@
 const MovingFee = require('../models/MovingFee');
 const Vehicle = require('../models/Vehicle');
-
+const fs = require('fs');
 
 
 const vehicleController = {
@@ -160,6 +160,11 @@ const vehicleController = {
                     suitable_for: req.body.suitable_for,
                     image: file.path
                 }
+                //Thực hiện xóa ảnh cũ
+                const imagePath = `${req.body.image_old}`;
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
             } else {
                 vehicle_data = {
                     vehicle_name: req.body.name,
@@ -242,6 +247,8 @@ const vehicleController = {
 
             const data_vehicle = await Vehicle.findOne({ _id: id_vehicle });
 
+
+
             const id_moving_fee = data_vehicle.movingFee_id;
 
             const check_delete_vehicle = await Vehicle.findByIdAndDelete(id_vehicle);
@@ -249,6 +256,11 @@ const vehicleController = {
             if (check_delete_vehicle) {
                 const check_delete_movingFee = await MovingFee.findByIdAndDelete(id_moving_fee);
                 if (check_delete_movingFee) {
+                    //Thực hiện xóa ảnh cũ
+                    const imagePath = `${data_vehicle.image}`;
+                    if (fs.existsSync(imagePath)) {
+                        fs.unlinkSync(imagePath);
+                    }
                     res.status(200).json('Delete Success');
                 } else {
                     res.status(501).json('Delete Fail');

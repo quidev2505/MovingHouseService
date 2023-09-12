@@ -1,4 +1,5 @@
 const Blog = require('../models/Blog');
+const fs = require('fs');
 
 
 const blogController = {
@@ -14,7 +15,7 @@ const blogController = {
             const vietnamTime = now.toLocaleString('vi-VN');
             const time_now = vietnamTime.split(' ')[1];
 
-            
+
             const data_blog = await new Blog({
                 title: data_input.title,
                 content: data_input.content,
@@ -37,23 +38,31 @@ const blogController = {
         }
     },
     //update Blog 
-    updateBlog: async(req, res) => {
-        try{
+    updateBlog: async (req, res) => {
+        try {
             const id = req.params.id;
 
             // Lấy thông tin về file được upload
             const file = req.file;
-            if(file){
-                req.body.thumbnail = file.path 
+
+            if (file) {
+                req.body.thumbnail = file.path
+                
+                //Thực hiện xóa ảnh cũ
+                const imagePath = `${req.body.image_old}`;
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
+
             }
-            
+
             const check_update = await Blog.findByIdAndUpdate(id, req.body);
-            if(check_update){
+            if (check_update) {
                 res.status(201).json('Update success')
-            }else{
+            } else {
                 res.status(501).json('Update fail')
             }
-        }catch(e){
+        } catch (e) {
             console.log(e)
             res.status(501).json(e);
         }
@@ -111,8 +120,17 @@ const blogController = {
     deleteBlog: async (req, res) => {
         try {
             const id = req.params.id;
+            const data_blog = await Blog.findOne({_id: id})
+            
             const check_delete = await Blog.findByIdAndDelete({ _id: id });
+
+
             if (check_delete) {
+                //Thực hiện xóa ảnh cũ
+                const imagePath = `${data_blog.thumbnail}`;
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
                 res.status(201).json('Delete Success !')
             } else {
                 res.status(501).json('Error');

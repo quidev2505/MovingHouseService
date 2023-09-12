@@ -40,7 +40,7 @@ function Blog() {
                     style={{
                       width: "371px",
                       height: "248px",
-                      objectFit: "contain",
+                      objectFit: "cover",
                     }}
                     alt=""
                   ></img>

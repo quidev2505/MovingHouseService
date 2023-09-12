@@ -69,6 +69,7 @@ function EditService() {
   const { handleSubmit } = useForm();
 
   const [image, setImage] = useState("");
+  const [image_old, setImageOld] = useState("");
 
   // Upload Img
   function uploadImg(e) {
@@ -125,6 +126,7 @@ function EditService() {
 
     const formData = new FormData();
     formData.append("file", image);
+    formData.append("image_old", image_old);
     formData.append("name", dataService.name);
     formData.append("vehicle", dataService.vehicle);
     formData.append("needPeople", dataService.needPeople);
@@ -227,6 +229,7 @@ function EditService() {
         setTargetKeysBonus(arrBonusKey);
 
         setImage(object_data.image);
+        setImageOld(object_data.image)
         setDataService(object_data);
         // console.log(dataService);
       })

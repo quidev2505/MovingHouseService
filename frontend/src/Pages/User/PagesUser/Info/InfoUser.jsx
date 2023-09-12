@@ -5,6 +5,9 @@ import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
+import { updateUser } from "../../../../redux/apiRequest";
+import { useDispatch } from "react-redux";
+
 function InfoUser() {
   const user = useSelector((state) => state.auth.login.currentUser);
 
@@ -14,20 +17,13 @@ function InfoUser() {
   const [phonenumber, setPhonenumber] = useState();
 
   const [image, setImage] = useState("");
-
-  //Upload Img
-  function convertToBase64(e) {
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      // console.log(reader.result); //base64encoded string
-      setImage(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log("Error", error);
-    };
+  const [image_old, setImageOld] = useState("");
+  // Upload Img
+  function uploadImg(e) {
+    setImage(e.target.files[0]);
   }
 
+  const dispatch = useDispatch();
   //Update Info
   const updateInfo = async () => {
     dataCustomer.id_user = user._id; // Tự động thêm key vô Object
@@ -35,17 +31,42 @@ function InfoUser() {
     dataCustomer.email = email; // Tự động thêm key vô Object
     dataCustomer.phonenumber = phonenumber; // Tự động thêm key vô Object
 
-    if (dataCustomer) {
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("id_customer", dataCustomer._id);
+    formData.append("image_old", image_old);
+    formData.append("fullname", dataCustomer.fullname);
+    formData.append("address", dataCustomer.address);
+    formData.append("gender", dataCustomer.gender);
+    formData.append("id_user", user._id);
+    formData.append("email", email);
+    formData.append("phonenumber", phonenumber);
+
+    if (formData) {
       await axios
-        .post(`/v1/customer/update_customer`, dataCustomer)
+        .post(`/v1/customer/update_customer`, formData)
         .then((data) => {
           Swal.fire({
             position: "center",
             icon: "success",
             title: "Cập nhật thông tin cá nhân thành công!",
+            text: "Cần đăng nhập lại để cập nhật thông tin !",
             showConfirmButton: false,
             timer: 1200,
           });
+
+          const dataNew = {
+            _id: user._id,
+            accessToken: user.accessToken,
+            email: dataCustomer.email,
+            fullname: dataCustomer.fullname,
+            phonenumber: dataCustomer.phonenumber,
+            status: true,
+          };
+
+          // console.log(data)
+          // useSelector((state) => state.auth.login.currentUser.fullname = data.fullname);
+          updateUser(dataNew, dispatch);
         })
         .catch((e) => {
           console.log(e);
@@ -62,32 +83,34 @@ function InfoUser() {
 
   const getInfoCustomer = async () => {
     let id = user._id;
+
     await axios
       .get(`/v1/customer/get_customer_info/${id}`)
       .then((data) => {
         let data_customer = data.data;
-        console.log(data_customer)
+        console.log(data_customer);
 
         setDataCustomer(data_customer);
         setImage(data_customer.avatar);
+        setImageOld(data_customer.avatar);
         setEmail(user.email);
         setPhonenumber(user.phonenumber);
       })
       .catch((e) => console.log(e));
   };
 
-
-  const [isActive, setIsActive] = useState(true)
+  const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     getInfoCustomer();
-    setIsActive(false)
+    setIsActive(false);
+    // eslint-disable-next-line
   }, []);
 
   const [hide, setHide] = useState(true);
 
   useEffect(() => {
-    setHide(!hide);
+    setHide(false);
   }, [dataCustomer, email, phonenumber, image]);
 
   return (
@@ -114,6 +137,9 @@ function InfoUser() {
                       type="text"
                       className="form-control form-control-lg"
                       value={dataCustomer?.fullname}
+                      placeholder={
+                        dataCustomer?.fullname ? "" : "Vui lòng cập nhật !"
+                      }
                       onChange={(e) => {
                         setDataCustomer({
                           ...dataCustomer,
@@ -124,7 +150,7 @@ function InfoUser() {
                     ></input>
                   </td>
                 </tr>
-                <br></br>
+
                 <br></br>
                 <tr>
                   <td className="left_text">GIỚI TÍNH</td>
@@ -142,6 +168,9 @@ function InfoUser() {
                     >
                       <option value="Nam">Nam</option>
                       <option value="Nữ">Nữ</option>
+                      <option value="Chưa chọn" selected>
+                        Chưa chọn
+                      </option>
                     </select>
                     {/* <input
                     type="text"
@@ -157,7 +186,7 @@ function InfoUser() {
                   ></input> */}
                   </td>
                 </tr>
-                <br></br>
+
                 <br></br>
                 <tr>
                   <td className="left_text">ĐỊA CHỈ</td>
@@ -166,6 +195,9 @@ function InfoUser() {
                       type="text"
                       className="form-control form-control-lg"
                       value={dataCustomer?.address}
+                      placeholder={
+                        dataCustomer?.address ? "" : "Vui lòng cập nhật !"
+                      }
                       onChange={(e) => {
                         setDataCustomer({
                           ...dataCustomer,
@@ -176,7 +208,7 @@ function InfoUser() {
                     ></input>
                   </td>
                 </tr>
-                <br></br>
+
                 <br></br>
                 <tr>
                   <td className="left_text">SỐ ĐIỆN THOẠI</td>
@@ -185,6 +217,7 @@ function InfoUser() {
                       type="text"
                       className="form-control form-control-lg"
                       value={phonenumber}
+                      placeholder={phonenumber ? "" : "Vui lòng cập nhật !"}
                       onChange={(e) => {
                         setPhonenumber(e.target.value);
                       }}
@@ -194,13 +227,13 @@ function InfoUser() {
                 </tr>
 
                 <br></br>
-                <br></br>
                 <tr>
                   <td className="left_text">EMAIL ĐĂNG NHẬP</td>
                   <td>
                     <input
                       type="text"
                       className="form-control form-control-lg"
+                      placeholder={email ? "" : "Vui lòng cập nhật !"}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       style={{ fontSize: "14px" }}
@@ -242,23 +275,32 @@ function InfoUser() {
                 }}
               >
                 <td>
-                  <img
-                    src={image}
-                    alt=""
-                    style={{
-                      borderRadius: "50%",
-                      border: "3px solid var(--second-color)",
-                      backgroundColor: "black",
-                      width: "250px",
-                      marginLeft: "70px",
-                    }}
-                  />
+                  {image && (
+                    <img
+                      style={{
+                        borderRadius: "50%",
+                        border: "3px solid var(--second-color)",
+                        backgroundColor: "black",
+                        width: "250px",
+                        marginLeft: "70px",
+                        objectFit: "cover",
+                        height: "250px",
+                      }}
+                      src={
+                        typeof image === "object"
+                          ? URL.createObjectURL(image)
+                          : image
+                      }
+                      alt="anh"
+                    />
+                  )}
                 </td>
                 <td>
+                  {" "}
                   <input
-                    accept="image/"
+                    accept="image/*"
                     type="file"
-                    onChange={convertToBase64}
+                    onChange={uploadImg}
                     className="form-control form-control-lg"
                     style={{ width: "fit-content", marginTop: "30px" }}
                   />

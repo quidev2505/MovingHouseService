@@ -4,8 +4,8 @@ const upload = multer({
     storage: multer.diskStorage({
         destination: "./uploads",
         filename: (req, file, cb) => {
-            const date_gen = Date.now()
-            cb(null,date_gen + file.originalname);
+            const ext = file.originalname.split('.')[1];
+            cb(null, `${Date.now()}.${ext}`);
         },
     }),
 });

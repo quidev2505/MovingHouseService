@@ -1,12 +1,13 @@
 const Customer = require('../models/Customer');
 const User = require('../models/User')
+const fs = require('fs');
 
 const customerController = {
     //Get Info Customer
     getCustomer: async (req, res) => {
         try {
-
-            const data_user = await User.findOne({_id: req.params.id})
+            const data_user = await User.findOne({ _id: req.params.id })
+        
             const data_customer = await Customer.findOne({ fullname: data_user.fullname });
 
             if (data_customer) {
@@ -21,17 +22,37 @@ const customerController = {
     //Update Customer
     updateCustomer: async (req, res) => {
         try {
+            // Lấy thông tin về file được upload
+            const file = req.file;
             const data_object = req.body;
 
-            const Customer_udpate = {
-                fullname: data_object.fullname,
-                address: data_object.address,
-                avatar: data_object.avatar,
-                gender: data_object.gender,
+            let Customer_update = {}
+
+            if (file) {
+                Customer_update = {
+                    fullname: data_object.fullname,
+                    address: data_object.address,
+                    avatar: file.path,
+                    gender: data_object.gender,
+                }
+                //Thực hiện xóa ảnh cũ
+                const imagePath = `${req.body.image_old}`;
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
+            } else {
+                Customer_update = {
+                    fullname: data_object.fullname,
+                    address: data_object.address,
+                    gender: data_object.gender,
+                }
             }
 
-            if (Customer_udpate) {
-                const data_update_customer = await Customer.findByIdAndUpdate({ _id: data_object._id }, Customer_udpate);
+
+
+
+            if (Customer_update) {
+                const data_update_customer = await Customer.findByIdAndUpdate({ _id: data_object.id_customer }, Customer_update);
                 if (data_update_customer) {
                     const user_update = {
                         fullname: data_object.fullname,
@@ -40,7 +61,7 @@ const customerController = {
                     }
                     const data_update_user = await User.findByIdAndUpdate({ _id: data_object.id_user }, user_update);
                     if (data_update_user) {
-                        res.status(202).json("update Success");
+                        res.status(202).json(data_update_user);
                     } else {
                         res.status(502).json("update Fail");
 

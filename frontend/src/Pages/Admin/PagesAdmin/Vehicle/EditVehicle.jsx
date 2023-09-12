@@ -22,6 +22,7 @@ function EditVehicle() {
   const { handleSubmit } = useForm();
 
   const [image, setImage] = useState("");
+  const [image_old, setImageOld] = useState("");
 
   // Upload Img
   function uploadImg(e) {
@@ -50,6 +51,7 @@ function EditVehicle() {
     const formData = new FormData();
     formData.append("file", image);
     formData.append("name", dataVehicle.name);
+    formData.append("image_old", image_old);
   
     formData.append("brand", dataVehicle.brand);
     formData.append("capacity", dataVehicle.capacity);
@@ -131,6 +133,7 @@ function EditVehicle() {
         Twoway_loadingFee: dataVehicle.movingFee_id.Twoway_loadingFee,
       };
 
+      setImageOld(objectData.image);
       setImage(objectData.image);
       setDataVehicle(objectData);
       console.log(dataVehicle);

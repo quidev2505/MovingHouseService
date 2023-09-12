@@ -26,6 +26,11 @@
     right: 0;
     z-index: 999;
 
+    .ant-avatar{
+        border-radius: 50%;
+        background-color: black;
+    }
+
     .navbar_header li:hover a {
         color: black !important;
     }
@@ -496,13 +501,14 @@ th.ant-table-cell {
 // User Page
 .headerUser {
     height: fit-content;
-    border-bottom: 2px solid var(--second-color);
+    border-bottom: 2px solid #ed883b;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     align-items: center;
     justify-content: space-between;
+    z-index: 999;
 
     .ant-menu-overflow-item {
         border-radius: 5px !important;
@@ -551,11 +557,11 @@ th.ant-table-cell {
 .bookingUser,
 .orderUser,
 .infoUser {
-    margin-top: 55px;
+    margin-top: 50px;
 }
 
 .infoUser {
-    padding: 50px 0 0 30px;
+    padding: 50px 0 0 55px;
 
     .left_text {
         font-weight: 600;

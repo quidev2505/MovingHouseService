@@ -1,4 +1,5 @@
 const Service = require('../models/Service');
+const fs = require('fs');
 
 
 const serviceController = {
@@ -83,6 +84,11 @@ const serviceController = {
             const file = req.file;
             if (file) {
                 req.body.image = file.path
+                //Thực hiện xóa ảnh cũ
+                const imagePath = `${req.body.image_old}`;
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
             }
 
 
@@ -140,8 +146,15 @@ const serviceController = {
         try {
             const id_service = req.params.id;
 
+            const data_service = await Service.findOne({ _id: id_service })
+
             const check_delete = await Service.findByIdAndDelete(id_service);
             if (check_delete) {
+                //Thực hiện xóa ảnh cũ
+                const imagePath = `${data_service.image}`;
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
                 res.status(200).json('Delete Success');
             } else {
                 res.status(501).json('Delete Fail');

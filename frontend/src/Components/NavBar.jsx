@@ -5,9 +5,13 @@ import { useNavigate } from "react-router-dom";
 // import { createAxios } from "../../createInstance";
 // import { logOutSuccess } from "../../redux/authSlice";
 //Icon
-import { FaRegUser, FaCircleUser } from "react-icons/fa6";
-import {  Tooltip} from "antd";
+import { FaRegUser } from "react-icons/fa6";
+import { Tooltip } from "antd";
 import { FiLogOut } from "react-icons/fi";
+
+import { useState, useEffect } from "react";
+import { Avatar } from "antd";
+import axios from "axios";
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
@@ -21,6 +25,26 @@ const NavBar = () => {
     logOut(navigate, dispatch);
   };
 
+  const [ava, setAva] = useState();
+  const getInfoCustomer = async () => {
+    if (user) {
+      let id = user._id;
+
+      await axios
+        .get(`/v1/customer/get_customer_info/${id}`)
+        .then((data) => {
+          let data_customer = data.data;
+          setAva(data_customer.avatar);
+        })
+        .catch((e) => console.log(e));
+    }
+  };
+
+  useEffect(() => {
+    getInfoCustomer();
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <div className="Header_Navbar">
       <nav
@@ -31,7 +55,7 @@ const NavBar = () => {
           backgroundColor: "#fff",
         }}
       >
-        <div className="container-fluid" style={{height:"90px"}}>
+        <div className="container-fluid" style={{ height: "90px" }}>
           <Link to="/" className="nav-link" style={{ marginLeft: "29px" }}>
             <img
               alt=""
@@ -114,7 +138,10 @@ const NavBar = () => {
           {user ? (
             <>
               <div className="content_right d-flex fw-bold">
-                <div className="btn_signIn d-flex" style={{flexDirection:"column"}}>
+                <div
+                  className="btn_signIn d-flex"
+                  style={{ flexDirection: "column" }}
+                >
                   Xin chào, &nbsp;
                   <span style={{ color: "#ff8268 " }}>{user.fullname}</span>
                 </div>
@@ -129,7 +156,7 @@ const NavBar = () => {
                       className="col btn_info_user"
                       style={{ textDecoration: "none", color: "#ff8268" }}
                     >
-                      <FaCircleUser></FaCircleUser>
+                      <Avatar src={ava} />
                     </Link>
                   </Tooltip>
 

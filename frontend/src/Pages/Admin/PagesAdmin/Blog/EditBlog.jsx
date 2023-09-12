@@ -34,6 +34,7 @@ function AddBlog() {
   const { handleSubmit } = useForm();
 
   const [image, setImage] = useState("");
+  const [imageOld, setImageOld] = useState("");
 
   // Upload Img
   function uploadImg(e) {
@@ -66,6 +67,7 @@ function AddBlog() {
     const formData = new FormData();
     formData.append("file", image);
     formData.append("content", content);
+    formData.append("image_old", imageOld);
     formData.append("title", dataBlog.title);
     formData.append("category", dataBlog.category);
 
@@ -110,6 +112,7 @@ function AddBlog() {
         const data_blog = data.data;
         setDataBlog(data_blog);
         setImage(data_blog.thumbnail);
+        setImageOld(data_blog.thumbnail);
       })
       .catch((e) => {
         console.log(e);

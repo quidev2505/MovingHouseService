@@ -67,6 +67,26 @@ export const loginUser = async (user, dispatch, navigate) => {
     }
 }
 
+
+export const updateUser = async (user, dispatch) => {
+    dispatch(loginStart());
+
+    try {
+
+        dispatch(loginSuccess(user));
+
+    } catch (err) {
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: 'Cập nhật thất bại',
+            showConfirmButton: false,
+            timer: 1000
+        })
+        dispatch(loginFailed());
+    }
+}
+
 export const loginAdmin = async (admin, dispatch, navigate) => {
     dispatch(loginAdminStart());
 
@@ -78,7 +98,7 @@ export const loginAdmin = async (admin, dispatch, navigate) => {
             title: 'Đăng nhập thành công',
             text: "Tiến hành vào giao diện quản trị Admin!"
         })
-        
+
         navigate("/admin/dashboard");
         dispatch(loginAdminSuccess(res.data));
 
