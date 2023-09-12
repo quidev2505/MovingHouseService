@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
+import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 
 // Ant Design
 import { InputNumber, Button, Alert } from "antd";
@@ -11,6 +12,8 @@ import { faCircleRight } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 function ServicePrice() {
+  const [isActive, setIsActive] = useState(true);
+
   //Loading
   const [loadings, setLoadings] = useState([]);
   //Set Hide or appear
@@ -78,14 +81,19 @@ function ServicePrice() {
   const get_fee_service = async () => {
     await axios.get(`/v1/service_fee/list_service_fee`).then((data) => {
       let data_service_fee = data.data;
-      let arrDOMFee = data_service_fee.map((item, index) => (
-        <tr>
-          <td>{item.fee_name}</td>
-          <td>
-            {item.price.toLocaleString()} đ / {item.unit}
-          </td>
-        </tr>
-      ));
+      // eslint-disable-next-line
+      let arrDOMFee = data_service_fee.map((item, index) => {
+        if (item.status) {
+          return (
+            <tr>
+              <td>{item.fee_name}</td>
+              <td>
+                {item.price.toLocaleString()} đ / {item.unit}
+              </td>
+            </tr>
+          );
+        }
+      });
 
       setDataFee(arrDOMFee);
     });
@@ -100,15 +108,20 @@ function ServicePrice() {
     await axios.get(`/v1/vehicle/list_movingFee`).then((data) => {
       let data_result = data.data;
 
-      let arrDOMHire = data_result.map((item, index) => (
-        <tr>
-          <td>{item.name}</td>
-          <td>{item.priceFirst10km.toLocaleString()} đ</td>
-          <td>{item.priceFrom11to45.toLocaleString()} đ</td>
-          <td>{item.pricePer45km.toLocaleString()} đ</td>
-          <td>{item.waiting_fee.toLocaleString()} đ</td>
-        </tr>
-      ));
+      // eslint-disable-next-line
+      let arrDOMHire = data_result.map((item, index) => {
+        if (item.status) {
+          return (
+            <tr>
+              <td>{item.name}</td>
+              <td>{item.priceFirst10km.toLocaleString()} đ</td>
+              <td>{item.priceFrom11to45.toLocaleString()} đ</td>
+              <td>{item.pricePer45km.toLocaleString()} đ</td>
+              <td>{item.waiting_fee.toLocaleString()} đ</td>
+            </tr>
+          );
+        }
+      });
 
       let weightTypeSelect = data_result.map((item, index) => (
         <option value={item.name}>{item.name}</option>
@@ -118,178 +131,187 @@ function ServicePrice() {
 
       setDataHire(arrDOMHire);
 
-      let arrDOMLoading = data_result.map((item, index) => (
-        <tr>
-          <td>{item.name}</td>
-          <td>{item.TwowayFloor_loadingFee.toLocaleString()} đ</td>
-          <td>{item.OnewayFloor_loadingFee.toLocaleString()} đ</td>
-          <td>{item.Twoway_loadingFee.toLocaleString()} đ</td>
-          <td>{item.Oneway_loadingFee.toLocaleString()} đ</td>
-        </tr>
-      ));
+      // eslint-disable-next-line
+      let arrDOMLoading = data_result.map((item, index) => {
+        if (item.status) {
+          return (
+            <tr>
+              <td>{item.name}</td>
+              <td>{item.TwowayFloor_loadingFee.toLocaleString()} đ</td>
+              <td>{item.OnewayFloor_loadingFee.toLocaleString()} đ</td>
+              <td>{item.Twoway_loadingFee.toLocaleString()} đ</td>
+              <td>{item.Oneway_loadingFee.toLocaleString()} đ</td>
+            </tr>
+          );
+        }
+      });
 
       setDataLoading(arrDOMLoading);
     });
   };
 
   useEffect(() => {
+    setIsActive(false);
     get_fee_service();
     get_vehicle();
   }, []);
+
   return (
     <>
       <Header />
       {/* Công cụ tra cứu giá cước thuê xe tải - Start Service Search Price Hire Lorry*/}
-      <div className="tool_search_price_hireLorry">
-        <div
-          className="imgService container d-flex"
-          style={{ alignItems: "center", justifyContent: "center" }}
-        >
-          <h1
-            className="col-lg-4"
-            style={{ fontSize: "80px", fontWeight: "600" }}
-          >
-            Giá dịch vụ dọn nhà
-          </h1>
-          <img
-            src="./img/giadichvu.jpg"
-            class="img-fluid col-lg"
-            alt="..."
-            style={{ height: "300px", width: "100%", objectFit: "cover" }}
-          ></img>
-        </div>
-        <div className="tool_calculator container">
+      <LoadingOverlayComponent status={isActive}>
+        <div className="tool_search_price_hireLorry">
           <div
-            className="header_tool"
-            style={{
-              backgroundColor: "#e16c27",
-              color: "#fff",
-              height: "70px",
-              borderRadius: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: "20px",
-            }}
+            className="imgService container d-flex"
+            style={{ alignItems: "center", justifyContent: "center" }}
           >
-            <h2>Công cụ tính giá cước thuê xe tải</h2>
+            <h1
+              className="col-lg-4"
+              style={{ fontSize: "80px", fontWeight: "600" }}
+            >
+              Giá dịch vụ dọn nhà
+            </h1>
+            <img
+              src="./img/giadichvu.jpg"
+              class="img-fluid col-lg"
+              alt="..."
+              style={{ height: "300px", width: "100%", objectFit: "cover" }}
+            ></img>
           </div>
-          <div
-            className="container_Input_result row container"
-            style={{
-              border: "1px solid #e16c27",
-              borderRadius: "5px",
-              padding: "10px",
-              margin: "10px 0",
-            }}
-          >
-            <div className="d-flex">
-              <div className="d-flex" style={{ flexDirection: "column" }}>
-                <div className="d-flex">
-                  <h5 style={{ color: "#e16c27" }}>
-                    Nhập vào số Kilomet cần vận chuyển: &nbsp;
-                  </h5>
-                  <div className="col left_input">
-                    <InputNumber
-                      onChange={onChangeDistance}
-                      min={1}
-                      max={99999}
-                      defaultValue={1}
-                      placeholder="Số km..."
-                    />
-                  </div>
-                </div>
-
-                <p style={{ fontStyle: "italic" }}>
-                  Lưu ý: Từ 45km trở lên sẽ được tính là xe đường dài
-                </p>
-              </div>
-
-              <div
-                style={{
-                  lineHeight: "72px",
-                  margin: " 0px 70px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faCircleRight}
-                  style={{ color: "#e16c27", fontSize: "30px", margin: "" }}
-                />
-              </div>
-
-              <div className="d-flex" style={{ flexDirection: "column" }}>
-                <div className="d-flex" style={{ flexDirection: "column" }}>
-                  <h5 style={{ color: "#e16c27" }}>
-                    Chọn loại trọng tải: &nbsp;
-                  </h5>
-                  <div className="col left_input">
-                    <select
-                      className="select_xe"
-                      onChange={(e) => setSelectVehicle(e.target.value)}
-                      value={selectVehicle}
-                    >
-                      {weightType}
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  lineHeight: "72px",
-                  margin: " 0px 70px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faCircleRight}
-                  style={{ color: "#e16c27", fontSize: "30px", margin: "" }}
-                />
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Button
-                  style={{
-                    backgroundColor: "#e16c27",
-                    fontWeight: "700",
-                    width: "300px",
-                  }}
-                  type="primary"
-                  loading={loadings[0]}
-                  onClick={() => enterLoading(0)}
-                >
-                  Tính giá cước
-                </Button>
-              </div>
-            </div>
-
+          <div className="tool_calculator container">
             <div
-              className="right_result"
+              className="header_tool"
               style={{
-                display: hide,
-                backgroundColor: "#fffbe6",
-                padding: "10px",
-                border: "1px solid #e16c27",
-                borderRadius: "5px",
+                backgroundColor: "#e16c27",
+                color: "#fff",
+                height: "70px",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: "20px",
               }}
             >
-              <h2>Kết quả:</h2>
-              <p>
-                Giá cước ước tính cho xe {selectVehicle} chạy {distance} km là{" "}
-                <span className="fw-bold"> {total.toLocaleString()} đ</span>
-              </p>
+              <h2>Công cụ tính giá cước thuê xe tải</h2>
+            </div>
+            <div
+              className="container_Input_result row container"
+              style={{
+                border: "1px solid #e16c27",
+                borderRadius: "5px",
+                padding: "10px",
+                margin: "10px 0",
+              }}
+            >
+              <div className="d-flex">
+                <div className="d-flex" style={{ flexDirection: "column" }}>
+                  <div className="d-flex">
+                    <h5 style={{ color: "#e16c27" }}>
+                      Nhập vào số Kilomet cần vận chuyển: &nbsp;
+                    </h5>
+                    <div className="col left_input">
+                      <InputNumber
+                        onChange={onChangeDistance}
+                        min={1}
+                        max={99999}
+                        defaultValue={1}
+                        placeholder="Số km..."
+                      />
+                    </div>
+                  </div>
+
+                  <p style={{ fontStyle: "italic" }}>
+                    Lưu ý: Từ 45km trở lên sẽ được tính là xe đường dài
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    lineHeight: "72px",
+                    margin: " 0px 70px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faCircleRight}
+                    style={{ color: "#e16c27", fontSize: "30px", margin: "" }}
+                  />
+                </div>
+
+                <div className="d-flex" style={{ flexDirection: "column" }}>
+                  <div className="d-flex" style={{ flexDirection: "column" }}>
+                    <h5 style={{ color: "#e16c27" }}>
+                      Chọn loại trọng tải: &nbsp;
+                    </h5>
+                    <div className="col left_input">
+                      <select
+                        className="select_xe"
+                        onChange={(e) => setSelectVehicle(e.target.value)}
+                        value={selectVehicle}
+                      >
+                        {weightType}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    lineHeight: "72px",
+                    margin: " 0px 70px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faCircleRight}
+                    style={{ color: "#e16c27", fontSize: "30px", margin: "" }}
+                  />
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    style={{
+                      backgroundColor: "#e16c27",
+                      fontWeight: "700",
+                      width: "300px",
+                    }}
+                    type="primary"
+                    loading={loadings[0]}
+                    onClick={() => enterLoading(0)}
+                  >
+                    Tính giá cước
+                  </Button>
+                </div>
+              </div>
+
+              <div
+                className="right_result"
+                style={{
+                  display: hide,
+                  backgroundColor: "#fffbe6",
+                  padding: "10px",
+                  border: "1px solid #e16c27",
+                  borderRadius: "5px",
+                }}
+              >
+                <h2>Kết quả:</h2>
+                <p>
+                  Giá cước ước tính cho xe {selectVehicle} chạy {distance} km là{" "}
+                  <span className="fw-bold"> {total.toLocaleString()} đ</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </LoadingOverlayComponent>
       {/* End Service Search Price Hire Lorry */}
 
       {/* Start Price List */}

@@ -5,7 +5,9 @@ const customerController = {
     //Get Info Customer
     getCustomer: async (req, res) => {
         try {
-            const data_customer = await Customer.findOne({ fullname: req.params.fullname });
+
+            const data_user = await User.findOne({_id: req.params.id})
+            const data_customer = await Customer.findOne({ fullname: data_user.fullname });
 
             if (data_customer) {
                 res.status(200).json(data_customer)
@@ -32,6 +34,7 @@ const customerController = {
                 const data_update_customer = await Customer.findByIdAndUpdate({ _id: data_object._id }, Customer_udpate);
                 if (data_update_customer) {
                     const user_update = {
+                        fullname: data_object.fullname,
                         email: data_object.email,
                         phonenumber: data_object.phonenumber
                     }

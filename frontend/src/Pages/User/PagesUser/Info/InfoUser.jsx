@@ -61,11 +61,12 @@ function InfoUser() {
   };
 
   const getInfoCustomer = async () => {
-    let fullname = user.fullname;
+    let id = user._id;
     await axios
-      .get(`/v1/customer/get_customer_info/${fullname}`)
+      .get(`/v1/customer/get_customer_info/${id}`)
       .then((data) => {
         let data_customer = data.data;
+        console.log(data_customer)
 
         setDataCustomer(data_customer);
         setImage(data_customer.avatar);
@@ -87,7 +88,7 @@ function InfoUser() {
 
   useEffect(() => {
     setHide(!hide);
-  }, [dataCustomer, email, phonenumber]);
+  }, [dataCustomer, email, phonenumber, image]);
 
   return (
     <>

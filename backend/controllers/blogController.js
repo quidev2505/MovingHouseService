@@ -1,24 +1,26 @@
 const Blog = require('../models/Blog');
 
+
 const blogController = {
     //Create Blog
     createBlog: async (req, res) => {
         try {
             const data_input = req.body;
-
+            // Lấy thông tin về file được upload
+            const file = req.file;
 
             //Calculate Time at the moment
             const now = new Date();
             const vietnamTime = now.toLocaleString('vi-VN');
             const time_now = vietnamTime.split(' ')[1];
 
+            
             const data_blog = await new Blog({
                 title: data_input.title,
                 content: data_input.content,
-                comment_blog_id: data_input.comment_blog_id,
                 category: data_input.category,
                 post_date: time_now,
-                thumbnail: data_input.thumbnail
+                thumbnail: file.path
             })
 
             //Save Data Blog
@@ -38,8 +40,14 @@ const blogController = {
     updateBlog: async(req, res) => {
         try{
             const id = req.params.id;
-            const check_update = await Blog.findByIdAndUpdate(id, req.body);
 
+            // Lấy thông tin về file được upload
+            const file = req.file;
+            if(file){
+                req.body.thumbnail = file.path 
+            }
+            
+            const check_update = await Blog.findByIdAndUpdate(id, req.body);
             if(check_update){
                 res.status(201).json('Update success')
             }else{

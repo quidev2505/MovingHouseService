@@ -66,21 +66,13 @@ function EditService() {
   const [dataService, setDataService] = useState({});
 
   //Validation form
-  const {  handleSubmit } = useForm();
+  const { handleSubmit } = useForm();
 
   const [image, setImage] = useState("");
 
-  //Upload Img
-  function convertToBase64(e) {
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      // console.log(reader.result); //base64encoded string
-      setImage(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log("Error", error);
-    };
+  // Upload Img
+  function uploadImg(e) {
+    setImage(e.target.files[0]);
   }
 
   const params = useParams();
@@ -108,7 +100,7 @@ function EditService() {
     });
 
     dataService.bonus = arrBonus;
-		dataService.image = image;
+    dataService.image = image;
     // setDataService({
     //   ...dataService,
     //   image: image,
@@ -131,9 +123,21 @@ function EditService() {
       }
     }
 
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("name", dataService.name);
+    formData.append("vehicle", dataService.vehicle);
+    formData.append("needPeople", dataService.needPeople);
+    formData.append("distance", dataService.distance);
+    formData.append("price", dataService.price);
+    formData.append("process", arrProcess);
+    formData.append("bonus", arrBonus);
+    formData.append("warranty_policy", dataService.warranty_policy);
+    formData.append("suitable_for", dataService.suitable_for);
+
     if (check) {
       await axios
-        .put(`/v1/service/update_service/${params.id}`, dataService)
+        .put(`/v1/service/update_service/${params.id}`, formData)
         .then((data) => {
           Swal.fire({
             position: "center",
@@ -143,7 +147,7 @@ function EditService() {
             timer: 1200,
           });
 
-					console.log(data.data)
+          console.log(data.data);
 
           navigate("/admin/service");
         })
@@ -476,19 +480,21 @@ function EditService() {
                       </label>
                       <br />
                       <input
-                        accept="image/"
+                        accept="image/*"
                         type="file"
-                        onChange={convertToBase64}
+                        onChange={uploadImg}
                       />
-                      <br />
-                      {image === "" || image === null ? (
-                        ""
-                      ) : (
+
+                      {image && (
                         <img
+                          src={
+                            typeof image === "object"
+                              ? URL.createObjectURL(image)
+                              : image
+                          }
                           width={100}
                           height={100}
-                          src={image}
-                          alt=""
+                          alt="Image"
                           style={{ objectFit: "contain" }}
                         />
                       )}

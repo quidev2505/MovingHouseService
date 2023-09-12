@@ -6,6 +6,11 @@ const serviceController = {
     //Create
     createService: async (req, res) => {
         try {
+
+            // Lấy thông tin về file được upload
+            const file = req.file;
+
+
             const service_data = await new Service({
                 name: req.body.name,
                 vehicle: req.body.vehicle,
@@ -15,7 +20,7 @@ const serviceController = {
                 status: req.body.status,
                 process: req.body.process,
                 bonus: req.body.bonus,
-                image: req.body.image,
+                image: file.path,
                 warranty_policy: req.body.warranty_policy,
                 suitable_for: req.body.suitable_for
             })
@@ -73,6 +78,12 @@ const serviceController = {
             const id_service = req.params.id;
 
             const data_update_from_client = req.body;
+
+            // Lấy thông tin về file được upload
+            const file = req.file;
+            if (file) {
+                req.body.image = file.path
+            }
 
 
             const data_service = await Service.findOne({ _id: id_service });

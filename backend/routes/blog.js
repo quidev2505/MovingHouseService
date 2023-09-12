@@ -1,8 +1,10 @@
 const router = require('express').Router()
 const blogController = require("../controllers/blogController");
 
-//Create Blog
-router.post('/create_blog', blogController.createBlog)
+//Upload
+const upload = require("../middlewares/upload");
+
+router.post('/create_blog', upload.single("file"), blogController.createBlog)
 
 //Read Blog
 router.get('/read_blog', blogController.readBlog)
@@ -11,7 +13,7 @@ router.get('/read_blog', blogController.readBlog)
 router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)
 
 //Update Blog
-router.put('/update_blog/:id', blogController.updateBlog)
+router.put('/update_blog/:id', upload.single("file") ,blogController.updateBlog)
 
 //Delete Blog
 router.delete('/delete_blog/:id', blogController.deleteBlog);

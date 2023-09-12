@@ -38,27 +38,25 @@ function AddBlog() {
 
   const [image, setImage] = useState("");
 
-  //Upload Img
-  function convertToBase64(e) {
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      // console.log(reader.result); //base64encoded string
-      setImage(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log("Error", error);
-    };
+  // Upload Img
+  function uploadImg(e) {
+      setImage(e.target.files[0]);
   }
 
   const onSubmit = async (data) => {
     data.thumbnail = image;
     data.content = content;
 
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("content", content);
+    formData.append("title", data.title);
+    formData.append("category", data.category);
+
     try {
       if (data) {
         await axios
-          .post(`/v1/blog/create_blog`, data)
+          .post(`/v1/blog/create_blog`, formData)
           .then((data) => {
             Swal.fire({
               position: "center",
@@ -212,19 +210,17 @@ function AddBlog() {
                           </label>
                           <br />
                           <input
-                            accept="image/"
+                            accept="image/*"
                             type="file"
-                            onChange={convertToBase64}
+                            onChange={uploadImg}
                           />
                           <br />
-                          {image === "" || image === null ? (
-                            ""
-                          ) : (
+                          {image && (
                             <img
+                              src={URL.createObjectURL(image)}
                               width={100}
                               height={100}
-                              src={image}
-                              alt=""
+                              alt="Image"
                               style={{ objectFit: "contain" }}
                             />
                           )}

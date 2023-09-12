@@ -72,17 +72,9 @@ function AddService() {
 
   const [image, setImage] = useState("");
 
-  //Upload Img
-  function convertToBase64(e) {
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      // console.log(reader.result); //base64encoded string
-      setImage(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log("Error", error);
-    };
+  // Upload Img
+  function uploadImg(e) {
+    setImage(e.target.files[0]);
   }
 
   const onSubmit = async (data) => {
@@ -120,10 +112,20 @@ function AddService() {
           suitable_for: data.suitable_for,
         };
 
-
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("name", data.service_name);
+        formData.append("vehicle", data.vehicle_type);
+        formData.append("needPeople", data.need_people);
+        formData.append("distance", data.distance);
+        formData.append("price", data.service_price);
+        formData.append("process", arrProcess);
+        formData.append("bonus", arrBonus);
+        formData.append("warranty_policy", data.warranty_policy);
+        formData.append("suitable_for", data.suitable_for);
 
         await axios
-          .post(`/v1/service/add_service`, dataService)
+          .post(`/v1/service/add_service`, formData)
           .then((data) => {
             Swal.fire({
               position: "center",
@@ -403,19 +405,17 @@ function AddService() {
                       </label>
                       <br />
                       <input
-                        accept="image/"
+                        accept="image/*"
                         type="file"
-                        onChange={convertToBase64}
+                        onChange={uploadImg}
                       />
                       <br />
-                      {image === "" || image === null ? (
-                        ""
-                      ) : (
+                      {image && (
                         <img
+                          src={URL.createObjectURL(image)}
                           width={100}
                           height={100}
-                          src={image}
-                          alt=""
+                          alt="Image"
                           style={{ objectFit: "contain" }}
                         />
                       )}

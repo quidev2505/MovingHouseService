@@ -1,10 +1,13 @@
 const router = require('express').Router()
 const serviceController = require("../controllers/serviceController");
 
+//Upload
+const upload = require("../middlewares/upload");
+
 
 //CRUD
 //Create
-router.post('/add_service', serviceController.createService);
+router.post('/add_service', upload.single("file"), serviceController.createService);
 
 //Read
 router.get('/list_service', serviceController.readService);
@@ -13,7 +16,7 @@ router.get('/list_service', serviceController.readService);
 router.get('/list_service/:id', serviceController.readServiceDetail);
 
 //Update
-router.put('/update_service/:id', serviceController.updateService);
+router.put('/update_service/:id', upload.single("file") ,serviceController.updateService);
 
 //Update One Field
 router.patch('/update_one_field_service/:id', serviceController.updateOneFieldService);

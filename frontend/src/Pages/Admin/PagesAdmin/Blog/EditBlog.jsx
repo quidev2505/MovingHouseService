@@ -35,17 +35,9 @@ function AddBlog() {
 
   const [image, setImage] = useState("");
 
-  //Upload Img
-  function convertToBase64(e) {
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      // console.log(reader.result); //base64encoded string
-      setImage(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log("Error", error);
-    };
+  // Upload Img
+  function uploadImg(e) {
+    setImage(e.target.files[0]);
   }
 
   const [dataBlog, setDataBlog] = useState({});
@@ -71,9 +63,15 @@ function AddBlog() {
       }
     }
 
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("content", content);
+    formData.append("title", dataBlog.title);
+    formData.append("category", dataBlog.category);
+
     if (check) {
       await axios
-        .put(`/v1/blog/update_blog/${dataBlog._id}`, dataBlog)
+        .put(`/v1/blog/update_blog/${dataBlog._id}`, formData)
         .then((data) => {
           Swal.fire({
             position: "center",
@@ -120,6 +118,7 @@ function AddBlog() {
 
   useEffect(() => {
     get_data_blog();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -233,19 +232,18 @@ function AddBlog() {
                           </label>
                           <br />
                           <input
-                            accept="image/"
+                            accept="image/*"
                             type="file"
-                            onChange={convertToBase64}
+                            onChange={uploadImg}
                           />
-                          <br />
-                          {image === "" || image === null ? (
-                            ""
-                          ) : (
+
+                          {image && (
                             <img
+             
+                              src={typeof(image) === "object" ?  URL.createObjectURL(image) : image }
                               width={100}
                               height={100}
-                              src={image}
-                              alt=""
+                              alt="Image"
                               style={{ objectFit: "contain" }}
                             />
                           )}

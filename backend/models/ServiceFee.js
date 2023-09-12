@@ -16,7 +16,6 @@ const serviceFeeSchema = new mongoose.Schema({
     },
     status: {
         type: Boolean,
-        requierd: true,
         default: true
     },
 }, { timestamps: true })

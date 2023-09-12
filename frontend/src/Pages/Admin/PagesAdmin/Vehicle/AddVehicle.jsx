@@ -25,17 +25,9 @@ function AddVehicle() {
 
   const [image, setImage] = useState("");
 
-  //Upload Img
-  function convertToBase64(e) {
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      // console.log(reader.result); //base64encoded string
-      setImage(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log("Error", error);
-    };
+  // Upload Img
+  function uploadImg(e) {
+    setImage(e.target.files[0]);
   }
 
   const onSubmit = async (data) => {
@@ -55,10 +47,27 @@ function AddVehicle() {
           OnewayFloor_loadingFee: data.OnewayFloor_loadingFee,
           Oneway_loadingFee: data.Oneway_loadingFee,
           TwowayFloor_loadingFee: data.TwowayFloor_loadingFee,
-          Twoway_loadingFee: data.Twoway_loadingFee
+          Twoway_loadingFee: data.Twoway_loadingFee,
         };
+
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("name", data.name);
+        formData.append("brand", data.brand);
+        formData.append("capacity", data.capacity);
+        formData.append("cago_size", data.cago_size);
+        formData.append("suitable_for", data.suitable_for);
+        formData.append("priceFirst10km", data.priceFirst10km);
+        formData.append("priceFrom11to45", data.priceFrom11to45);
+        formData.append("pricePer45km", data.pricePer45km);
+        formData.append("waiting_fee", data.waiting_fee);
+        formData.append("OnewayFloor_loadingFee", data.OnewayFloor_loadingFee);
+        formData.append("Oneway_loadingFee", data.Oneway_loadingFee);
+        formData.append("TwowayFloor_loadingFee", data.TwowayFloor_loadingFee);
+        formData.append("Twoway_loadingFee", data.OnewayFloor_loadingFee);
+
         await axios
-          .post(`/v1/vehicle/add_vehicle`, dataVehicle)
+          .post(`/v1/vehicle/add_vehicle`, formData)
           .then((data) => {
             Swal.fire({
               position: "center",
@@ -240,19 +249,17 @@ function AddVehicle() {
                           </label>
                           <br />
                           <input
-                            accept="image/"
+                            accept="image/*"
                             type="file"
-                            onChange={convertToBase64}
+                            onChange={uploadImg}
                           />
                           <br />
-                          {image === "" || image === null ? (
-                            ""
-                          ) : (
+                          {image && (
                             <img
+                              src={URL.createObjectURL(image)}
                               width={100}
                               height={100}
-                              src={image}
-                              alt=""
+                              alt="Image"
                               style={{ objectFit: "contain" }}
                             />
                           )}

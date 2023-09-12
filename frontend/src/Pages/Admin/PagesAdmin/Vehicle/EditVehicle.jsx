@@ -23,17 +23,9 @@ function EditVehicle() {
 
   const [image, setImage] = useState("");
 
-  //Upload Img
-  function convertToBase64(e) {
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      // console.log(reader.result); //base64encoded string
-      setImage(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log("Error", error);
-    };
+  // Upload Img
+  function uploadImg(e) {
+    setImage(e.target.files[0]);
   }
 
   const onSubmit = async () => {
@@ -54,43 +46,67 @@ function EditVehicle() {
         break;
       }
     }
-     if (check) {
-       await axios
-         .put(`/v1/vehicle/update_vehicle/${params.id}`, dataVehicle)
-         .then((data) => {
-           Swal.fire({
-             position: "center",
-             icon: "success",
-             title: "Sửa phương tiện thành công!",
-             showConfirmButton: false,
-             timer: 1200,
-           });
 
-           console.log(data.data);
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("name", dataVehicle.name);
+  
+    formData.append("brand", dataVehicle.brand);
+    formData.append("capacity", dataVehicle.capacity);
+    formData.append("cago_size", dataVehicle.cago_size);
+    formData.append("suitable_for", dataVehicle.suitable_for);
+    formData.append("priceFirst10km", dataVehicle.priceFirst10km);
+    formData.append("priceFrom11to45", dataVehicle.priceFrom11to45);
+    formData.append("pricePer45km", dataVehicle.pricePer45km);
+    formData.append("waiting_fee", dataVehicle.waiting_fee);
+    formData.append(
+      "OnewayFloor_loadingFee",
+      dataVehicle.OnewayFloor_loadingFee
+    );
+    formData.append("Oneway_loadingFee", dataVehicle.Oneway_loadingFee);
+    formData.append(
+      "TwowayFloor_loadingFee",
+      dataVehicle.TwowayFloor_loadingFee
+    );
+    formData.append("Twoway_loadingFee", dataVehicle.OnewayFloor_loadingFee);
 
-           navigate("/admin/vehicle");
-         })
-         .catch((e) => {
-           console.log(e);
-           Swal.fire({
-             position: "center",
-             icon: "error",
-             title: "Sửa phương tiện thất bại!",
-             text: "Vui lòng thực hiện lại - Dung lượng ảnh quá lớn !",
-             showConfirmButton: false,
-             timer: 1000,
-           });
-         });
-     } else {
-       Swal.fire({
-         position: "center",
-         icon: "error",
-         title: "Sửa phương tiện thất bại!",
-         text: "Dữ liệu nhập chưa đủ !",
-         showConfirmButton: false,
-         timer: 1000,
-       });
-     }
+    if (check) {
+      await axios
+        .put(`/v1/vehicle/update_vehicle/${params.id}`, formData)
+        .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Sửa phương tiện thành công!",
+            showConfirmButton: false,
+            timer: 1200,
+          });
+
+          console.log(data.data);
+
+          navigate("/admin/vehicle");
+        })
+        .catch((e) => {
+          console.log(e);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Sửa phương tiện thất bại!",
+            text: "Vui lòng thực hiện lại - Dung lượng ảnh quá lớn !",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        });
+    } else {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Sửa phương tiện thất bại!",
+        text: "Dữ liệu nhập chưa đủ !",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    }
   };
 
   const getDataVehicle = async () => {
@@ -265,19 +281,21 @@ function EditVehicle() {
                           </label>
                           <br />
                           <input
-                            accept="image/"
+                            accept="image/*"
                             type="file"
-                            onChange={convertToBase64}
+                            onChange={uploadImg}
                           />
-                          <br />
-                          {image === "" || image === null ? (
-                            ""
-                          ) : (
+
+                          {image && (
                             <img
+                              src={
+                                typeof image === "object"
+                                  ? URL.createObjectURL(image)
+                                  : image
+                              }
                               width={100}
                               height={100}
-                              src={image}
-                              alt=""
+                              alt="Image"
                               style={{ objectFit: "contain" }}
                             />
                           )}

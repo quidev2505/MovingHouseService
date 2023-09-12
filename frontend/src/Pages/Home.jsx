@@ -23,72 +23,76 @@ const Home = () => {
         const data_service = [];
         data_solve &&
           data_solve.forEach((item) => {
-            const ob_service = {
-              key: item._id,
-              label: (
-                <Avatar
-                  size={60}
-                  src={
-                    <img
-                      src={item.image}
-                      alt="avatar"
+            if (item.status) {
+              const ob_service = {
+                key: item._id,
+                label: (
+                  <Avatar
+                    size={60}
+                    src={
+                      <img
+                        src={item.image}
+                        alt="avatar"
+                        style={{
+                          backgroundColor: "white",
+                        }}
+                      />
+                    }
+                  />
+                ),
+                children: (
+                  <>
+                    <h6
                       style={{
-                        backgroundColor: "white",
+                        fontSize: "18px",
+                        fontWeight: "800",
+                        color: "#e16d2a",
                       }}
-                    />
-                  }
-                />
-              ),
-              children: (
-                <>
-                  <h6
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "800",
-                      color: "#e16d2a",
-                    }}
-                  >
-                    Dịch vụ {item.name.toLowerCase()}
-                  </h6>
-                  <ul style={{ marginTop: "20px" }}>
-                    <li style={{ fontSize: "16px" }}>
-                      <span className="fw-bold">Giá gói dịch vụ: </span>
-                      {item.price === 0
-                        ? "Tùy thuộc vào số lượng đồ đạc và quãng đường di chuyển"
-                        : item.price.toLocaleString() + "đ"}
-                    </li>
-                    <li style={{ fontSize: "16px" }}>
-                      <span className="fw-bold">Xe tải sử dụng:</span>{" "}
-                      {item.vehicle}
-                    </li>
-                    <li style={{ fontSize: "16px" }}>
-                      <span className="fw-bold">Số lượng người khuân vác:</span>{" "}
-                      {item.needPeople === 0
-                        ? "Tùy thuộc vào số lượng đồ đạc và quãng đường di chuyển"
-                        : item.needPeople}
-                    </li>
-                    <li style={{ fontSize: "16px" }}>
-                      <span className="fw-bold">Quảng đường áp dụng:</span>{" "}
-                      {item.distance === "0"
-                        ? "Tùy thuộc vào yêu cầu của khách hàng"
-                        : item.distance}
-                    </li>
-                  </ul>
-
-                  <div style={{ textAlign: "right" }}>
-                    <button
-                      type="button"
-                      class="btn"
-                      style={{ backgroundColor: "#e16d2a", color: "white" }}
                     >
-                      Đặt dịch vụ ngay
-                    </button>
-                  </div>
-                </>
-              ),
-            };
+                      Dịch vụ {item.name.toLowerCase()}
+                    </h6>
+                    <ul style={{ marginTop: "20px" }}>
+                      <li style={{ fontSize: "16px" }}>
+                        <span className="fw-bold">Giá gói dịch vụ: </span>
+                        {item.price === 0
+                          ? "Tùy thuộc vào số lượng đồ đạc và quãng đường di chuyển"
+                          : item.price.toLocaleString() + "đ"}
+                      </li>
+                      <li style={{ fontSize: "16px" }}>
+                        <span className="fw-bold">Xe tải sử dụng:</span>{" "}
+                        {item.vehicle}
+                      </li>
+                      <li style={{ fontSize: "16px" }}>
+                        <span className="fw-bold">
+                          Số lượng người khuân vác:
+                        </span>{" "}
+                        {item.needPeople === 0
+                          ? "Tùy thuộc vào số lượng đồ đạc và quãng đường di chuyển"
+                          : item.needPeople}
+                      </li>
+                      <li style={{ fontSize: "16px" }}>
+                        <span className="fw-bold">Quảng đường áp dụng:</span>{" "}
+                        {item.distance === "0"
+                          ? "Tùy thuộc vào yêu cầu của khách hàng"
+                          : item.distance}
+                      </li>
+                    </ul>
 
-            data_service.push(ob_service);
+                    <div style={{ textAlign: "right" }}>
+                      <button
+                        type="button"
+                        class="btn"
+                        style={{ backgroundColor: "#e16d2a", color: "white" }}
+                      >
+                        Đặt dịch vụ ngay
+                      </button>
+                    </div>
+                  </>
+                ),
+              };
+
+              data_service.push(ob_service);
+            }
           });
 
         setDataSource(data_service);
@@ -106,42 +110,46 @@ const Home = () => {
         let data_solve = data.data;
         // const data_service = [];
         let data_arr =
-          data_solve &&
+        data_solve &&
+        // eslint-disable-next-line
           data_solve.map((item, index) => {
-            return {
-              label: item.vehicle_name,
-              key: index + 1,
-              children: (
-                <div className="row">
-                  <div className="col">
-                    <img
-                      src={item.image}
-                      width="500"
-                      height={207}
-                      style={{ objectFit: "contain" }}
-                      alt=""
-                    />
+            if (item.status) {
+              return {
+                label: item.vehicle_name,
+                key: index + 1,
+                children: (
+                  <div className="row">
+                    <div className="col">
+                      <img
+                        src={item.image}
+                        width="500"
+                        height={207}
+                        style={{ objectFit: "contain" }}
+                        alt=""
+                      />
+                    </div>
+                    <div
+                      className="col"
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "500",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        height: "227px",
+                      }}
+                    >
+                      <p>Trọng lượng tối đa: {item.capacity}</p>
+                      <p>Kích cỡ hàng hóa tối đa: {item.cago_size}</p>
+                      <p>Phù hợp cho: {item.suitable_for}</p>
+                    </div>
                   </div>
-                  <div
-                    className="col"
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "500",
-                      display: "flex",
-                      alignItems: "flex-start",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                      height: "227px",
-                    }}
-                  >
-                    <p>Trọng lượng tối đa: {item.capacity}</p>
-                    <p>Kích cỡ hàng hóa tối đa: {item.cago_size}</p>
-                    <p>Phù hợp cho: {item.suitable_for}</p>
-                  </div>
-                </div>
-              ),
-            };
+                ),
+              };
+            }
           });
+
         setDataVehicle(data_arr);
       })
       .catch((e) => console.log(e));
@@ -160,7 +168,10 @@ const Home = () => {
   return (
     <>
       <Header />
-      <div style={{ height: "fit-content", overflowX:"hidden" }} className="HomePage">
+      <div
+        style={{ height: "fit-content", overflowX: "hidden" }}
+        className="HomePage"
+      >
         <LoadingOverlayComponent status={isActive}>
           {/* First_service */}
           <div className="provide_service row" style={{ position: "relative" }}>
