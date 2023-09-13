@@ -8,10 +8,12 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { Tag } from "antd";
 import axios from "axios";
+import {useNavigate} from 'react-router-dom';
 
 function Blog() {
   const [isActive, setIsActive] = useState(true);
   const [datablog, setDataBlog] = useState([]);
+  const nav = useNavigate();
 
   const get_blog = async () => {
     try {
@@ -25,13 +27,16 @@ function Blog() {
             if (item.status) {
               return (
                 <div
-                  className="blog_item col"
+                  className="blog_item"
                   style={{
                     borderRadius: "10px",
                     marginRight: "20px",
                     border: "1px solid #ccc",
                     padding: "0px",
+                    width: "370px",
                     boxShadow: "0.3px 0.3px #ccc",
+                    marginBottom: "20px",
+                    overflow: "hidden",
                   }}
                 >
                   <img
@@ -49,7 +54,7 @@ function Blog() {
                     style={{
                       width: "100%",
                       alignItems: "center",
-                      justifyContent: "flex-start",
+                      justifyContent: "center",
                       marginTop: "10px",
                     }}
                   >
@@ -110,6 +115,7 @@ function Blog() {
                         border: "none",
                         margin: "5px",
                       }}
+                      onClick={() => nav(`/blog-detail/?name=${item.title}`)}
                     >
                       Xem chi tiết
                     </button>
@@ -159,7 +165,7 @@ function Blog() {
           className="bottom_blog container"
           style={{ marginBottom: "200px" }}
         >
-          <div className="row">{datablog}</div>
+          <div className="row" style={{justifyContent:"space-between"}}>{datablog}</div>
         </div>
       </LoadingOverlayComponent>
       <Footer />

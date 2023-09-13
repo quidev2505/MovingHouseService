@@ -21,4 +21,7 @@ router.delete('/delete_blog/:id', blogController.deleteBlog);
 //View Detail blog with ID
 router.get('/view_detail_blog/:id', blogController.viewDetailBlog)
 
+//View Detail blog with Title
+router.get('/view_detail_blog_title/:title', blogController.viewDetailBlogWithTitle)
+
 module.exports = router;

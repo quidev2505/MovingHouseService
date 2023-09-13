@@ -10,6 +10,7 @@ import VerifyOTP from './Pages/VerifyOTP';
 import ServicePrice from './Pages/ServicePrice';
 import Contact from './Pages/Contact';
 import Blog from './Pages/Blog';
+import BlogDetail from './Pages/BlogDetail';
 
 
 //Trang quản lý User
@@ -67,6 +68,7 @@ import ChangePasswordAdmin  from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
 
 
 
+
 function App() {
 
   return (
@@ -82,6 +84,7 @@ function App() {
         <Route path="/service_price" element={<ServicePrice />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog-detail/" element={<BlogDetail />} />
 
         {/* Bảo vệ Route Client */}
         <Route element={<ProtectRoutes />}>
