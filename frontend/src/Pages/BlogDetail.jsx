@@ -79,49 +79,60 @@ function BlogDetail() {
         .get(`/v1/commentBlog/read_comment_blog/${id_blog}`)
         .then((data) => {
           let data_comment = data.data;
-          let DOM_LIST_COMMENT = data_comment.map((item, index) => {
-            return (
-              <div
-                className="d-flex"
-                style={{
-                  backgroundColor: "#edf2f8",
-                  padding: "10px 10px 0 10px",
-                  borderRadius: "5px",
-                  height: "fit-content",
-                  marginBottom: "10px",
-                }}
-              >
-                <Avatar src={item.avatar} />
-                <div
-                  style={{
-                    marginLeft: "15px",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                  className="d-flex"
-                >
-                  <div>
-                    <p
-                      className="name_user"
-                      style={{
-                        color: "#66b2f9",
-                        marginBottom: "4px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {item.fullname}
-                    </p>
-                    <p className="comment_user" style={{ color: "#7b8082" }}>
-                      {item.comment_content}
-                    </p>
-                  </div>
 
-                  <div className="time_comment" style={{ color: "#b9babb" }}>
-                    {item.comment_time}
+          let DOM_LIST_COMMENT = data_comment.map((item, index) => {
+            if (item.status) {
+              return (
+                <div
+                  className="d-flex"
+                  style={{
+                    backgroundColor: "#edf2f8",
+                    padding: "10px 10px 0 10px",
+                    borderRadius: "5px",
+                    height: "fit-content",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Avatar
+                    src={item.avatar}
+                    style={{
+                      border: "1px solid #66b2f9",
+                      backgroundColor: "black",
+                    }}
+                  />
+                  <div
+                    style={{
+                      marginLeft: "15px",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                    className="d-flex"
+                  >
+                    <div>
+                      <p
+                        className="name_user"
+                        style={{
+                          color: "#66b2f9",
+                          marginBottom: "4px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {item.fullname}
+                      </p>
+                      <p className="comment_user" style={{ color: "#7b8082" }}>
+                        {item.comment_content}
+                      </p>
+                    </div>
+
+                    <div className="time_comment" style={{ color: "#b9babb" }}>
+                      {item.comment_time}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
+              );
+            }else{
+              return []
+            }
           });
           setCommentList(DOM_LIST_COMMENT);
         })
@@ -215,12 +226,20 @@ function BlogDetail() {
             {/* <div>{htmlReactParser(datablogDetail.content)}</div> */}
             <div>{htmlReactParser(content)}</div>
           </div>
-          <hr></hr>
+          <hr style={{ marginTop: "30px" }}></hr>
           <div className="comment_area">
             <div className="comment_input">
               {user ? (
                 <div className="d-flex">
-                  <Avatar src={ava} style={{ width: "40px", height: "35px" }} />
+                  <Avatar
+                    src={ava}
+                    style={{
+                      width: "40px",
+                      height: "35px",
+                      backgroundColor: "black",
+                      border: "1px solid #66b2f9",
+                    }}
+                  />
 
                   <Input
                     placeholder="Nhập vào bình luận..."
@@ -242,7 +261,17 @@ function BlogDetail() {
               )}
             </div>
             <hr></hr>
-            <div className="list_comment">{commentList}</div>
+            {commentList.length > 0 ? (
+              <div className="list_comment" style={{ marginBottom: "20px" }}>
+                {commentList}
+              </div>
+            ) : (
+              <Alert
+                style={{ marginBottom: "20px" }}
+                message="Vẫn chưa có bình luận nào ! Hãy là người bình luận đầu tiên"
+                type="warning"
+              />
+            )}
           </div>
         </div>
       </LoadingOverlayComponent>

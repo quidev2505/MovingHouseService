@@ -7,7 +7,7 @@ import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 
-import { Space, Table, Tag, Image, Modal } from "antd";
+import { Space, Table, Tag, Image, Modal, Avatar } from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -262,39 +262,180 @@ function BlogAdmin() {
       });
   };
 
+  const changeStatusComment = (id, status) => {
+    let id_comment_blog = id;
+    Swal.fire({
+      title: "Bạn muốn thay đổi trạng thái comment này ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .patch(
+              `/v1/commentBlog/updateonefield_comment_blog/${id_comment_blog}`,
+              {
+                status: !status,
+              }
+            )
+            .then((data) => {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Thay đổi trạng thái comment thành công !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+              
+            })
+            .catch((e) => {
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Thay đổi trạng thái comment thất bại !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+              console.log(e);
+            });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Thay đổi trạng thái comment thất bại !",
+          showConfirmButton: false,
+          timer: 1200,
+        });
+        console.log(e);
+      });
+  };
+
   const view_detail_blog = async (id) => {
     await axios
       .get(`/v1/blog/view_detail_blog/${id.id}`)
-      .then((data) => {
+      .then(async (data) => {
         let data_result = data.data;
-        // console.log(data_result);
-        const objectBlog = {
-          content: data_result.content,
-          comment_blog_id: data_result.comment_blog_id,
-        };
+        const arr_commentBlogID = data_result.comment_blog_id;
 
-        Modal.success({
-          title: "Thông tin chi tiết Blog",
-          content: (
-            <>
-              <h5>Nội dung Blog: </h5>
-              <div className="content_blog_detail">
-                {htmlReactParser(objectBlog.content)}
-              </div>
+        await axios
+          .post(`/v1/commentBlog/read_comment_blog_id`, arr_commentBlogID)
+          .then((data) => {
+            const data_comment_blog = data.data;
 
-              <div>
-                <h5>Bình luận: </h5>
-                <p>
-                  Số lượng :{" "}
-                  <span className="fw-bold">
-                    {objectBlog.comment_blog_id.length}
-                  </span>
-                </p>
-              </div>
-            </>
-          ),
-          onOk() {},
-        });
+            let DOM_LIST_COMMENT = data_comment_blog.map((item, index) => {
+              return (
+                <div
+                  className="d-flex"
+                  style={{
+                    backgroundColor: "#edf2f8",
+                    padding: "10px 10px 0 10px",
+                    borderRadius: "5px",
+                    height: "fit-content",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Avatar
+                    src={item.avatar}
+                    style={{
+                      border: "1px solid #66b2f9",
+                      backgroundColor: "black",
+                    }}
+                  />
+                  <div
+                    style={{
+                      marginLeft: "15px",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                    className="d-flex"
+                  >
+                    <div>
+                      <p
+                        className="name_user"
+                        style={{
+                          color: "#66b2f9",
+                          marginBottom: "4px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {item.fullname}
+                      </p>
+                      <p className="comment_user" style={{ color: "#7b8082" }}>
+                        {item.comment_content}
+                      </p>
+                    </div>
+
+                    <div className="time_comment" style={{ color: "#b9babb" }}>
+                      {item.comment_time}
+                      <div className="d-flex">
+                        <Tag
+                          color={item.status ? "green" : "volcano"}
+                          key={item.status}
+                        >
+                          {item.status ? "Hoạt động" : "Bị cấm"}
+                        </Tag>
+                        <div
+                          onClick={() =>
+                            changeStatusComment(
+                              item.id,
+                              item.status,
+                            )
+                          }
+                          style={{
+                            backgroundColor: "orange",
+                            borderRadius: "50%",
+                            padding: "5px",
+                            display: "flex",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <SwapOutlined
+                            style={{ color: "white", fontWeight: "bold" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div></div>
+                  </div>
+                </div>
+              );
+            });
+
+            const objectBlog = {
+              content: data_result.content,
+              comment_blog_id: data_result.comment_blog_id,
+            };
+
+            Modal.success({
+              title: "Thông tin chi tiết Blog",
+              content: (
+                <>
+                  <h5>Nội dung Blog: </h5>
+                  <div className="content_blog_detail">
+                    {htmlReactParser(objectBlog.content)}
+                  </div>
+
+                  <div>
+                    <h5>Bình luận: </h5>
+                    <p>
+                      Số lượng :{" "}
+                      <span className="fw-bold">
+                        {objectBlog.comment_blog_id.length}
+                      </span>
+                    </p>
+                    <div>{DOM_LIST_COMMENT}</div>
+                  </div>
+                </>
+              ),
+              onOk() {},
+            });
+          })
+          .catch((e) => console.log(e));
       })
       .catch((e) => {
         console.log(e);

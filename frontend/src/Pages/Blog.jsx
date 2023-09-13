@@ -8,7 +8,9 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { Tag } from "antd";
 import axios from "axios";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
+import { WechatOutlined, FieldTimeOutlined } from "@ant-design/icons";
 
 function Blog() {
   const [isActive, setIsActive] = useState(true);
@@ -71,8 +73,12 @@ function Blog() {
                       }}
                     />
                     <div className="date_img">
-                      <Tag color="green">
-                        {" "}
+                      <Tag
+                        color="green"
+                        className="d-flex"
+                        style={{ alignItems: "center" }}
+                      >
+                        <WechatOutlined style={{ marginRight: "5px" }} />{" "}
                         {item.comment_blog_id.length} bình luận
                       </Tag>
                     </div>
@@ -86,7 +92,14 @@ function Blog() {
                       }}
                     />
                     <div className="date_img">
-                      <Tag color="#2db7f5"> {item.post_date}</Tag>
+                      <Tag
+                        color="#2db7f5"
+                        className="d-flex"
+                        style={{ alignItems: "center" }}
+                      >
+                        <FieldTimeOutlined style={{ marginRight: "5px" }} />
+                        {item.post_date}
+                      </Tag>
                     </div>
                   </div>
 
@@ -165,7 +178,9 @@ function Blog() {
           className="bottom_blog container"
           style={{ marginBottom: "200px" }}
         >
-          <div className="row" style={{justifyContent:"space-between"}}>{datablog}</div>
+          <div className="row" style={{ justifyContent: "space-between" }}>
+            {datablog}
+          </div>
         </div>
       </LoadingOverlayComponent>
       <Footer />

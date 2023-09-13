@@ -24,7 +24,7 @@ function HeaderUser() {
       key: "/",
     },
     {
-      label: "Đặt lịch",
+      label: "Đặt giao hàng",
       icon: <FcCalendar />,
       key: "/user/booking",
     },
@@ -46,8 +46,11 @@ function HeaderUser() {
   ];
 
   let defaultkey = localStorage.getItem("menu");
+  if(defaultkey === '/'){
+    defaultkey = '/user/booking'
+  }
   if (!defaultkey) {
-    defaultkey = localStorage.setItem("menu", items[0].key);
+    defaultkey = localStorage.setItem("menu", items[1].key);
   }
 
   return (

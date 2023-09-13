@@ -93,7 +93,8 @@ const commentBlogController = {
                     fullname: item.fullname,
                     avatar: item.avatar,
                     comment_content: item.comment_content,
-                    comment_time: item.comment_time
+                    comment_time: item.comment_time,
+                    status: item.status
                 }
 
                 arr_data_return.push(object_data_return)
@@ -104,6 +105,44 @@ const commentBlogController = {
             } else {
                 res.status(501).json('Error');
             }
+
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+    //Read comment blog at admin page
+    readCommentBlogAdmin: async (req, res) => {
+        try {
+            const arr_id = req.body;
+            const arr_data_return = []
+            for (const item of arr_id) {
+                const id_comment_blog = item;
+                const data_comment = await CommentBlog.find({ _id: id_comment_blog })
+
+                const object_data_return = {
+                    id: data_comment[0]._id,
+                    fullname: data_comment[0].fullname,
+                    avatar: data_comment[0].avatar,
+                    comment_content: data_comment[0].comment_content,
+                    comment_time: data_comment[0].comment_time,
+                    status: data_comment[0].status
+                }
+
+                arr_data_return.push(object_data_return)
+            }
+
+            if (arr_data_return) {
+                res.status(201).json(arr_data_return)
+            }else{
+                res.status(501).json('Lỗi')
+
+            }
+
+
+
+
 
         } catch (e) {
             console.log(e)
@@ -148,10 +187,10 @@ const commentBlogController = {
     },
 
     //Update one field blog
-    updateOneFieldBlog: async (req, res) => {
+    updateOneFieldCommentBlog: async (req, res) => {
         try {
-            const id_blog = req.params.id;
-            const dataUpdateOne = await Blog.updateOne({ _id: id_blog }, req.body, { new: true });
+            const id_comment_blog = req.params.id;
+            const dataUpdateOne = await CommentBlog.updateOne({ _id: id_comment_blog }, req.body, { new: true });
             if (dataUpdateOne) {
                 res.status(201).json('update success');
             } else {
