@@ -8,18 +8,18 @@ const commentBlogController = {
     createCommentBlog: async (req, res) => {
         try {
             const data_input = req.body;
-            console.log(data_input)
 
             //Calculate Time at the moment
             const now = new Date();
             const vietnamTime = now.toLocaleString('vi-VN');
-            const time_now = vietnamTime.split(' ').join('-')
+            const time_now = vietnamTime;
 
 
             const data_comment_blog = await new CommentBlog({
                 comment_content: data_input.comment_content,
                 comment_time: time_now,
-                customer_id: data_input.customer_id,
+                fullname: data_input.fullname,
+                avatar: data_input.avatar,
                 blog_id: data_input.blog_id
             })
 
@@ -82,28 +82,29 @@ const commentBlogController = {
     //Read Comment Blog
     readCommentBlog: async (req, res) => {
         try {
-            const data_from_db = await CommentBlog.find();
+            const id_blog = req.params.id;
 
-            data_from_db.forEach(async(item, index)=>{
-                const customer = await item.populate('customer_id')
-                const data_object_comment = {
-                    fullname: customer.customer_id.fullname,
-                    avatar: customer.customer_id.avatar,
+            const data_comment_blog = await CommentBlog.find({ blog_id: id_blog })
+
+
+            const arr_data_return = []
+            for (const item of data_comment_blog) {
+                const object_data_return = {
+                    fullname: item.fullname,
+                    avatar: item.avatar,
                     comment_content: item.comment_content,
                     comment_time: item.comment_time
                 }
-            
-                return [data_object_comment]
-            })
 
-            console.log(arr_db)
+                arr_data_return.push(object_data_return)
+            }
 
-            // if (data_from_db) {
-                
-            //     res.status(201).json(data_from_db)
-            // } else {
-            //     res.status(501).json('Error');
-            // }
+            if (arr_data_return.length > 0) {
+                res.status(200).json(arr_data_return)
+            } else {
+                res.status(501).json('Error');
+            }
+
         } catch (e) {
             console.log(e)
             res.status(501).json(e)

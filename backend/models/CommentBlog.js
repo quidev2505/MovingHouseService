@@ -10,10 +10,13 @@ const commentBlogSchema = new mongoose.Schema({
         default: null,
         required:true
     },
-    customer_id: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Customer',
-        required: true
+    fullname: {
+        type: String,
+        required: true,
+    },
+    avatar: {
+        type: String,
+        required: true,
     },
     blog_id: {
         type: mongoose.Types.ObjectId,

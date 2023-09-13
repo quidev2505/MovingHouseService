@@ -6,6 +6,6 @@ const CommentBlog = require("../controllers/commentBlogController");
 router.post('/create_comment_blog', CommentBlog.createCommentBlog)
 
 //Create Comment Blog
-router.get('/read_comment_blog', CommentBlog.readCommentBlog)
+router.get('/read_comment_blog/:id', CommentBlog.readCommentBlog)
 
 module.exports = router;

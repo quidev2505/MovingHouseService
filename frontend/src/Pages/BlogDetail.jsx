@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { Alert, Input, Button, Avatar } from "antd";
@@ -14,7 +14,7 @@ import htmlReactParser from "html-react-parser";
 
 import { SendOutlined } from "@ant-design/icons";
 
-import { Toast } from "../Components/ToastColor";
+import { Toast_comment, Toast } from "../Components/ToastColor";
 
 function BlogDetail() {
   const user = useSelector((state) => state.auth.login.currentUser);
@@ -25,8 +25,7 @@ function BlogDetail() {
   const [content, setContent] = useState("");
   const [searchParams] = useSearchParams();
 
-
-  const [customer, setCustomer] = useState()
+  const [customer, setCustomer] = useState();
 
   const getInfoCustomer = async () => {
     if (user) {
@@ -36,7 +35,7 @@ function BlogDetail() {
         .get(`/v1/customer/get_customer_info/${id}`)
         .then((data) => {
           let data_customer = data.data;
-          setCustomer(data_customer._id)
+          setCustomer(data_customer);
           setAva(data_customer.avatar);
         })
         .catch((e) => console.log(e));
@@ -61,83 +60,97 @@ function BlogDetail() {
 
   const [comment, setComment] = useState("");
 
-  const [dataComment, setDataComment] = useState([]);
-  
+  const [commentList, setCommentList] = useState([]);
 
   const getDataComment = async () => {
-    try{
-      await axios.get(`/v1/commentBlog/read_comment_blog`).then((data)=>{
-        let list_comment = data.data;
-        // const arr_list_comment = list_comment.map((item, index)=>{
-        //   return (
-        //     <div
-        //       className="d-flex"
-        //       style={{
-        //         backgroundColor: "#edf2f8",
-        //         padding: "10px 10px 0 10px",
-        //         borderRadius: "5px",
-        //         height: "fit-content",
-        //         marginBottom: "10px",
-        //       }}
-        //     >
-        //       <Avatar src={ava} />
-        //       <div
-        //         style={{
-        //           marginLeft: "15px",
-        //           justifyContent: "space-between",
-        //           width: "100%",
-        //         }}
-        //         className="d-flex"
-        //       >
-        //         <div>
-        //           <p
-        //             className="name_user"
-        //             style={{
-        //               color: "#66b2f9",
-        //               marginBottom: "4px",
-        //               fontWeight: "bold",
-        //             }}
-        //           >
-        //             {user.fullname}
-        //           </p>
-        //           <p className="comment_user" style={{ color: "#7b8082" }}>
-        //             {dataComment.comment_content}
-        //           </p>
-        //         </div>
+    try {
+      let id_blog = "";
+      await axios
+        .get(`/v1/blog/view_detail_blog_title/${searchParams.get("name")}`)
+        .then((data) => {
+          const dataBlog = data.data;
+          id_blog = dataBlog._id;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
 
-        //         <div className="time_comment" style={{ color: "#b9babb" }}>
-        //           {dataComment.comment_time}
-        //         </div>
-        //       </div>
-        //     </div>
-        //   );
-        // })
-        
-      }).catch((e)=>{
-        console.log(e)
-      })
-    }catch(e){
-      console.log(e)
+      await axios
+        .get(`/v1/commentBlog/read_comment_blog/${id_blog}`)
+        .then((data) => {
+          let data_comment = data.data;
+          let DOM_LIST_COMMENT = data_comment.map((item, index) => {
+            return (
+              <div
+                className="d-flex"
+                style={{
+                  backgroundColor: "#edf2f8",
+                  padding: "10px 10px 0 10px",
+                  borderRadius: "5px",
+                  height: "fit-content",
+                  marginBottom: "10px",
+                }}
+              >
+                <Avatar src={item.avatar} />
+                <div
+                  style={{
+                    marginLeft: "15px",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                  className="d-flex"
+                >
+                  <div>
+                    <p
+                      className="name_user"
+                      style={{
+                        color: "#66b2f9",
+                        marginBottom: "4px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {item.fullname}
+                    </p>
+                    <p className="comment_user" style={{ color: "#7b8082" }}>
+                      {item.comment_content}
+                    </p>
+                  </div>
+
+                  <div className="time_comment" style={{ color: "#b9babb" }}>
+                    {item.comment_time}
+                  </div>
+                </div>
+              </div>
+            );
+          });
+          setCommentList(DOM_LIST_COMMENT);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (e) {
+      console.log(e);
     }
-  }
+  };
 
   const sendComment = async () => {
     try {
       if (comment) {
         const data_comment_blog = {
           comment_content: comment,
-          customer_id: customer,
           blog_id: datablogDetail._id,
+          fullname: customer.fullname,
+          avatar: ava,
         };
 
         await axios
           .post(`/v1/commentBlog/create_comment_blog`, data_comment_blog)
           .then(async (data) => {
-              await Toast.fire({
-                icon: "success",
-                title: "Bình luận thành công",
-              });
-              getDataComment()
+            getDataComment();
+            await Toast_comment.fire({
+              icon: "success",
+              title: "Bình luận thành công",
+            });
             setComment("");
           })
           .catch((e) => {
@@ -158,7 +171,7 @@ function BlogDetail() {
     setIsActive(false);
     get_blog();
     getInfoCustomer();
-    getDataComment()
+    getDataComment();
     // eslint-disable-next-line
   }, []);
 
@@ -213,7 +226,9 @@ function BlogDetail() {
                     placeholder="Nhập vào bình luận..."
                     style={{ margin: "0 10px" }}
                     value={comment}
-                    onChange={(e) => setComment(e.target.value)}
+                    onChange={(e) => {
+                      setComment(e.target.value);
+                    }}
                   />
                   <Button type="primary" onClick={sendComment}>
                     Gửi <SendOutlined />
@@ -227,48 +242,7 @@ function BlogDetail() {
               )}
             </div>
             <hr></hr>
-            <div className="list_comment">
-              <div
-                className="d-flex"
-                style={{
-                  backgroundColor: "#edf2f8",
-                  padding: "10px 10px 0 10px",
-                  borderRadius: "5px",
-                  height: "fit-content",
-                  marginBottom: "10px",
-                }}
-              >
-                <Avatar src={ava} />
-                <div
-                  style={{
-                    marginLeft: "15px",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                  className="d-flex"
-                >
-                  <div>
-                    <p
-                      className="name_user"
-                      style={{
-                        color: "#66b2f9",
-                        marginBottom: "4px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {user.fullname}
-                    </p>
-                    <p className="comment_user" style={{ color: "#7b8082" }}>
-                      {dataComment.comment_content}
-                    </p>
-                  </div>
-
-                  <div className="time_comment" style={{ color: "#b9babb" }}>
-                    {dataComment.comment_time}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className="list_comment">{commentList}</div>
           </div>
         </div>
       </LoadingOverlayComponent>
