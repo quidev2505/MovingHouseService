@@ -70,7 +70,12 @@ const blogController = {
     //Read Blog -> Show Blog
     readBlog: async (req, res) => {
         try {
-            const data_from_db = await Blog.find();
+            const data_from_db = await Blog.find().sort({
+                post_date: -1 
+            })
+
+    
+
             if (data_from_db) {
                 res.status(201).json(data_from_db)
             } else {

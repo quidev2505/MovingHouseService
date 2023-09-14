@@ -116,6 +116,7 @@ const commentBlogController = {
     readCommentBlogAdmin: async (req, res) => {
         try {
             const arr_id = req.body;
+
             const arr_data_return = []
             for (const item of arr_id) {
                 const id_comment_blog = item;

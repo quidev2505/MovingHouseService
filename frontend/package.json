@@ -27,6 +27,7 @@
     "imagemin": "^8.0.1",
     "jquery": "^3.7.0",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.4",
     "path-browserify": "^1.0.1",
     "popper.js": "^1.16.1",
     "prop-types": "^15.8.1",

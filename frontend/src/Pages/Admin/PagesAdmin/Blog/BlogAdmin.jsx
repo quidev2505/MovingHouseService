@@ -7,7 +7,8 @@ import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 
-import { Space, Table, Tag, Image, Modal, Avatar } from "antd";
+
+import { Space, Table, Tag, Image, Modal, Avatar, } from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -22,6 +23,7 @@ import {
   FolderViewOutlined,
   DeleteOutlined,
   SwapOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -289,7 +291,6 @@ function BlogAdmin() {
                 showConfirmButton: false,
                 timer: 1200,
               });
-              
             })
             .catch((e) => {
               Swal.fire({
@@ -320,6 +321,7 @@ function BlogAdmin() {
       .get(`/v1/blog/view_detail_blog/${id.id}`)
       .then(async (data) => {
         let data_result = data.data;
+
         const arr_commentBlogID = data_result.comment_blog_id;
 
         await axios
@@ -381,10 +383,7 @@ function BlogAdmin() {
                         </Tag>
                         <div
                           onClick={() =>
-                            changeStatusComment(
-                              item.id,
-                              item.status,
-                            )
+                            changeStatusComment(item.id, item.status)
                           }
                           style={{
                             backgroundColor: "orange",
@@ -462,6 +461,17 @@ function BlogAdmin() {
           <BottomCssContent>
             <TopCssContent>
               <p>Blog</p>
+              <div className="d-flex" style={{ width: "300px", borderRadius:"5px", overflow:"hidden" }}>
+                <input
+                  type="text"
+                  id="find_blog"
+                  className="form-control form-control-lg"
+                  placeholder="Nhập vào tiêu đề blog..."
+                  style={{ fontSize: "17px", borderRadius: "3px" }}
+                />
+                <SearchOutlined style={{ backgroundColor: "#7bd6e5", padding:"13px", color:"white", cursor:"pointer" }} />
+              </div>
+
               <Link to="/admin/blog/add">
                 <Button
                   style={{

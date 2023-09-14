@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
@@ -16,6 +16,19 @@ function Blog() {
   const [isActive, setIsActive] = useState(true);
   const [datablog, setDataBlog] = useState([]);
   const nav = useNavigate();
+  const [optionDropdown, setOptionDropdown] = useState([]);
+  const choose = useRef("TẤT CẢ");
+
+  const clickSelect = (item) => {
+    if (item === "TẤT CẢ") {
+      choose.current = "TẤT CẢ";
+    } else {
+      let selected = item.target.innerText;
+      choose.current = selected;
+    }
+
+    get_blog();
+  };
 
   const get_blog = async () => {
     try {
@@ -24,9 +37,47 @@ function Blog() {
         .then((data) => {
           let arr_blog = data.data;
 
+          let arr_category = arr_blog.map((item, index) => {
+            return item.category;
+          });
+
+          // Loại bỏ các phần tử trùng lặp
+          const uniqueArray = arr_category.reduce((uniqueArray, element) => {
+            if (uniqueArray.indexOf(element) === -1) {
+              uniqueArray.push(element);
+            }
+            return uniqueArray;
+          }, []);
+
+          let DOM_OPTION = uniqueArray.map((item, index) => {
+            return (
+              <button
+                className="btn_filter_blog"
+                onClick={(item) => clickSelect(item)}
+                style={{
+                  cursor: "pointer",
+                  padding: "10px",
+                  background: "#66b4bf",
+                  borderRadius: "5px",
+                  color: "white",
+                  outline: "none",
+                  border: "none",
+                  margin: " 5px 5px",
+                }}
+              >
+                {item}
+              </button>
+            );
+          });
+
+          setOptionDropdown(DOM_OPTION);
+
           // eslint-disable-next-line
           let data_blog = arr_blog.map((item, index) => {
-            if (item.status) {
+            if (
+              (item.status && item.category === choose.current) ||
+              (item.status && choose.current === "TẤT CẢ")
+            ) {
               return (
                 <div
                   className="blog_item"
@@ -35,7 +86,7 @@ function Blog() {
                     marginRight: "20px",
                     border: "1px solid #ccc",
                     padding: "0px",
-                    width: "370px",
+                    width: "400px",
                     boxShadow: "0.3px 0.3px #ccc",
                     marginBottom: "20px",
                     overflow: "hidden",
@@ -45,7 +96,7 @@ function Blog() {
                     src={item.thumbnail}
                     className="img-fluid col-lg"
                     style={{
-                      width: "371px",
+                      width: "400px",
                       height: "248px",
                       objectFit: "cover",
                     }}
@@ -54,7 +105,7 @@ function Blog() {
                   <div
                     className="d-flex"
                     style={{
-                      width: "100%",
+                      width: "fit-content",
                       alignItems: "center",
                       justifyContent: "center",
                       marginTop: "10px",
@@ -146,6 +197,7 @@ function Blog() {
   };
 
   useEffect(() => {
+    choose.current = "TẤT CẢ";
     setIsActive(false);
     get_blog();
   }, []);
@@ -175,10 +227,32 @@ function Blog() {
         </div>
 
         <div
+          className="filter_blog"
+          style={{ marginLeft: "100px", marginBottom: "20px" }}
+        >
+          <button
+            className="btn_filter_blog"
+            onClick={() => clickSelect("TẤT CẢ")}
+            style={{
+              cursor: "pointer",
+              padding: "10px",
+              background: "#66b4bf",
+              borderRadius: "5px",
+              color: "white",
+              outline: "none",
+              border: "none",
+              margin: " 5px 5px",
+            }}
+          >
+            #Tất cả
+          </button>
+          {optionDropdown}
+        </div>
+        <div
           className="bottom_blog container"
           style={{ marginBottom: "200px" }}
         >
-          <div className="row" style={{ justifyContent: "space-between" }}>
+          <div className="row" style={{ justifyContent: "flex-start" }}>
             {datablog}
           </div>
         </div>

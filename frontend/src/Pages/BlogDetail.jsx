@@ -130,8 +130,8 @@ function BlogDetail() {
                   </div>
                 </div>
               );
-            }else{
-              return []
+            } else {
+              return [];
             }
           });
           setCommentList(DOM_LIST_COMMENT);
