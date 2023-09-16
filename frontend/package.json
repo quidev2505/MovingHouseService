@@ -37,6 +37,7 @@
     "react-file-upload": "^0.0.4",
     "react-hook-form": "^7.45.4",
     "react-icons": "^4.10.1",
+    "react-leaflet": "^4.2.1",
     "react-loader-spinner": "^5.4.5",
     "react-loading-overlay": "^1.0.1",
     "react-otp-input": "^3.0.4",

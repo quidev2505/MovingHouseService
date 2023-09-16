@@ -279,7 +279,8 @@ function InfoUser() {
                     <img
                       style={{
                         borderRadius: "50%",
-                        border: "3px solid var(--second-color)",
+                        border: "1px solid #ccc",
+                        boxShadow:"2px 3px 6px #ccc",
                         backgroundColor: "black",
                         width: "250px",
                         marginLeft: "70px",

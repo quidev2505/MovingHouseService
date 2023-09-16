@@ -6,18 +6,47 @@ import { useNavigate } from "react-router-dom";
 
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import Step1 from "./Step1";
+import Step2 from "./Step2";
+
+import { Toast } from "../../../../Components/ToastColor";
 
 function BookingUser() {
   const nav = useNavigate();
   const [current, setCurrent] = useState(0);
-  const [check_fill, setCheckFill] = useState(false)
+  const [check_fill, setCheckFill] = useState(false);
 
-  const onChange = (value) => {
-    console.log("onChange:", value);
-    setCurrent(value);
+  const onChange = async (value) => {
+    let check_navigate_arr = JSON.parse(
+      localStorage.getItem("check_nav_booking")
+    );
+
+    if (!check_navigate_arr.includes(value)) {
+      await Toast.fire({
+        icon: "warning",
+        title: "Bạn hãy hoàn thành bước hiện tại !",
+      });
+    } else {
+      setCurrent(value);
+    }
   };
 
+  useEffect(() => {
+    let check_navigate_arr = localStorage.getItem("check_nav_booking");
 
+    if (!check_navigate_arr) {
+      let arr_init = [0];
+      localStorage.setItem("check_nav_booking", JSON.stringify(arr_init));
+    } else {
+      const arr_new = JSON.parse(localStorage.getItem("check_nav_booking"));
+
+      if (Array.isArray(arr_new)) {
+        if (!arr_new.includes(current)) {
+          arr_new.push(current);
+        }
+      }
+      localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
+    }
+  }, [current]);
 
   return (
     <>
@@ -56,8 +85,17 @@ function BookingUser() {
           />
         </div>
 
-        <div className="form_step" style={{marginTop:"30px", margin: "30px 150px"}}>
-            {current === 0 ? <Step1 check_fill={check_fill} setCheckFill={setCheckFill}/> : ''}
+        <div
+          className="form_step"
+          style={{ marginTop: "30px", margin: "30px 150px" }}
+        >
+          {current === 0 ? (
+            <Step1 check_fill={check_fill} setCheckFill={setCheckFill} />
+          ) : current === 1 ? (
+            <Step2 check_fill={check_fill} setCheckFill={setCheckFill} />
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="navigate_step container">
@@ -76,7 +114,7 @@ function BookingUser() {
           </div>
           <div
             className="btn_navigate_to"
-            style={{display: check_fill ? 'flex' : 'none'}}
+            style={{ display: check_fill ? "flex" : "none" }}
             onClick={() => setCurrent(current + 1)}
           >
             Tiếp tục

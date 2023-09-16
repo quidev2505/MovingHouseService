@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DatePicker } from "antd";
 import { TimePicker } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 function Step1({ check_fill, setCheckFill }) {
   const [date, setDate] = useState();
@@ -10,7 +11,29 @@ function Step1({ check_fill, setCheckFill }) {
     setDate(newDate);
   };
 
+  const disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < dayjs().endOf("day");
+  };
+
   const [time, setTime] = useState();
+
+  const disabledDateTime = () => ({
+    disabledHours: () => range(8,21),
+  });
+
+  const range = (start, end) => {
+    const result = [];
+    for (let i = 0; i < start; i++) {
+      result.push(i);
+    }
+
+    for(let j=end; j < 24; j++){
+      result.push(j)
+    }
+
+    return result;
+  };
 
   const handleChange_Time = (newTime) => {
     setTime(newTime);
@@ -31,6 +54,14 @@ function Step1({ check_fill, setCheckFill }) {
       localStorage.setItem("order_moving", JSON.stringify(object_order));
     }
   }, [date, time]);
+
+  useEffect(() => {
+    if (localStorage.getItem("order_moving")) {
+      let data = JSON.parse(localStorage.getItem("order_moving"));
+      document.querySelector("#date_choose").value = data.moving_date;
+      document.querySelector("#time_choose").value = data.moving_time;
+    }
+  }, []);
 
   return (
     <div className="booking_step_1 row">
@@ -76,6 +107,7 @@ function Step1({ check_fill, setCheckFill }) {
           format="DD/MM/YYYY"
           selected={date}
           onChange={handleChange_Date}
+          disabledDate={disabledDate}
           id="date_choose"
           placeholder="Chọn ngày chuyển"
           style={{ width: "400px", height: "60px", marginBottom: "15px" }}
@@ -89,9 +121,9 @@ function Step1({ check_fill, setCheckFill }) {
         <TimePicker
           selected={time}
           id="time_choose"
-          use12Hours
+          disabledTime={disabledDateTime}
           placeholder="Chọn giờ chuyển"
-          format="h:mm:ss A"
+          format="HH:mm"
           style={{ width: "400px", height: "60px" }}
           onChange={handleChange_Time}
         />
