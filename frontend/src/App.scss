@@ -26,7 +26,7 @@
     right: 0;
     z-index: 999;
 
-    .ant-avatar{
+    .ant-avatar {
         border-radius: 50%;
         background-color: black;
     }
@@ -501,7 +501,8 @@ th.ant-table-cell {
 // User Page
 .headerUser {
     height: fit-content;
-    border-bottom: 2px solid #ed883b;
+    border-bottom: 2px solid #ccc;
+    box-shadow: 0.5px 1px 4px #ccc;
     position: fixed;
     top: 0;
     left: 0;
@@ -581,18 +582,86 @@ th.ant-table-cell {
 
 
 //Blog Admin
-.content_blog_detail{
-    border:2px solid var(--primay-color) !important;
+.content_blog_detail {
+    border: 2px solid var(--primay-color) !important;
     border-radius: 5px;
     padding: 10px;
     margin: 20px 0px;
 }
 
 //Blog 
-.blog_item:hover{
+.blog_item:hover {
     box-shadow: 1px 2px 5px 2px #ccc !important;
 }
 
-.btn_filter_blog:hover{
+.btn_filter_blog:hover {
     color: black !important;
+}
+
+
+//Booking User
+.bookingUser {
+    .top_process {
+        padding-top: 50px;
+
+    }
+
+    .time_choose {
+        .ant-picker-input{
+            font-size: 17px;
+        }
+    }
+
+    .ant-steps-item-icon{
+        color:green !important;
+    }
+
+    .navigate_step {
+        position: fixed;
+        flex-direction: row;
+        height: 77px;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 3px var(--primay-color);
+        border-radius: 5px;
+
+
+        .btn_navigate_back {
+            width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ccc;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .btn_navigate_to {
+            width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #e68523;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .btn_navigate_back:hover {
+            transform: translateY(-3px);
+            box-shadow: 1px 2px 5px black;
+        }
+
+        .btn_navigate_to:hover {
+            transform: translateY(-3px);
+            box-shadow: 1px 2px 5px black;
+        }
+    }
 }

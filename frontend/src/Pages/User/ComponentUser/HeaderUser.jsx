@@ -24,7 +24,7 @@ function HeaderUser() {
       key: "/",
     },
     {
-      label: "Đặt giao hàng",
+      label: "Đặt dịch vụ",
       icon: <FcCalendar />,
       key: "/user/booking",
     },
