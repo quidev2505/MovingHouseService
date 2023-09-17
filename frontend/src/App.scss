@@ -607,13 +607,13 @@ th.ant-table-cell {
     }
 
     .time_choose {
-        .ant-picker-input{
+        .ant-picker-input {
             font-size: 17px;
         }
     }
 
-    .ant-steps-item-icon{
-        color:green !important;
+    .ant-steps-item-icon {
+        color: green !important;
     }
 
     .navigate_step {
@@ -665,4 +665,15 @@ th.ant-table-cell {
             box-shadow: 1px 2px 5px black;
         }
     }
+}
+
+
+.image_ava_map>div {
+
+    width: 100% !important;
+    height: 431px !important;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+
 }

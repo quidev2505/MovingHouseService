@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import Map from "./Map";
+import MapBox from "./Map/MapBox";
 
 function Step2({ check_fill, setCheckFill }) {
   return (
-    <div className="booking_step_2 row" style={{ margin: "30px -125px" }}>
+    <div className="booking_step_2 row" style={{ margin: "30px -160px" }}>
       <div
         className="location col-lg-6"
         style={{ overflowY: "scroll", maxHeight: "430px" }}
@@ -164,8 +164,8 @@ function Step2({ check_fill, setCheckFill }) {
           />
         </div>
       </div>
-      <div className="image_ava col-lg-6">
-        <Map/>
+      <div className="image_ava_map col-lg-6">
+        <MapBox/>
       </div>
     </div>
   );
