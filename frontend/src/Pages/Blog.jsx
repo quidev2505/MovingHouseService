@@ -252,7 +252,7 @@ function Blog() {
           className="bottom_blog container"
           style={{ marginBottom: "200px" }}
         >
-          <div className="row" style={{ justifyContent: "flex-start" }}>
+          <div className="row" style={{ justifyContent: "space-between" }}>
             {datablog}
           </div>
         </div>

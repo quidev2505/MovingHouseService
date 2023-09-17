@@ -154,7 +154,7 @@ const NavBar = () => {
                     <Link
                       to="/user/booking"
                       className="col btn_info_user"
-                      style={{ textDecoration: "none", color: "#ff8268" }}
+                      style={{ textDecoration: "none", color: "#ff8268", borderColor:"transparent" }}
                     >
                       <Avatar src={ava} />
                     </Link>
@@ -165,7 +165,7 @@ const NavBar = () => {
                     {/* Đăng xuất */}
                     <div
                       className="col btn_logout"
-                      style={{ color: "red" }}
+                      style={{ color: "red", fontSize:"20px" }}
                       onClick={() => handleLogout()}
                     >
                       <FiLogOut></FiLogOut>
