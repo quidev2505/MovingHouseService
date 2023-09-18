@@ -1,0 +1,81 @@
+[{
+  "_id": {
+    "$oid": "64f73856008ce88410041561"
+  },
+  "name": "Chuyển nhà theo yêu cầu",
+  "vehicle": "Xe tải 1.5 tấn, 2 tấn, 2.5 tấn, 3 tấn,...",
+  "needPeople": 0,
+  "distance": "0",
+  "price": 0,
+  "status": true,
+  "process": [
+    "Khảo sát và ký kết hợp đồng,Tháo dỡ đồ đạc,Đóng gói đồ đạc,Lắp đặt đồ đạc tại nhà mới,Vận chuyển đồ đạc bằng xe tải"
+  ],
+  "bonus": [
+    "Vận chuyển đồ đạc lên chung cư, nhà cao tầng,Vệ sinh nhà mới sau khi chuyển nhà,Bảo hiểm đồ đạc"
+  ],
+  "image": "uploads\\1694533875044.png",
+  "warranty_policy": "Bồi thường 100% giá trị đồ đạc nếu bị hư hỏng trong quá trình vận chuyển",
+  "suitable_for": "Phù hợp với những khách hàng có nhu cầu chuyển nhà đặc biệt, như chuyển nhà đi xa, chuyển nhà văn phòng,...",
+  "createdAt": {
+    "$date": "2023-09-05T14:16:54.750Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:51:15.056Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f7df8ef99c65b934df38c5"
+  },
+  "name": "Chuyển nhà trọn gói",
+  "vehicle": " Xe tải 1.5 tấn",
+  "needPeople": 4,
+  "distance": "10km trong nội thành",
+  "price": 10000000,
+  "status": true,
+  "process": [
+    "Vận chuyển đồ đạc bằng xe tải,Khảo sát và ký kết hợp đồng,Tháo dỡ đồ đạc,Đóng gói đồ đạc,Vận chuyển đồ đạc bằng xe tải 1.5 tấn,Lắp đặt đồ đạc tại nhà mới"
+  ],
+  "bonus": [
+    "Vận chuyển đồ đạc lên chung cư, nhà cao tầng,Vệ sinh nhà mới sau khi chuyển nhà,Bảo hiểm đồ đạc"
+  ],
+  "image": "uploads\\1694534026380.png",
+  "warranty_policy": "Bồi thường 100% giá trị đồ đạc nếu bị hư hỏng trong quá trình vận chuyển",
+  "suitable_for": "Phù hợp với những khách hàng có số lượng đồ đạc vừa phải, muốn tiết kiệm thời gian và công sức khi chuyển nhà.",
+  "createdAt": {
+    "$date": "2023-09-06T02:10:22.986Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:53:46.393Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f7e4caf99c65b934df38eb"
+  },
+  "name": "Chuyển nhà tự đóng gói",
+  "vehicle": "Xe tải 1.5 tấn",
+  "needPeople": 2,
+  "distance": "10km trong nội thành",
+  "price": 5000000,
+  "status": true,
+  "process": [
+    "Vận chuyển đồ đạc bằng xe tải 1.5 tấn,Lắp đặt đồ đạc tại nhà mới"
+  ],
+  "bonus": [
+    "Vận chuyển đồ đạc lên chung cư, nhà cao tầng,Vệ sinh nhà mới sau khi chuyển nhà,Bảo hiểm đồ đạc"
+  ],
+  "image": "uploads\\1694534034030.png",
+  "warranty_policy": "Bồi thường 100% giá trị đồ đạc nếu bị hư hỏng trong quá trình vận chuyển",
+  "suitable_for": "Phù hợp với những khách hàng có số lượng đồ đạc ít, muốn tự tay đóng gói đồ đạc để tiết kiệm chi phí.",
+  "createdAt": {
+    "$date": "2023-09-06T02:32:42.550Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:53:54.036Z"
+  },
+  "__v": 0
+}]

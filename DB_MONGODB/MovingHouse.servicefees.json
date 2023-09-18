@@ -1,0 +1,160 @@
+[{
+  "_id": {
+    "$oid": "64f94406a7db5535462e4afc"
+  },
+  "fee_name": "Thùng Carton",
+  "price": 50000,
+  "unit": "Thùng",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:31:18.532Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-11T12:06:56.584Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f94462a7db5535462e4b00"
+  },
+  "fee_name": "Màng bọc PE",
+  "price": 20000,
+  "unit": "Cuộn",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:32:50.664Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T03:32:50.664Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f945b2a7db5535462e4b06"
+  },
+  "fee_name": "Băng dính",
+  "price": 10000,
+  "unit": "Cuộn",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:38:26.829Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T03:38:26.829Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f945c6a7db5535462e4b09"
+  },
+  "fee_name": "Dây buộc",
+  "price": 10000,
+  "unit": "Cuộn",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:38:46.033Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T03:38:46.033Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f945eca7db5535462e4b0c"
+  },
+  "fee_name": "Xe nâng",
+  "price": 500000,
+  "unit": "Ca",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:39:24.408Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T12:37:29.819Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f94780a7db5535462e4b10"
+  },
+  "fee_name": "Đóng gói đồ đạc",
+  "price": 300000,
+  "unit": "Thùng",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:46:08.514Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T03:46:08.514Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f947bfa7db5535462e4b14"
+  },
+  "fee_name": "Tháo lắp đồ đạc",
+  "price": 1000000,
+  "unit": "Người",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:47:11.553Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-11T12:06:59.001Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f947d4a7db5535462e4b17"
+  },
+  "fee_name": "Lắp đặt đồ đạc",
+  "price": 1000000,
+  "unit": "Tủ",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:47:32.689Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T03:47:32.689Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f947eca7db5535462e4b1a"
+  },
+  "fee_name": "Nâng cẩu",
+  "price": 5000000,
+  "unit": "Ca",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T03:47:56.300Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T03:47:56.300Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64f95c75a7db5535462e4b31"
+  },
+  "fee_name": "Thêm nhân công bốc vác",
+  "price": 370000,
+  "unit": "Người",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-07T05:15:33.363Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T05:15:33.363Z"
+  },
+  "__v": 0
+}]

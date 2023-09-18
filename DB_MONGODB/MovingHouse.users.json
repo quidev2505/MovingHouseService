@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "64fca38c90928cab7c85c8d4"
+  },
+  "fullname": "Phan Thành Quí",
+  "email": "phanok@gmail.com",
+  "phonenumber": "0907532754",
+  "password": "$2b$10$v0EjM3Ad4qVdlICAT.qCVOSSX2E1UV0dpXcwvTe0nU.TnT.4rQM8G",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-09T16:55:40.129Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-13T03:29:37.883Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650080ef1ef1c8e4d12e632e"
+  },
+  "fullname": "Phan Hữu Tình",
+  "email": "huutinh@gmail.com",
+  "phonenumber": "0905642545",
+  "password": "$2b$10$GFZF03Bgp1qhHriyGdVpM.VaAAm8OFX3HYUdxMRr7mrf4fM1edvSa",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-12T15:17:03.269Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:17:03.269Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65012c409878b3b011e9c40d"
+  },
+  "fullname": "Nguyễn Trọng Trí",
+  "email": "tri123@gmail.com",
+  "phonenumber": "0945655545",
+  "password": "$2b$10$l8PyiCPNPXP7RKilujcmguJd/L10CtBh33UNn8jp6I9uuWXt7Mc2y",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-13T03:28:00.238Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-13T03:28:00.238Z"
+  },
+  "__v": 0
+}]

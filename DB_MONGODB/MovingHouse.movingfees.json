@@ -1,0 +1,154 @@
+[{
+  "_id": {
+    "$oid": "64fa9b75c24e04ec90778444"
+  },
+  "name": "Xe bán tải",
+  "priceFirst10km": 200000,
+  "priceFrom11to45": 15000,
+  "pricePer45km": 20000,
+  "waiting_fee": 20000,
+  "TwowayFloor_loadingFee": 200000,
+  "OnewayFloor_loadingFee": 100000,
+  "Twoway_loadingFee": 100000,
+  "Oneway_loadingFee": 50000,
+  "createdAt": {
+    "$date": "2023-09-08T03:56:37.901Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:54:08.472Z"
+  },
+  "__v": 0,
+  "status": true
+},
+{
+  "_id": {
+    "$oid": "64fa9d49c24e04ec90778449"
+  },
+  "name": "Xe van 500kg",
+  "priceFirst10km": 250000,
+  "priceFrom11to45": 20000,
+  "pricePer45km": 25000,
+  "waiting_fee": 25000,
+  "TwowayFloor_loadingFee": 250000,
+  "OnewayFloor_loadingFee": 125000,
+  "Twoway_loadingFee": 125000,
+  "Oneway_loadingFee": 75000,
+  "createdAt": {
+    "$date": "2023-09-08T04:04:25.312Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:54:49.624Z"
+  },
+  "__v": 0,
+  "status": true
+},
+{
+  "_id": {
+    "$oid": "64faa161c24e04ec90778450"
+  },
+  "name": "Xe van 1 tấn",
+  "priceFirst10km": 300000,
+  "priceFrom11to45": 25000,
+  "pricePer45km": 30000,
+  "waiting_fee": 30000,
+  "TwowayFloor_loadingFee": 300000,
+  "OnewayFloor_loadingFee": 150000,
+  "Twoway_loadingFee": 150000,
+  "Oneway_loadingFee": 100000,
+  "createdAt": {
+    "$date": "2023-09-08T04:21:53.777Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T16:01:42.388Z"
+  },
+  "__v": 0,
+  "status": true
+},
+{
+  "_id": {
+    "$oid": "64faf025081df81bd354329a"
+  },
+  "name": "Xe tải 500kg",
+  "priceFirst10km": 350000,
+  "priceFrom11to45": 30000,
+  "pricePer45km": 35000,
+  "waiting_fee": 35000,
+  "TwowayFloor_loadingFee": 350000,
+  "OnewayFloor_loadingFee": 175000,
+  "Twoway_loadingFee": 175000,
+  "Oneway_loadingFee": 112500,
+  "createdAt": {
+    "$date": "2023-09-08T09:57:57.542Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:55:00.238Z"
+  },
+  "__v": 0,
+  "status": true
+},
+{
+  "_id": {
+    "$oid": "64faf067081df81bd354329f"
+  },
+  "name": "Xe tải 1 tấn",
+  "priceFirst10km": 400000,
+  "priceFrom11to45": 35000,
+  "pricePer45km": 40000,
+  "waiting_fee": 40000,
+  "TwowayFloor_loadingFee": 400000,
+  "OnewayFloor_loadingFee": 200000,
+  "Twoway_loadingFee": 200000,
+  "Oneway_loadingFee": 150000,
+  "createdAt": {
+    "$date": "2023-09-08T09:59:04.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T16:08:14.754Z"
+  },
+  "__v": 0,
+  "status": true
+},
+{
+  "_id": {
+    "$oid": "64faf275a64fef3d0f71bd6b"
+  },
+  "name": "Xe tải 1.5 tấn",
+  "priceFirst10km": 500000,
+  "priceFrom11to45": 40000,
+  "pricePer45km": 50000,
+  "waiting_fee": 40000,
+  "TwowayFloor_loadingFee": 500000,
+  "OnewayFloor_loadingFee": 250000,
+  "Twoway_loadingFee": 250000,
+  "Oneway_loadingFee": 187500,
+  "createdAt": {
+    "$date": "2023-09-08T10:07:49.144Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-13T14:11:56.267Z"
+  },
+  "__v": 0,
+  "status": true
+},
+{
+  "_id": {
+    "$oid": "64faf35aa64fef3d0f71bd78"
+  },
+  "name": "Xe tải 2 tấn",
+  "priceFirst10km": 600000,
+  "priceFrom11to45": 45000,
+  "pricePer45km": 60000,
+  "waiting_fee": 45000,
+  "TwowayFloor_loadingFee": 600000,
+  "OnewayFloor_loadingFee": 300000,
+  "Twoway_loadingFee": 300000,
+  "Oneway_loadingFee": 225000,
+  "createdAt": {
+    "$date": "2023-09-08T10:11:38.655Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:56:42.884Z"
+  },
+  "__v": 0,
+  "status": true
+}]

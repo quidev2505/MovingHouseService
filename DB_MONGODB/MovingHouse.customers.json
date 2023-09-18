@@ -1,0 +1,48 @@
+[{
+  "_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "fullname": "Phan Thành Quí",
+  "address": "Hựu thành, Trà Ôn, Vĩnh Long, Cần Thơ",
+  "avatar": "uploads\\1694575777858.jpg",
+  "gender": "Nam",
+  "createdAt": {
+    "$date": "2023-09-09T16:55:40.138Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-13T03:29:37.873Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650080ef1ef1c8e4d12e6330"
+  },
+  "fullname": "Phan Hữu Tình",
+  "address": null,
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Phan Hữu Tình",
+  "gender": null,
+  "createdAt": {
+    "$date": "2023-09-12T15:17:03.284Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:17:03.284Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65012c409878b3b011e9c40f"
+  },
+  "fullname": "Nguyễn Trọng Trí",
+  "address": null,
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Nguyễn Trọng Trí",
+  "gender": null,
+  "createdAt": {
+    "$date": "2023-09-13T03:28:00.246Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-13T03:28:00.246Z"
+  },
+  "__v": 0
+}]

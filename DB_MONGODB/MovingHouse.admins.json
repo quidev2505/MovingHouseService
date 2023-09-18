@@ -1,0 +1,13 @@
+[{
+  "_id": {
+    "$oid": "64f43a5ed0044c6b6faa99a7"
+  },
+  "avatar": null,
+  "password": "admin123",
+  "permission": "Nhân viên",
+  "status": true,
+  "username": "admin",
+  "updatedAt": {
+    "$date": "2023-09-06T01:50:53.264Z"
+  }
+}]

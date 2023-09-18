@@ -1,0 +1,154 @@
+[{
+  "_id": {
+    "$oid": "64fa9b75c24e04ec90778446"
+  },
+  "vehicle_name": "Xe bán tải",
+  "brand": "Toyota Hilux",
+  "capacity": "500kg",
+  "status": true,
+  "cago_size": "1.2m x 1m x 1.2m",
+  "suitable_for": "Đồ dùng cá nhân, đồ nội thất nhỏ,...",
+  "image": "uploads\\1694534048446.png",
+  "movingFee_id": {
+    "$oid": "64fa9b75c24e04ec90778444"
+  },
+  "createdAt": {
+    "$date": "2023-09-08T03:56:37.914Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:54:08.461Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64fa9d49c24e04ec9077844b"
+  },
+  "vehicle_name": "Xe van 500kg",
+  "brand": "Toyota HiAce",
+  "capacity": "500kg",
+  "status": true,
+  "cago_size": "2.1m x 1.4m x 1.5m",
+  "suitable_for": "Đồ nội thất, thiết bị điện tử,...",
+  "image": "uploads\\1694534089613.png",
+  "movingFee_id": {
+    "$oid": "64fa9d49c24e04ec90778449"
+  },
+  "createdAt": {
+    "$date": "2023-09-08T04:04:25.322Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:54:49.620Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64faa161c24e04ec90778452"
+  },
+  "vehicle_name": "Xe van 1 tấn",
+  "brand": "Toyota HiAce",
+  "capacity": "1 tấn",
+  "status": true,
+  "cago_size": "2.1m x 1.4m x 1.5m",
+  "suitable_for": "Đồ nội thất lớn, máy móc, thiết bị,...",
+  "image": "uploads\\1694534502379.online_50kb_27417",
+  "movingFee_id": {
+    "$oid": "64faa161c24e04ec90778450"
+  },
+  "createdAt": {
+    "$date": "2023-09-08T04:21:53.788Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T16:01:42.384Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64faf025081df81bd354329c"
+  },
+  "vehicle_name": "Xe tải 500kg",
+  "brand": "Hyundai Mighty",
+  "capacity": "500kg",
+  "status": true,
+  "cago_size": "2.5m x 1.4m x 1.5m",
+  "suitable_for": "Đồ nội thất, thiết bị điện tử,...",
+  "image": "uploads\\1694534100218.webp",
+  "movingFee_id": {
+    "$oid": "64faf025081df81bd354329a"
+  },
+  "createdAt": {
+    "$date": "2023-09-08T09:57:57.558Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:55:00.235Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64faf068081df81bd35432a1"
+  },
+  "vehicle_name": "Xe tải 1 tấn",
+  "brand": "Hyundai Mighty",
+  "capacity": "1 tấn",
+  "status": true,
+  "cago_size": "2.5m x 1.4m x 1.5m",
+  "suitable_for": "Đồ nội thất lớn, máy móc, thiết bị,...",
+  "image": "uploads\\1694534123353.png",
+  "movingFee_id": {
+    "$oid": "64faf067081df81bd354329f"
+  },
+  "createdAt": {
+    "$date": "2023-09-08T09:59:04.009Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T16:08:14.753Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64faf275a64fef3d0f71bd6d"
+  },
+  "vehicle_name": "Xe tải 1.5 tấn",
+  "brand": "Hyundai new porter",
+  "capacity": "1.5 tấn",
+  "status": true,
+  "cago_size": "3.2m x 1.7m x 1.7m",
+  "suitable_for": "Đồ nội thất cồng kềnh, máy móc, thiết bị lớn,...",
+  "image": "uploads\\1694614316261.png",
+  "movingFee_id": {
+    "$oid": "64faf275a64fef3d0f71bd6b"
+  },
+  "createdAt": {
+    "$date": "2023-09-08T10:07:49.154Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-13T14:11:56.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64faf35aa64fef3d0f71bd7a"
+  },
+  "vehicle_name": "Xe tải 2 tấn",
+  "brand": "Hyundai Mighty",
+  "capacity": "2 tấn",
+  "status": true,
+  "cago_size": "3.6m x 1.8m x 1.8m",
+  "suitable_for": "Đồ nội thất cồng kềnh, máy móc, thiết bị lớn,...",
+  "image": "uploads\\1694534202873.png",
+  "movingFee_id": {
+    "$oid": "64faf35aa64fef3d0f71bd78"
+  },
+  "createdAt": {
+    "$date": "2023-09-08T10:11:38.666Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-12T15:56:42.880Z"
+  },
+  "__v": 0
+}]
