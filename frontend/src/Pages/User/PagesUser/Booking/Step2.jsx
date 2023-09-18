@@ -14,12 +14,12 @@ import goongSdk from "@goongmaps/goong-sdk";
 import polyline from "@mapbox/polyline";
 
 function Step2({ check_fill, setCheckFill }) {
-  const [locationFrom, setLocationFrom] = useState();
+  const [locationFrom, setLocationFrom] = useState("");
   const [dataList, setDataList] = useState([]);
   const [locationFromChoose, setLocationFromChoose] = useState();
   const [fromLocation, setFromLocation] = useState({});
 
-  const [locationTo, setLocationTo] = useState();
+  const [locationTo, setLocationTo] = useState("");
   const [dataList_To, setDataList_To] = useState([]);
   const [locationToChoose, setLocationToChoose] = useState();
   const [toLocation, setToLocation] = useState({});
@@ -28,16 +28,20 @@ function Step2({ check_fill, setCheckFill }) {
   const get_location_list = async () => {
     await axios
       .get(
-        `https://rsapi.goong.io/Place/AutoComplete?api_key=${process.env.REACT_APP_GOONG_API_KEY}&input=${locationFrom}`
+        `https://nominatim.openstreetmap.org/search?q=${locationFrom}&format=json`
       )
       .then((data) => {
-        let result = data.data.predictions;
+        let result = data.data;
         if (result) {
           let arr_result = result.map((item, index) => {
             const ob = {
-              key: item.description,
-              value: item.description,
-              place_id: item.place_id,
+              id: item.display_name,
+              value: item.display_name,
+              location: {
+                lat: item.lat,
+                lon: item.lon,
+                name: item.name,
+              },
             };
             return ob;
           });
@@ -50,32 +54,21 @@ function Step2({ check_fill, setCheckFill }) {
       });
   };
 
-  const get_location_from_choose = async () => {
-    await axios
-      .get(
-        `https://rsapi.goong.io/Place/Detail?place_id=${locationFromChoose}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
-      )
-      .then((data) => {
-        let result = data.data.result.geometry.location;
-        let name = data.data.result.formatted_address;
+  const get_location_from_choose = () => {
+    let choose_option = locationFromChoose;
+    if (choose_option) {
+      const ob = {
+        lat: Number(choose_option.lat),
+        lng: Number(choose_option.lon),
+        name: choose_option.name,
+      };
 
-        const ob = {
-          lat: result.lat,
-          lng: result.lng,
-          name: name,
-        };
-
-        setFromLocation(ob);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      setFromLocation(ob);
+    }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      get_location_list();
-    }, 1000);
+    get_location_list();
   }, [locationFrom]);
 
   useEffect(() => {
@@ -88,17 +81,20 @@ function Step2({ check_fill, setCheckFill }) {
   const get_location_list_to = async () => {
     await axios
       .get(
-        `https://rsapi.goong.io/Place/AutoComplete?api_key=${process.env.REACT_APP_GOONG_API_KEY}&input=${locationTo}`
+        `https://nominatim.openstreetmap.org/search?q=${locationTo}&format=json`
       )
       .then((data) => {
-        console.log(data);
-        let result = data.data.predictions;
+        let result = data.data;
         if (result) {
           let arr_result = result.map((item, index) => {
             const ob = {
-              key: item.description,
-              value: item.description,
-              place_id: item.place_id,
+              id: item.display_name,
+              value: item.display_name,
+              location: {
+                lat: item.lat,
+                lon: item.lon,
+                name: item.name,
+              },
             };
             return ob;
           });
@@ -111,32 +107,22 @@ function Step2({ check_fill, setCheckFill }) {
       });
   };
 
-  const get_location_to_choose = async () => {
-    await axios
-      .get(
-        `https://rsapi.goong.io/Place/Detail?place_id=${locationToChoose}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
-      )
-      .then((data) => {
-        let result = data.data.result.geometry.location;
-        let name = data.data.result.formatted_address;
+  const get_location_to_choose =  () => {
+    let choose_option = locationToChoose;
+    if (choose_option) {
+      const ob = {
+        lat: Number(choose_option.lat),
+        lng: Number(choose_option.lon),
+        name: choose_option.name,
+      };
 
-        const ob = {
-          lat: result.lat,
-          lng: result.lng,
-          name: name,
-        };
-
-        setToLocation(ob);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      console.log(ob)
+      setToLocation(ob);
+    }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      get_location_list_to();
-    }, 1000);
+    get_location_list_to();
   }, [locationTo]);
 
   useEffect(() => {
@@ -164,17 +150,12 @@ function Step2({ check_fill, setCheckFill }) {
           break;
         }
       }
-      // // Initialize goongClient with an API KEY
-      // var goongClient = goongSdk({
-      //   accessToken: "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu",
-      // });
-
 
       const goongClient = require("@goongmaps/goong-sdk");
       const goongDirections = require("@goongmaps/goong-sdk/services/directions");
 
       const baseClient = goongClient({
-        accessToken: "x4WqDgXKiVktyzY4RVpr8t8CO6RPi2iR2j3g4HIB"
+        accessToken: "5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy",
       });
       const directionService = goongDirections(baseClient);
       // Get Directions
@@ -280,7 +261,7 @@ function Step2({ check_fill, setCheckFill }) {
               value={locationFrom}
               onChange={(e) => setLocationFrom(e.target.value)}
               items={dataList}
-              onSelect={(item) => setLocationFromChoose(item.place_id)}
+              onSelect={(item) => setLocationFromChoose(item.location)}
             />
           </div>
 
@@ -361,7 +342,7 @@ function Step2({ check_fill, setCheckFill }) {
               value={locationTo}
               onChange={(e) => setLocationTo(e.target.value)}
               items={dataList_To}
-              onSelect={(item) => setLocationToChoose(item.place_id)}
+              onSelect={(item) => setLocationToChoose(item.location)}
             />
           </div>
 

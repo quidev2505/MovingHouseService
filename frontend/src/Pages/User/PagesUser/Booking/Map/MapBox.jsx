@@ -12,10 +12,6 @@ import ReactMapGL, {
 // app.js
 import "@goongmaps/goong-js/dist/goong-js.css";
 
-
-
-
-
 const geolocateStyle = {
   top: 0,
   left: 0,
@@ -162,7 +158,6 @@ function MapBox({ fromLocation, toLocation }) {
     }, 2000);
   }, [fromLocation, toLocation]);
 
-
   return (
     <>
       <ReactMapGL
@@ -180,8 +175,6 @@ function MapBox({ fromLocation, toLocation }) {
         <NavigationControl style={navStyle} />
         <ScaleControl style={scaleControlStyle} />
       </ReactMapGL>
-
-    
     </>
   );
 }
