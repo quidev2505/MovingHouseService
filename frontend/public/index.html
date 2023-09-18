@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Fix lỗi ảnh không hiện khi load qua các route khác ! -->
-    <base href="/">
+  <!-- Fix lỗi ảnh không hiện khi load qua các route khác ! -->
+  <base href="/">
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -55,6 +55,10 @@
 </head>
 
 <body>
+  <script src="https://cdn.jsdelivr.net/npm/@mapbox/polyline/src/polyline.js"></script>
+  <script src="https://unpkg.com/@goongmaps/goong-sdk/umd/goong-sdk.min.js"></script>
+
+
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <!-- Loading Animation when data is loading -->
   <div id="preloader"></div>

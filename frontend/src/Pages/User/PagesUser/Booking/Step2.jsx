@@ -7,6 +7,12 @@ import axios from "axios";
 import DatalistInput from "react-datalist-input";
 import "react-datalist-input/dist/styles.css";
 
+import goongjs from "@goongmaps/goong-js";
+
+import goongSdk from "@goongmaps/goong-sdk";
+
+import polyline from "@mapbox/polyline";
+
 function Step2({ check_fill, setCheckFill }) {
   const [locationFrom, setLocationFrom] = useState();
   const [dataList, setDataList] = useState([]);
@@ -105,26 +111,6 @@ function Step2({ check_fill, setCheckFill }) {
       });
   };
 
-  const [img_draw, setImgDraw] = useState();
-
-  const show_draw_between_location = async () => {
-    axios
-      .get(
-        `https://rsapi.goong.io/staticmap/route?origin=20.981971,105.864323&destination=21.03876,105.79810&vehicle=car&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
-      )
-      .then(async (data) => {
-        let data_new = data.data;
-
-        console.log(data_new);
-        let data_result =
-          "https://images.unsplash.com/photo-1682685796186-1bb4a5655653?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60";
-        setImgDraw(data_result);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
   const get_location_to_choose = async () => {
     await axios
       .get(
@@ -141,12 +127,6 @@ function Step2({ check_fill, setCheckFill }) {
         };
 
         setToLocation(ob);
-
-        if (toLocation !== undefined) {
-          setTimeout(() => {
-            show_draw_between_location();
-          }, 5000);
-        }
       })
       .catch((e) => {
         console.log(e);
@@ -164,6 +144,77 @@ function Step2({ check_fill, setCheckFill }) {
       get_location_to_choose();
     }, 1000);
   }, [locationToChoose]);
+
+  useEffect(() => {
+    goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";
+    var map = new goongjs.Map({
+      container: "map",
+      style: "https://tiles.goong.io/assets/goong_map_web.json",
+      center: [105.80278, 20.99245],
+      zoom: 11.5,
+    });
+
+    map.on("load", function () {
+      var layers = map.getStyle().layers;
+      // Find the index of the first symbol layer in the map style
+      var firstSymbolId;
+      for (var i = 0; i < layers.length; i++) {
+        if (layers[i].type === "symbol") {
+          firstSymbolId = layers[i].id;
+          break;
+        }
+      }
+      // // Initialize goongClient with an API KEY
+      // var goongClient = goongSdk({
+      //   accessToken: "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu",
+      // });
+
+
+      const goongClient = require("@goongmaps/goong-sdk");
+      const goongDirections = require("@goongmaps/goong-sdk/services/directions");
+
+      const baseClient = goongClient({
+        accessToken: "x4WqDgXKiVktyzY4RVpr8t8CO6RPi2iR2j3g4HIB"
+      });
+      const directionService = goongDirections(baseClient);
+      // Get Directions
+      directionService
+        .getDirections({
+          origin: "20.981971,105.864323",
+          destination: "21.031011,105.783206",
+          vehicle: "car",
+        })
+        .send()
+        .then(function (response) {
+          var directions = response.body;
+          var route = directions.routes[0];
+
+          var geometry_string = route.overview_polyline.points;
+          var geoJSON = polyline.toGeoJSON(geometry_string);
+          map.addSource("route", {
+            type: "geojson",
+            data: geoJSON,
+          });
+          // Add route layer below symbol layers
+          map.addLayer(
+            {
+              id: "route",
+              type: "line",
+              source: "route",
+              layout: {
+                "line-join": "round",
+                "line-cap": "round",
+              },
+              paint: {
+                "line-color": "#1e88e5",
+                "line-width": 8,
+              },
+            },
+            firstSymbolId
+          );
+        });
+    });
+  }, []);
 
   return (
     <div className="booking_step_2 row" style={{ margin: "30px -160px" }}>
@@ -332,12 +383,12 @@ function Step2({ check_fill, setCheckFill }) {
               backgroundColor: "#fbfafc",
             }}
           />
-
-          {img_draw ? <img alt="ok" src={img_draw} /> : ""}
         </div>
       </div>
       <div className="image_ava_map col-lg-6">
         <MapBox fromLocation={fromLocation} toLocation={toLocation} />
+
+        <div id="map"></div>
       </div>
     </div>
   );
