@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
+import Step3 from "./Step3";
 
 import { Toast } from "../../../../Components/ToastColor";
 
@@ -93,9 +94,9 @@ function BookingUser() {
             <Step1 check_fill={check_fill} setCheckFill={setCheckFill} />
           ) : current === 1 ? (
             <Step2 check_fill={check_fill} setCheckFill={setCheckFill} />
-          ) : (
-            ""
-          )}
+          ) : current === 2 ? (
+            <Step3 check_fill={check_fill} setCheckFill={setCheckFill} />
+          ) : ''}
         </div>
 
         <div className="navigate_step container">

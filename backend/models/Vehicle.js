@@ -13,6 +13,10 @@ const vehicleSchema = new mongoose.Schema({
         type:String, 
         required: true
     },
+    moving_ban_time:{
+        type:String,
+        required:true
+    },
     status:{
         type:Boolean,
         required: true,

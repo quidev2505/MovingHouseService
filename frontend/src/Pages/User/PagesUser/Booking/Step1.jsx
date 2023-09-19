@@ -19,7 +19,7 @@ function Step1({ check_fill, setCheckFill }) {
   const [time, setTime] = useState();
 
   const disabledDateTime = () => ({
-    disabledHours: () => range(8,21),
+    disabledHours: () => range(8, 21),
   });
 
   const range = (start, end) => {
@@ -28,8 +28,8 @@ function Step1({ check_fill, setCheckFill }) {
       result.push(i);
     }
 
-    for(let j=end; j < 24; j++){
-      result.push(j)
+    for (let j = end; j < 24; j++) {
+      result.push(j);
     }
 
     return result;
@@ -47,8 +47,10 @@ function Step1({ check_fill, setCheckFill }) {
       let time_choose = document.querySelector("#time_choose").value;
 
       const object_order = {
-        moving_date: date_choose,
-        moving_time: time_choose,
+        step1: {
+          moving_date: date_choose,
+          moving_time: time_choose,
+        },
       };
 
       localStorage.setItem("order_moving", JSON.stringify(object_order));
@@ -58,8 +60,11 @@ function Step1({ check_fill, setCheckFill }) {
   useEffect(() => {
     if (localStorage.getItem("order_moving")) {
       let data = JSON.parse(localStorage.getItem("order_moving"));
-      document.querySelector("#date_choose").value = data.moving_date;
-      document.querySelector("#time_choose").value = data.moving_time;
+      console.log(data)
+      // setDate(data.step1.moving_date)
+      // setTime(data.step1.moving_time);
+      document.querySelector("#date_choose").value = data.step1.moving_date;
+      document.querySelector("#time_choose").value = data.step1.moving_time;
     }
   }, []);
 

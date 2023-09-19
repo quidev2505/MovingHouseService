@@ -214,6 +214,8 @@ export const logOut = async (navigate, dispatch) => {
         if (result.isConfirmed) {
             navigate("/login")
             dispatch(logOutSuccess())
+            localStorage.removeItem("check_nav_booking")
+            localStorage.removeItem("order_moving")
             dispatch(logOutAdminSuccess())
         }
     })

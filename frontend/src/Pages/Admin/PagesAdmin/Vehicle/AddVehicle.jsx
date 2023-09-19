@@ -37,6 +37,7 @@ function AddVehicle() {
           name: data.name,
           brand: data.brand,
           capacity: data.capacity,
+          moving_ban_time: data.moving_ban_time,
           cago_size: data.cago_size,
           suitable_for: data.suitable_for,
           image: image,
@@ -55,6 +56,7 @@ function AddVehicle() {
         formData.append("name", data.name);
         formData.append("brand", data.brand);
         formData.append("capacity", data.capacity);
+        formData.append("moving_ban_time", data.moving_ban_time);
         formData.append("cago_size", data.cago_size);
         formData.append("suitable_for", data.suitable_for);
         formData.append("priceFirst10km", data.priceFirst10km);
@@ -232,6 +234,34 @@ function AddVehicle() {
                               })}
                             />
                             {errors?.capacity?.type === "required" && (
+                              <p>Không được để trống !</p>
+                            )}
+                          </div>
+                        </div>
+                        <div style={{ marginBottom: "5px" }}>
+                          <label
+                            htmlFor="moving_ban_time"
+                            className="label-color"
+                            style={{ marginBottom: "5px" }}
+                          >
+                            Giờ cấm tải
+                          </label>
+                          <div className="form-outline mb-3  form_input_handle">
+                            <input
+                              type="text"
+                              id="moving_ban_time"
+                              className="form-control form-control-lg"
+                              placeholder="Nhập vào giá giờ cấm tải"
+                              style={{
+                                fontSize: "17px",
+                                borderRadius: "3px",
+                                width: "fit-content",
+                              }}
+                              {...register("moving_ban_time", {
+                                required: true,
+                              })}
+                            />
+                            {errors?.moving_ban_time?.type === "required" && (
                               <p>Không được để trống !</p>
                             )}
                           </div>

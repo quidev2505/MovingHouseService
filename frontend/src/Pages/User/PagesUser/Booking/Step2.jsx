@@ -16,15 +16,20 @@ import polyline from "@mapbox/polyline";
 function Step2({ check_fill, setCheckFill }) {
   const [locationFrom, setLocationFrom] = useState("");
   const [dataList, setDataList] = useState([]);
-  const [locationFromChoose, setLocationFromChoose] = useState();
+  const [locationFromChoose, setLocationFromChoose] = useState("");
   const [fromLocation, setFromLocation] = useState({});
+  const [from_location_detail, setFromLocationDetail] = useState(""); //Địa chỉ nhận hàng cụ thể
 
   const [locationTo, setLocationTo] = useState("");
   const [dataList_To, setDataList_To] = useState([]);
-  const [locationToChoose, setLocationToChoose] = useState();
+  const [locationToChoose, setLocationToChoose] = useState("");
   const [toLocation, setToLocation] = useState({});
+  const [to_location_detail, setToLocationDetail] = useState(""); //Địa chỉ nhận hàng cụ thể
 
-  //FROM
+  //Tính khoảng cách
+  const [distance, setDistance] = useState();
+
+  //Thiết lập địa lấy hàng FROM
   const get_location_list = async () => {
     await axios
       .get(
@@ -40,13 +45,14 @@ function Step2({ check_fill, setCheckFill }) {
               location: {
                 lat: item.lat,
                 lon: item.lon,
-                name: item.name,
+                display_name: item.display_name,
               },
             };
             return ob;
           });
 
           setDataList(arr_result);
+          console.log(arr_result);
         }
       })
       .catch((e) => {
@@ -60,7 +66,7 @@ function Step2({ check_fill, setCheckFill }) {
       const ob = {
         lat: Number(choose_option.lat),
         lng: Number(choose_option.lon),
-        name: choose_option.name,
+        name: choose_option.display_name,
       };
 
       setFromLocation(ob);
@@ -68,7 +74,9 @@ function Step2({ check_fill, setCheckFill }) {
   };
 
   useEffect(() => {
-    get_location_list();
+    if (locationFrom.length >= 5) {
+      get_location_list();
+    }
   }, [locationFrom]);
 
   useEffect(() => {
@@ -77,7 +85,7 @@ function Step2({ check_fill, setCheckFill }) {
     }, 1000);
   }, [locationFromChoose]);
 
-  //TO
+  //Thiết lập địa điểm nhận hàng TO
   const get_location_list_to = async () => {
     await axios
       .get(
@@ -93,7 +101,7 @@ function Step2({ check_fill, setCheckFill }) {
               location: {
                 lat: item.lat,
                 lon: item.lon,
-                name: item.name,
+                display_name: item.display_name,
               },
             };
             return ob;
@@ -107,94 +115,214 @@ function Step2({ check_fill, setCheckFill }) {
       });
   };
 
-  const get_location_to_choose =  () => {
+  const get_location_to_choose = () => {
     let choose_option = locationToChoose;
     if (choose_option) {
       const ob = {
         lat: Number(choose_option.lat),
         lng: Number(choose_option.lon),
-        name: choose_option.name,
+        name: choose_option.display_name,
       };
 
-      console.log(ob)
+      console.log(ob);
       setToLocation(ob);
+
+      setTimeout(() => {
+        draw_between_two_location(fromLocation, ob);
+      }, 2000);
     }
   };
 
   useEffect(() => {
-    get_location_list_to();
+    if (locationTo.length >= 5) {
+      get_location_list_to();
+    }
   }, [locationTo]);
 
   useEffect(() => {
     setTimeout(() => {
       get_location_to_choose();
-    }, 1000);
+    }, 4000);
   }, [locationToChoose]);
 
-  useEffect(() => {
+  //Thiết lập tính năng vẽ giữa 2 điểm
+  const draw_between_two_location = (fromLocation, ob) => {
+    try{
+// Get the map element
     goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";
     var map = new goongjs.Map({
       container: "map",
       style: "https://tiles.goong.io/assets/goong_map_web.json",
-      center: [105.80278, 20.99245],
-      zoom: 11.5,
+      center: [fromLocation.lng, fromLocation.lat],
+      zoom: 8,
     });
 
-    map.on("load", function () {
-      var layers = map.getStyle().layers;
-      // Find the index of the first symbol layer in the map style
-      var firstSymbolId;
-      for (var i = 0; i < layers.length; i++) {
-        if (layers[i].type === "symbol") {
-          firstSymbolId = layers[i].id;
-          break;
+    map &&
+      map.on("load", function () {
+        var layers = map.getStyle().layers;
+        // Find the index of the first symbol layer in the map style
+        var firstSymbolId;
+        for (var i = 0; i < layers.length; i++) {
+          if (layers[i].type === "symbol") {
+            firstSymbolId = layers[i].id;
+            break;
+          }
         }
-      }
 
-      const goongClient = require("@goongmaps/goong-sdk");
-      const goongDirections = require("@goongmaps/goong-sdk/services/directions");
+        const goongClient = require("@goongmaps/goong-sdk");
+        const goongDirections = require("@goongmaps/goong-sdk/services/directions");
 
-      const baseClient = goongClient({
-        accessToken: "5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy",
-      });
-      const directionService = goongDirections(baseClient);
-      // Get Directions
-      directionService
-        .getDirections({
-          origin: "20.981971,105.864323",
-          destination: "21.031011,105.783206",
-          vehicle: "car",
-        })
-        .send()
-        .then(function (response) {
-          var directions = response.body;
-          var route = directions.routes[0];
-
-          var geometry_string = route.overview_polyline.points;
-          var geoJSON = polyline.toGeoJSON(geometry_string);
-          map.addSource("route", {
-            type: "geojson",
-            data: geoJSON,
-          });
-          // Add route layer below symbol layers
-          map.addLayer(
-            {
-              id: "route",
-              type: "line",
-              source: "route",
-              layout: {
-                "line-join": "round",
-                "line-cap": "round",
-              },
-              paint: {
-                "line-color": "#1e88e5",
-                "line-width": 8,
-              },
-            },
-            firstSymbolId
-          );
+        const baseClient = goongClient({
+          accessToken: "5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy",
         });
-    });
+        const directionService = goongDirections(baseClient);
+        // Get Directions
+        directionService
+          .getDirections({
+            origin: `${fromLocation.lat}, ${fromLocation.lng}`,
+            destination: `${ob.lat}, ${ob.lng}`,
+            vehicle: "car",
+          })
+          .send()
+          .then(function (response) {
+            var directions = response.body;
+            var route = directions.routes[0];
+
+            var geometry_string = route.overview_polyline.points;
+            var geoJSON = polyline.toGeoJSON(geometry_string);
+            map.addSource("route", {
+              type: "geojson",
+              data: geoJSON,
+            });
+            // Add route layer below symbol layers
+            map.addLayer(
+              {
+                id: "route",
+                type: "line",
+                source: "route",
+                layout: {
+                  "line-join": "round",
+                  "line-cap": "round",
+                },
+                paint: {
+                  "line-color": "#1e88e5",
+                  "line-width": 8,
+                },
+              },
+              firstSymbolId
+            );
+
+            //Thêm 2 điểm marker vào 2 đầu
+            var marker = new goongjs.Marker({ color: "red" })
+              .setLngLat([fromLocation.lng, fromLocation.lat])
+              .addTo(map);
+
+            var marker = new goongjs.Marker({ color: "#00bab3" })
+              .setLngLat([ob.lng, ob.lat])
+              .addTo(map);
+
+            //Cho mapFirst biến mất
+            // document.querySelector("#Map_first").style.display = "none";
+
+            //Cho map phia dưới nhảy lên trên
+            let element = document.getElementById("map");
+            if (element) {
+              element.style.top = "-441px";
+            }
+
+            //Thực hiện gọi hàm tính khoảng cách
+            total_distance(fromLocation, ob);
+          });
+      });
+    }catch(e){
+      console.log(e)
+    }
+    
+  };
+
+  //Tính năng tính khoảng cách giữa 2 điểm
+  const total_distance = async (fromLocation, ob) => {
+    await axios
+      .get(
+        `https://rsapi.goong.io/Direction?origin=${fromLocation.lat},${fromLocation.lng}&destination=${ob.lat},${ob.lng}&vehicle=truck&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
+      )
+      .then((data) => {
+        let result_data = data.data.routes[0].legs[0].distance.text;
+        setDistance(result_data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  //Kiểm tra khi nhập đủ hết các trường
+  useEffect(() => {
+    if (
+      fromLocation !== undefined &&
+      toLocation !== undefined &&
+      from_location_detail !== undefined &&
+      to_location_detail !== undefined &&
+      distance !== undefined
+    ) {
+      setCheckFill(true);
+
+      const object_order_local = JSON.parse(
+        localStorage.getItem("order_moving")
+      );
+
+      const step2 = {
+        locationFrom: fromLocation.display_name,
+        locationTo: toLocation.display_name,
+
+        locationFromChoose: locationFromChoose,
+        from_location_detail: from_location_detail,
+        fromLocation: fromLocation,
+
+        locationToChoose: locationToChoose,
+        to_location_detail: to_location_detail,
+        toLocation: toLocation,
+
+        distance: distance,
+      };
+
+      object_order_local.step2 = step2;
+
+      localStorage.setItem("order_moving", JSON.stringify(object_order_local));
+    }
+  }, [
+    locationFrom,
+    locationTo,
+    fromLocation,
+    toLocation,
+    locationFromChoose,
+    locationToChoose,
+    from_location_detail,
+    to_location_detail,
+    distance,
+  ]);
+
+  //Khi đã nhập rồi thì kiểm tra trong localStorage
+  useEffect(() => {
+    if (localStorage.getItem("order_moving")) {
+      if (
+        JSON.parse(localStorage.getItem("order_moving")).step2 !== undefined
+      ) {
+        let data = JSON.parse(localStorage.getItem("order_moving"));
+        let step2 = data.step2;
+
+        setLocationFrom(step2.fromLocation.name);
+
+        setLocationTo(step2.toLocation.name);
+
+        setFromLocation(step2.fromLocation);
+        setToLocation(step2.toLocation);
+        setLocationFromChoose(step2.locationFromChoose);
+        setLocationToChoose(step2.locationToChoose);
+        setFromLocationDetail(step2.from_location_detail);
+        setToLocationDetail(step2.to_location_detail);
+        setDistance(step2.distance);
+      }
+    }
   }, []);
 
   return (
@@ -270,6 +398,8 @@ function Step2({ check_fill, setCheckFill }) {
           </span>
           <input
             type="text"
+            value={from_location_detail}
+            onChange={(e) => setFromLocationDetail(e.target.value)}
             placeholder="Nhập vào thông tin cụ thể..."
             style={{
               width: "100%",
@@ -352,6 +482,8 @@ function Step2({ check_fill, setCheckFill }) {
           <input
             type="text"
             placeholder="Nhập vào thông tin cụ thể..."
+            value={to_location_detail}
+            onChange={(e) => setToLocationDetail(e.target.value)}
             style={{
               width: "100%",
               height: "100px",
@@ -367,9 +499,31 @@ function Step2({ check_fill, setCheckFill }) {
         </div>
       </div>
       <div className="image_ava_map col-lg-6">
-        <MapBox fromLocation={fromLocation} toLocation={toLocation} />
+        <MapBox
+          fromLocation={fromLocation}
+          toLocation={toLocation}
+          id="Map_first"
+        />
 
-        <div id="map"></div>
+        <div id="map" style={{ marginTop: "10px" }}>
+          <div
+            id="distance"
+            style={{
+              top: 0,
+              backgroundColor: "rgba(255,255,255,0.8)",
+              padding: "5px",
+              position: "absolute",
+              color: "black",
+              fontSize: "14px",
+              fontWeight: "400",
+              width: "600px",
+              margin: "5px",
+              borderRadius: "5px",
+            }}
+          >
+            Khoảng cách: <span style={{ color: "#ed883b" }}>{distance}</span>
+          </div>
+        </div>
       </div>
     </div>
   );

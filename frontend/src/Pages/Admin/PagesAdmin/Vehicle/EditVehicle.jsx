@@ -55,6 +55,7 @@ function EditVehicle() {
   
     formData.append("brand", dataVehicle.brand);
     formData.append("capacity", dataVehicle.capacity);
+    formData.append("moving_ban_time", dataVehicle.moving_ban_time);
     formData.append("cago_size", dataVehicle.cago_size);
     formData.append("suitable_for", dataVehicle.suitable_for);
     formData.append("priceFirst10km", dataVehicle.priceFirst10km);
@@ -120,6 +121,7 @@ function EditVehicle() {
         name: dataVehicle.vehicle_name,
         brand: dataVehicle.brand,
         capacity: dataVehicle.capacity,
+        moving_ban_time: dataVehicle.moving_ban_time,
         cago_size: dataVehicle.cago_size,
         suitable_for: dataVehicle.suitable_for,
         image: dataVehicle.image,
@@ -266,6 +268,36 @@ function EditVehicle() {
                                 setDataVehicle({
                                   ...dataVehicle,
                                   capacity: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                        </div>
+
+                        <div style={{ marginBottom: "5px" }}>
+                          <label
+                            htmlFor="moving_ban_time"
+                            className="label-color"
+                            style={{ marginBottom: "5px" }}
+                          >
+                            Giờ cấm tải
+                          </label>
+                          <div className="form-outline mb-3  form_input_handle">
+                            <input
+                              type="text"
+                              id="moving_ban_time"
+                              className="form-control form-control-lg"
+                              placeholder="Giờ cấm tải"
+                              style={{
+                                fontSize: "17px",
+                                borderRadius: "3px",
+                                width: "fit-content",
+                              }}
+                              value={dataVehicle.moving_ban_time}
+                              onChange={(e) =>
+                                setDataVehicle({
+                                  ...dataVehicle,
+                                  moving_ban_time: e.target.value,
                                 })
                               }
                             />

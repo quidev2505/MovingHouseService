@@ -56,6 +56,27 @@ function VehicleAdmin() {
       key: "brand",
     },
     {
+      title: "Giờ cấm tải",
+      dataIndex: "moving_ban_time",
+      key: "moving_ban_time",
+      render: (moving_ban_time) => (
+        <div className="d-flex">
+          <Tag
+            color={
+              moving_ban_time === "Hoạt động tất cả khung giờ"
+                ? "green"
+                : "volcano"
+            }
+            key={moving_ban_time}
+          >
+            {moving_ban_time === "Hoạt động tất cả khung giờ"
+              ? "Hoạt động tất cả khung giờ"
+              : "Giờ cấm tải 6H-9H & 16H-20H"}
+          </Tag>
+        </div>
+      ),
+    },
+    {
       title: "Trọng lượng tối đa",
       dataIndex: "capacity",
       key: "capacity",
@@ -188,6 +209,7 @@ function VehicleAdmin() {
               vehicle_name: item.vehicle_name,
               brand: item.brand,
               capacity: item.capacity,
+              moving_ban_time: item.moving_ban_time,
               status: item.status,
               cago_size: item.cago_size,
               suitable_for: item.suitable_for,
