@@ -9,12 +9,11 @@ import {
   FcAutomotive,
   FcNews,
   FcDeployment,
-  FcSurvey,
   FcPaid,
   FcInTransit,
   FcFaq,
   FcBusinessman,
-  FcMoneyTransfer
+  FcMoneyTransfer,
 } from "react-icons/fc";
 
 function SideMenuAdmin() {
@@ -38,8 +37,8 @@ function SideMenuAdmin() {
         },
         {
           label: "Chi phí",
-          icon: <FcMoneyTransfer/>,
-          key: "/admin/service_fee"
+          icon: <FcMoneyTransfer />,
+          key: "/admin/service_fee",
         },
       ],
     },
@@ -56,12 +55,7 @@ function SideMenuAdmin() {
     {
       label: "Vật dụng",
       icon: <FcDeployment />,
-      key: "/admin/item_container",
-    },
-    {
-      label: "Báo giá",
-      icon: <FcSurvey />,
-      key: "/admin/get_quote",
+      key: "/admin/item",
     },
     {
       label: "Đơn hàng",

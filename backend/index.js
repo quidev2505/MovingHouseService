@@ -9,6 +9,7 @@ const vehicleRoute = require('./routes/vehicle');
 const customerRoute = require('./routes/customer');
 const blogRoute = require('./routes/blog');
 const commentBlogRoute = require('./routes/comment_blog');
+const itemRoute = require('./routes/item');
 var cookieParser = require('cookie-parser')
 
 //Cors
@@ -67,6 +68,9 @@ app.use("/v1/blog", blogRoute)
 
 //Comment Blog 
 app.use("/v1/commentBlog", commentBlogRoute)
+
+//Item 
+app.use("/v1/item", itemRoute)
 
 //Middleware Test First
 app.get('/', (req, res) => {

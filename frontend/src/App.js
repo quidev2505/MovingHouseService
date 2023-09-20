@@ -20,7 +20,6 @@ import DriverUser from './Pages/User/PagesUser/Driver/DriverUser'
 import InfoUser from './Pages/User/PagesUser/Info/InfoUser';
 
 
-
 // Bảo vệ Route
 import ProtectRoutes from './Pages/ProtectRoutes'
 import PageNotFound from './Pages/PageNotFound';
@@ -35,7 +34,6 @@ import LoginAdmin from "./Pages/Admin/PagesAdmin/LoginAdmin";
 //Import danh mục Admin
 import DashBoardAdmin from './Pages/Admin/PagesAdmin/DashboardAdmin';
 import OrderAdmin from "./Pages/Admin/PagesAdmin/OrderAdmin";
-import ItemContainerAdmin from './Pages/Admin/PagesAdmin/ItemContainerAdmin';
 import GetquoteAdmin from './Pages/Admin/PagesAdmin/GetquoteAdmin';
 
 import DriverAdmin from './Pages/Admin/PagesAdmin/DriverAdmin';
@@ -63,8 +61,13 @@ import BlogAdmin from './Pages/Admin/PagesAdmin/Blog/BlogAdmin';
 import AddBlog from './Pages/Admin/PagesAdmin/Blog/AddBlog';
 import EditBlog from './Pages/Admin/PagesAdmin/Blog/EditBlog';
 
+//Item Admin
+import ItemAdmin from './Pages/Admin/PagesAdmin/Item/ItemAdmin';
+import AddItem from './Pages/Admin/PagesAdmin/Item/AddItem';
+import EditItem from './Pages/Admin/PagesAdmin/Item/EditItem';
+
 //Import trong Setting Admin
-import ChangePasswordAdmin  from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
+import ChangePasswordAdmin from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
 
 
 
@@ -131,10 +134,16 @@ function App() {
           <Route path="/admin/blog" element={<BlogAdmin />} />
           <Route path="/admin/blog/add" element={<AddBlog />} />
           <Route path="/admin/blog/edit/:id" element={<EditBlog />} />
-
           {/* End Blog_Admin CRUD */}
 
-          <Route path="/admin/item_container" element={<ItemContainerAdmin />} />
+
+          {/* Item Admin CRUD */}
+          <Route path="/admin/item" element={<ItemAdmin />} />
+          <Route path="/admin/item/add" element={<AddItem />} />
+          <Route path="/admin/item/edit/:id" element={<EditItem />} />
+          {/* End Item_Admin CRUD */}
+
+
           <Route path="/admin/get_quote" element={<GetquoteAdmin />} />
           <Route path="/admin/order" element={<OrderAdmin />} />
           <Route path="/admin/driver" element={<DriverAdmin />} />

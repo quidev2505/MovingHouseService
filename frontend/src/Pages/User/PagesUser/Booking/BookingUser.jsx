@@ -18,20 +18,22 @@ function BookingUser() {
   const [check_fill, setCheckFill] = useState(false);
 
   //Tổng giá đơn hàng
-  const [totalOrder, setTotalOrder] = useState(0); 
+  const [totalOrder, setTotalOrder] = useState(0);
 
   const onChange = async (value) => {
     let check_navigate_arr = JSON.parse(
       localStorage.getItem("check_nav_booking")
     );
 
-    if (!check_navigate_arr.includes(value)) {
-      await Toast.fire({
-        icon: "warning",
-        title: "Bạn hãy hoàn thành bước hiện tại !",
-      });
-    } else {
-      setCurrent(value);
+    if (check_navigate_arr) {
+      if (!check_navigate_arr.includes(value)) {
+        await Toast.fire({
+          icon: "warning",
+          title: "Bạn hãy hoàn thành bước hiện tại !",
+        });
+      } else {
+        setCurrent(value);
+      }
     }
   };
 
@@ -161,7 +163,13 @@ function BookingUser() {
               >
                 Tổng cộng
               </span>
-              <h3 style={{ fontWeight: "600", marginLeft: "10px", fontSize:"20px" }}>
+              <h3
+                style={{
+                  fontWeight: "600",
+                  marginLeft: "10px",
+                  fontSize: "20px",
+                }}
+              >
                 {totalOrder.toLocaleString()} đ
               </h3>
             </div>

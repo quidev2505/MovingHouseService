@@ -637,7 +637,7 @@ th.ant-table-cell {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow:  rgba(132, 34, 33, 0.2) 0px 0px 20px;
+        box-shadow: rgba(132, 34, 33, 0.2) 0px 0px 20px;
         border-radius: 5px;
         background-color: white;
 
@@ -715,9 +715,10 @@ th.ant-table-cell {
 }
 
 
-.react-datalist-input__container.data_list{
+.react-datalist-input__container.data_list {
     border-radius: 10px;
 }
+
 //Vehicle Step 3
 .item_vehicle:hover {
     height: 100px;
@@ -733,17 +734,28 @@ th.ant-table-cell {
 }
 
 //Step 4
-.booking_step_4{
-    .item_add_service{
+.booking_step_4 {
+    .item_add_service {
         width: fit-content;
         border: 1px solid #ccc;
         border-radius: 50px 50px 50px 50px;
         padding: 10px;
         padding-left: 0px;
-        img{
+
+        img {
             width: 100px;
             height: 50px;
             object-fit: contain;
         }
     }
+}
+
+//Tạo ra 
+.ant-table-content {
+    overflow-y: scroll;
+    max-height: 375px;
+}
+
+#rc-tabs-1-panel-1{
+    display: flex;
 }

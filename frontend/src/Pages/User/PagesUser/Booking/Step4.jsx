@@ -4,7 +4,11 @@ import axios from "axios";
 
 import { Toast } from "../../../../Components/ToastColor";
 
-import { RightCircleOutlined } from "@ant-design/icons";
+import { ReloadOutlined } from "@ant-design/icons";
+
+import { Checkbox, Col, Row } from "antd";
+
+import { Tabs } from "antd";
 
 function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   //Xử lý lấy toàn bộ dữ liệu chi phí
@@ -16,11 +20,21 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   const [quantity, setQuantity] = useState(0); //Số lượng nhân công
   const [total_price_man, setTotalPriceMan] = useState(0); //Tổng giá nhân công
 
+  const [dataItem, setDataItem] = useState([]);
+
   //Khu vực cho nhân công
   const firstPrice = useRef(0);
 
   //Khu vực cho phí di chuyển phương tiện
   const secondPrice = useRef(0);
+
+  //Khu vực cho phí dịch vụ bổ sung
+  const thirdPrice = useRef(0);
+
+  //Chi tiết hàng hóa đã chọn
+  const onChange = (checkedValues) => {
+    console.log("checked = ", checkedValues);
+  };
 
   //Tạo ra biến tạm cho tổng đơn hàng
   const temp_price_order = useRef(
@@ -47,20 +61,41 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     }
   };
 
-
   //Tính tổng toàn bộ
   const calculator_all = () => {
-    let firstPriceNew, secondPriceNew = 0;
-    if(firstPrice.current !== 0){
+    let firstPriceNew = 0;
+    let secondPriceNew = 0;
+    let thirdPriceNew = 0;
+    if (firstPrice.current !== 0) {
       firstPriceNew = firstPrice.current.total_price_man;
     }
 
-    if(secondPrice.current !== 0){
+    if (secondPrice.current !== 0) {
       secondPriceNew = secondPrice.current.total_second;
     }
 
-    setTotalOrder(temp_price_order.current + firstPriceNew + secondPriceNew);
-  }
+    if (thirdPrice.current !== 0) {
+      thirdPriceNew = thirdPrice.current.total_third;
+    }
+    console.log(temp_price_order.current);
+    console.log(firstPriceNew);
+    console.log(secondPriceNew);
+    setTotalOrder(
+      Number(
+        temp_price_order.current +
+          firstPriceNew +
+          secondPriceNew +
+          thirdPriceNew
+      )
+    );
+  };
+
+  //Cập nhật giá tiền cuối cùng vào totalOrder
+  const update_total_order = () => {
+    changePriceMan();
+    changeSecondPrice();
+    changeThirdPrice();
+  };
 
   //Khi nhấn xác nhận thêm vào total_order -> First Price
   const changePriceMan = () => {
@@ -71,10 +106,10 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
     //Gắn cho First Price
     firstPrice.current = ob; //Hoàn tất tính tiền FirstPrice
-    //Tính hóa đơn
-    calculator_all()
-  };
 
+    //Tính hóa đơn
+    calculator_all();
+  };
 
   //Khi nhấn xác nhận thêm vào phí di chuyển phương tiện => Second price
   const changeSecondPrice = () => {
@@ -105,6 +140,42 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
     //Tính hóa đơn
     calculator_all();
+  };
+
+  //Khi nhấn xác nhận thêm vào phí dịch vụ bổ sung => Third price
+  const changeThirdPrice = () => {
+    let arrThirdPrice = [];
+
+    targetKeys.forEach((item, index) => {
+      DataServiceFee.forEach((item1, index) => {
+        if (item === item1.key) {
+          const ob = {
+            name: item1.title,
+            price: item1.price,
+          };
+          arrThirdPrice.push(ob);
+        }
+      });
+    });
+
+    let total_third = 0;
+    //Tính tổng tiền ThirdPrice
+    arrThirdPrice.forEach((item, index) => {
+      total_third += Number(item.price);
+    });
+
+    arrThirdPrice.total_third = total_third;
+
+    //Gắn cho Third Price
+    thirdPrice.current = arrThirdPrice; //Hoàn tất tính tiền ThirdPrice
+
+    //Tính hóa đơn
+    calculator_all();
+  };
+
+  //Khi nhấn vào các vật dụng chi tiết
+  const onChangeCheckBox = (checkedValues) => {
+    console.log(checkedValues);
   };
 
   //Lấy danh sách phí bổ sung
@@ -197,7 +268,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
               " (" +
               data_result.TwowayFloor_loadingFee.toLocaleString() +
               " đ)",
-            price: data_result.TưowayFloor_loadingFee,
+            price: data_result.TwowayFloor_loadingFee,
           },
           {
             key: 5,
@@ -217,9 +288,83 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       });
   };
 
+  //Lấy vật dụng từ CSDL
+  const get_item = async () => {
+    try {
+      await axios
+        .get(`/v1/item/read_item`)
+        .then((data) => {
+          let data_solve = data.data;
+          const get_category =
+            data_solve &&
+            data_solve.map((item, index) => {
+              if (item.status) {
+                return item.category;
+              }
+            });
+
+          //Loại bỏ phần tử trùng
+          const set = new Set(get_category);
+
+          const category_result = Array.from(set);
+
+          if (category_result) {
+            //Nếu đã có danh mục tiến hành thêm vào bảng
+            const arr_data = category_result.map((item, index) => {
+              const ob = {
+                key: index + 1,
+                label: item,
+                children: data_solve.map((item1, index1) => {
+                  if (item1.category === item) {
+                    return (
+                      <>
+                        <Checkbox.Group
+                          style={{
+                            width: "100%",
+                          }}
+                          onChange={onChangeCheckBox}
+                        >
+                          <Row>
+                            <Col span={8}>
+                              <Checkbox value={item1.name}>
+                                <div style={{border:"1px solid #ccc"}}>
+                                  <img
+                                    src={item1.image}
+                                    width="50px"
+                                    height="100px"
+                                  />
+                                  <p>{item1.name}</p>
+                                  <p>{item1.size}</p>
+                                </div>
+                              </Checkbox>
+                            </Col>
+                          </Row>
+                        </Checkbox.Group>
+                      </>
+                    );
+                  }
+                }),
+              };
+
+              return ob;
+            });
+
+            console.log(arr_data);
+            setDataItem(arr_data);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     get_service_fee();
     get_moving_fee();
+    get_item();
   }, []);
 
   //Xử lý phần show danh sách chi phí
@@ -251,6 +396,34 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
   return (
     <div className="booking_step_4 row">
+      {/* Floating Action Button Phím gọi cập nhật giá tiền */}
+      <div
+        style={{
+          position: "fixed",
+          right: "-70px",
+          borderRadius: "50%",
+          top: "50%",
+          width: "150px",
+          height: "50px",
+        }}
+        onClick={() => update_total_order()}
+      >
+        <button
+          className="btn"
+          style={{
+            backgroundColor: "rgb(230, 133, 35)",
+            color: "white",
+            borderRadius: "50%",
+            width: "50px",
+            height: "50px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ReloadOutlined />
+        </button>
+      </div>
       <h4 style={{ fontSize: "16px", fontWeight: "700" }}>
         Bạn có thêm các dịch vụ bổ sung vào không ?
       </h4>
@@ -327,28 +500,12 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
               alignItems: "center",
               justifyContent: "center",
               color: "white",
-              borderRadius: "10px",
+              borderRadius: "10px 50px 50px 10px",
               backgroundColor: "#e68523",
               padding: "3px",
             }}
           >
             {total_price_man.toLocaleString()} đ
-          </div>
-          <div
-            className="btn"
-            style={{
-              marginLeft: "50px",
-              backgroundColor: "#e68523",
-              color: "white",
-              borderRadius: "10px 50px 50px 10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "70px",
-            }}
-            onClick={() => changePriceMan()}
-          >
-            <RightCircleOutlined />
           </div>
         </div>
       </div>
@@ -379,24 +536,6 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
             marginBottom: 16,
           }}
         />
-
-        <div
-          className="btn"
-          style={{
-            height: "50px",
-            width: "50px",
-            marginLeft: "50px",
-            backgroundColor: "#e68523",
-            color: "white",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onClick={() => changeSecondPrice()}
-        >
-          <RightCircleOutlined />
-        </div>
       </div>
 
       {/* Đây là danh sách phí bổ sung */}
@@ -492,6 +631,10 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         <span style={{ fontWeight: "700", fontSize: "18px" }}>
           Chi tiết hàng hóa
         </span>
+      </div>
+
+      <div className="tab_choose_item">
+        <Tabs defaultActiveKey="1" items={dataItem} onChange={onChange} />;
       </div>
     </div>
   );

@@ -76,9 +76,9 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         element.style.top = "0px";
         if (toLocation !== "") {
           get_location_to_choose();
-          setTimeout(()=>{
+          setTimeout(() => {
             draw_between_two_location(fromLocation, toLocation);
-          },2000)
+          }, 2000);
         }
       }
     }
@@ -251,17 +251,21 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
 
   //Tính năng tính khoảng cách giữa 2 điểm
   const total_distance = async (fromLocation, ob) => {
-    await axios
-      .get(
-        `https://rsapi.goong.io/Direction?origin=${fromLocation.lat},${fromLocation.lng}&destination=${ob.lat},${ob.lng}&vehicle=truck&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
-      )
-      .then((data) => {
-        let result_data = data.data.routes[0].legs[0].distance.text;
-        setDistance(result_data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    try {
+      await axios
+        .get(
+          `https://rsapi.goong.io/Direction?origin=${fromLocation.lat},${fromLocation.lng}&destination=${ob.lat},${ob.lng}&vehicle=truck&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
+        )
+        .then((data) => {
+          let result_data = data.data.routes[0].legs[0].distance.text;
+          setDistance(result_data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //Kiểm tra khi nhập đủ hết các trường

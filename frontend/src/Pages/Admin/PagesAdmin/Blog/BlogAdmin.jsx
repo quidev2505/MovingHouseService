@@ -267,7 +267,7 @@ function BlogAdmin() {
   const delete_blog = (id) => {
     let id_blog = id.id;
     Swal.fire({
-      title: "Bạn muốn xóa dịch vụ này ?",
+      title: "Bạn muốn xóa blog này ?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
