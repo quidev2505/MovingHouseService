@@ -4,6 +4,8 @@ import { TimePicker } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
+import { Toast } from "../../../../Components/ToastColor";
+
 function Step1({ check_fill, setCheckFill }) {
   const [date, setDate] = useState();
 
@@ -12,8 +14,16 @@ function Step1({ check_fill, setCheckFill }) {
   };
 
   const disabledDate = (current) => {
-    // Can not select days before today and today
-    return current && current < dayjs().endOf("day");
+    const now = new Date();
+    const hour = now.getHours();
+
+    if (hour >= 18) {
+      // Can not select days before today and today -> Chuyển qua ngày hôm sau
+      return current && current < dayjs().endOf("day");
+    } else {
+      // Can not select days before yesterday and yesterday -> Có thể chọn ngày hiện tại
+      return current && current < dayjs().subtract(1, "day").endOf("day");
+    }
   };
 
   const [time, setTime] = useState();
@@ -41,26 +51,61 @@ function Step1({ check_fill, setCheckFill }) {
 
   useEffect(() => {
     if (date !== undefined && time !== undefined) {
-      setCheckFill(true);
-
       let date_choose = document.querySelector("#date_choose").value;
       let time_choose = document.querySelector("#time_choose").value;
 
-      const object_order = {
-        step1: {
-          moving_date: date_choose,
-          moving_time: time_choose,
-        },
-      };
+      let today = document.querySelector("#date_choose").value;
+      let today_split = today.slice(0, 2);
 
-      localStorage.setItem("order_moving", JSON.stringify(object_order));
+      const ngayhomnay = new Date();
+      const result_homnay = ngayhomnay.getDate();
+
+      if (today_split == result_homnay) {
+        //Lấy giờ hiện tại
+        const now = new Date();
+        const hour = now.getHours();
+
+        //Xử lý giờ chọn
+        let hour_choose = time_choose.split(":")[0];
+
+        if (hour_choose < hour) {
+          //Trường hợp giờ nhỏ hơn giờ hiện tại
+          Toast.fire({
+            icon: "warning",
+            title: "Vui lòng chọn giờ lớn hơn giờ hiện tại !",
+          });
+          document.querySelector("#time_choose").value = "";
+        } else {
+          setCheckFill(true);
+
+          const object_order = {
+            step1: {
+              moving_date: date_choose,
+              moving_time: time_choose,
+            },
+          };
+
+          localStorage.setItem("order_moving", JSON.stringify(object_order));
+        }
+      } else {
+        setCheckFill(true);
+
+        const object_order = {
+          step1: {
+            moving_date: date_choose,
+            moving_time: time_choose,
+          },
+        };
+
+        localStorage.setItem("order_moving", JSON.stringify(object_order));
+      }
     }
   }, [date, time]);
 
   useEffect(() => {
     if (localStorage.getItem("order_moving")) {
       let data = JSON.parse(localStorage.getItem("order_moving"));
-      console.log(data)
+      console.log(data);
       // setDate(data.step1.moving_date)
       // setTime(data.step1.moving_time);
       document.querySelector("#date_choose").value = data.step1.moving_date;

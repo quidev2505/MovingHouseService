@@ -5,20 +5,20 @@ import MapBox from "./Map/MapBox";
 import axios from "axios";
 
 import DatalistInput from "react-datalist-input";
+
 import "react-datalist-input/dist/styles.css";
+// eslint-disable-next-line
 
 import goongjs from "@goongmaps/goong-js";
 
-import goongSdk from "@goongmaps/goong-sdk";
-
 import polyline from "@mapbox/polyline";
 
-function Step2({ check_fill, setCheckFill }) {
-  const [locationFrom, setLocationFrom] = useState("");
-  const [dataList, setDataList] = useState([]);
-  const [locationFromChoose, setLocationFromChoose] = useState("");
-  const [fromLocation, setFromLocation] = useState({});
-  const [from_location_detail, setFromLocationDetail] = useState(""); //Địa chỉ nhận hàng cụ thể
+function Step2({ check_fill, setCheckFill, current, setCurrent }) {
+  const [locationFrom, setLocationFrom] = useState(""); //Địa điểm nhập vào
+  const [dataList, setDataList] = useState([]); //Hiển thị ra list danh sách
+  const [locationFromChoose, setLocationFromChoose] = useState(""); //Địa điểm đã chọn từ danh sách
+  const [fromLocation, setFromLocation] = useState({}); //Chọn địa điểm đưa vào bản đồ
+  const [from_location_detail, setFromLocationDetail] = useState(""); //Địa chỉ lấy hàng cụ thể
 
   const [locationTo, setLocationTo] = useState("");
   const [dataList_To, setDataList_To] = useState([]);
@@ -70,6 +70,17 @@ function Step2({ check_fill, setCheckFill }) {
       };
 
       setFromLocation(ob);
+
+      let element = document.getElementById("map");
+      if (element) {
+        element.style.top = "0px";
+        if (toLocation !== "") {
+          get_location_to_choose();
+          setTimeout(()=>{
+            draw_between_two_location(fromLocation, toLocation);
+          },2000)
+        }
+      }
     }
   };
 
@@ -124,7 +135,6 @@ function Step2({ check_fill, setCheckFill }) {
         name: choose_option.display_name,
       };
 
-      console.log(ob);
       setToLocation(ob);
 
       setTimeout(() => {
@@ -147,97 +157,96 @@ function Step2({ check_fill, setCheckFill }) {
 
   //Thiết lập tính năng vẽ giữa 2 điểm
   const draw_between_two_location = (fromLocation, ob) => {
-    try{
-// Get the map element
-    goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";
-    var map = new goongjs.Map({
-      container: "map",
-      style: "https://tiles.goong.io/assets/goong_map_web.json",
-      center: [fromLocation.lng, fromLocation.lat],
-      zoom: 8,
-    });
-
-    map &&
-      map.on("load", function () {
-        var layers = map.getStyle().layers;
-        // Find the index of the first symbol layer in the map style
-        var firstSymbolId;
-        for (var i = 0; i < layers.length; i++) {
-          if (layers[i].type === "symbol") {
-            firstSymbolId = layers[i].id;
-            break;
-          }
-        }
-
-        const goongClient = require("@goongmaps/goong-sdk");
-        const goongDirections = require("@goongmaps/goong-sdk/services/directions");
-
-        const baseClient = goongClient({
-          accessToken: "5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy",
-        });
-        const directionService = goongDirections(baseClient);
-        // Get Directions
-        directionService
-          .getDirections({
-            origin: `${fromLocation.lat}, ${fromLocation.lng}`,
-            destination: `${ob.lat}, ${ob.lng}`,
-            vehicle: "car",
-          })
-          .send()
-          .then(function (response) {
-            var directions = response.body;
-            var route = directions.routes[0];
-
-            var geometry_string = route.overview_polyline.points;
-            var geoJSON = polyline.toGeoJSON(geometry_string);
-            map.addSource("route", {
-              type: "geojson",
-              data: geoJSON,
-            });
-            // Add route layer below symbol layers
-            map.addLayer(
-              {
-                id: "route",
-                type: "line",
-                source: "route",
-                layout: {
-                  "line-join": "round",
-                  "line-cap": "round",
-                },
-                paint: {
-                  "line-color": "#1e88e5",
-                  "line-width": 8,
-                },
-              },
-              firstSymbolId
-            );
-
-            //Thêm 2 điểm marker vào 2 đầu
-            var marker = new goongjs.Marker({ color: "red" })
-              .setLngLat([fromLocation.lng, fromLocation.lat])
-              .addTo(map);
-
-            var marker = new goongjs.Marker({ color: "#00bab3" })
-              .setLngLat([ob.lng, ob.lat])
-              .addTo(map);
-
-            //Cho mapFirst biến mất
-            // document.querySelector("#Map_first").style.display = "none";
-
-            //Cho map phia dưới nhảy lên trên
-            let element = document.getElementById("map");
-            if (element) {
-              element.style.top = "-441px";
-            }
-
-            //Thực hiện gọi hàm tính khoảng cách
-            total_distance(fromLocation, ob);
-          });
+    try {
+      // Get the map element
+      goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";
+      var map = new goongjs.Map({
+        container: "map",
+        style: "https://tiles.goong.io/assets/goong_map_web.json",
+        center: [fromLocation.lng, fromLocation.lat],
+        zoom: 8,
       });
-    }catch(e){
-      console.log(e)
+
+      map &&
+        map.on("load", function () {
+          var layers = map.getStyle().layers;
+          // Find the index of the first symbol layer in the map style
+          var firstSymbolId;
+          for (var i = 0; i < layers.length; i++) {
+            if (layers[i].type === "symbol") {
+              firstSymbolId = layers[i].id;
+              break;
+            }
+          }
+
+          const goongClient = require("@goongmaps/goong-sdk");
+          const goongDirections = require("@goongmaps/goong-sdk/services/directions");
+
+          const baseClient = goongClient({
+            accessToken: "5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy",
+          });
+          const directionService = goongDirections(baseClient);
+          // Get Directions
+          directionService
+            .getDirections({
+              origin: `${fromLocation.lat}, ${fromLocation.lng}`,
+              destination: `${ob.lat}, ${ob.lng}`,
+              vehicle: "car",
+            })
+            .send()
+            .then(function (response) {
+              var directions = response.body;
+              var route = directions.routes[0];
+
+              var geometry_string = route.overview_polyline.points;
+              var geoJSON = polyline.toGeoJSON(geometry_string);
+              map.addSource("route", {
+                type: "geojson",
+                data: geoJSON,
+              });
+              // Add route layer below symbol layers
+              map.addLayer(
+                {
+                  id: "route",
+                  type: "line",
+                  source: "route",
+                  layout: {
+                    "line-join": "round",
+                    "line-cap": "round",
+                  },
+                  paint: {
+                    "line-color": "#1e88e5",
+                    "line-width": 8,
+                  },
+                },
+                firstSymbolId
+              );
+
+              //Thêm 2 điểm marker vào 2 đầu
+              var marker = new goongjs.Marker({ color: "red" })
+                .setLngLat([fromLocation.lng, fromLocation.lat])
+                .addTo(map);
+
+              var marker_1 = new goongjs.Marker({ color: "#00bab3" })
+                .setLngLat([ob.lng, ob.lat])
+                .addTo(map);
+
+              //Cho mapFirst biến mất
+              // document.querySelector("#Map_first").style.display = "none";
+
+              //Cho map phia dưới nhảy lên trên
+              let element = document.getElementById("map");
+              if (element) {
+                element.style.top = "-441px";
+              }
+
+              //Thực hiện gọi hàm tính khoảng cách
+              total_distance(fromLocation, ob);
+            });
+        });
+    } catch (e) {
+      console.log(e);
     }
-    
   };
 
   //Tính năng tính khoảng cách giữa 2 điểm
@@ -288,6 +297,8 @@ function Step2({ check_fill, setCheckFill }) {
       object_order_local.step2 = step2;
 
       localStorage.setItem("order_moving", JSON.stringify(object_order_local));
+    } else {
+      setCheckFill(false);
     }
   }, [
     locationFrom,
@@ -374,17 +385,21 @@ function Step2({ check_fill, setCheckFill }) {
             </div>
             <DatalistInput
               type="text"
+              className="data_list"
               placeholder="Nhập vào điểm lấy hàng"
               style={{
                 width: "100%",
                 height: "60px",
-                marginBottom: "15px",
+                marginBottom: "14px",
                 borderRadius: "10px",
                 border: "1px solid #ccc",
                 outline: "none",
-                padding: "7px",
                 paddingLeft: "50px",
                 backgroundColor: "#fbfafc",
+                width: "100% !important",
+                borderRadius: "10px !important",
+                padding: "3px !important",
+                border: "1px solid #ccc",
               }}
               value={locationFrom}
               onChange={(e) => setLocationFrom(e.target.value)}
@@ -457,11 +472,12 @@ function Step2({ check_fill, setCheckFill }) {
             </div>
             <DatalistInput
               type="text"
+              className="data_list_2"
               placeholder="Nhập vào điểm nhận hàng"
               style={{
                 width: "100%",
                 height: "60px",
-                marginBottom: "15px",
+                marginBottom: "16px",
                 borderRadius: "10px",
                 border: "1px solid #ccc",
                 outline: "none",

@@ -2,7 +2,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Roboto+Condensed:ital,wght@0,300;0,700;1,300;1,400&family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
-@import '~@geoapify/route-directions/styles/styles.css';
 
 .leaflet-container {
     width: 100%;
@@ -633,12 +632,12 @@ th.ant-table-cell {
     .navigate_step {
         position: fixed;
         flex-direction: row;
-        height: 77px;
+        height: 70px;
         bottom: 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        box-shadow: 0 2px 3px var(--primay-color);
+        box-shadow:  rgba(132, 34, 33, 0.2) 0px 0px 20px;
         border-radius: 5px;
         background-color: white;
 
@@ -665,6 +664,7 @@ th.ant-table-cell {
             color: white;
             font-weight: bold;
             border-radius: 5px;
+            margin-right: 10px;
             padding: 10px;
             cursor: pointer;
         }
@@ -702,7 +702,48 @@ th.ant-table-cell {
     background-color: transparent !important;
 
     .react-datalist-input__textbox {
-        margin-top: 7px;
+        margin-top: 14px;
+        width: 550px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 3px;
+    }
+}
 
+.react-datalist-input__container.undefined {
+    border-radius: 5px;
+}
+
+
+.react-datalist-input__container.data_list{
+    border-radius: 10px;
+}
+//Vehicle Step 3
+.item_vehicle:hover {
+    height: 100px;
+    width: 120px;
+    border: 1px solid rgb(216, 216, 216);
+    box-sizing: border-box;
+    box-shadow: #ed883b 0px 6px 15px;
+    border-radius: 6px;
+    transition: all 0.3s ease 0s;
+    transform: scale(1.1);
+    z-index: 10;
+    background: rgb(255, 255, 255) !important;
+}
+
+//Step 4
+.booking_step_4{
+    .item_add_service{
+        width: fit-content;
+        border: 1px solid #ccc;
+        border-radius: 50px 50px 50px 50px;
+        padding: 10px;
+        padding-left: 0px;
+        img{
+            width: 100px;
+            height: 50px;
+            object-fit: contain;
+        }
     }
 }

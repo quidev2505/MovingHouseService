@@ -15,10 +15,10 @@ import axios from "axios";
 
 function AddServiceFee() {
   const navigate = useNavigate();
-  const [unit, setUnit] = useState("Không có")
+  const [unit, setUnit] = useState("Không có");
 
   const handleChange = (value) => {
-    setUnit(value)
+    setUnit(value);
   };
 
   //Validation form
@@ -215,6 +215,10 @@ function AddServiceFee() {
                               {
                                 value: "Người",
                                 label: "Người",
+                              },
+                              {
+                                value: "Món",
+                                label: "Món",
                               },
                               {
                                 value: "Không có",

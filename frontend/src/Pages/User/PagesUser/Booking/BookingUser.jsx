@@ -8,6 +8,7 @@ import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+import Step4 from "./Step4";
 
 import { Toast } from "../../../../Components/ToastColor";
 
@@ -15,6 +16,9 @@ function BookingUser() {
   const nav = useNavigate();
   const [current, setCurrent] = useState(0);
   const [check_fill, setCheckFill] = useState(false);
+
+  //Tổng giá đơn hàng
+  const [totalOrder, setTotalOrder] = useState(0); 
 
   const onChange = async (value) => {
     let check_navigate_arr = JSON.parse(
@@ -52,7 +56,7 @@ function BookingUser() {
   return (
     <>
       <HeaderUser />
-      <div className="bookingUser container">
+      <div className="bookingUser container" style={{ height: "1500px" }}>
         <div className="top_process">
           <Steps
             current={current}
@@ -93,10 +97,29 @@ function BookingUser() {
           {current === 0 ? (
             <Step1 check_fill={check_fill} setCheckFill={setCheckFill} />
           ) : current === 1 ? (
-            <Step2 check_fill={check_fill} setCheckFill={setCheckFill} />
+            <Step2
+              check_fill={check_fill}
+              setCheckFill={setCheckFill}
+              current={current}
+              setCurrent={setCurrent}
+            />
           ) : current === 2 ? (
-            <Step3 check_fill={check_fill} setCheckFill={setCheckFill} />
-          ) : ''}
+            <Step3
+              check_fill={check_fill}
+              setCheckFill={setCheckFill}
+              totalOrder={totalOrder}
+              setTotalOrder={setTotalOrder}
+            />
+          ) : current === 3 ? (
+            <Step4
+              check_fill={check_fill}
+              setCheckFill={setCheckFill}
+              totalOrder={totalOrder}
+              setTotalOrder={setTotalOrder}
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="navigate_step container">
@@ -113,13 +136,43 @@ function BookingUser() {
             <ArrowLeftOutlined />
             Trở về
           </div>
-          <div
-            className="btn_navigate_to"
-            style={{ display: check_fill ? "flex" : "none" }}
-            onClick={() => setCurrent(current + 1)}
-          >
-            Tiếp tục
-            <ArrowRightOutlined />
+          <div className="d-flex row">
+            <div
+              className="total_order col"
+              style={{
+                backgroundColor: "white",
+                border: "1px solid rgb(204, 204, 204)",
+                width: "400px",
+                height: "44px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                borderRadius: "5px",
+                marginRight: "10px",
+              }}
+            >
+              <span
+                style={{
+                  color: "#ed883b",
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  width: "68px",
+                }}
+              >
+                Tổng cộng
+              </span>
+              <h3 style={{ fontWeight: "600", marginLeft: "10px", fontSize:"20px" }}>
+                {totalOrder.toLocaleString()} đ
+              </h3>
+            </div>
+            <div
+              className="btn_navigate_to col"
+              style={{ display: check_fill ? "flex" : "none" }}
+              onClick={() => setCurrent(current + 1)}
+            >
+              Tiếp tục
+              <ArrowRightOutlined />
+            </div>
           </div>
         </div>
       </div>

@@ -246,6 +246,10 @@ function EditServiceFee() {
                                 label: "Người",
                               },
                               {
+                                value: "Món",
+                                label: "Món",
+                              },
+                              {
                                 value: "Không có",
                                 label: "Không có",
                               },
