@@ -6,7 +6,7 @@ import { Toast } from "../../../../Components/ToastColor";
 
 import { ReloadOutlined } from "@ant-design/icons";
 
-import { Checkbox, Col, Row } from "antd";
+import { Checkbox } from "antd";
 
 import { Tabs } from "antd";
 
@@ -20,7 +20,13 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   const [quantity, setQuantity] = useState(0); //Số lượng nhân công
   const [total_price_man, setTotalPriceMan] = useState(0); //Tổng giá nhân công
 
+  const [noteDriver, setNoteDriver] = useState(""); //Ghi chú cho tài xế
+
   const [dataItem, setDataItem] = useState([]);
+
+  const [dataChooseItem, setDataChooseItem] = useState([]);
+
+  const [cickUpdate, setClickUpdate] = useState(true);
 
   //Khu vực cho nhân công
   const firstPrice = useRef(0);
@@ -30,6 +36,122 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
   //Khu vực cho phí dịch vụ bổ sung
   const thirdPrice = useRef(0);
+
+  //Khi đã lưu vào LocalStorage
+  // useEffect(() => {
+  //   if (localStorage.getItem("order_moving")) {
+  //     //Khi đã nhập rồi thì lấy dữ liệu ra trong localStorage
+  //     let data = JSON.parse(localStorage.getItem("order_moving"));
+  //     let step4 = data.step4;
+
+  //     if (step4) {
+  //       // => Xử lý xong first
+  //       setQuantity(step4.man_power_count.quantity_man);
+  //       setTotalPriceMan(step4.man_power_count.total_price_man);
+  //       firstPrice.current = step4.man_power_count.total_price_man;
+
+  //       //Xử lý bước second
+  //       const arrMovingFee = [];
+  //       step4.moving_fee.forEach((item, idnex) => {
+  //         DataMovingFee.forEach((item1, index) => {
+  //           if (item.name === item1.title) {
+  //             arrMovingFee.push(item1.key);
+  //           }
+  //         });
+  //       });
+
+  //       setTargetKeysMovingFee(arrMovingFee);
+  //       get_moving_fee();
+
+  //       //Xử lý bước 3
+  //       const arrServiceFee = [];
+  //       step4.service_fee.forEach((item, idnex) => {
+  //         DataServiceFee.forEach((item1, index) => {
+  //           if (item.name === item1.title) {
+  //             arrServiceFee.push(item1.key);
+  //           }
+  //         });
+  //       });
+  //       setTargetKeys(arrServiceFee);
+  //       get_service_fee();
+
+  //       // Xử lý xong 4
+  //       setNoteDriver(step4.noteDriver);
+
+  //       get_item();
+  //       //Xử lý về bước 5
+  //       let data_ItemChoose = step4.dataChooseItem;
+  //       setDataChooseItem(data_ItemChoose);
+
+  //       // data_ItemChoose.forEach((item, index) => {
+  //       //   let value_item_arr = document.querySelectorAll(".ant-checkbox-input");
+
+  //       //   console.log(value_item_arr);
+
+  //       //   value_item_arr[0].checked = true;
+  //       //   // value_item_arr.forEach((item1, index1) => {
+
+  //       //   //   // if (item1._wrapperState.initialValue === item) {
+  //       //   //   //   console.log('bang rồi')
+  //       //   //   //   item1.checked = true;
+  //       //   //   // }
+  //       //   // });
+  //       // });
+
+  //       //Xử lý tổng đơn hàng
+  //       setTotalOrder(data.totalOrder);
+  //     }
+  //     update_total_order();
+  //   }
+  // }, []);
+
+  useEffect(()=>{
+      get_moving_fee();
+      get_service_fee()
+      get_item()
+  },[])
+
+
+  //Kiểm tra sau khi đã nhập đầy đủ tất cả dữ liệu
+  useEffect(() => {
+    if (
+      firstPrice.current !== 0 &&
+      secondPrice.current !== 0 &&
+      thirdPrice.current !== 0 &&
+      noteDriver !== "" &&
+      dataChooseItem.length > 0
+    ) {
+      setCheckFill(true);
+
+      //Tạo object lưu vào local cũ
+      const object_order_local = JSON.parse(
+        localStorage.getItem("order_moving")
+      );
+
+      object_order_local.totalOrder = totalOrder;
+
+      const step4 = {
+        man_power_count: firstPrice.current,
+        moving_fee: secondPrice.current,
+        service_fee: thirdPrice.current,
+        noteDriver: noteDriver,
+        dataChooseItem: dataChooseItem,
+      };
+
+      object_order_local.step4 = step4;
+
+      localStorage.setItem("order_moving", JSON.stringify(object_order_local));
+    } else {
+      setCheckFill(false);
+    }
+  }, [
+    firstPrice.current,
+    secondPrice.current,
+    thirdPrice.current,
+    noteDriver,
+    dataChooseItem,
+    cickUpdate,
+  ]);
 
   //Chi tiết hàng hóa đã chọn
   const onChange = (checkedValues) => {
@@ -77,9 +199,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     if (thirdPrice.current !== 0) {
       thirdPriceNew = thirdPrice.current.total_third;
     }
-    console.log(temp_price_order.current);
-    console.log(firstPriceNew);
-    console.log(secondPriceNew);
+
     setTotalOrder(
       Number(
         temp_price_order.current +
@@ -92,6 +212,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
   //Cập nhật giá tiền cuối cùng vào totalOrder
   const update_total_order = () => {
+    setClickUpdate(!cickUpdate);
     changePriceMan();
     changeSecondPrice();
     changeThirdPrice();
@@ -175,7 +296,22 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
   //Khi nhấn vào các vật dụng chi tiết
   const onChangeCheckBox = (checkedValues) => {
-    console.log(checkedValues);
+    let StringChange = checkedValues + "";
+
+    // Kiểm tra xem phần tử đã tồn tại trong mảng hay chưa
+    let index = dataChooseItem.indexOf(StringChange);
+
+    // Nếu phần tử đã tồn tại trong mảng
+    if (index > -1) {
+      // Xóa phần tử trong mảng
+      dataChooseItem.splice(index, 1);
+    } else {
+      // Thêm phần tử vào mảng
+      dataChooseItem.push(StringChange);
+    }
+
+    // Cập nhật giá trị của mảng
+    setDataChooseItem(dataChooseItem);
   };
 
   //Lấy danh sách phí bổ sung
@@ -322,23 +458,42 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                           style={{
                             width: "100%",
                           }}
-                          onChange={onChangeCheckBox}
+                          onChange={() => onChangeCheckBox(item1.name)}
                         >
-                          <Row>
-                            <Col span={8}>
+                          <div className="row">
+                            <div className="row">
                               <Checkbox value={item1.name}>
-                                <div style={{border:"1px solid #ccc"}}>
+                                <div
+                                  className="col"
+                                  style={{
+                                    border: "1px solid rgb(204, 204, 204)",
+                                    borderRadius: "5px",
+                                    padding: "5px",
+                                    textAlign: "center",
+                                    width: "200px",
+                                  }}
+                                >
                                   <img
+                                    alt="anh"
                                     src={item1.image}
                                     width="50px"
                                     height="100px"
+                                    style={{ objectFit: "cover" }}
                                   />
-                                  <p>{item1.name}</p>
-                                  <p>{item1.size}</p>
+                                  <p
+                                    style={{
+                                      color: "#fab56e",
+                                      fontWeight: "bold",
+                                      marginTop: "3px",
+                                    }}
+                                  >
+                                    {item1.name}
+                                  </p>
+                                  <p className="fw-bold">{item1.size}</p>
                                 </div>
                               </Checkbox>
-                            </Col>
-                          </Row>
+                            </div>
+                          </div>
                         </Checkbox.Group>
                       </>
                     );
@@ -360,12 +515,6 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    get_service_fee();
-    get_moving_fee();
-    get_item();
-  }, []);
 
   //Xử lý phần show danh sách chi phí
   const [targetKeys, setTargetKeys] = useState([]);
@@ -602,6 +751,8 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         }}
         className="note-for-driver"
         placeholder="Thêm hướng dẫn cho đơn hàng (ví dụ như danh mục hàng hóa, điểm gần địa chỉ nào...)"
+        value={noteDriver}
+        onChange={(e) => setNoteDriver(e.target.value)}
       ></input>
 
       {/* Chi tiết hàng hóa */}
@@ -634,7 +785,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       </div>
 
       <div className="tab_choose_item">
-        <Tabs defaultActiveKey="1" items={dataItem} onChange={onChange} />;
+        <Tabs defaultActiveKey="1" items={dataItem} onChange={onChange} />
       </div>
     </div>
   );
