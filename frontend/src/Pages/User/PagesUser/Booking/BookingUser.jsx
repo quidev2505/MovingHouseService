@@ -9,6 +9,7 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
+import Step5 from "./Step5";
 
 import { Toast } from "../../../../Components/ToastColor";
 
@@ -82,11 +83,11 @@ function BookingUser() {
               },
               {
                 title: "Bước 5",
-                description: "Review đơn hàng",
+                description: "Xem lại và thanh toán",
               },
               {
                 title: "Bước 6",
-                description: "Thanh toán và hoàn tất",
+                description: "Hoàn tất",
               },
             ]}
           />
@@ -119,9 +120,14 @@ function BookingUser() {
               totalOrder={totalOrder}
               setTotalOrder={setTotalOrder}
             />
-          ) : (
-            ""
-          )}
+          ) : current === 4 ? (
+            <Step5
+              check_fill={check_fill}
+              setCheckFill={setCheckFill}
+              totalOrder={totalOrder}
+              setTotalOrder={setTotalOrder}
+            />
+          ) : ''}
         </div>
 
         <div className="navigate_step container">

@@ -171,6 +171,7 @@ function Step3({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       };
 
       object_order_local.step3 = step3;
+      object_order_local.step3.priceStep3 = totalOrder
 
       localStorage.setItem("order_moving", JSON.stringify(object_order_local));
     }
@@ -207,7 +208,23 @@ function Step3({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         </div>
       </div>
       <div className="info_vehicle col" style={{ textAlign: "center" }}>
-        {domvehicle_right ? domvehicle_right : <img src="./img/xe_trong.png" />}
+        {domvehicle_right ? (
+          domvehicle_right
+        ) : (
+          <img
+            src="./img/xe_trong.png"
+            style={{
+              objectFit: "contain",
+              width: "400px",
+              height: "300px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              margin: "0 auto",
+            }}
+          />
+        )}
       </div>
     </div>
   );

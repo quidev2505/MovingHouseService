@@ -10,10 +10,13 @@ import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { Tabs, Avatar } from "antd";
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [dataSource, setDataSource] = useState([]);
   const [isActive, setIsActive] = useState(true);
+
+  const nav = useNavigate();
 
   const get_service = async () => {
     await axios
@@ -83,6 +86,14 @@ const Home = () => {
                         type="button"
                         class="btn"
                         style={{ backgroundColor: "#e16d2a", color: "white" }}
+                        onClick={() => {
+                          localStorage.setItem(
+                            "you_choose_service",
+                            JSON.stringify(item.name)
+                          );
+
+                          nav("/user/booking");
+                        }}
                       >
                         Đặt dịch vụ ngay
                       </button>
@@ -110,8 +121,8 @@ const Home = () => {
         let data_solve = data.data;
         // const data_service = [];
         let data_arr =
-        data_solve &&
-        // eslint-disable-next-line
+          data_solve &&
+          // eslint-disable-next-line
           data_solve.map((item, index) => {
             if (item.status) {
               return {

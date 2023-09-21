@@ -20,7 +20,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   const [quantity, setQuantity] = useState(0); //Số lượng nhân công
   const [total_price_man, setTotalPriceMan] = useState(0); //Tổng giá nhân công
 
-  const [noteDriver, setNoteDriver] = useState(""); //Ghi chú cho tài xế
+  const [noteDriver, setNoteDriver] = useState("Không có ghi chú !"); //Ghi chú cho tài xế
 
   const [dataItem, setDataItem] = useState([]);
 
@@ -115,10 +115,10 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   //Kiểm tra sau khi đã nhập đầy đủ tất cả dữ liệu
   useEffect(() => {
     if (
-      firstPrice.current !== 0 &&
-      secondPrice.current !== 0 &&
-      thirdPrice.current !== 0 &&
-      noteDriver !== "" &&
+      firstPrice.current !== 0 ||
+      secondPrice.current !== 0 ||
+      noteDriver !== '' ||
+      thirdPrice.current !== 0 ||
       dataChooseItem.length > 0
     ) {
       setCheckFill(true);
@@ -129,6 +129,8 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       );
 
       object_order_local.totalOrder = totalOrder;
+
+
 
       const step4 = {
         man_power_count: firstPrice.current,

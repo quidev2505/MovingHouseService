@@ -304,7 +304,9 @@ function ServicePrice() {
               >
                 <h2>Kết quả:</h2>
                 <p>
-                  Giá cước ước tính cho xe {selectVehicle} chạy {distance} km là{" "}
+                  Giá cước ước tính cho xe{" "}
+                  <span style={{ color: "#e16c270", fontWeight:"bold" }}>{selectVehicle}</span> chạy{" "}
+                  {distance} km là{" "}
                   <span className="fw-bold"> {total.toLocaleString()} đ</span>
                 </p>
               </div>

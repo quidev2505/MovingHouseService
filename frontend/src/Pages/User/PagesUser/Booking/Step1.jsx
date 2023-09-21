@@ -6,8 +6,12 @@ import dayjs from "dayjs";
 
 import { Toast } from "../../../../Components/ToastColor";
 
+import axios from "axios";
+
 function Step1({ check_fill, setCheckFill }) {
   const [date, setDate] = useState();
+
+  const [selectService, setSelectService] = useState("Chuyển nhà theo yêu cầu");
 
   const handleChange_Date = (newDate) => {
     setDate(newDate);
@@ -50,7 +54,7 @@ function Step1({ check_fill, setCheckFill }) {
   };
 
   useEffect(() => {
-    if (date !== undefined && time !== undefined) {
+    if (date !== undefined && time !== undefined && selectService !== "") {
       let date_choose = document.querySelector("#date_choose").value;
       let time_choose = document.querySelector("#time_choose").value;
 
@@ -80,6 +84,7 @@ function Step1({ check_fill, setCheckFill }) {
 
           const object_order = {
             step1: {
+              select_service: selectService,
               moving_date: date_choose,
               moving_time: time_choose,
             },
@@ -92,6 +97,7 @@ function Step1({ check_fill, setCheckFill }) {
 
         const object_order = {
           step1: {
+            select_service: selectService,
             moving_date: date_choose,
             moving_time: time_choose,
           },
@@ -100,17 +106,43 @@ function Step1({ check_fill, setCheckFill }) {
         localStorage.setItem("order_moving", JSON.stringify(object_order));
       }
     }
-  }, [date, time]);
+  }, [date, time, selectService]);
+
+  const [dataService, setDataService] = useState([]);
+  const get_service = async () => {
+    await axios
+      .get(`/v1/service/list_service`)
+      .then((data) => {
+        let data_solve = data.data;
+        let arr_result = data_solve.map((item, index) => {
+          return item.name;
+        });
+
+        setDataService(arr_result);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   useEffect(() => {
     if (localStorage.getItem("order_moving")) {
       let data = JSON.parse(localStorage.getItem("order_moving"));
-      console.log(data);
-      // setDate(data.step1.moving_date)
-      // setTime(data.step1.moving_time);
-      document.querySelector("#date_choose").value = data.step1.moving_date;
-      document.querySelector("#time_choose").value = data.step1.moving_time;
+      if (localStorage.getItem("you_choose_service")) {
+        let data_service_Choose = JSON.parse(
+          localStorage.getItem("you_choose_service")
+        );
+
+        setSelectService(data_service_Choose);
+      } else {
+        setSelectService(data.step1.select_service);
+      }
+      setTimeout(() => {
+        document.querySelector("#date_choose").value = data.step1.moving_date;
+        document.querySelector("#time_choose").value = data.step1.moving_time;
+      }, 1000);
     }
+    get_service();
   }, []);
 
   return (
@@ -127,7 +159,21 @@ function Step1({ check_fill, setCheckFill }) {
           Loại dịch vụ
         </p>
         <p style={{ fontSize: "18px", fontWeight: "400px", color: "#ed883b" }}>
-          Dọn nhà trọn gói
+          <select
+            value={selectService}
+            onChange={(e) => setSelectService(e.target.value)}
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              padding: "5px",
+              color: "#e16c27",
+              fontWeight: "bold",
+            }}
+          >
+            {dataService.map((item, index) => {
+              return <option value={item}>{item}</option>;
+            })}
+          </select>
         </p>
         <h3
           style={{

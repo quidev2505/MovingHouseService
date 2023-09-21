@@ -486,6 +486,10 @@ th.ant-table-cell {
 }
 
 .HomePage {
+    .ant-tabs-tabpane.ant-tabs-tabpane-active {
+        flex-direction: column !important;
+    }
+
     .ant-tabs-tab-active {
         background-color: orange !important;
         padding: 10px !important;
@@ -748,32 +752,34 @@ th.ant-table-cell {
             object-fit: contain;
         }
     }
+
+    .tab_choose_item {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        margin-top: 10px;
+    }
+
+    .ant-tabs-content-holder {
+        display: flex;
+        overflow: hidden;
+        overflow-x: scroll;
+    }
+
+    .ant-tabs-content.ant-tabs-content-top {
+        display: flex;
+    }
+
+
 }
 
-//Tạo ra 
+
+//Tạo ra thanh scroll phía bên trong content Admin page
 .ant-table-content {
     overflow-y: scroll;
     max-height: 375px;
 }
 
-
 .ant-tabs-tabpane {
-    display: flex;
-}
-
-.booking_step_4 .tab_choose_item {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
-    margin-top: 10px;
-}
-
-.booking_step_4 .ant-tabs-content-holder {
-    display: flex;
-    overflow: hidden;
-    overflow-x: scroll;
-}
-
-.booking_step_4 .ant-tabs-content.ant-tabs-content-top {
     display: flex;
 }

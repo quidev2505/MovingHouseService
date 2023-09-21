@@ -77,7 +77,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         if (toLocation !== "") {
           get_location_to_choose();
           setTimeout(() => {
-            draw_between_two_location(fromLocation, toLocation);
+            draw_between_two_location(ob, toLocation);
           }, 2000);
         }
       }
