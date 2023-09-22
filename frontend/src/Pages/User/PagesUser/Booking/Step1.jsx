@@ -128,19 +128,23 @@ function Step1({ check_fill, setCheckFill }) {
   useEffect(() => {
     if (localStorage.getItem("order_moving")) {
       let data = JSON.parse(localStorage.getItem("order_moving"));
-      if (localStorage.getItem("you_choose_service")) {
-        let data_service_Choose = JSON.parse(
-          localStorage.getItem("you_choose_service")
-        );
-
-        setSelectService(data_service_Choose);
-      } else {
-        setSelectService(data.step1.select_service);
-      }
       setTimeout(() => {
-        document.querySelector("#date_choose").value = data.step1.moving_date;
-        document.querySelector("#time_choose").value = data.step1.moving_time;
-      }, 1000);
+        if (
+          document.querySelector("#date_choose") &&
+          document.querySelector("#time_choose")
+        ) {
+          document.querySelector("#date_choose").value = data.step1.moving_date;
+          document.querySelector("#time_choose").value = data.step1.moving_time;
+        }
+      }, 3000);
+    }
+
+    if (localStorage.getItem("you_choose_service")) {
+      let data_service_Choose = JSON.parse(
+        localStorage.getItem("you_choose_service")
+      );
+
+      setSelectService(data_service_Choose);
     }
     get_service();
   }, []);

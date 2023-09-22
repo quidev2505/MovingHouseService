@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HeaderUser from "../../ComponentUser/HeaderUser";
 
-import { Steps } from "antd";
+import { Steps, Tour } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+import "sweetalert2/src/sweetalert2.scss";
+
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -17,6 +25,20 @@ function BookingUser() {
   const nav = useNavigate();
   const [current, setCurrent] = useState(0);
   const [check_fill, setCheckFill] = useState(false);
+
+  //Thử nghiệm Tour
+  const ref1 = useRef(null);
+  const [open, setOpen] = useState(false);
+  const steps = [
+    {
+      title: "Nhấn để hủy đơn",
+      description: "Click vào đây đặt hàng lại !",
+      target: () => ref1.current,
+    },
+  ];
+
+  //Reset Order
+  const [reset, setReset] = useState("");
 
   //Tổng giá đơn hàng
   const [totalOrder, setTotalOrder] = useState(0);
@@ -47,12 +69,30 @@ function BookingUser() {
     } else {
       const arr_new = JSON.parse(localStorage.getItem("check_nav_booking"));
 
-      if (Array.isArray(arr_new)) {
-        if (!arr_new.includes(current)) {
+      if (current === 4) {
+        let arr_init = [4];
+        localStorage.setItem("check_nav_booking", JSON.stringify(arr_init));
+        setOpen(true);
+        setReset("Hủy bỏ đơn hàng");
+      } else {
+        if (current === 5) {
           arr_new.push(current);
+          localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
+          document.querySelector(".navigate_step").style.display = 'none';
+          
+        } else {
+          if (arr_new[0] === 4) {
+            setCurrent(4);
+          }
+
+          if (Array.isArray(arr_new)) {
+            if (!arr_new.includes(current)) {
+              arr_new.push(current);
+            }
+          }
+          localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
         }
       }
-      localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
     }
   }, [current]);
 
@@ -127,23 +167,54 @@ function BookingUser() {
               totalOrder={totalOrder}
               setTotalOrder={setTotalOrder}
             />
-          ) : ''}
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="navigate_step container">
           <div
+            ref={ref1}
             className="btn_navigate_back"
+            style={{ width: "fit-content" }}
             onClick={() => {
               if (current === 0) {
                 nav("/");
+              } else if (current == 4) {
+                Swal.fire({
+                  title: "Bạn muốn hủy bỏ đơn hàng",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Xác nhận",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    nav("/user/booking");
+                    setCurrent(0);
+                    localStorage.removeItem("check_nav_booking");
+                    localStorage.removeItem("order_moving");
+                  }
+                });
               } else {
                 setCurrent(current - 1);
               }
             }}
           >
-            <ArrowLeftOutlined />
-            Trở về
+            {reset !== "" ? <DeleteOutlined /> : <ArrowLeftOutlined />}
+            &nbsp;
+            {reset !== "" ? reset : "Trở về"}
           </div>
+          <Tour
+            open={open}
+            onClose={() => setOpen(false)}
+            steps={steps}
+            indicatorsRender={(current, total) => (
+              <span>
+                {current + 1} / {total}
+              </span>
+            )}
+          />
           <div className="d-flex row">
             <div
               className="total_order col"
@@ -182,7 +253,25 @@ function BookingUser() {
             <div
               className="btn_navigate_to col"
               style={{ display: check_fill ? "flex" : "none" }}
-              onClick={() => setCurrent(current + 1)}
+              onClick={() => {
+                if (current === 3) {
+                  Swal.fire({
+                    title: "Bạn muốn đến bước 5 ?",
+                    text: "Sẽ không thể thay đổi các lựa chọn trước đây",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Xác nhận",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      setCurrent(current + 1);
+                    }
+                  });
+                } else {
+                  setCurrent(current + 1);
+                }
+              }}
             >
               Tiếp tục
               <ArrowRightOutlined />

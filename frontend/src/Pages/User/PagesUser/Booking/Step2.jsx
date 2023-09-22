@@ -6,12 +6,15 @@ import axios from "axios";
 
 import DatalistInput from "react-datalist-input";
 
+// eslint-disable-next-line
 import "react-datalist-input/dist/styles.css";
 // eslint-disable-next-line
 
 import goongjs from "@goongmaps/goong-js";
 
 import polyline from "@mapbox/polyline";
+
+import { Toast } from "../../../../Components/ToastColor";
 
 function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   const [locationFrom, setLocationFrom] = useState(""); //Địa điểm nhập vào
@@ -69,20 +72,29 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         name: choose_option.display_name,
       };
 
-      setFromLocation(ob);
-
-      let element = document.getElementById("map");
-      if (element) {
-        element.style.top = "0px";
-        if (toLocation !== "") {
-          get_location_to_choose();
-          setTimeout(() => {
-            draw_between_two_location(ob, toLocation);
-          }, 2000);
-        }
+      if (!isInVietnam(ob)) {
+        Toast.fire({
+          icon: "warning",
+          title: "Chỉ có thể chọn địa chỉ trong phạm vi Việt Nam !",
+        });
+        setLocationFrom("");
+      } else {
+        setFromLocation(ob);
       }
     }
   };
+
+  // Hàm kiểm tra địa chỉ có nằm trong Việt Nam hay không
+  function isInVietnam(coordinates) {
+    const latitude = coordinates.lat;
+    const longitude = coordinates.lng;
+    return (
+      latitude >= 8.526794234832764 &&
+      latitude <= 23.2021484375 &&
+      longitude >= 102.22265625 &&
+      longitude <= 109.3125
+    );
+  }
 
   useEffect(() => {
     if (locationFrom.length >= 5) {
@@ -135,11 +147,20 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         name: choose_option.display_name,
       };
 
-      setToLocation(ob);
+      //Kiểm tra xem điểm nhập vào có nằm ở Việt nam không.
+      if (!isInVietnam(ob)) {
+        Toast.fire({
+          icon: "warning",
+          title: "Chỉ có thể chọn địa chỉ trong phạm vi Việt Nam !",
+        });
+        setLocationTo("");
+      } else {
+        setToLocation(ob);
 
-      setTimeout(() => {
-        draw_between_two_location(fromLocation, ob);
-      }, 2000);
+        setTimeout(() => {
+          draw_between_two_location(fromLocation, ob);
+        }, 2000);
+      }
     }
   };
 

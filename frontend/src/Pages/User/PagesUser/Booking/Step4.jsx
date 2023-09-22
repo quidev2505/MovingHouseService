@@ -37,51 +37,67 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   //Khu vực cho phí dịch vụ bổ sung
   const thirdPrice = useRef(0);
 
-  //Khi đã lưu vào LocalStorage
-  // useEffect(() => {
+  // // Khi đã lưu vào LocalStorage
+  // useEffect(async () => {
   //   if (localStorage.getItem("order_moving")) {
   //     //Khi đã nhập rồi thì lấy dữ liệu ra trong localStorage
   //     let data = JSON.parse(localStorage.getItem("order_moving"));
   //     let step4 = data.step4;
 
   //     if (step4) {
+  //       get_service_fee();
+  //       get_item();
+
+  //       //Tiền cố định
+  //       temp_price_order.current = Number(step4.price_step4_init);
+
   //       // => Xử lý xong first
   //       setQuantity(step4.man_power_count.quantity_man);
   //       setTotalPriceMan(step4.man_power_count.total_price_man);
-  //       firstPrice.current = step4.man_power_count.total_price_man;
+
+  //       firstPrice.current = step4.man_power_count;
+
+  //       get_moving_fee();
 
   //       //Xử lý bước second
+
   //       const arrMovingFee = [];
-  //       step4.moving_fee.forEach((item, idnex) => {
+  //       secondPrice.current = step4.moving_fee;
+  //       console.log(step4.moving_fee);
+  //       console.log(DataMovingFee);
+  //       step4.moving_fee.forEach((item, index) => {
   //         DataMovingFee.forEach((item1, index) => {
   //           if (item.name === item1.title) {
+  //             console.log(item1.key);
   //             arrMovingFee.push(item1.key);
   //           }
   //         });
   //       });
 
+  //       console.log(arrMovingFee);
+
   //       setTargetKeysMovingFee(arrMovingFee);
-  //       get_moving_fee();
 
-  //       //Xử lý bước 3
-  //       const arrServiceFee = [];
-  //       step4.service_fee.forEach((item, idnex) => {
-  //         DataServiceFee.forEach((item1, index) => {
-  //           if (item.name === item1.title) {
-  //             arrServiceFee.push(item1.key);
-  //           }
-  //         });
-  //       });
-  //       setTargetKeys(arrServiceFee);
-  //       get_service_fee();
+  //       // //Xử lý bước 3
+  //       // const arrServiceFee = [];
+  //       // step4.service_fee.forEach((item, idnex) => {
+  //       //   DataServiceFee.forEach((item1, index) => {
+  //       //     if (item.name === item1.title) {
+  //       //       arrServiceFee.push(item1.key);
+  //       //     }
+  //       //   });
+  //       // });
 
-  //       // Xử lý xong 4
-  //       setNoteDriver(step4.noteDriver);
+  //       // setTargetKeys(arrServiceFee);
+  //       // get_service_fee();
 
-  //       get_item();
-  //       //Xử lý về bước 5
-  //       let data_ItemChoose = step4.dataChooseItem;
-  //       setDataChooseItem(data_ItemChoose);
+  //       // // Xử lý xong 4
+  //       // setNoteDriver(step4.noteDriver);
+
+  //       // get_item();
+  //       // //Xử lý về bước 5
+  //       // let data_ItemChoose = step4.dataChooseItem;
+  //       // setDataChooseItem(data_ItemChoose);
 
   //       // data_ItemChoose.forEach((item, index) => {
   //       //   let value_item_arr = document.querySelectorAll(".ant-checkbox-input");
@@ -98,27 +114,31 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   //       //   // });
   //       // });
 
-  //       //Xử lý tổng đơn hàng
-  //       setTotalOrder(data.totalOrder);
+  //       // //Xử lý tổng đơn hàng
+  //       // setTotalOrder(data.totalOrder);
+  //     } else {
+  //       get_moving_fee();
+  //       get_service_fee();
+  //       get_item();
   //     }
-  //     update_total_order();
+
+  //     // update_total_order();
   //   }
   // }, []);
 
-  useEffect(()=>{
-      get_moving_fee();
-      get_service_fee()
-      get_item()
-  },[])
-
+  useEffect(() => {
+    get_moving_fee();
+    get_service_fee();
+    get_item();
+  }, []);
 
   //Kiểm tra sau khi đã nhập đầy đủ tất cả dữ liệu
   useEffect(() => {
     if (
-      firstPrice.current !== 0 ||
-      secondPrice.current !== 0 ||
-      noteDriver !== '' ||
-      thirdPrice.current !== 0 ||
+      firstPrice.current !== 0 &&
+      secondPrice.current !== 0 &&
+      noteDriver !== "" &&
+      thirdPrice.current !== 0 &&
       dataChooseItem.length > 0
     ) {
       setCheckFill(true);
@@ -130,14 +150,13 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
       object_order_local.totalOrder = totalOrder;
 
-
-
       const step4 = {
         man_power_count: firstPrice.current,
         moving_fee: secondPrice.current,
         service_fee: thirdPrice.current,
         noteDriver: noteDriver,
         dataChooseItem: dataChooseItem,
+        price_step4_init: temp_price_order.current,
       };
 
       object_order_local.step4 = step4;
@@ -325,7 +344,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         const data_service = [];
         data_solve &&
           data_solve.forEach((item, index) => {
-            if (item.fee_name !== "Nhân công bốc vác") {
+            if (item.fee_name !== "Nhân công bốc xếp") {
               const ob_service = {
                 key: index + 1,
                 title:
@@ -656,7 +675,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
               padding: "3px",
             }}
           >
-            {total_price_man.toLocaleString()} đ
+            {total_price_man && total_price_man.toLocaleString()} đ
           </div>
         </div>
       </div>
