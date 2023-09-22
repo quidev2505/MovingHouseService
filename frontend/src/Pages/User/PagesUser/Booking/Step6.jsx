@@ -21,9 +21,10 @@ function Step6() {
       icon: "success",
       title: "Hãy chờ 5s để chuyển qua trang đơn hàng !",
     });
+    
     setTimeout(() => {
       success_order();
-    }, [5000]);
+    },4300);
   }, []);
 
   return (

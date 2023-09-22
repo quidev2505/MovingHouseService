@@ -8,6 +8,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 
 import "sweetalert2/src/sweetalert2.scss";
 
+
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -26,6 +27,8 @@ function BookingUser() {
   const nav = useNavigate();
   const [current, setCurrent] = useState(0);
   const [check_fill, setCheckFill] = useState(false);
+
+
 
   //Thử nghiệm Tour
   const ref1 = useRef(null);
@@ -60,6 +63,7 @@ function BookingUser() {
       }
     }
   };
+
   useEffect(() => {
     let check_navigate_arr = localStorage.getItem("check_nav_booking");
     if (!check_navigate_arr) {
@@ -67,7 +71,7 @@ function BookingUser() {
       localStorage.setItem("check_nav_booking", JSON.stringify(arr_init));
     } else {
       let arr_new = JSON.parse(localStorage.getItem("check_nav_booking"));
-      if (current === 4 || current === undefined) {
+      if (current === 4) {
         arr_new = [4];
         localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
         setOpen(true);
@@ -87,6 +91,7 @@ function BookingUser() {
         localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
       }
     }
+
   }, [current]);
 
   return (
@@ -126,133 +131,58 @@ function BookingUser() {
           />
         </div>
 
-        <div
-          className="form_step"
-          style={{ marginTop: "30px", margin: "30px 150px" }}
-        >
-          {current === 0 ? (
-            <Step1 check_fill={check_fill} setCheckFill={setCheckFill} />
-          ) : current === 1 ? (
-            <Step2
-              check_fill={check_fill}
-              setCheckFill={setCheckFill}
-              current={current}
-              setCurrent={setCurrent}
-            />
-          ) : current === 2 ? (
-            <Step3
-              check_fill={check_fill}
-              setCheckFill={setCheckFill}
-              totalOrder={totalOrder}
-              setTotalOrder={setTotalOrder}
-            />
-          ) : current === 3 ? (
-            <Step4
-              check_fill={check_fill}
-              setCheckFill={setCheckFill}
-              totalOrder={totalOrder}
-              setTotalOrder={setTotalOrder}
-            />
-          ) : current === 4 ? (
-            <Step5
-              check_fill={check_fill}
-              setCheckFill={setCheckFill}
-              totalOrder={totalOrder}
-              setTotalOrder={setTotalOrder}
-            />
-          ) : current === 5 ? (
-            <Step6 />
-          ) : (
-            ""
-          )}
-        </div>
-
-        <div className="navigate_step container">
           <div
-            ref={ref1}
-            className="btn_navigate_back"
-            style={{ width: "fit-content" }}
-            onClick={() => {
-              if (current === 0) {
-                nav("/");
-              } else if (current === 4) {
-                Swal.fire({
-                  title: "Bạn muốn hủy bỏ đơn hàng",
-                  icon: "warning",
-                  showCancelButton: true,
-                  confirmButtonColor: "#3085d6",
-                  cancelButtonColor: "#d33",
-                  confirmButtonText: "Xác nhận",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    nav("/user/booking");
-                    setCurrent(0);
-                    localStorage.removeItem("check_nav_booking");
-                    localStorage.removeItem("order_moving");
-                  }
-                });
-              } else {
-                setCurrent(current - 1);
-              }
-            }}
+            className="form_step"
+            style={{ marginTop: "30px", margin: "30px 150px" }}
           >
-            {reset !== "" ? <DeleteOutlined /> : <ArrowLeftOutlined />}
-            &nbsp;
-            {reset !== "" ? reset : "Trở về"}
-          </div>
-          <Tour
-            open={open}
-            onClose={() => setOpen(false)}
-            steps={steps}
-            indicatorsRender={(current, total) => (
-              <span>
-                {current + 1} / {total}
-              </span>
+            {current === 0 ? (
+              <Step1 check_fill={check_fill} setCheckFill={setCheckFill} />
+            ) : current === 1 ? (
+              <Step2
+                check_fill={check_fill}
+                setCheckFill={setCheckFill}
+                current={current}
+                setCurrent={setCurrent}
+              />
+            ) : current === 2 ? (
+              <Step3
+                check_fill={check_fill}
+                setCheckFill={setCheckFill}
+                totalOrder={totalOrder}
+                setTotalOrder={setTotalOrder}
+              />
+            ) : current === 3 ? (
+              <Step4
+                check_fill={check_fill}
+                setCheckFill={setCheckFill}
+                totalOrder={totalOrder}
+                setTotalOrder={setTotalOrder}
+              />
+            ) : current === 4 ? (
+              <Step5
+                check_fill={check_fill}
+                setCheckFill={setCheckFill}
+                totalOrder={totalOrder}
+                setTotalOrder={setTotalOrder}
+              />
+            ) : current === 5 ? (
+              <Step6 />
+            ) : (
+              ""
             )}
-          />
-          <div className="d-flex row">
+          </div>
+
+          <div className="navigate_step container">
             <div
-              className="total_order col"
-              style={{
-                backgroundColor: "white",
-                border: "1px solid rgb(204, 204, 204)",
-                width: "400px",
-                height: "44px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-around",
-                borderRadius: "5px",
-                marginRight: "10px",
-              }}
-            >
-              <span
-                style={{
-                  color: "#ed883b",
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  width: "68px",
-                }}
-              >
-                Tổng cộng
-              </span>
-              <h3
-                style={{
-                  fontWeight: "600",
-                  marginLeft: "10px",
-                  fontSize: "20px",
-                }}
-              >
-                {totalOrder.toLocaleString()} đ
-              </h3>
-            </div>
-            <div
-              className="btn_navigate_to col"
-              style={{ display: check_fill ? "flex" : "none" }}
+              ref={ref1}
+              className="btn_navigate_back"
+              style={{ width: "fit-content" }}
               onClick={() => {
-                if (current === 3) {
+                if (current === 0) {
+                  nav("/");
+                } else if (current === 4) {
                   Swal.fire({
-                    title: "Bạn muốn đến bước 5 ?",
-                    text: "Sẽ không thể thay đổi các lựa chọn trước đây",
+                    title: "Bạn muốn hủy bỏ đơn hàng",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -260,19 +190,95 @@ function BookingUser() {
                     confirmButtonText: "Xác nhận",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      setCurrent(current + 1);
+                      nav("/user/booking");
+                      setCurrent(0);
+                      localStorage.removeItem("check_nav_booking");
+                      localStorage.removeItem("order_moving");
                     }
                   });
                 } else {
-                  setCurrent(current + 1);
+                  setCurrent(current - 1);
                 }
               }}
             >
-              Tiếp tục
-              <ArrowRightOutlined />
+              {reset !== "" ? <DeleteOutlined /> : <ArrowLeftOutlined />}
+              &nbsp;
+              {reset !== "" ? reset : "Trở về"}
+            </div>
+            <Tour
+              open={open}
+              onClose={() => setOpen(false)}
+              steps={steps}
+              indicatorsRender={(current, total) => (
+                <span>
+                  {current + 1} / {total}
+                </span>
+              )}
+            />
+            <div className="d-flex row">
+              <div
+                className="total_order col"
+                style={{
+                  backgroundColor: "white",
+                  border: "1px solid rgb(204, 204, 204)",
+                  width: "400px",
+                  height: "44px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  borderRadius: "5px",
+                  marginRight: "10px",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#ed883b",
+                    fontSize: "14px",
+                    fontWeight: "400",
+                    width: "68px",
+                  }}
+                >
+                  Tổng cộng
+                </span>
+                <h3
+                  style={{
+                    fontWeight: "600",
+                    marginLeft: "10px",
+                    fontSize: "20px",
+                  }}
+                >
+                  {totalOrder.toLocaleString()} đ
+                </h3>
+              </div>
+              <div
+                className="btn_navigate_to col"
+                style={{ display: check_fill ? "flex" : "none" }}
+                onClick={() => {
+                  if (current === 3) {
+                    Swal.fire({
+                      title: "Bạn muốn đến bước 5 ?",
+                      text: "Sẽ không thể thay đổi các lựa chọn trước đây",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "Xác nhận",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        setCurrent(current + 1);
+                      }
+                    });
+                  } else {
+                    setCurrent(current + 1);
+                  }
+                }}
+              >
+                Tiếp tục
+                <ArrowRightOutlined />
+              </div>
             </div>
           </div>
-        </div>
+  
       </div>
     </>
   );

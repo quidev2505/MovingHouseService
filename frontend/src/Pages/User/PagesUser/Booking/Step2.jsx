@@ -16,7 +16,10 @@ import polyline from "@mapbox/polyline";
 
 import { Toast } from "../../../../Components/ToastColor";
 
+import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+
 function Step2({ check_fill, setCheckFill, current, setCurrent }) {
+  const [isActive, setIsActive] = useState(true);
   const [locationFrom, setLocationFrom] = useState(""); //Địa điểm nhập vào
   const [dataList, setDataList] = useState([]); //Hiển thị ra list danh sách
   const [locationFromChoose, setLocationFromChoose] = useState(""); //Địa điểm đã chọn từ danh sách
@@ -358,215 +361,221 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         setToLocationDetail(step2.to_location_detail);
         setDistance(step2.distance);
       }
+
+      setIsActive(false);
     }
   }, []);
 
   return (
-    <div className="booking_step_2 row" style={{ margin: "30px -160px" }}>
-      <div
-        className="location col-lg-6"
-        style={{ overflowY: "scroll", maxHeight: "430px" }}
-      >
-        <div>
-          <h3
-            style={{
-              fontSize: "20px",
-              fontWeight: "700",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <span
+    <LoadingOverlayComponent status={isActive}>
+      <div className="booking_step_2 row" style={{ margin: "30px -160px" }}>
+        <div
+          className="location col-lg-6"
+          style={{ overflowY: "scroll", maxHeight: "430px" }}
+        >
+          <div>
+            <h3
               style={{
-                marginRight: "10px",
-                color: "#9d9d9d",
-                marginBottom: "5px",
+                fontSize: "20px",
+                fontWeight: "700",
+                display: "flex",
+                alignItems: "center",
               }}
             >
-              <QuestionCircleOutlined />
-            </span>
-            <span style={{ fontWeight: "700", fontSize: "16px" }}>
-              {" "}
-              Địa điểm lấy hàng
-            </span>
-          </h3>
-          <div style={{ position: "relative" }}>
-            <div
-              style={{
-                fontWeight: "bold",
-                textAlign: "center",
-                color: "white",
-                display: "block",
-                borderRadius: "5px",
-                backgroundColor: "red",
-                width: "28px",
-                height: "28px",
-                position: "absolute",
-                top: "17px",
-                left: "10px",
-              }}
-            >
-              1
+              <span
+                style={{
+                  marginRight: "10px",
+                  color: "#9d9d9d",
+                  marginBottom: "5px",
+                }}
+              >
+                <QuestionCircleOutlined />
+              </span>
+              <span style={{ fontWeight: "700", fontSize: "16px" }}>
+                {" "}
+                Địa điểm lấy hàng
+              </span>
+            </h3>
+            <div style={{ position: "relative" }}>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  color: "white",
+                  display: "block",
+                  borderRadius: "5px",
+                  backgroundColor: "red",
+                  width: "28px",
+                  height: "28px",
+                  position: "absolute",
+                  top: "17px",
+                  left: "10px",
+                }}
+              >
+                1
+              </div>
+              <DatalistInput
+                type="text"
+                className="data_list"
+                placeholder="Nhập vào điểm lấy hàng"
+                style={{
+                  width: "100%",
+                  height: "60px",
+                  marginBottom: "14px",
+                  borderRadius: "10px",
+                  border: "1px solid #ccc",
+                  outline: "none",
+                  paddingLeft: "50px",
+                  backgroundColor: "#fbfafc",
+                  width: "100% !important",
+                  borderRadius: "10px !important",
+                  padding: "3px !important",
+                  border: "1px solid #ccc",
+                }}
+                value={locationFrom}
+                onChange={(e) => setLocationFrom(e.target.value)}
+                items={dataList}
+                onSelect={(item) => setLocationFromChoose(item.location)}
+              />
             </div>
-            <DatalistInput
+
+            <span style={{ fontSize: "14px", fontWeight: "400" }}>
+              Thông tin địa chỉ cụ thể:
+            </span>
+            <input
               type="text"
-              className="data_list"
-              placeholder="Nhập vào điểm lấy hàng"
+              value={from_location_detail}
+              onChange={(e) => setFromLocationDetail(e.target.value)}
+              placeholder="Nhập vào thông tin cụ thể..."
               style={{
                 width: "100%",
-                height: "60px",
-                marginBottom: "14px",
-                borderRadius: "10px",
-                border: "1px solid #ccc",
-                outline: "none",
-                paddingLeft: "50px",
-                backgroundColor: "#fbfafc",
-                width: "100% !important",
-                borderRadius: "10px !important",
-                padding: "3px !important",
-                border: "1px solid #ccc",
-              }}
-              value={locationFrom}
-              onChange={(e) => setLocationFrom(e.target.value)}
-              items={dataList}
-              onSelect={(item) => setLocationFromChoose(item.location)}
-            />
-          </div>
-
-          <span style={{ fontSize: "14px", fontWeight: "400" }}>
-            Thông tin địa chỉ cụ thể:
-          </span>
-          <input
-            type="text"
-            value={from_location_detail}
-            onChange={(e) => setFromLocationDetail(e.target.value)}
-            placeholder="Nhập vào thông tin cụ thể..."
-            style={{
-              width: "100%",
-              height: "100px",
-              marginBottom: "15px",
-              borderRadius: "10px",
-              border: "1px solid #ccc",
-              outline: "none",
-              padding: "7px",
-              backgroundColor: "#fbfafc",
-            }}
-          />
-        </div>
-
-        <div>
-          <h3
-            style={{
-              fontSize: "20px",
-              fontWeight: "700",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <span
-              style={{
-                marginRight: "10px",
-                color: "#9d9d9d",
-                marginBottom: "5px",
-              }}
-            >
-              <QuestionCircleOutlined />
-            </span>
-            <span style={{ fontWeight: "700", fontSize: "16px" }}>
-              {" "}
-              Địa điểm nhận hàng
-            </span>
-          </h3>
-          <div style={{ position: "relative" }}>
-            <div
-              style={{
-                fontWeight: "bold",
-                textAlign: "center",
-                color: "white",
-                display: "block",
-                borderRadius: "5px",
-                backgroundColor: "#00bab3 ",
-                width: "28px",
-                height: "28px",
-                position: "absolute",
-                top: "17px",
-                left: "10px",
-              }}
-            >
-              2
-            </div>
-            <DatalistInput
-              type="text"
-              className="data_list_2"
-              placeholder="Nhập vào điểm nhận hàng"
-              style={{
-                width: "100%",
-                height: "60px",
-                marginBottom: "16px",
+                height: "100px",
+                marginBottom: "15px",
                 borderRadius: "10px",
                 border: "1px solid #ccc",
                 outline: "none",
                 padding: "7px",
-                paddingLeft: "50px",
                 backgroundColor: "#fbfafc",
               }}
-              value={locationTo}
-              onChange={(e) => setLocationTo(e.target.value)}
-              items={dataList_To}
-              onSelect={(item) => setLocationToChoose(item.location)}
             />
           </div>
 
-          <span style={{ fontSize: "14px", fontWeight: "400" }}>
-            Thông tin địa chỉ cụ thể:
-          </span>
-          <input
-            type="text"
-            placeholder="Nhập vào thông tin cụ thể..."
-            value={to_location_detail}
-            onChange={(e) => setToLocationDetail(e.target.value)}
-            style={{
-              width: "100%",
-              height: "100px",
-              marginBottom: "15px",
-              borderRadius: "10px",
-              border: "1px solid #ccc",
-              outline: "none",
-              padding: "7px",
+          <div>
+            <h3
+              style={{
+                fontSize: "20px",
+                fontWeight: "700",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <span
+                style={{
+                  marginRight: "10px",
+                  color: "#9d9d9d",
+                  marginBottom: "5px",
+                }}
+              >
+                <QuestionCircleOutlined />
+              </span>
+              <span style={{ fontWeight: "700", fontSize: "16px" }}>
+                {" "}
+                Địa điểm nhận hàng
+              </span>
+            </h3>
+            <div style={{ position: "relative" }}>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  color: "white",
+                  display: "block",
+                  borderRadius: "5px",
+                  backgroundColor: "#00bab3 ",
+                  width: "28px",
+                  height: "28px",
+                  position: "absolute",
+                  top: "17px",
+                  left: "10px",
+                }}
+              >
+                2
+              </div>
+              <DatalistInput
+                type="text"
+                className="data_list_2"
+                placeholder="Nhập vào điểm nhận hàng"
+                style={{
+                  width: "100%",
+                  height: "60px",
+                  marginBottom: "16px",
+                  borderRadius: "10px",
+                  border: "1px solid #ccc",
+                  outline: "none",
+                  padding: "7px",
+                  paddingLeft: "50px",
+                  backgroundColor: "#fbfafc",
+                }}
+                value={locationTo}
+                onChange={(e) => setLocationTo(e.target.value)}
+                items={dataList_To}
+                onSelect={(item) => setLocationToChoose(item.location)}
+              />
+            </div>
 
-              backgroundColor: "#fbfafc",
-            }}
-          />
+            <span style={{ fontSize: "14px", fontWeight: "400" }}>
+              Thông tin địa chỉ cụ thể:
+            </span>
+            <input
+              type="text"
+              placeholder="Nhập vào thông tin cụ thể..."
+              value={to_location_detail}
+              onChange={(e) => setToLocationDetail(e.target.value)}
+              style={{
+                width: "100%",
+                height: "100px",
+                marginBottom: "15px",
+                borderRadius: "10px",
+                border: "1px solid #ccc",
+                outline: "none",
+                padding: "7px",
+
+                backgroundColor: "#fbfafc",
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <div className="image_ava_map col-lg-6">
-        <MapBox
-          fromLocation={fromLocation}
-          toLocation={toLocation}
-          id="Map_first"
-        />
+        <div className="image_ava_map col-lg-6">
+          <MapBox
+            fromLocation={fromLocation}
+            toLocation={toLocation}
+            id="Map_first"
+          />
 
-        <div id="map" style={{ marginTop: "10px" }}>
-          <div
-            id="distance"
-            style={{
-              top: 0,
-              backgroundColor: "rgba(255,255,255,0.8)",
-              padding: "5px",
-              position: "absolute",
-              color: "black",
-              fontSize: "14px",
-              fontWeight: "400",
-              width: "600px",
-              margin: "5px",
-              borderRadius: "5px",
-            }}
-          >
-            Khoảng cách: <span style={{ color: "#ed883b" }}>{distance}</span>
+          <div id="map" style={{ marginTop: "10px" }}>
+            <div
+              id="distance"
+              style={{
+                top: 0,
+                backgroundColor: "rgba(255,255,255,0.8)",
+                padding: "5px",
+                position: "absolute",
+                color: "black",
+                fontSize: "14px",
+                fontWeight: "400",
+                width: "600px",
+                margin: "5px",
+                borderRadius: "5px",
+                marginTop: "23px",
+                left: "10px",
+              }}
+            >
+              Khoảng cách: <span style={{ color: "#ed883b" }}>{distance}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </LoadingOverlayComponent>
   );
 }
 

@@ -4,7 +4,10 @@ import { QuestionCircleOutlined } from "@ant-design/icons";
 
 import axios from "axios";
 
+import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+
 function Step3({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
+  const [isActive, setIsActive] = useState(true);
   const [domvehicle_left, setDomVehicleLeft] = useState("");
   const [domvehicle_right, setDomVehicleRight] = useState("");
 
@@ -152,6 +155,7 @@ function Step3({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         setTotalOrder(data.totalOrder);
       }
       get_list_vehicle();
+      setIsActive(false);
     }
   }, []);
 
@@ -171,62 +175,65 @@ function Step3({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       };
 
       object_order_local.step3 = step3;
-      object_order_local.step3.priceStep3 = totalOrder
+      object_order_local.step3.priceStep3 = totalOrder;
 
       localStorage.setItem("order_moving", JSON.stringify(object_order_local));
     }
   }, [totalOrder, selectVehicle]);
 
   return (
-    <div className="booking_step_3 row">
-      <div className="time_choose col-5">
-        <h3
-          style={{
-            fontSize: "18px",
-            fontWeight: "700",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <span
+    <LoadingOverlayComponent status={isActive}>
+      <div className="booking_step_3 row">
+        <div className="time_choose col-5">
+          <h3
             style={{
-              marginRight: "10px",
-              color: "#9d9d9d",
-              marginBottom: "5px",
-            }}
-          >
-            <QuestionCircleOutlined />
-          </span>
-          Loại phương tiện bạn cần là gì ?
-        </h3>
-        <p style={{ fontSize: "14px", fontWeight: "400" }}>
-          Nhân công bốc vác không thể chọn ở đây, bạn có thể chọn ở dịch vụ thêm
-        </p>
-
-        <div className="choose_vehicle">
-          <div className="row">{domvehicle_left}</div>
-        </div>
-      </div>
-      <div className="info_vehicle col" style={{ textAlign: "center" }}>
-        {domvehicle_right ? (
-          domvehicle_right
-        ) : (
-          <img
-            src="./img/xe_trong.png"
-            style={{
-              objectFit: "contain",
-              width: "400px",
-              height: "300px",
+              fontSize: "18px",
+              fontWeight: "700",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              margin: "0 auto",
             }}
-          />
-        )}
+          >
+            <span
+              style={{
+                marginRight: "10px",
+                color: "#9d9d9d",
+                marginBottom: "5px",
+              }}
+            >
+              <QuestionCircleOutlined />
+            </span>
+            Loại phương tiện bạn cần là gì ?
+          </h3>
+          <p style={{ fontSize: "14px", fontWeight: "400" }}>
+            Nhân công bốc vác không thể chọn ở đây, bạn có thể chọn ở dịch vụ
+            thêm
+          </p>
+
+          <div className="choose_vehicle">
+            <div className="row">{domvehicle_left}</div>
+          </div>
+        </div>
+        <div className="info_vehicle col" style={{ textAlign: "center" }}>
+          {domvehicle_right ? (
+            domvehicle_right
+          ) : (
+            <img
+              src="./img/xe_trong.png"
+              style={{
+                objectFit: "contain",
+                width: "400px",
+                height: "300px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                margin: "0 auto",
+              }}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </LoadingOverlayComponent>
   );
 }
 

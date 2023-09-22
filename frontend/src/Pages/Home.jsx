@@ -188,7 +188,7 @@ const Home = () => {
           <div className="provide_service row" style={{ position: "relative" }}>
             <div
               className="left-container col-lg-4"
-              style={{ position: "absolute", left: "59px", top: "50px" }}
+              style={{ position: "absolute", left: "59px", top: "42px" }}
             >
               <h1 style={{ fontSize: "25px", fontWeight: "600" }}>
                 Đặt lịch dọn nhà nhanh chóng và tiện lợi.

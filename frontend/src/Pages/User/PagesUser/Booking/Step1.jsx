@@ -6,9 +6,13 @@ import dayjs from "dayjs";
 
 import { Toast } from "../../../../Components/ToastColor";
 
+import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+
+
 import axios from "axios";
 
 function Step1({ check_fill, setCheckFill }) {
+  const [isActive, setIsActive] = useState(true);
   const [date, setDate] = useState();
 
   const [selectService, setSelectService] = useState("Chuyển nhà theo yêu cầu");
@@ -147,106 +151,111 @@ function Step1({ check_fill, setCheckFill }) {
       setSelectService(data_service_Choose);
     }
     get_service();
+    setIsActive(false)
   }, []);
 
   return (
-    <div className="booking_step_1 row">
-      <div className="time_choose col">
-        <p
-          style={{
-            fontSize: "12px",
-            fontWeight: "400",
-            color: "#9d9d9d",
-            marginBottom: "5px",
-          }}
-        >
-          Loại dịch vụ
-        </p>
-        <p style={{ fontSize: "18px", fontWeight: "400px", color: "#ed883b" }}>
-          <select
-            value={selectService}
-            onChange={(e) => setSelectService(e.target.value)}
+    <LoadingOverlayComponent status={isActive}>
+      <div className="booking_step_1 row">
+        <div className="time_choose col">
+          <p
             style={{
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-              padding: "5px",
-              color: "#e16c27",
-              fontWeight: "bold",
-            }}
-          >
-            {dataService.map((item, index) => {
-              return <option value={item}>{item}</option>;
-            })}
-          </select>
-        </p>
-        <h3
-          style={{
-            fontSize: "20px",
-            fontWeight: "700",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <span
-            style={{
-              marginRight: "10px",
+              fontSize: "12px",
+              fontWeight: "400",
               color: "#9d9d9d",
               marginBottom: "5px",
             }}
           >
-            <QuestionCircleOutlined />
+            Loại dịch vụ
+          </p>
+          <p
+            style={{ fontSize: "18px", fontWeight: "400px", color: "#ed883b" }}
+          >
+            <select
+              value={selectService}
+              onChange={(e) => setSelectService(e.target.value)}
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                padding: "5px",
+                color: "#e16c27",
+                fontWeight: "bold",
+              }}
+            >
+              {dataService.map((item, index) => {
+                return <option value={item}>{item}</option>;
+              })}
+            </select>
+          </p>
+          <h3
+            style={{
+              fontSize: "20px",
+              fontWeight: "700",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <span
+              style={{
+                marginRight: "10px",
+                color: "#9d9d9d",
+                marginBottom: "5px",
+              }}
+            >
+              <QuestionCircleOutlined />
+            </span>
+            Khi nào bạn muốn chuyển nhà ?
+          </h3>
+
+          <br></br>
+          <span style={{ fontSize: "14px", fontWeight: "400" }}>
+            Ngày vận chuyển:
           </span>
-          Khi nào bạn muốn chuyển nhà ?
-        </h3>
+          <DatePicker
+            format="DD/MM/YYYY"
+            selected={date}
+            onChange={handleChange_Date}
+            disabledDate={disabledDate}
+            id="date_choose"
+            placeholder="Chọn ngày chuyển"
+            style={{ width: "400px", height: "60px", marginBottom: "15px" }}
+          />
 
-        <br></br>
-        <span style={{ fontSize: "14px", fontWeight: "400" }}>
-          Ngày vận chuyển:
-        </span>
-        <DatePicker
-          format="DD/MM/YYYY"
-          selected={date}
-          onChange={handleChange_Date}
-          disabledDate={disabledDate}
-          id="date_choose"
-          placeholder="Chọn ngày chuyển"
-          style={{ width: "400px", height: "60px", marginBottom: "15px" }}
-        />
-
-        <br></br>
-        <span style={{ fontSize: "14px", fontWeight: "400" }}>
-          Giờ vận chuyển:
-        </span>
-        <br></br>
-        <TimePicker
-          selected={time}
-          id="time_choose"
-          disabledTime={disabledDateTime}
-          placeholder="Chọn giờ chuyển"
-          format="HH:mm"
-          style={{ width: "400px", height: "60px" }}
-          onChange={handleChange_Time}
-        />
+          <br></br>
+          <span style={{ fontSize: "14px", fontWeight: "400" }}>
+            Giờ vận chuyển:
+          </span>
+          <br></br>
+          <TimePicker
+            selected={time}
+            id="time_choose"
+            disabledTime={disabledDateTime}
+            placeholder="Chọn giờ chuyển"
+            format="HH:mm"
+            style={{ width: "400px", height: "60px" }}
+            onChange={handleChange_Time}
+          />
+        </div>
+        <div className="image_ava col">
+          <img
+            src="./img/step1.avif"
+            style={{ width: "550px", height: "300px", objectFit: "contain" }}
+            alt="anh"
+          />
+          <p
+            style={{
+              fontSize: "14px",
+              fontWeight: "400",
+              width: "300px",
+              margin: "0 auto",
+            }}
+          >
+            Tùy chỉnh đơn đặt dịch vụ của bạn. Thêm vào loại phương tiện, dịch
+            vụ thêm, và các dịch vụ khác.
+          </p>
+        </div>
       </div>
-      <div className="image_ava col">
-        <img
-          src="./img/step1.avif"
-          style={{ width: "550px", height: "300px", objectFit: "contain" }}
-          alt="anh"
-        />
-        <p
-          style={{
-            fontSize: "14px",
-            fontWeight: "400",
-            width: "300px",
-            margin: "0 auto",
-          }}
-        >
-          Tùy chỉnh đơn đặt dịch vụ của bạn. Thêm vào loại phương tiện, dịch vụ
-          thêm, và các dịch vụ khác.
-        </p>
-      </div>
-    </div>
+    </LoadingOverlayComponent>
   );
 }
 
