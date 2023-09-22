@@ -18,6 +18,7 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
 import Step5 from "./Step5";
+import Step6 from "./Step6";
 
 import { Toast } from "../../../../Components/ToastColor";
 
@@ -59,39 +60,31 @@ function BookingUser() {
       }
     }
   };
-
   useEffect(() => {
     let check_navigate_arr = localStorage.getItem("check_nav_booking");
-
     if (!check_navigate_arr) {
       let arr_init = [0];
       localStorage.setItem("check_nav_booking", JSON.stringify(arr_init));
     } else {
-      const arr_new = JSON.parse(localStorage.getItem("check_nav_booking"));
-
-      if (current === 4) {
-        let arr_init = [4];
-        localStorage.setItem("check_nav_booking", JSON.stringify(arr_init));
+      let arr_new = JSON.parse(localStorage.getItem("check_nav_booking"));
+      if (current === 4 || current === undefined) {
+        arr_new = [4];
+        localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
         setOpen(true);
         setReset("Hủy bỏ đơn hàng");
+      } else if (current === 5) {
+        arr_new = [5];
+        localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
+        document.querySelector(".navigate_step").style.display = "none";
+      } else if (arr_new[0] === 4) {
+        setCurrent(4);
       } else {
-        if (current === 5) {
-          arr_new.push(current);
-          localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
-          document.querySelector(".navigate_step").style.display = 'none';
-          
-        } else {
-          if (arr_new[0] === 4) {
-            setCurrent(4);
+        if (Array.isArray(arr_new)) {
+          if (!arr_new.includes(current)) {
+            arr_new.push(current);
           }
-
-          if (Array.isArray(arr_new)) {
-            if (!arr_new.includes(current)) {
-              arr_new.push(current);
-            }
-          }
-          localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
         }
+        localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
       }
     }
   }, [current]);
@@ -167,6 +160,8 @@ function BookingUser() {
               totalOrder={totalOrder}
               setTotalOrder={setTotalOrder}
             />
+          ) : current === 5 ? (
+            <Step6 />
           ) : (
             ""
           )}
@@ -180,7 +175,7 @@ function BookingUser() {
             onClick={() => {
               if (current === 0) {
                 nav("/");
-              } else if (current == 4) {
+              } else if (current === 4) {
                 Swal.fire({
                   title: "Bạn muốn hủy bỏ đơn hàng",
                   icon: "warning",
