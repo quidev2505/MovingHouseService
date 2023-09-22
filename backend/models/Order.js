@@ -10,73 +10,59 @@ const orderSchema = new mongoose.Schema({
         ref: 'Customer',
         required: true
     },
-    created_date: {
+    date_created: {
         type: String,
         required:true
-    },
+    },//Ngày tạo đơn hàng
     service_name: {
         type:String,
         required: true
     },
-    moving_date: {
+    date_start: {
         type:String,
         required: true 
-    },//Dạng ngày + giờ Ví dụ: 21:47
-// 27 tháng 8 năm 202
-    distance: {
+    },//Ngày vận chuyển // 27 tháng 8 năm 2023
+    date_end: {
         type: String,
-        requierd: true
-    },
+        required: true
+    },//Ngày kết thúc vận chuyển// 27 tháng 8 năm 2023
     fromLocation: {
         type:String,
         required: true
-    }, //Dạng: địa chỉ - địa chỉ cụ thể
+    }, //Dạng: địa chỉ 
     toLocation: {
         type: String,
         required: true
-    }, //Dạng: địa chỉ - địa chỉ cụ thể
-    vehicle_price:{
+    }, //Dạng: địa chỉ
+    vehicle_name:{
         type: Number,
         required:true
-    },
-    vehicle_name: {
-        type:String,
-        required:true
-    },
+    },//Tên phương tiện
     driver_id:{
         type: mongoose.Types.ObjectId,
         ref: 'Driver',
         default: null
-    },
-    man_power_quantity: {
-        type:Number,
-        required:true
-    },
-    man_power_price:{
-        type:Number,
-        required:true
-    },
-    moving_fee:{
-        type: Array, of: String, default: []
-    },
-    service_fee:{
-        type: Array, of: String, default: []
-    },
-    noteDriver:{
-        type: String,
-        requied: true
-    },
-    item_detail:{
-        type: Array, of: String, default: []
-    },
+    },//Id của tài xế
     totalOrder:{
         type:Number,
-        requierd:true
+        required: true
+    },//Tổng đơn hàng
+    order_detail_id:{
+        type: mongoose.Types.ObjectId,
+        ref: 'OrderDetail',
+        default: null
     },
     status:{
         type:String,
         default: "Đang tìm tài xế"
     }
+    //6 trạng thái
+    // 1.Đang tìm tài xế
+    // 2.Đang thực hiện
+    // 3. Xác nhận hóa đơn
+    // 4.Thanh toán hóa đơn
+    // 5. Hoàn thành
+    // 6. Đã hủy
 
 }, { timestamps: true })
 
