@@ -126,6 +126,14 @@ function BookingUser() {
         })
         .catch((e) => {
           console.log(e);
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: "Đặt dịch vụ thất bại !",
+            text: "Hãy thử lại !",
+            showConfirmButton: false,
+            timer: 1000,
+          });
         });
     }
   };

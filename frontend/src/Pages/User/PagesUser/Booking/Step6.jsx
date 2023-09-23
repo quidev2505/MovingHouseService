@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { Toast } from "../../../../Components/ToastColor";
 
-import axios from "axios";
-
 import { useNavigate } from "react-router-dom";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
@@ -17,6 +15,7 @@ function Step6() {
     setIsActive(false);
     localStorage.removeItem("check_nav_booking");
     localStorage.removeItem("order_moving");
+    localStorage.removeItem("success_payment_vnpay");;
     nav("/user/order");
     localStorage.setItem("menu", "/user/order");
   };
@@ -50,8 +49,8 @@ function Step6() {
         <h1>Đặt hàng thành công</h1>
         <br></br>
         <p>
-          Cảm ơn quý khách đã đặt dịch vụ của chúng tôi ! Thông tin chi tiết hãy
-          theo dõi ở mục{" "}
+          Chúng tôi sẽ liên hệ đến bạn sớm nhất ! Thông tin chi tiết hãy theo
+          dõi ở mục{" "}
           <span style={{ color: "#fed03f", fontWeight: "bold" }}>Đơn hàng</span>
         </p>
         <LoadingOverlayComponent status={isActive}></LoadingOverlayComponent>

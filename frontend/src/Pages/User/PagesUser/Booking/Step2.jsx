@@ -61,7 +61,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
           });
 
           setDataList(arr_result);
-          console.log(arr_result);
+          // console.log(arr_result);
         }
       })
       .catch((e) => {

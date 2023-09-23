@@ -22,6 +22,10 @@ const orderController = {
             const date_now = vietnamTime.split(' ')[0];
             const time_now = vietnamTime.split(' ')[1];
 
+            let payment_status = ''
+            if(req.body.payment_method === "Thanh toán VNPAY"){
+                payment_status = 'Đã thanh toán'
+            }
 
             const data_order_detail = await new OrderDetail({
                 distance: req.body.distance,
@@ -34,17 +38,18 @@ const orderController = {
                 service_fee: req.body.service_fee,
                 item_detail: req.body.item_detail,
                 payment_method: req.body.payment_method,
-                note_driver: req.body.note_driver
+                note_driver: req.body.note_driver,
+                payment_status: payment_status
             })
 
-            //Save Blog Detail
+            //Save Order Detail
             const data_save_order_detail = await data_order_detail.save();
 
             if (data_save_order_detail) {
                 const data_order = await new Order({
                     order_id: code_order_id,
                     customer_id: req.body.customer_id,
-                    date_created: date_now,
+                    date_created: date_now + time_now,//Ngày + giờ tạo đơn hàng
                     service_name: req.body.service_name,
                     date_start: req.body.date_start,
                     time_start: req.body.time_start,
@@ -57,7 +62,13 @@ const orderController = {
 
 
                 if (data_order) {
-                    res.status(200).json(data_order)
+                    //Save Order Detail
+                    const data_save_order = await data_order.save();
+                    if (data_save_order) {
+                        res.status(200).json(data_order)
+                    } else {
+                        res.status(401).json('Error')
+                    }
                 } else {
                     res.status(401).json('Error')
                 }

@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema({
     date_created: {
         type: String,
         required:true
-    },//Ngày tạo đơn hàng
+    },//Ngày tạo đơn hàng - giờ
     service_name: {
         type:String,
         required: true
@@ -39,7 +39,7 @@ const orderSchema = new mongoose.Schema({
         required: true
     }, //Dạng: địa chỉ
     vehicle_name:{
-        type: Number,
+        type: String,
         required:true
     },//Tên phương tiện
     driver_id:{

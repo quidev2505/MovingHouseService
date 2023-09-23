@@ -5,6 +5,11 @@ import { Tag, Space } from "antd";
 import { useSelector } from "react-redux";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+import axios from "axios";
+
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+import "sweetalert2/src/sweetalert2.scss";
 
 function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   const [isActive, setIsActive] = useState(true);
@@ -43,8 +48,6 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       totalOrder: data_from_local.totalOrder,
     };
 
-    console.log(object_data);
-
     if (object_data) {
       setDataStep5(object_data);
     }
@@ -52,10 +55,44 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     setTotalOrder(object_data.totalOrder);
   };
 
+  const check_payment_success = () => {
+    let check_success = localStorage.getItem("success_payment_vnpay");
+    if (check_success) {
+      let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+      data_from_local.step4.payment_method = "Thanh toán VNPAY";
+      localStorage.setItem("order_moving", JSON.stringify(data_from_local))
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Thanh toán VNPAY thành công !",
+        text: "Chuyển sang bước kế tiếp !",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      setCheckFill(true);
+    }
+  };
+
   useEffect(() => {
+    check_payment_success();
     get_data_from_local();
     setIsActive(false);
   }, []);
+
+  //Thanh toán trực tuyến
+  const vnpay = async () => {
+    await axios
+      .post(`/v1/vnpay/create_payment_url`, {
+        totalOrder: dataStep5.totalOrder,
+      })
+      .then((data) => {
+        localStorage.setItem("success_payment_vnpay", true);
+        window.location.href = data.data;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <LoadingOverlayComponent status={isActive}>
@@ -127,7 +164,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                   <div className="d-flex">
                     <span
                       style={{
-                        width: "32px",
+                        width: "25px",
                         height: "26px",
                         backgroundColor: "#00bab3",
                         display: "flex",
@@ -459,6 +496,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
             {/* Đây là thanh toán trực tuyến */}
             <div>
               <div
+                onClick={() => vnpay()}
                 className="btn_navigate_to col"
                 style={{
                   display: onlineMethod ? "none" : "flex",
