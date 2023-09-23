@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 
 const orderDetailSchema = new mongoose.Schema({
     distance: {
-        type: Number,
+        type: String,
+        required: true
+    },
+    duration: {
+        type: String,
         required: true
     },
     fromLocation_detail: {
@@ -22,14 +26,10 @@ const orderDetailSchema = new mongoose.Schema({
         required: true
     },
     moving_fee: {
-        type: Array, of: String, default: []
+        type: Array, of: Object, default: []
     },
     service_fee: {
-        type: Array, of: String, default: []
-    },
-    noteDriver: {
-        type: String,
-        required: true
+        type: Array, of: Object, default: []
     },
     item_detail: {
         type: Array, of: String, default: []

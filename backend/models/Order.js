@@ -22,10 +22,14 @@ const orderSchema = new mongoose.Schema({
         type:String,
         required: true 
     },//Ngày vận chuyển // 27 tháng 8 năm 2023
+    time_start:{
+        type: String,
+        required: true
+    },//Thời gian bắt đầu
     date_end: {
         type: String,
         default: ""
-    },//Ngày kết thúc vận chuyển// 27 tháng 8 năm 2023
+    },//Ngày kết thúc vận chuyển // 27 tháng 8 năm 2023
     fromLocation: {
         type:String,
         required: true

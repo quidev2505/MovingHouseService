@@ -25,6 +25,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       moving_date: data_from_local.step1.moving_date,
       moving_time: data_from_local.step1.moving_time,
       distance: data_from_local.step2.distance,
+      duration: data_from_local.step2.duration,
       fromLocation: data_from_local.step2.fromLocation.name,
       from_location_detail: data_from_local.step2.from_location_detail,
       toLocation: data_from_local.step2.toLocation.name,
@@ -178,7 +179,11 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                 style={{ justifyContent: "space-between" }}
               >
                 <span>
-                  {dataStep5.name_vehicle}&nbsp; ({dataStep5.distance})
+                  {dataStep5.name_vehicle}&nbsp;{" "}
+                  <span style={{ color: "#ed883b" }}>
+                    ({dataStep5.distance})
+                  </span>{" "}
+                  - (<span className="fw-bold">{dataStep5.duration})</span>
                 </span>
                 <span className="fw-bold">
                   {dataStep5.price_vehicle

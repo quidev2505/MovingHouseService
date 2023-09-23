@@ -98,8 +98,9 @@ function BookingUser() {
       totalOrder: data_from_local.totalOrder,
       service_name: data_from_local.step1.select_service,
       date_start: data_from_local.step1.moving_date,
-      moving_time: data_from_local.step1.moving_time,
+      time_start: data_from_local.step1.moving_time,
       distance: data_from_local.step2.distance,
+      duration: data_from_local.step2.duration,
       fromLocation: data_from_local.step2.fromLocation.name,
       fromLocation_detail: data_from_local.step2.from_location_detail,
       toLocation: data_from_local.step2.toLocation.name,
@@ -120,6 +121,7 @@ function BookingUser() {
       await axios
         .post("/v1/order/create_order", object_data)
         .then((data) => {
+          setCurrent(current + 1);
           console.log(data);
         })
         .catch((e) => {
@@ -304,7 +306,6 @@ function BookingUser() {
                   });
                 } else if (current === 4) {
                   create_order();
-                  setCurrent(current + 1);
                 } else {
                   setCurrent(current + 1);
                 }

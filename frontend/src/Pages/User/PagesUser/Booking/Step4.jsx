@@ -6,7 +6,7 @@ import { Toast } from "../../../../Components/ToastColor";
 
 import { ReloadOutlined } from "@ant-design/icons";
 
-import { Checkbox } from "antd";
+import { Checkbox, Tour } from "antd";
 
 import { Tabs } from "antd";
 
@@ -15,8 +15,19 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 import { useSelector } from "react-redux";
 
 function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
+  //Thử nghiệm Tour
+  const ref1 = useRef(null);
+  const [open, setOpen] = useState(false);
+  const steps = [
+    {
+      title: "Cập nhật dữ liệu",
+      description: "Click vào đây để cập nhật tổng đơn hàng !",
+      target: () => ref1.current,
+    },
+  ];
+
   const [isActive, setIsActive] = useState(true);
-    const user = useSelector((state) => state.auth.login.currentUser); //Lấy User hiện tại ra
+  const user = useSelector((state) => state.auth.login.currentUser); //Lấy User hiện tại ra
   //Xử lý lấy toàn bộ dữ liệu chi phí
   const [DataServiceFee, setDataServiceFee] = useState([]); //Phí dịch vụ bổ sung
   const [DataMovingFee, setDataMovingFee] = useState([]); // Phí di chuyển
@@ -137,6 +148,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     get_service_fee();
     get_item();
     setIsActive(false);
+    setOpen(true);
   }, []);
 
   //Kiểm tra sau khi đã nhập đầy đủ tất cả dữ liệu
@@ -589,6 +601,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
           onClick={() => update_total_order()}
         >
           <button
+            ref={ref1}
             className="btn"
             style={{
               backgroundColor: "rgb(230, 133, 35)",
@@ -604,6 +617,16 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
             <ReloadOutlined />
           </button>
         </div>
+        <Tour
+          open={open}
+          onClose={() => setOpen(false)}
+          steps={steps}
+          indicatorsRender={(current, total) => (
+            <span>
+              {current + 1} / {total}
+            </span>
+          )}
+        />
         <h4 style={{ fontSize: "16px", fontWeight: "700" }}>
           Bạn có thêm các dịch vụ bổ sung vào không ?
         </h4>

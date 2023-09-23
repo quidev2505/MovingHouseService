@@ -4,68 +4,64 @@ const fs = require('fs');
 
 
 const orderController = {
-    generateRandomCode: () => {
-        // Tạo chuỗi chứa 8 ký tự số ngẫu nhiên
-        const code = "";
-        for (let i = 0; i < 8; i++) {
-            code += String(Math.floor(Math.random() * 10));
-        }
-
-        // Trả về chuỗi này
-        return code;
-    },
     //Create Order
     createOrder: async (req, res) => {
         try {
             const data_input = req.body;
 
-            console.log(data_input)
-            // //Calculate Time at the moment
-            // const now = new Date();
-            // const vietnamTime = now.toLocaleString('vi-VN');
-            // const date_now = vietnamTime.split(' ')[0];
-            // const time_now = vietnamTime.split(' ')[1];
+            // Tạo chuỗi chứa 8 ký tự số ngẫu nhiên
+            let code_order_id = "";
+            for (let i = 0; i < 8; i++) {
+                code_order_id += String(Math.floor(Math.random() * 10));
+            }
 
 
-            // const data_order_detail = await new OrderDetail({
-            //     distance: req.body.distance,
-            //     fromLocation_detail: req.body.fromLocation_detail,
-            //     toLocation_detail: req.body.toLocation_detail,
-            //     man_power_quantity: req.body.man_power_quantity,
-            //       man_power_price: req.body.man_power_price,
-            //     moving_fee: req.body.moving_fee,
-            //     service_fee: req.body.service_fee,
-            //     noteDriver: req.body.noteDriver,
-            //     item_detail: req.body.item_detail,
-            //     payment_method: req.body.payment_method,
-            //     note_driver: req.body.note_driver
-            // })
-
-            // //Save Blog Detail
-            // const data_save_order_detail = await data_order_detail.save();
-
-            // if (data_save_order_detail) {
-            //     const data_order = await new Order({
-            //         order_id: this.orderController.generateRandomCode(),
-            //         customer_id: req.body.customer_id,
-            //         date_created: date_now,
-            //         service_name: req.body.service_name,
-            //         date_start: req.body.date_start,
-            //         fromLocation: req.body.fromLocation,
-            //         toLocation: req.body.toLocation,
-            //         vehicle_name: req.body.vehicle_name,
-            //         totalOrder: req.body.totalOrder,
-            //         order_detail_id: data_save_order_detail._id,
-            //         date_end: req.body.date_end
-            //     })
+            //Calculate Time at the moment
+            const now = new Date();
+            const vietnamTime = now.toLocaleString('vi-VN');
+            const date_now = vietnamTime.split(' ')[0];
+            const time_now = vietnamTime.split(' ')[1];
 
 
-            //     if (data_order) {
-            //         res.status(200).json(data_order)
-            //     } else {
-            //         res.status(401).json('Error')
-            //     }
-            // }
+            const data_order_detail = await new OrderDetail({
+                distance: req.body.distance,
+                duration: req.body.duration,
+                fromLocation_detail: req.body.fromLocation_detail,
+                toLocation_detail: req.body.toLocation_detail,
+                man_power_quantity: req.body.man_power_quantity,
+                man_power_price: req.body.man_power_price,
+                moving_fee: req.body.moving_fee,
+                service_fee: req.body.service_fee,
+                item_detail: req.body.item_detail,
+                payment_method: req.body.payment_method,
+                note_driver: req.body.note_driver
+            })
+
+            //Save Blog Detail
+            const data_save_order_detail = await data_order_detail.save();
+
+            if (data_save_order_detail) {
+                const data_order = await new Order({
+                    order_id: code_order_id,
+                    customer_id: req.body.customer_id,
+                    date_created: date_now,
+                    service_name: req.body.service_name,
+                    date_start: req.body.date_start,
+                    time_start: req.body.time_start,
+                    fromLocation: req.body.fromLocation,
+                    toLocation: req.body.toLocation,
+                    vehicle_name: req.body.vehicle_name,
+                    totalOrder: req.body.totalOrder,
+                    order_detail_id: data_save_order_detail._id,
+                })
+
+
+                if (data_order) {
+                    res.status(200).json(data_order)
+                } else {
+                    res.status(401).json('Error')
+                }
+            }
 
 
 

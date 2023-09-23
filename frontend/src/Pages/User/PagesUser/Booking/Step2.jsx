@@ -35,6 +35,9 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   //Tính khoảng cách
   const [distance, setDistance] = useState();
 
+  //Tính thời gian hoàn thành giao hàng
+  const [duration, setDuration] = useState();
+
   //Thiết lập địa lấy hàng FROM
   const get_location_list = async () => {
     await axios
@@ -273,7 +276,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
     }
   };
 
-  //Tính năng tính khoảng cách giữa 2 điểm
+  //Tính năng tính khoảng cách giữa 2 điểm và tính thời gian hoàn tất.
   const total_distance = async (fromLocation, ob) => {
     try {
       await axios
@@ -281,8 +284,11 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
           `https://rsapi.goong.io/Direction?origin=${fromLocation.lat},${fromLocation.lng}&destination=${ob.lat},${ob.lng}&vehicle=truck&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
         )
         .then((data) => {
-          let result_data = data.data.routes[0].legs[0].distance.text;
-          setDistance(result_data);
+          console.log(data);
+          let result_data_distance = data.data.routes[0].legs[0].distance.text; //Tính khoảng cách
+          let result_data_duration = data.data.routes[0].legs[0].duration.text; //Tính thời gian hoàn thành
+          setDistance(result_data_distance);
+          setDuration(result_data_duration);
         })
         .catch((e) => {
           console.log(e);
@@ -299,7 +305,8 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
       toLocation !== undefined &&
       from_location_detail !== undefined &&
       to_location_detail !== undefined &&
-      distance !== undefined
+      distance !== undefined &&
+      duration !== undefined
     ) {
       setCheckFill(true);
 
@@ -320,6 +327,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         toLocation: toLocation,
 
         distance: distance,
+        duration: duration,
       };
 
       object_order_local.step2 = step2;
@@ -338,6 +346,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
     from_location_detail,
     to_location_detail,
     distance,
+    duration,
   ]);
 
   //Khi đã nhập rồi thì kiểm tra trong localStorage
@@ -570,7 +579,8 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
                 left: "10px",
               }}
             >
-              Khoảng cách: <span style={{ color: "#ed883b" }}>{distance}</span>
+              Khoảng cách: <span style={{ color: "#ed883b" }}>{distance}</span>{" "}
+              | Thời gian: <span style={{ color: "#ed883b" }}>{duration}</span>
             </div>
           </div>
         </div>
