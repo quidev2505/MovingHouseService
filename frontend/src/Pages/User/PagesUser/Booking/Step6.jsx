@@ -6,10 +6,15 @@ import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 
+import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+
 function Step6() {
   const nav = useNavigate();
 
+  const [isActive, setIsActive] = useState(true);
+
   const success_order = () => {
+    setIsActive(false);
     localStorage.removeItem("check_nav_booking");
     localStorage.removeItem("order_moving");
     nav("/user/order");
@@ -21,10 +26,10 @@ function Step6() {
       icon: "success",
       title: "Hãy chờ 5s để chuyển qua trang đơn hàng !",
     });
-    
+
     setTimeout(() => {
       success_order();
-    },4300);
+    }, 3900);
   }, []);
 
   return (
@@ -49,6 +54,7 @@ function Step6() {
           theo dõi ở mục{" "}
           <span style={{ color: "#fed03f", fontWeight: "bold" }}>Đơn hàng</span>
         </p>
+        <LoadingOverlayComponent status={isActive}></LoadingOverlayComponent>
       </div>
     </div>
   );

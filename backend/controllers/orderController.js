@@ -4,35 +4,71 @@ const fs = require('fs');
 
 
 const orderController = {
+    generateRandomCode: () => {
+        // Tạo chuỗi chứa 8 ký tự số ngẫu nhiên
+        const code = "";
+        for (let i = 0; i < 8; i++) {
+            code += String(Math.floor(Math.random() * 10));
+        }
+
+        // Trả về chuỗi này
+        return code;
+    },
     //Create Order
     createOrder: async (req, res) => {
         try {
             const data_input = req.body;
-            // Lấy thông tin về file được upload
-            const file = req.file;
 
-            //Calculate Time at the moment
-            const now = new Date();
-            const vietnamTime = now.toLocaleString('vi-VN');
-            const time_now = vietnamTime.split(' ')[1];
+            console.log(data_input)
+            // //Calculate Time at the moment
+            // const now = new Date();
+            // const vietnamTime = now.toLocaleString('vi-VN');
+            // const date_now = vietnamTime.split(' ')[0];
+            // const time_now = vietnamTime.split(' ')[1];
 
 
-            const data_blog = await new Blog({
-                title: data_input.title,
-                content: data_input.content,
-                category: data_input.category,
-                post_date: time_now,
-                thumbnail: file.path
-            })
+            // const data_order_detail = await new OrderDetail({
+            //     distance: req.body.distance,
+            //     fromLocation_detail: req.body.fromLocation_detail,
+            //     toLocation_detail: req.body.toLocation_detail,
+            //     man_power_quantity: req.body.man_power_quantity,
+            //       man_power_price: req.body.man_power_price,
+            //     moving_fee: req.body.moving_fee,
+            //     service_fee: req.body.service_fee,
+            //     noteDriver: req.body.noteDriver,
+            //     item_detail: req.body.item_detail,
+            //     payment_method: req.body.payment_method,
+            //     note_driver: req.body.note_driver
+            // })
 
-            //Save Data Blog
-            const data_save = await data_blog.save();
+            // //Save Blog Detail
+            // const data_save_order_detail = await data_order_detail.save();
 
-            if (data_save) {
-                res.status(200).json(data_save)
-            } else {
-                res.status(401).json('Error')
-            }
+            // if (data_save_order_detail) {
+            //     const data_order = await new Order({
+            //         order_id: this.orderController.generateRandomCode(),
+            //         customer_id: req.body.customer_id,
+            //         date_created: date_now,
+            //         service_name: req.body.service_name,
+            //         date_start: req.body.date_start,
+            //         fromLocation: req.body.fromLocation,
+            //         toLocation: req.body.toLocation,
+            //         vehicle_name: req.body.vehicle_name,
+            //         totalOrder: req.body.totalOrder,
+            //         order_detail_id: data_save_order_detail._id,
+            //         date_end: req.body.date_end
+            //     })
+
+
+            //     if (data_order) {
+            //         res.status(200).json(data_order)
+            //     } else {
+            //         res.status(401).json('Error')
+            //     }
+            // }
+
+
+
         } catch (e) {
             console.log(e)
             res.status(501).json(e)
@@ -169,4 +205,4 @@ const orderController = {
 
 }
 
-module.exports = blogController;
+module.exports = orderController;

@@ -8,7 +8,6 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 
 import "sweetalert2/src/sweetalert2.scss";
 
-
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -22,13 +21,12 @@ import Step5 from "./Step5";
 import Step6 from "./Step6";
 
 import { Toast } from "../../../../Components/ToastColor";
+import axios from "axios";
 
 function BookingUser() {
   const nav = useNavigate();
   const [current, setCurrent] = useState(0);
   const [check_fill, setCheckFill] = useState(false);
-
-
 
   //Thử nghiệm Tour
   const ref1 = useRef(null);
@@ -91,8 +89,44 @@ function BookingUser() {
         localStorage.setItem("check_nav_booking", JSON.stringify(arr_new));
       }
     }
-
   }, [current]);
+
+  //Tạo đơn hàng
+  const create_order = async () => {
+    let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+    const object_data = {
+      totalOrder: data_from_local.totalOrder,
+      service_name: data_from_local.step1.select_service,
+      date_start: data_from_local.step1.moving_date,
+      moving_time: data_from_local.step1.moving_time,
+      distance: data_from_local.step2.distance,
+      fromLocation: data_from_local.step2.fromLocation.name,
+      fromLocation_detail: data_from_local.step2.from_location_detail,
+      toLocation: data_from_local.step2.toLocation.name,
+      toLocation_detail: data_from_local.step2.to_location_detail,
+      price_vehicle: data_from_local.step3.priceStep3,
+      vehicle_name: data_from_local.step3.vehicle_choose.vehicle_name,
+      man_power_quantity: data_from_local.step4.man_power_count.quantity_man,
+      man_power_price: data_from_local.step4.man_power_count.total_price_man,
+      payment_method: data_from_local.step4.payment_method,
+      note_driver: data_from_local.step4.noteDriver,
+      customer_id: data_from_local.step4.customer_id,
+      moving_fee: data_from_local.step4.moving_fee,
+      service_fee: data_from_local.step4.service_fee,
+      item_detail: data_from_local.step4.dataChooseItem,
+    };
+
+    if (object_data) {
+      await axios
+        .post("/v1/order/create_order", object_data)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  };
 
   return (
     <>
@@ -131,58 +165,133 @@ function BookingUser() {
           />
         </div>
 
-          <div
-            className="form_step"
-            style={{ marginTop: "30px", margin: "30px 150px" }}
-          >
-            {current === 0 ? (
-              <Step1 check_fill={check_fill} setCheckFill={setCheckFill} />
-            ) : current === 1 ? (
-              <Step2
-                check_fill={check_fill}
-                setCheckFill={setCheckFill}
-                current={current}
-                setCurrent={setCurrent}
-              />
-            ) : current === 2 ? (
-              <Step3
-                check_fill={check_fill}
-                setCheckFill={setCheckFill}
-                totalOrder={totalOrder}
-                setTotalOrder={setTotalOrder}
-              />
-            ) : current === 3 ? (
-              <Step4
-                check_fill={check_fill}
-                setCheckFill={setCheckFill}
-                totalOrder={totalOrder}
-                setTotalOrder={setTotalOrder}
-              />
-            ) : current === 4 ? (
-              <Step5
-                check_fill={check_fill}
-                setCheckFill={setCheckFill}
-                totalOrder={totalOrder}
-                setTotalOrder={setTotalOrder}
-              />
-            ) : current === 5 ? (
-              <Step6 />
-            ) : (
-              ""
-            )}
-          </div>
+        <div
+          className="form_step"
+          style={{ marginTop: "30px", margin: "30px 150px" }}
+        >
+          {current === 0 ? (
+            <Step1 check_fill={check_fill} setCheckFill={setCheckFill} />
+          ) : current === 1 ? (
+            <Step2
+              check_fill={check_fill}
+              setCheckFill={setCheckFill}
+              current={current}
+              setCurrent={setCurrent}
+            />
+          ) : current === 2 ? (
+            <Step3
+              check_fill={check_fill}
+              setCheckFill={setCheckFill}
+              totalOrder={totalOrder}
+              setTotalOrder={setTotalOrder}
+            />
+          ) : current === 3 ? (
+            <Step4
+              check_fill={check_fill}
+              setCheckFill={setCheckFill}
+              totalOrder={totalOrder}
+              setTotalOrder={setTotalOrder}
+            />
+          ) : current === 4 ? (
+            <Step5
+              check_fill={check_fill}
+              setCheckFill={setCheckFill}
+              totalOrder={totalOrder}
+              setTotalOrder={setTotalOrder}
+            />
+          ) : current === 5 ? (
+            <Step6 />
+          ) : (
+            ""
+          )}
+        </div>
 
-          <div className="navigate_step container">
+        <div className="navigate_step container">
+          <div
+            ref={ref1}
+            className="btn_navigate_back"
+            style={{ width: "fit-content" }}
+            onClick={() => {
+              if (current === 0) {
+                nav("/");
+              } else if (current === 4) {
+                Swal.fire({
+                  title: "Bạn muốn hủy bỏ đơn hàng",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Xác nhận",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    nav("/user/booking");
+                    setCurrent(0);
+                    localStorage.removeItem("check_nav_booking");
+                    localStorage.removeItem("order_moving");
+                  }
+                });
+              } else {
+                setCurrent(current - 1);
+              }
+            }}
+          >
+            {reset !== "" ? <DeleteOutlined /> : <ArrowLeftOutlined />}
+            &nbsp;
+            {reset !== "" ? reset : "Trở về"}
+          </div>
+          <Tour
+            open={open}
+            onClose={() => setOpen(false)}
+            steps={steps}
+            indicatorsRender={(current, total) => (
+              <span>
+                {current + 1} / {total}
+              </span>
+            )}
+          />
+          <div className="d-flex row">
             <div
-              ref={ref1}
-              className="btn_navigate_back"
-              style={{ width: "fit-content" }}
+              className="total_order col"
+              style={{
+                backgroundColor: "white",
+                border: "1px solid rgb(204, 204, 204)",
+                width: "400px",
+                height: "44px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                borderRadius: "5px",
+                marginRight: "10px",
+              }}
+            >
+              <span
+                style={{
+                  color: "#ed883b",
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  width: "68px",
+                }}
+              >
+                Tổng cộng
+              </span>
+              <h3
+                style={{
+                  fontWeight: "600",
+                  marginLeft: "10px",
+                  fontSize: "20px",
+                }}
+              >
+                {totalOrder.toLocaleString()} đ
+              </h3>
+            </div>
+            <div
+              className="btn_navigate_to col"
+              style={{ display: check_fill ? "flex" : "none" }}
               onClick={() => {
-                if (current === 0) {
-                  nav("/");
-                } else if (current === 4) {
+                if (current === 3) {
                   Swal.fire({
-                    title: "Bạn muốn hủy bỏ đơn hàng",
+                    title: "Bạn muốn đến bước 5 ?",
+                    text: "Sẽ không thể thay đổi các lựa chọn trước đây",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -190,95 +299,22 @@ function BookingUser() {
                     confirmButtonText: "Xác nhận",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      nav("/user/booking");
-                      setCurrent(0);
-                      localStorage.removeItem("check_nav_booking");
-                      localStorage.removeItem("order_moving");
+                      setCurrent(current + 1);
                     }
                   });
+                } else if (current === 4) {
+                  create_order();
+                  setCurrent(current + 1);
                 } else {
-                  setCurrent(current - 1);
+                  setCurrent(current + 1);
                 }
               }}
             >
-              {reset !== "" ? <DeleteOutlined /> : <ArrowLeftOutlined />}
-              &nbsp;
-              {reset !== "" ? reset : "Trở về"}
-            </div>
-            <Tour
-              open={open}
-              onClose={() => setOpen(false)}
-              steps={steps}
-              indicatorsRender={(current, total) => (
-                <span>
-                  {current + 1} / {total}
-                </span>
-              )}
-            />
-            <div className="d-flex row">
-              <div
-                className="total_order col"
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid rgb(204, 204, 204)",
-                  width: "400px",
-                  height: "44px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                  borderRadius: "5px",
-                  marginRight: "10px",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#ed883b",
-                    fontSize: "14px",
-                    fontWeight: "400",
-                    width: "68px",
-                  }}
-                >
-                  Tổng cộng
-                </span>
-                <h3
-                  style={{
-                    fontWeight: "600",
-                    marginLeft: "10px",
-                    fontSize: "20px",
-                  }}
-                >
-                  {totalOrder.toLocaleString()} đ
-                </h3>
-              </div>
-              <div
-                className="btn_navigate_to col"
-                style={{ display: check_fill ? "flex" : "none" }}
-                onClick={() => {
-                  if (current === 3) {
-                    Swal.fire({
-                      title: "Bạn muốn đến bước 5 ?",
-                      text: "Sẽ không thể thay đổi các lựa chọn trước đây",
-                      icon: "warning",
-                      showCancelButton: true,
-                      confirmButtonColor: "#3085d6",
-                      cancelButtonColor: "#d33",
-                      confirmButtonText: "Xác nhận",
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        setCurrent(current + 1);
-                      }
-                    });
-                  } else {
-                    setCurrent(current + 1);
-                  }
-                }}
-              >
-                Tiếp tục
-                <ArrowRightOutlined />
-              </div>
+              Tiếp tục
+              <ArrowRightOutlined />
             </div>
           </div>
-  
+        </div>
       </div>
     </>
   );

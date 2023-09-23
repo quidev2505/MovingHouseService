@@ -10,6 +10,7 @@ const customerRoute = require('./routes/customer');
 const blogRoute = require('./routes/blog');
 const commentBlogRoute = require('./routes/comment_blog');
 const itemRoute = require('./routes/item');
+const orderRoute = require('./routes/order');
 var cookieParser = require('cookie-parser')
 
 //Cors
@@ -71,6 +72,10 @@ app.use("/v1/commentBlog", commentBlogRoute)
 
 //Item 
 app.use("/v1/item", itemRoute)
+
+//Order 
+app.use("/v1/order", orderRoute)
+
 
 //Middleware Test First
 app.get('/', (req, res) => {

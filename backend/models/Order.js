@@ -24,7 +24,7 @@ const orderSchema = new mongoose.Schema({
     },//Ngày vận chuyển // 27 tháng 8 năm 2023
     date_end: {
         type: String,
-        required: true
+        default: ""
     },//Ngày kết thúc vận chuyển// 27 tháng 8 năm 2023
     fromLocation: {
         type:String,
@@ -50,7 +50,7 @@ const orderSchema = new mongoose.Schema({
     order_detail_id:{
         type: mongoose.Types.ObjectId,
         ref: 'OrderDetail',
-        default: null
+        required: true
     },
     status:{
         type:String,

@@ -12,8 +12,11 @@ import { Tabs } from "antd";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
+import { useSelector } from "react-redux";
+
 function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   const [isActive, setIsActive] = useState(true);
+    const user = useSelector((state) => state.auth.login.currentUser); //Lấy User hiện tại ra
   //Xử lý lấy toàn bộ dữ liệu chi phí
   const [DataServiceFee, setDataServiceFee] = useState([]); //Phí dịch vụ bổ sung
   const [DataMovingFee, setDataMovingFee] = useState([]); // Phí di chuyển
@@ -161,6 +164,8 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         noteDriver: noteDriver,
         dataChooseItem: dataChooseItem,
         price_step4_init: temp_price_order.current,
+        customer_id: user._id,
+        payment_method: "Thanh toán cho tài xế",
       };
 
       object_order_local.step4 = step4;
