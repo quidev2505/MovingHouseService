@@ -25,6 +25,8 @@ const orderController = {
             let payment_status = ''
             if (req.body.payment_method === "Thanh toán VNPAY") {
                 payment_status = 'Đã thanh toán'
+            } else {
+                payment_status = 'Chưa thanh toán'
             }
 
             const data_order_detail = await new OrderDetail({
@@ -33,13 +35,15 @@ const orderController = {
                 fromLocation_detail: req.body.fromLocation_detail,
                 toLocation_detail: req.body.toLocation_detail,
                 man_power_quantity: req.body.man_power_quantity,
+                vehicle_price: req.body.price_vehicle,
                 man_power_price: req.body.man_power_price,
                 moving_fee: req.body.moving_fee,
                 service_fee: req.body.service_fee,
                 item_detail: req.body.item_detail,
                 payment_method: req.body.payment_method,
                 note_driver: req.body.note_driver,
-                payment_status: payment_status
+                payment_status: payment_status,
+                totalOrder: req.body.totalOrder,
             })
 
             //Save Order Detail
@@ -87,6 +91,22 @@ const orderController = {
 
             if (data_order) {
                 res.status(201).json(data_order)
+            } else {
+                res.status(501).json(e)
+            }
+        } catch (e) {
+            res.status(501).json(e)
+        }
+    },
+    //View Order Detail With Order detail id
+    viewOrderWithOrderDetailId: async (req, res) => {
+        try {
+            const order_detail_id = req.params.order_detail_id;
+
+            const data_order_detail = await OrderDetail.find({ _id: order_detail_id });
+
+            if (data_order_detail) {
+                res.status(201).json(data_order_detail)
             } else {
                 res.status(501).json(e)
             }

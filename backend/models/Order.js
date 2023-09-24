@@ -50,7 +50,7 @@ const orderSchema = new mongoose.Schema({
     totalOrder:{
         type:Number,
         required: true
-    },//Tổng đơn hàng
+    },//Tổng đơn hàng hiện tại
     order_detail_id:{
         type: mongoose.Types.ObjectId,
         ref: 'OrderDetail',

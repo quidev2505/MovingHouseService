@@ -20,7 +20,7 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 
 function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   const [isActive, setIsActive] = useState(true);
-  const [locationFrom, setLocationFrom] = useState(""); //Địa điểm nhập vào
+  const [locationFrom, setLocationFrom] = useState(" "); //Địa điểm nhập vào
   const [dataList, setDataList] = useState([]); //Hiển thị ra list danh sách
   const [locationFromChoose, setLocationFromChoose] = useState(""); //Địa điểm đã chọn từ danh sách
   const [fromLocation, setFromLocation] = useState({}); //Chọn địa điểm đưa vào bản đồ
@@ -103,7 +103,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   }
 
   useEffect(() => {
-    if (locationFrom.length >= 5) {
+    if (locationFrom && locationFrom.length >= 5) {
       get_location_list();
     }
   }, [locationFrom]);
@@ -250,7 +250,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
               );
 
               //Thêm 2 điểm marker vào 2 đầu
-              var marker = new goongjs.Marker({ color: "red" })
+              var marker = new goongjs.Marker({ color: "red", draggable: true })
                 .setLngLat([fromLocation.lng, fromLocation.lat])
                 .addTo(map);
 
@@ -258,7 +258,15 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
                 .setLngLat([ob.lng, ob.lat])
                 .addTo(map);
 
-              //Cho mapFirst biến mất
+            
+              function onDragEnd() {
+                var lngLat = marker.getLngLat();
+                changeLocation(lngLat.lng, lngLat.lat);
+              }
+
+              marker.on("dragend", onDragEnd);  
+
+              // //Cho mapFirst biến mất
               // document.querySelector("#Map_first").style.display = "none";
 
               //Cho map phia dưới nhảy lên trên
@@ -275,6 +283,16 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
       console.log(e);
     }
   };
+
+
+  const changeLocation = async(lng, lat) => {
+    const data = await axios.get(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&1`
+    );
+    console.log(data.data)
+  }
+
+
 
   //Tính năng tính khoảng cách giữa 2 điểm và tính thời gian hoàn tất.
   const total_distance = async (fromLocation, ob) => {

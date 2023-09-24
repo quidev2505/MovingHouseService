@@ -821,3 +821,23 @@ th.ant-table-cell {
         margin: 0 auto;
     }
 }
+
+
+//Order User
+.orderUser {
+    .bottom_content_order .ant-drawer .ant-drawer-content-wrapper {
+        width: 600px !important;
+    }
+
+    .orderUser .ant-drawer-body {
+        width: 600px;
+    }
+
+    .ant-table-thead .ant-table-cell:nth-child(10) {
+        width: 10px !important;
+    }
+
+    .ant-table-content{
+        max-height: 448px !important;
+    }
+}

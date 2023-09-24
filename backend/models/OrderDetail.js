@@ -46,6 +46,14 @@ const orderDetailSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    totalOrder: {
+        type: Number,
+        required: true
+    },
+    totalOrderNew: {
+        type: Number,
+        default: 0
+    },//Tổng đơn hàng mới
     note_driver: {
         type: String,
         required: true
@@ -54,6 +62,7 @@ const orderDetailSchema = new mongoose.Schema({
         type: String,
         default: 'Chưa thanh toán'
     }//Chưa thanh toán, đã thanh toán
+
 }, { timestamps: true })
 
 module.exports = mongoose.model('OrderDetail', orderDetailSchema)

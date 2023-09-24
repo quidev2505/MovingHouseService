@@ -8,6 +8,10 @@ router.post('/create_order', orderController.createOrder)
 // View Order with customer_id
 router.get('/viewOrderWithCustomerId/:id_customer', orderController.viewOrderWithIdCustomer)
 
+// View Order Detail with id order detail
+router.get('/viewOrderDetail/:order_detail_id', orderController.viewOrderWithOrderDetailId)
+
+
 // //Update one field Blog
 // router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)
 
