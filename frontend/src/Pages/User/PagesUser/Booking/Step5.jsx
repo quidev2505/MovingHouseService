@@ -60,7 +60,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     if (check_success) {
       let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
       data_from_local.step4.payment_method = "Thanh toán VNPAY";
-      localStorage.setItem("order_moving", JSON.stringify(data_from_local))
+      localStorage.setItem("order_moving", JSON.stringify(data_from_local));
       Swal.fire({
         position: "center",
         icon: "success",
@@ -164,7 +164,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                   <div className="d-flex">
                     <span
                       style={{
-                        width: "25px",
+                        width: "40px",
                         height: "26px",
                         backgroundColor: "#00bab3",
                         display: "flex",
@@ -181,7 +181,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                     <p>{dataStep5.toLocation}</p>
                   </div>
                 </div>
-                <div className="col">
+                <div className="col" style={{ marginLeft: "32px" }}>
                   <div>
                     <p style={{ color: "#a6acb7" }}>
                       {dataStep5.from_location_detail}
@@ -478,7 +478,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
             >
               <img
                 alt="anh_dai_dien_vehicle"
-                src="./img/pngwing.com.png"
+                src="./img/vnpay.webp"
                 style={{ width: "75px", height: "44px", objectFit: "contain" }}
               />
               <p
@@ -513,6 +513,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                 id="online_method_payment"
               >
                 <img
+                  alt="anh"
                   src="./img/payment.jpg"
                   width="100px"
                   height="100px"
@@ -537,7 +538,13 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                 <h4 style={{ color: "#179bd7", fontWeight: "bold" }}>
                   Thanh toán trực tuyến
                 </h4>
-                <p>Thanh toán đơn giản với Paypal !</p>
+                <p>
+                  Thanh toán trực tuyến đơn giản với{" "}
+                  <span style={{ color: "#ed2129", fontWeight: "bold" }}>
+                    VNPAY
+                  </span>{" "}
+                  !
+                </p>
               </>
             )}
           </div>

@@ -23,7 +23,7 @@ const orderController = {
             const time_now = vietnamTime.split(' ')[1];
 
             let payment_status = ''
-            if(req.body.payment_method === "Thanh toán VNPAY"){
+            if (req.body.payment_method === "Thanh toán VNPAY") {
                 payment_status = 'Đã thanh toán'
             }
 
@@ -73,11 +73,24 @@ const orderController = {
                     res.status(401).json('Error')
                 }
             }
-
-
-
         } catch (e) {
             console.log(e)
+            res.status(501).json(e)
+        }
+    },
+    //View Order With Id_Customer
+    viewOrderWithIdCustomer: async (req, res) => {
+        try {
+            const customer_id = req.params.id_customer;
+
+            const data_order = await Order.find({ customer_id: customer_id });
+
+            if (data_order) {
+                res.status(201).json(data_order)
+            } else {
+                res.status(501).json(e)
+            }
+        } catch (e) {
             res.status(501).json(e)
         }
     },

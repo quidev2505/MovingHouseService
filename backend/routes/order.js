@@ -5,8 +5,8 @@ const orderController = require("../controllers/orderController");
 //create Order
 router.post('/create_order', orderController.createOrder)
 
-// //Read Blog
-// router.get('/read_blog', blogController.readBlog)
+// View Order with customer_id
+router.get('/viewOrderWithCustomerId/:id_customer', orderController.viewOrderWithIdCustomer)
 
 // //Update one field Blog
 // router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)
