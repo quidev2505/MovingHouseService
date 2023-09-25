@@ -21,6 +21,7 @@ function EditVehicle() {
   //Validation form
   const { handleSubmit } = useForm();
 
+  const [imgURL, setImgURL] = useState(""); //Link hình ảnh
   const [image, setImage] = useState("");
   const [image_old, setImageOld] = useState("");
 
@@ -51,8 +52,9 @@ function EditVehicle() {
     const formData = new FormData();
     formData.append("file", image);
     formData.append("name", dataVehicle.name);
+    formData.append("imgURL", imgURL);
     formData.append("image_old", image_old);
-  
+
     formData.append("brand", dataVehicle.brand);
     formData.append("capacity", dataVehicle.capacity);
     formData.append("moving_ban_time", dataVehicle.moving_ban_time);
@@ -334,6 +336,19 @@ function EditVehicle() {
                               style={{ objectFit: "contain" }}
                             />
                           )}
+
+                          <input
+                            type="text"
+                            value={imgURL}
+                            onChange={(e) => setImgURL(e.target.value)}
+                            placeholder="Hoặc nhập đường dẫn hình ảnh vào đây"
+                            style={{
+                              marginTop: "10px",
+                              borderRadius: "5px",
+                              padding: "5px",
+                              width: "500px",
+                            }}
+                          />
                         </div>
                         <div style={{ marginBottom: "5px" }}>
                           <label

@@ -9,10 +9,16 @@ const itemController = {
             // Lấy thông tin về file được upload
             const file = req.file;
 
+            let IMG = ""
+            if (file) {
+                IMG = file.path;
+            } else {
+                IMG = req.body.imgURL
+            }
 
             const data_item = await new Item({
                 name: data_input.name,
-                image: file.path,
+                image: IMG,
                 category: data_input.category,
                 size: data_input.size
             })
@@ -49,7 +55,8 @@ const itemController = {
                 if (fs.existsSync(imagePath)) {
                     fs.unlinkSync(imagePath);
                 }
-
+            } else {
+                req.body.image = req.body.imgURL
             }
 
             const check_update = await Item.findByIdAndUpdate(id, req.body);

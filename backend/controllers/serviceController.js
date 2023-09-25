@@ -11,6 +11,12 @@ const serviceController = {
             // Lấy thông tin về file được upload
             const file = req.file;
 
+            let IMG = ""
+            if(file){
+                IMG = file.path;
+            }else{
+                IMG = req.body.imgURL
+            }
 
             const service_data = await new Service({
                 name: req.body.name,
@@ -21,7 +27,7 @@ const serviceController = {
                 status: req.body.status,
                 process: req.body.process,
                 bonus: req.body.bonus,
-                image: file.path,
+                image: IMG,
                 warranty_policy: req.body.warranty_policy,
                 suitable_for: req.body.suitable_for
             })
@@ -89,6 +95,8 @@ const serviceController = {
                 if (fs.existsSync(imagePath)) {
                     fs.unlinkSync(imagePath);
                 }
+            }else{
+                req.body.image = req.body.imgURL;
             }
 
 

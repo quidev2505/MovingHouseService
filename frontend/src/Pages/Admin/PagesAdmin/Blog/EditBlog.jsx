@@ -33,6 +33,7 @@ function AddBlog() {
   //Validation form
   const { handleSubmit } = useForm();
 
+  const [imgURL, setImgURL] = useState(""); //Link hình ảnh
   const [image, setImage] = useState("");
   const [imageOld, setImageOld] = useState("");
 
@@ -67,6 +68,7 @@ function AddBlog() {
     const formData = new FormData();
     formData.append("file", image);
     formData.append("content", content);
+    formData.append("imgURL", imgURL);
     formData.append("image_old", imageOld);
     formData.append("title", dataBlog.title);
     formData.append("category", dataBlog.category);
@@ -242,14 +244,30 @@ function AddBlog() {
 
                           {image && (
                             <img
-             
-                              src={typeof(image) === "object" ?  URL.createObjectURL(image) : image }
+                              src={
+                                typeof image === "object"
+                                  ? URL.createObjectURL(image)
+                                  : image
+                              }
                               width={100}
                               height={100}
                               alt="Image"
                               style={{ objectFit: "contain" }}
                             />
                           )}
+
+                          <input
+                            type="text"
+                            value={imgURL}
+                            onChange={(e) => setImgURL(e.target.value)}
+                            placeholder="Hoặc nhập đường dẫn hình ảnh vào đây"
+                            style={{
+                              marginTop: "10px",
+                              borderRadius: "5px",
+                              padding: "5px",
+                              width: "500px",
+                            }}
+                          />
                         </div>
                       </div>
                     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 
 import { Breadcrumb, Button } from "antd";
@@ -45,6 +45,8 @@ function OrderAdmin() {
   const [dataOrder, setDataOrder] = useState([]);
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
+
+  // const [statusOrder, setStatusOrder] = useState();
 
   const showDrawer = () => {
     setOpen(true);
@@ -106,29 +108,33 @@ function OrderAdmin() {
     }
   };
 
+  const statusOrder = useRef("Đã hủy");
+
   //Update One Field Order
-  const updateOrder = async (order_id, statusOrder) => {
-    console.log(statusOrder);
-    console.log(order_id);
-    // await axios
-    //   .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, {
-    //     status: statusOrder,
-    //   })
-    //   .then((data) => {
-    //     Swal.fire({
-    //       position: "center",
-    //       icon: "success",
-    //       title: "Cập nhật đơn hàng thành công !",
-    //       showConfirmButton: false,
-    //       timer: 1500,
-    //     });
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
+  const updateOrder = async (order_id) => {
+    console.log(statusOrder.current);
+    await axios
+      .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, {
+        status: statusOrder.current,
+      })
+      .then((data) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Cập nhật đơn hàng thành công !",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          show_order_customer("Đang tìm tài xế");
+        }, 1100);
+        Modal.destroyAll();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
-	const [statusOrder, setStatusOrder] = useState("Đã hủy");
   //Update order
   const handle_update_order = (order_id) => {
     Modal.success({
@@ -139,21 +145,29 @@ function OrderAdmin() {
             Trạng thái đơn hàng hiện tại:{" "}
             <span className="fw-bold">{order_id.status}</span>
           </p>
-          <div>
+          <div className="d-flex">
             <p>Cập nhật trạng thái mới:</p>
             <select
-              onChange={(e) => setStatusOrder(e.target.value)}
-              value={statusOrder}
+              style={{
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                marginLeft: "10px",
+              }}
+              onChange={(e) => (statusOrder.current = e.target.value)}
             >
               <option value="Đã hủy">Đã hủy</option>
               <option value="Đang tìm tài xế">Đang tìm tài xế</option>
             </select>
           </div>
           <div
-            style={{ marginBottom: "50px", marginTop: "20px" }}
-            onClick={() => updateOrder(order_id, statusOrder)}
+            style={{
+              marginBottom: "50px",
+              marginTop: "20px",
+              display: "inline-block",
+            }}
+            onClick={() => updateOrder(order_id)}
           >
-            <button className="btn btn-primary">Cập nhật</button>
+            <button className="btn btn-success">Cập nhật</button>
           </div>
         </>
       ),
@@ -239,10 +253,11 @@ function OrderAdmin() {
       render: (status) => (
         <div className="d-flex">
           <Tag
-            color={status === "Đang tìm tài xế" ? "blue" : "volcano"}
+            color={status === "Đang tìm tài xế" ? "blue" : status === "Đã hủy" ? 'volcano' : status === 
+          "Đang thực hiện" ? "gold" : status === "Xác nhận hóa đơn" ? "purple" : status === "Thanh toán hóa đơn" ? "magenta" : "#87d068"}
             key={status}
           >
-            {status === "Đang tìm tài xế" ? "Đang tìm tài xế" : "Tạm ngưng"}
+            {status === "Đang tìm tài xế" ? "Đang tìm tài xế" : status === "Đã hủy" ? "Đã hủy" : status === "Đang thực hiện" ? "Đang thực hiện" : status === "Xác nhận hóa đơn" ? "Xác nhận hóa đơn" : status === "Thanh toán hóa đơn" ? "Thanh toán hóa đơn" : "Hoàn thành"}
           </Tag>
         </div>
       ),
@@ -626,7 +641,7 @@ function OrderAdmin() {
                 style={{ justifyContent: "space-between" }}
               >
                 <p>Tổng thanh toán cũ</p>
-                <p>{item.totalOrder.toLocaleString()} đ</p>
+                <p className="fw-bold">{item.totalOrder.toLocaleString()} đ</p>
               </div>
 
               <div

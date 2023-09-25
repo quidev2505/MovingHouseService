@@ -70,6 +70,7 @@ function AddService() {
     formState: { errors },
   } = useForm();
 
+  const [imgURL, setImgURL] = useState(""); //Link hình ảnh
   const [image, setImage] = useState("");
 
   // Upload Img
@@ -98,7 +99,7 @@ function AddService() {
     });
 
     try {
-      if (image && arrProcess.length > 0 && arrBonus.length > 0) {
+      if (image && arrProcess.length > 0 && arrBonus.length > 0 || imgURL !== '') {
         const dataService = {
           name: data.service_name,
           vehicle: data.vehicle_type,
@@ -114,6 +115,7 @@ function AddService() {
 
         const formData = new FormData();
         formData.append("file", image);
+        formData.append("imgURL", imgURL);
         formData.append("name", data.service_name);
         formData.append("vehicle", data.vehicle_type);
         formData.append("needPeople", data.need_people);
@@ -419,6 +421,19 @@ function AddService() {
                           style={{ objectFit: "contain" }}
                         />
                       )}
+
+                      <input
+                        type="text"
+                        value={imgURL}
+                        onChange={(e) => setImgURL(e.target.value)}
+                        placeholder="Hoặc nhập đường dẫn hình ảnh vào đây"
+                        style={{
+                          marginTop: "10px",
+                          borderRadius: "5px",
+                          padding: "5px",
+                          width: "500px",
+                        }}
+                      />
                     </div>
 
                     <div class="process_add_service">

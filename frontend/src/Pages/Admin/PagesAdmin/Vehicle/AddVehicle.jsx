@@ -24,6 +24,7 @@ function AddVehicle() {
   } = useForm();
 
   const [image, setImage] = useState("");
+  const [imgURL, setImgURL] = useState(""); //Link hình ảnh
 
   // Upload Img
   function uploadImg(e) {
@@ -32,7 +33,7 @@ function AddVehicle() {
 
   const onSubmit = async (data) => {
     try {
-      if (image) {
+      if (image || imgURL !== "") {
         const dataVehicle = {
           name: data.name,
           brand: data.brand,
@@ -53,6 +54,7 @@ function AddVehicle() {
 
         const formData = new FormData();
         formData.append("file", image);
+        formData.append("imgURL", imgURL);
         formData.append("name", data.name);
         formData.append("brand", data.brand);
         formData.append("capacity", data.capacity);
@@ -293,6 +295,19 @@ function AddVehicle() {
                               style={{ objectFit: "contain" }}
                             />
                           )}
+
+                          <input
+                            type="text"
+                            value={imgURL}
+                            onChange={(e) => setImgURL(e.target.value)}
+                            placeholder="Hoặc nhập đường dẫn hình ảnh vào đây"
+                            style={{
+                              marginTop: "10px",
+                              borderRadius: "5px",
+                              padding: "5px",
+                              width: "500px",
+                            }}
+                          />
                         </div>
                         <div style={{ marginBottom: "5px" }}>
                           <label

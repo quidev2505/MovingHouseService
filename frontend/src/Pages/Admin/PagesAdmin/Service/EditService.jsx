@@ -68,6 +68,7 @@ function EditService() {
   //Validation form
   const { handleSubmit } = useForm();
 
+  const [imgURL, setImgURL] = useState(""); //Link hình ảnh
   const [image, setImage] = useState("");
   const [image_old, setImageOld] = useState("");
 
@@ -126,6 +127,7 @@ function EditService() {
 
     const formData = new FormData();
     formData.append("file", image);
+    formData.append("imgURL", imgURL);
     formData.append("image_old", image_old);
     formData.append("name", dataService.name);
     formData.append("vehicle", dataService.vehicle);
@@ -229,7 +231,7 @@ function EditService() {
         setTargetKeysBonus(arrBonusKey);
 
         setImage(object_data.image);
-        setImageOld(object_data.image)
+        setImageOld(object_data.image);
         setDataService(object_data);
         // console.log(dataService);
       })
@@ -501,6 +503,19 @@ function EditService() {
                           style={{ objectFit: "contain" }}
                         />
                       )}
+
+                      <input
+                        type="text"
+                        value={imgURL}
+                        onChange={(e) => setImgURL(e.target.value)}
+                        placeholder="Hoặc nhập đường dẫn hình ảnh vào đây"
+                        style={{
+                          marginTop: "10px",
+                          borderRadius: "5px",
+                          padding: "5px",
+                          width: "500px",
+                        }}
+                      />
                     </div>
 
                     <div class="process_add_service">

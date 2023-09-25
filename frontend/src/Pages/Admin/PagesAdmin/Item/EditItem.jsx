@@ -20,6 +20,7 @@ function EditItem() {
   //Validation form
   const { handleSubmit } = useForm();
 
+  const [imgURL, setImgURL] = useState(""); //Link hình ảnh
   const [image, setImage] = useState("");
   const [imageOld, setImageOld] = useState("");
 
@@ -53,6 +54,7 @@ function EditItem() {
     const formData = new FormData();
     formData.append("file", image);
     formData.append("name", dataItem.name);
+    formData.append("imgURL", imgURL);
     formData.append("image_old", imageOld);
     formData.append("size", dataItem.size);
     formData.append("category", dataItem.category);
@@ -283,6 +285,19 @@ function EditItem() {
                               style={{ objectFit: "contain" }}
                             />
                           )}
+
+                          <input
+                            type="text"
+                            value={imgURL}
+                            onChange={(e) => setImgURL(e.target.value)}
+                            placeholder="Hoặc nhập đường dẫn hình ảnh vào đây"
+                            style={{
+                              marginTop: "10px",
+                              borderRadius: "5px",
+                              padding: "5px",
+                              width: "500px",
+                            }}
+                          />
                         </div>
                       </div>
                     </div>

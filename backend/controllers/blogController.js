@@ -10,6 +10,13 @@ const blogController = {
             // Lấy thông tin về file được upload
             const file = req.file;
 
+            let IMG = ""
+            if (file) {
+                IMG = file.path;
+            } else {
+                IMG = req.body.imgURL
+            }
+
             //Calculate Time at the moment
             const now = new Date();
             const vietnamTime = now.toLocaleString('vi-VN');
@@ -21,7 +28,7 @@ const blogController = {
                 content: data_input.content,
                 category: data_input.category,
                 post_date: time_now,
-                thumbnail: file.path
+                thumbnail: IMG
             })
 
             //Save Data Blog
@@ -53,7 +60,8 @@ const blogController = {
                 if (fs.existsSync(imagePath)) {
                     fs.unlinkSync(imagePath);
                 }
-
+            }else{
+                req.body.thumbnail = req.body.imgURL
             }
 
             const check_update = await Blog.findByIdAndUpdate(id, req.body);

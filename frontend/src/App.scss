@@ -863,8 +863,14 @@ th.ant-table-cell {
         padding: 20px 24px;
         left: 235px;
     }
-    .ant-modal-footer{
+
+    .ant-modal-footer {
         display: flex;
         justify-content: flex-end;
     }
+}
+
+.driver_add_admin .ant-select-selection-item{
+    display: flex;
+    align-items: center;
 }

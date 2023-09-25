@@ -24,6 +24,7 @@ function AddBlog() {
   } = useForm();
 
   const [image, setImage] = useState("");
+  const [imgURL, setImgURL] = useState(""); //Link hình ảnh
 
   // Upload Img
   function uploadImg(e) {
@@ -33,6 +34,7 @@ function AddBlog() {
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("file", image);
+    formData.append("imgURL", imgURL);
     formData.append("name", data.name);
     formData.append("category", data.category);
     formData.append("size", data.size);
@@ -251,6 +253,19 @@ function AddBlog() {
                               style={{ objectFit: "contain" }}
                             />
                           )}
+
+                          <input
+                            type="text"
+                            value={imgURL}
+                            onChange={(e) => setImgURL(e.target.value)}
+                            placeholder="Hoặc nhập đường dẫn hình ảnh vào đây"
+                            style={{
+                              marginTop: "10px",
+                              borderRadius: "5px",
+                              padding: "5px",
+                              width: "500px",
+                            }}
+                          />
                         </div>
                       </div>
                     </div>

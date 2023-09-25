@@ -12,6 +12,13 @@ const vehicleController = {
             // Lấy thông tin về file được upload
             const file = req.file;
 
+            let IMG = ""
+            if (file) {
+                IMG = file.path;
+            } else {
+                IMG = req.body.imgURL
+            }
+
             const movingfee_data = await new MovingFee({
                 name: req.body.name,
                 priceFirst10km: req.body.priceFirst10km,
@@ -36,7 +43,7 @@ const vehicleController = {
                     status: req.body.status,
                     cago_size: req.body.cago_size,
                     suitable_for: req.body.suitable_for,
-                    image: file.path,
+                    image: IMG,
                     movingFee_id: DB_movingfee.id
                 })
 
@@ -168,14 +175,28 @@ const vehicleController = {
                     fs.unlinkSync(imagePath);
                 }
             } else {
-                vehicle_data = {
-                    vehicle_name: req.body.name,
-                    brand: req.body.brand,
-                    capacity: req.body.capacity,
-                    moving_ban_time: req.body.moving_ban_time,
-                    status: req.body.status,
-                    cago_size: req.body.cago_size,
-                    suitable_for: req.body.suitable_for,
+                if (req.body.imgURL !== "") {
+                    vehicle_data = {
+                        vehicle_name: req.body.name,
+                        brand: req.body.brand,
+                        capacity: req.body.capacity,
+                        moving_ban_time: req.body.moving_ban_time,
+                        status: req.body.status,
+                        cago_size: req.body.cago_size,
+                        suitable_for: req.body.suitable_for,
+                        image: req.body.imgURL
+                    }
+                } else {
+                    vehicle_data = {
+                        vehicle_name: req.body.name,
+                        brand: req.body.brand,
+                        capacity: req.body.capacity,
+                        moving_ban_time: req.body.moving_ban_time,
+                        status: req.body.status,
+                        cago_size: req.body.cago_size,
+                        suitable_for: req.body.suitable_for,
+                    }
+
                 }
 
             }

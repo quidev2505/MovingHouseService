@@ -28,7 +28,7 @@ function OrderUser() {
 
   const user = useSelector((state) => state.auth.login.currentUser); //Lấy User hiện tại ra
   const show_order_customer = async () => {
-    setIsActive(false)
+    setIsActive(false);
     await axios
       .get(`/v1/order/viewOrderWithCustomerId/${user._id}`)
       .then((data) => {
@@ -308,7 +308,7 @@ function OrderUser() {
                 style={{ justifyContent: "space-between" }}
               >
                 <p>Tổng thanh toán cũ</p>
-                <p>{item.totalOrder.toLocaleString()} đ</p>
+                <p className="fw-bold">{item.totalOrder.toLocaleString()} đ</p>
               </div>
 
               <div
@@ -430,10 +430,32 @@ function OrderUser() {
       render: (status) => (
         <div className="d-flex">
           <Tag
-            color={status === "Đang tìm tài xế" ? "blue" : "volcano"}
+            color={
+              status === "Đang tìm tài xế"
+                ? "blue"
+                : status === "Đã hủy"
+                ? "volcano"
+                : status === "Đang thực hiện"
+                ? "gold"
+                : status === "Xác nhận hóa đơn"
+                ? "purple"
+                : status === "Thanh toán hóa đơn"
+                ? "magenta"
+                : "#87d068"
+            }
             key={status}
           >
-            {status === "Đang tìm tài xế" ? "Đang tìm tài xế" : "Tạm ngưng"}
+            {status === "Đang tìm tài xế"
+              ? "Đang tìm tài xế"
+              : status === "Đã hủy"
+              ? "Đã hủy"
+              : status === "Đang thực hiện"
+              ? "Đang thực hiện"
+              : status === "Xác nhận hóa đơn"
+              ? "Xác nhận hóa đơn"
+              : status === "Thanh toán hóa đơn"
+              ? "Thanh toán hóa đơn"
+              : "Hoàn thành"}
           </Tag>
         </div>
       ),

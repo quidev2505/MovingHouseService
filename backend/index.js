@@ -12,6 +12,7 @@ const commentBlogRoute = require('./routes/comment_blog');
 const itemRoute = require('./routes/item');
 const orderRoute = require('./routes/order');
 const vnpayRoute = require('./routes/vnpay');
+const driverRoute = require('./routes/driver');
 var cookieParser = require('cookie-parser')
 
 //Cors
@@ -76,6 +77,9 @@ app.use("/v1/item", itemRoute)
 
 //Order 
 app.use("/v1/order", orderRoute)
+
+//Driver
+app.use("/v1/driver", driverRoute)
 
 //Thanh toán với VN PAY
 app.use("/v1/vnpay", vnpayRoute)
