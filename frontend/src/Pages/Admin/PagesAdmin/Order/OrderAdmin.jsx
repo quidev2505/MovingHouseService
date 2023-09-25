@@ -1,22 +1,51 @@
-import React, { useState, useEffect } from "react";
-import HeaderUser from "../../ComponentUser/HeaderUser";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
+
+import { Breadcrumb, Button } from "antd";
+import TopCssContent from "../TopCssContent";
+import BottomCssContent from "../BottomCssContent";
+
+import { Link } from "react-router-dom";
 
 import {
-  SearchOutlined,
+  Space,
+  Table,
+  Tag,
+  Image,
+  Modal,
+  Avatar,
+  Tabs,
+  Timeline,
+  Drawer,
+  ConfigProvider,
+} from "antd";
+
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+import "sweetalert2/src/sweetalert2.scss";
+
+import { useNavigate } from "react-router-dom";
+
+import htmlReactParser from "html-react-parser";
+
+import {
+  EditOutlined,
   FolderViewOutlined,
+  DeleteOutlined,
+  SwapOutlined,
+  SearchOutlined,
   EnvironmentOutlined,
+  ditOutlined,
 } from "@ant-design/icons";
 
-import { Table, Tag, Drawer, Timeline } from "antd";
+import axios from "axios";
 
-import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
-
-function OrderUser() {
-  const [isActive, setIsActive] = useState(true);
+function OrderAdmin() {
+  const nav = useNavigate();
+  const [dataOrder, setDataOrder] = useState([]);
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -24,34 +53,138 @@ function OrderUser() {
     setOpen(false);
   };
 
-  const [dataOrder, setDataOrder] = useState([]);
+  //Thanh Tab
+  const items = [
+    {
+      key: "1",
+      label: "ĐÃ HỦY",
+    },
+    {
+      key: "2",
+      label: "ĐANG TÌM TÀI XẾ",
+    },
+    {
+      key: "3",
+      label: "ĐANG THỰC HIỆN",
+    },
+    {
+      key: "4",
+      label: "XÁC NHẬN HÓA ĐƠN",
+    },
+    {
+      key: "5",
+      label: "THANH TOÁN HÓA ĐƠN",
+    },
+    {
+      key: "6",
+      label: "HOÀN THÀNH",
+    },
+  ];
 
-  const user = useSelector((state) => state.auth.login.currentUser); //Lấy User hiện tại ra
-  const show_order_customer = async () => {
-    setIsActive(false)
+  const onChange = (key) => {
+    switch (key) {
+      case "1":
+        show_order_customer("Đã hủy");
+        break;
+      case "2":
+        show_order_customer("Đang tìm tài xế");
+        break;
+      case "3":
+        show_order_customer("Đang thực hiện");
+        break;
+      case "4":
+        show_order_customer("Xác nhận hóa đơn");
+        break;
+      case "5":
+        show_order_customer("Thanh toán hóa đơn");
+        break;
+      case "6":
+        show_order_customer("Hoàn thành");
+        break;
+      default:
+        break;
+    }
+  };
+
+  //Update One Field Order
+  const updateOrder = async (order_id, statusOrder) => {
+    console.log(statusOrder);
+    console.log(order_id);
+    // await axios
+    //   .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, {
+    //     status: statusOrder,
+    //   })
+    //   .then((data) => {
+    //     Swal.fire({
+    //       position: "center",
+    //       icon: "success",
+    //       title: "Cập nhật đơn hàng thành công !",
+    //       showConfirmButton: false,
+    //       timer: 1500,
+    //     });
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
+  };
+
+	const [statusOrder, setStatusOrder] = useState("Đã hủy");
+  //Update order
+  const handle_update_order = (order_id) => {
+    Modal.success({
+      title: "Cập nhật đơn hàng",
+      content: (
+        <>
+          <p>
+            Trạng thái đơn hàng hiện tại:{" "}
+            <span className="fw-bold">{order_id.status}</span>
+          </p>
+          <div>
+            <p>Cập nhật trạng thái mới:</p>
+            <select
+              onChange={(e) => setStatusOrder(e.target.value)}
+              value={statusOrder}
+            >
+              <option value="Đã hủy">Đã hủy</option>
+              <option value="Đang tìm tài xế">Đang tìm tài xế</option>
+            </select>
+          </div>
+          <div
+            style={{ marginBottom: "50px", marginTop: "20px" }}
+            onClick={() => updateOrder(order_id, statusOrder)}
+          >
+            <button className="btn btn-primary">Cập nhật</button>
+          </div>
+        </>
+      ),
+      onOk() {},
+    });
+  };
+
+  const show_order_customer = async (status_input) => {
     await axios
-      .get(`/v1/order/viewOrderWithCustomerId/${user._id}`)
+      .get(`/v1/order/viewAllOrder`)
       .then((data) => {
         let dataOrder = data.data;
         const data_order = [];
         dataOrder &&
           dataOrder.forEach((item, index) => {
-            const ob_order = {
-              id_order_detail: item.order_detail_id,
-              STT: index + 1,
-              order_id: item.order_id,
-              service_name: item.service_name,
-              status: item.status,
-              time_get_item: `${item.time_start} - ${item.date_start}`,
-              router: `${item.fromLocation} - ${item.toLocation}`,
-              driver_id: item.driver_id,
-              vehicle_name: item.vehicle_name,
-              totalOrder: item.totalOrder,
-            };
-
-            data_order.push(ob_order);
+            if (item.status === status_input) {
+              const ob_order = {
+                id_order_detail: item.order_detail_id,
+                STT: index + 1,
+                order_id: item.order_id,
+                service_name: item.service_name,
+                status: item.status,
+                time_get_item: `${item.time_start} - ${item.date_start}`,
+                router: `${item.fromLocation} - ${item.toLocation}`,
+                driver_id: item.driver_id,
+                vehicle_name: item.vehicle_name,
+                totalOrder: item.totalOrder,
+              };
+              data_order.push(ob_order);
+            }
           });
-
         let new_arr = data_order.filter((item) => {
           // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
           let word_Change_VN = removeVietnameseTones(item.order_id);
@@ -79,10 +212,195 @@ function OrderUser() {
           setDataOrder(new_arr);
         }
       })
+
       .catch((e) => {
         console.log(e);
       });
   };
+
+  //Table Area
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "STT",
+      key: "STT",
+    },
+    {
+      title: "ID",
+      dataIndex: "order_id",
+      key: "order_id",
+      render: (order_id) => <div className="fw-bold">{order_id}</div>,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+
+      render: (status) => (
+        <div className="d-flex">
+          <Tag
+            color={status === "Đang tìm tài xế" ? "blue" : "volcano"}
+            key={status}
+          >
+            {status === "Đang tìm tài xế" ? "Đang tìm tài xế" : "Tạm ngưng"}
+          </Tag>
+        </div>
+      ),
+    },
+    {
+      title: "Tên dịch vụ",
+      dataIndex: "service_name",
+      key: "service_name",
+    },
+    {
+      title: "Thời gian lấy hàng",
+      dataIndex: "time_get_item",
+      key: "time_get_item",
+      render: (time_get_item) => (
+        <>
+          <div style={{ fontWeight: "400", fontSize: "14px" }}>
+            {time_get_item?.split("-")[0]}
+          </div>
+          <div
+            style={{ fontWeight: "400", fontSize: "13px", color: "#737373" }}
+          >
+            {time_get_item?.split("-")[1]}
+          </div>
+        </>
+      ),
+    },
+    {
+      title: "Lộ trình",
+      dataIndex: "router",
+      key: "router",
+      render: (router) => (
+        <>
+          <div className="col" style={{ fontSize: "12px" }}>
+            <div className="d-flex">
+              <span
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  backgroundColor: "red",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "4px",
+                  color: "white",
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                }}
+              >
+                1
+              </span>
+              <p>{router?.split("-")[0]}</p>
+            </div>
+
+            <div className="d-flex">
+              <span
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  backgroundColor: "#00bab3",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "4px",
+                  color: "white",
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                }}
+              >
+                2
+              </span>
+              <p>{router?.split("-")[1]}</p>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      title: "Tài xế",
+      dataIndex: "driver_id",
+      key: "driver_id",
+      render: (driver_id) => (
+        <div className="fw-bold">
+          {driver_id === null ? (
+            <span style={{ color: "#ccc" }}>Chưa xác định</span>
+          ) : (
+            ""
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Loại xe",
+      dataIndex: "vehicle_name",
+      key: "vehicle_name",
+    },
+    {
+      title: "Giá",
+      dataIndex: "totalOrder",
+      key: "totalOrder",
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => a.totalOrder - b.totalOrder,
+      render: (totalOrder) => (
+        <div className="fw-bold" style={{ color: "red" }}>
+          {totalOrder.toLocaleString()} đ
+        </div>
+      ),
+    },
+    {
+      title: "Xem chi tiết",
+      dataIndex: "id_order_detail",
+      key: "id_order_detail",
+      render: (id_order_detail) => (
+        <div
+          onClick={() => {
+            showDrawer();
+            view_detail_order(id_order_detail);
+          }}
+          style={{
+            backgroundColor: "#29251b",
+            borderRadius: "50%",
+            padding: "5px",
+            display: "flex",
+            cursor: "pointer",
+            width: "30px",
+            height: "30px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <FolderViewOutlined style={{ color: "white", fontWeight: "bold" }} />
+        </div>
+      ),
+    },
+    {
+      title: "Thao tác",
+      key: "action",
+      render: (order_id) => (
+        <Space size="middle" className="icon_hover">
+          <div
+            onClick={() => handle_update_order(order_id)}
+            style={{
+              backgroundColor: "red",
+              borderRadius: "50%",
+              padding: "5px",
+              display: "flex",
+              cursor: "pointer",
+              width: "30px",
+              height: "30px",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
+          </div>
+        </Space>
+      ),
+    },
+  ];
 
   const view_detail_order = async (id_order_detail) => {
     await axios
@@ -266,7 +584,7 @@ function OrderUser() {
                       style={{
                         width: "30px",
                         height: "30px",
-                        objectFit: "contain",
+                        objectFit: "co ntain",
                       }}
                     />
                     <span style={{ marginLeft: "5px", fontSize: "13px" }}>
@@ -348,7 +666,7 @@ function OrderUser() {
   // //Search Realtime
   const [search, setSearch] = useState("");
   useEffect(() => {
-    show_order_customer();
+    show_order_customer("Đang tìm tài xế");
   }, [search]);
 
   function removeVietnameseTones(str) {
@@ -383,245 +701,75 @@ function OrderUser() {
     return str;
   }
 
-  //Table Area
-  const columns = [
-    {
-      title: "STT",
-      dataIndex: "STT",
-      key: "STT",
-    },
-    {
-      title: "ID",
-      dataIndex: "order_id",
-      key: "order_id",
-      render: (order_id) => <div className="fw-bold">{order_id}</div>,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      filters: [
-        {
-          text: "Đang tìm tài xế",
-          value: "Đang tìm tài xế",
-        },
-        {
-          text: "Đang thực hiện",
-          value: "Đang thực hiện",
-        },
-        {
-          text: "Xác nhận hóa đơn",
-          value: "Xác nhận hóa đơn",
-        },
-        {
-          text: "Thanh toán hóa đơn",
-          value: "Thanh toán hóa đơn",
-        },
-        {
-          text: "Hoàn thành",
-          value: "Hoàn thành",
-        },
-        {
-          text: "Đã hủy",
-          value: "Đã hủy",
-        },
-      ],
-      onFilter: (value, record) => record.status.indexOf(value) === 0,
-      render: (status) => (
-        <div className="d-flex">
-          <Tag
-            color={status === "Đang tìm tài xế" ? "blue" : "volcano"}
-            key={status}
-          >
-            {status === "Đang tìm tài xế" ? "Đang tìm tài xế" : "Tạm ngưng"}
-          </Tag>
-        </div>
-      ),
-    },
-    {
-      title: "Tên dịch vụ",
-      dataIndex: "service_name",
-      key: "service_name",
-    },
-    {
-      title: "Thời gian lấy hàng",
-      dataIndex: "time_get_item",
-      key: "time_get_item",
-      render: (time_get_item) => (
-        <>
-          <div style={{ fontWeight: "400", fontSize: "14px" }}>
-            {time_get_item.split("-")[0]}
-          </div>
-          <div
-            style={{ fontWeight: "400", fontSize: "13px", color: "#737373" }}
-          >
-            {time_get_item.split("-")[1]}
-          </div>
-        </>
-      ),
-    },
-    {
-      title: "Lộ trình",
-      dataIndex: "router",
-      key: "router",
-      render: (router) => (
-        <>
-          <div className="col" style={{ fontSize: "12px" }}>
-            <div className="d-flex">
-              <span
-                style={{
-                  width: "25px",
-                  height: "25px",
-                  backgroundColor: "red",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: "4px",
-                  color: "white",
-                  fontWeight: "bold",
-                  marginRight: "5px",
-                }}
-              >
-                1
-              </span>
-              <p>{router.split("-")[0]}</p>
-            </div>
-
-            <div className="d-flex">
-              <span
-                style={{
-                  width: "25px",
-                  height: "25px",
-                  backgroundColor: "#00bab3",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: "4px",
-                  color: "white",
-                  fontWeight: "bold",
-                  marginRight: "5px",
-                }}
-              >
-                2
-              </span>
-              <p>{router.split("-")[1]}</p>
-            </div>
-          </div>
-        </>
-      ),
-    },
-    {
-      title: "Tài xế",
-      dataIndex: "driver_id",
-      key: "driver_id",
-      render: (driver_id) => (
-        <div className="fw-bold">
-          {driver_id === null ? (
-            <span style={{ color: "#ccc" }}>Chưa xác định</span>
-          ) : (
-            ""
-          )}
-        </div>
-      ),
-    },
-    {
-      title: "Loại xe",
-      dataIndex: "vehicle_name",
-      key: "vehicle_name",
-    },
-    {
-      title: "Giá",
-      dataIndex: "totalOrder",
-      key: "totalOrder",
-      defaultSortOrder: "ascend",
-      sorter: (a, b) => a.totalOrder - b.totalOrder,
-      render: (totalOrder) => (
-        <div className="fw-bold" style={{ color: "red" }}>
-          {totalOrder.toLocaleString()} đ
-        </div>
-      ),
-    },
-    {
-      title: "Xem chi tiết",
-      dataIndex: "id_order_detail",
-      key: "id_order_detail",
-      render: (id_order_detail) => (
-        <div
-          onClick={() => {
-            showDrawer();
-            view_detail_order(id_order_detail);
-          }}
-          style={{
-            backgroundColor: "#29251b",
-            borderRadius: "50%",
-            padding: "5px",
-            display: "flex",
-            cursor: "pointer",
-            width: "30px",
-            height: "30px",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <FolderViewOutlined style={{ color: "white", fontWeight: "bold" }} />
-        </div>
-      ),
-    },
-  ];
-
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
-
   return (
     <>
-      <HeaderUser />
-      <div className="orderUser" style={{ padding: "30px" }}>
-        <div
-          className="d-flex"
-          style={{
-            width: "420px",
-            borderRadius: "5px 0 0 5px",
-            overflow: "hidden",
-          }}
-        >
-          <SearchOutlined
-            style={{
-              backgroundColor: "#ed883b",
-              padding: "13px",
-              color: "white",
-              cursor: "pointer",
-            }}
-          />
-          <input
-            type="text"
-            id="find_service"
-            className="form-control form-control-lg"
-            placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
-            style={{ fontSize: "17px", borderRadius: "3px" }}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+      <LayoutAdmin>
+        <div className="order_admin">
+          <div>
+            <Breadcrumb
+              routes={[
+                {
+                  title: "Admin",
+                },
+                {
+                  title: "Đơn hàng",
+                },
+              ]}
+            />
+          </div>
 
-        <div className="content_order" style={{ marginTop: "30px" }}>
-          <div className="top_content_order">
-            <h2
-              style={{
-                fontSize: "28px",
-                fontWeight: "700",
-                marginBottom: "20px",
+          <BottomCssContent>
+            <ConfigProvider
+              theme={{
+                token: {
+                  // Seed Token
+                  colorPrimary: "black",
+                  borderRadius: 2,
+
+                  // Alias Token
+                  colorBgContainer: "black",
+                },
               }}
             >
-              Đơn Hàng
-            </h2>
-          </div>
-          <LoadingOverlayComponent status={isActive}>
-            <div className="bottom_content_order">
-              <Table
-                columns={columns}
-                dataSource={dataOrder}
+              <Tabs
+                defaultActiveKey="2"
+                items={items}
                 onChange={onChange}
+                itemSelectedColor={""}
               />
+            </ConfigProvider>
+
+            <TopCssContent>
+              <div
+                className="d-flex"
+                style={{
+                  width: "420px",
+                  borderRadius: "5px 0 0 5px",
+                  overflow: "hidden",
+                  marginBottom: "20px",
+                }}
+              >
+                <SearchOutlined
+                  style={{
+                    backgroundColor: "#ed883b",
+                    padding: "13px",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                />
+                <input
+                  type="text"
+                  id="find_service"
+                  className="form-control form-control-lg"
+                  placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
+                  style={{ fontSize: "17px", borderRadius: "3px" }}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </TopCssContent>
+            <div>
+              <Table columns={columns} dataSource={dataOrder} />
+
               <Drawer
                 title="# Chi tiết đơn hàng"
                 placement="right"
@@ -631,11 +779,11 @@ function OrderUser() {
                 {DomOrderDetail}
               </Drawer>
             </div>
-          </LoadingOverlayComponent>
+          </BottomCssContent>
         </div>
-      </div>
+      </LayoutAdmin>
     </>
   );
 }
 
-export default OrderUser;
+export default OrderAdmin;

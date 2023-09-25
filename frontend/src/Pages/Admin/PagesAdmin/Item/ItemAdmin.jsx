@@ -56,6 +56,29 @@ function ItemAdmin() {
       title: "Danh mục",
       dataIndex: "category",
       key: "category",
+      filters: [
+        {
+          text: "Phòng khách",
+          value: "Phòng khách",
+        },
+        {
+          text: "Phòng ngủ",
+          value: "Phòng ngủ",
+        },
+        {
+          text: "Phòng bếp",
+          value: "Phòng bếp",
+        },
+        {
+          text: "Phòng tắm",
+          value: "Phòng tắm",
+        },
+        {
+          text: "Phòng làm việc",
+          value: "Phòng làm việc",
+        },
+      ],
+      onFilter: (value, record) => record.category.indexOf(value) === 0,
     },
     {
       title: "Kích cỡ",

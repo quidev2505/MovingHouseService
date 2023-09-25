@@ -50,6 +50,10 @@ const orderDetailSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    vehicle_price:{
+        type: Number,
+        required: true
+    },//Giá thuê xe
     totalOrderNew: {
         type: Number,
         default: 0

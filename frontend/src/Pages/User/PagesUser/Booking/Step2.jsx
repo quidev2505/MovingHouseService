@@ -78,6 +78,8 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         name: choose_option.display_name,
       };
 
+      console.log(ob);
+
       if (!isInVietnam(ob)) {
         Toast.fire({
           icon: "warning",
@@ -94,6 +96,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   function isInVietnam(coordinates) {
     const latitude = coordinates.lat;
     const longitude = coordinates.lng;
+
     return (
       latitude >= 8.526794234832764 &&
       latitude <= 23.2021484375 &&
@@ -254,17 +257,28 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
                 .setLngLat([fromLocation.lng, fromLocation.lat])
                 .addTo(map);
 
-              var marker_1 = new goongjs.Marker({ color: "#00bab3" })
+              var marker_1 = new goongjs.Marker({
+                color: "#00bab3",
+                draggable: true,
+              })
                 .setLngLat([ob.lng, ob.lat])
                 .addTo(map);
 
-            
+              //Location From
               function onDragEnd() {
                 var lngLat = marker.getLngLat();
                 changeLocation(lngLat.lng, lngLat.lat);
               }
 
-              marker.on("dragend", onDragEnd);  
+              marker.on("dragend", onDragEnd);
+
+              //Location To
+              function onDragEndTo() {
+                var lngLat = marker_1.getLngLat();
+                changeLocation_To(lngLat.lng, lngLat.lat);
+              }
+
+              marker_1.on("dragend", onDragEndTo);
 
               // //Cho mapFirst biến mất
               // document.querySelector("#Map_first").style.display = "none";
@@ -284,15 +298,106 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
     }
   };
 
-
-  const changeLocation = async(lng, lat) => {
+  const changeLocation = async (lng, lat) => {
+    Toast.fire({
+      icon: "warning",
+      title: "Xin vui lòng chờ cập nhật lại địa điểm !",
+    });
     const data = await axios.get(
       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&1`
     );
-    console.log(data.data)
-  }
+    let data_location = data.data;
+    // Sử dụng DOM parser để parse đoạn String XML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data_location, "text/xml");
 
+    // Lấy ra element <result>
+    const resultElement = doc.querySelector("result");
 
+    // Lấy ra text content của element <result>
+    const resultText = resultElement.textContent;
+
+    // Trả về text content của element <result>
+    const ob = {
+      lat: Number(lat),
+      lon: Number(lng),
+      display_name: resultText,
+    };
+
+    const ob_new = {
+      lat: Number(lat),
+      lng: Number(lng),
+      name: resultText,
+    };
+
+    setLocationFromChoose(ob);
+    // draw_between_two_location(ob, toLocation);
+
+    //Thực hiện set vào localStorage
+    let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+    let step2 = data_from_local.step2;
+    step2.fromLocation = ob_new;
+
+    localStorage.setItem("order_moving", JSON.stringify(data_from_local));
+
+    // get_location_from_choose();
+
+    setTimeout(() => {
+      setCurrent(current - 1);
+      setTimeout(() => {
+        setCurrent(current + 0);
+      }, 4000);
+    }, 2000);
+  };
+
+  const changeLocation_To = async (lng, lat) => {
+    const data = await axios.get(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&1`
+    );
+    let data_location = data.data;
+    console.log(data_location);
+    // Sử dụng DOM parser để parse đoạn String XML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data_location, "text/xml");
+
+    // Lấy ra element <result>
+    const resultElement = doc.querySelector("result");
+
+    // Lấy ra text content của element <result>
+    const resultText = resultElement.textContent;
+
+    // Trả về text content của element <result>
+    const ob = {
+      lat: Number(lat),
+      lon: Number(lng),
+      display_name: resultText,
+    };
+
+    const ob_new = {
+      lat: Number(lat),
+      lng: Number(lng),
+      name: resultText,
+    };
+
+    setLocationToChoose(ob);
+    // draw_between_two_location(ob, toLocation);
+
+    //Thực hiện set vào localStorage
+    let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+    let step2 = data_from_local.step2;
+    step2.toLocation = ob_new;
+
+    localStorage.setItem("order_moving", JSON.stringify(data_from_local));
+
+    // get_location_from_choose();
+
+    setTimeout(() => {
+      setCurrent(current - 1);
+      setTimeout(() => {
+        setCurrent(current + 0);
+      }, 4000);
+    }, 2000);
+  };
 
   //Tính năng tính khoảng cách giữa 2 điểm và tính thời gian hoàn tất.
   const total_distance = async (fromLocation, ob) => {

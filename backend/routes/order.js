@@ -5,11 +5,21 @@ const orderController = require("../controllers/orderController");
 //create Order
 router.post('/create_order', orderController.createOrder)
 
+
+// View All Order
+router.get('/viewAllOrder', orderController.viewAllOrder)
+
+
 // View Order with customer_id
 router.get('/viewOrderWithCustomerId/:id_customer', orderController.viewOrderWithIdCustomer)
 
 // View Order Detail with id order detail
 router.get('/viewOrderDetail/:order_detail_id', orderController.viewOrderWithOrderDetailId)
+
+
+//Update one field Order
+router.patch('/updateonefield_order/:id_order', orderController.updateOneFieldOrder)
+
 
 
 // //Update one field Blog

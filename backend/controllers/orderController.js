@@ -82,6 +82,21 @@ const orderController = {
             res.status(501).json(e)
         }
     },
+    //View All Order
+    viewAllOrder: async (req, res) => {
+        try {
+            const data_all_order = await Order.find();
+
+            if (data_all_order) {
+                res.status(201).json(data_all_order)
+            } else {
+                res.status(501).json(e)
+            }
+        } catch (e) {
+            res.status(501).json(e)
+        }
+    },
+
     //View Order With Id_Customer
     viewOrderWithIdCustomer: async (req, res) => {
         try {
@@ -200,11 +215,11 @@ const orderController = {
         }
     },
 
-    //Update one field blog
-    updateOneFieldBlog: async (req, res) => {
+    //Update one field Order
+    updateOneFieldOrder: async (req, res) => {
         try {
-            const id_blog = req.params.id;
-            const dataUpdateOne = await Blog.updateOne({ _id: id_blog }, req.body, { new: true });
+            const id_order = req.params.id_order;
+            const dataUpdateOne = await Order.updateOne({ order_id: id_order }, req.body, { new: true });
             if (dataUpdateOne) {
                 res.status(201).json('update success');
             } else {

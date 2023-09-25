@@ -837,7 +837,34 @@ th.ant-table-cell {
         width: 10px !important;
     }
 
-    .ant-table-content{
+    .ant-table-content {
         max-height: 448px !important;
+    }
+}
+
+//Order Admin
+.order_admin .ant-tabs-nav-wrap {
+    justify-content: center;
+    background-color: #f1a062;
+    color: white;
+    border-radius: 5px;
+}
+
+.order_admin {
+    .ant-modal-content {
+        position: relative;
+        width: 1000px;
+        background-color: #ffffff;
+        background-clip: padding-box;
+        border: 0;
+        border-radius: 8px;
+        box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+        pointer-events: auto;
+        padding: 20px 24px;
+        left: 235px;
+    }
+    .ant-modal-footer{
+        display: flex;
+        justify-content: flex-end;
     }
 }

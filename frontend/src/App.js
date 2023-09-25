@@ -33,8 +33,7 @@ import LoginAdmin from "./Pages/Admin/PagesAdmin/LoginAdmin";
 
 //Import danh mục Admin
 import DashBoardAdmin from './Pages/Admin/PagesAdmin/DashboardAdmin';
-import OrderAdmin from "./Pages/Admin/PagesAdmin/OrderAdmin";
-import GetquoteAdmin from './Pages/Admin/PagesAdmin/GetquoteAdmin';
+// import GetquoteAdmin from './Pages/Admin/PagesAdmin/GetquoteAdmin';
 
 import DriverAdmin from './Pages/Admin/PagesAdmin/DriverAdmin';
 import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
@@ -65,6 +64,10 @@ import EditBlog from './Pages/Admin/PagesAdmin/Blog/EditBlog';
 import ItemAdmin from './Pages/Admin/PagesAdmin/Item/ItemAdmin';
 import AddItem from './Pages/Admin/PagesAdmin/Item/AddItem';
 import EditItem from './Pages/Admin/PagesAdmin/Item/EditItem';
+
+//Order Admin
+import OrderAdmin from "./Pages/Admin/PagesAdmin/Order/OrderAdmin";
+
 
 //Import trong Setting Admin
 import ChangePasswordAdmin from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
@@ -144,8 +147,12 @@ function App() {
           {/* End Item_Admin CRUD */}
 
 
-          <Route path="/admin/get_quote" element={<GetquoteAdmin />} />
+          {/* Order Admin CRUD */}
           <Route path="/admin/order" element={<OrderAdmin />} />
+          {/* End order admin CRUD */}
+
+          {/* <Route path="/admin/get_quote" element={<GetquoteAdmin />} /> */}
+        
           <Route path="/admin/driver" element={<DriverAdmin />} />
           <Route path="/admin/service_support" element={<ServiceSupportAdmin />} />
           <Route path="/admin/administrator" element={<AdministratorAdmin />} />
