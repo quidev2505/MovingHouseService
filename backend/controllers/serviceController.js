@@ -96,7 +96,7 @@ const serviceController = {
                     fs.unlinkSync(imagePath);
                 }
             }else{
-                req.body.image = req.body.imgURL;
+                req.body.image = req.body.imgURL || req.body.image
             }
 
 

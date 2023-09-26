@@ -1,6 +1,7 @@
 const Driver = require('../models/Driver');
 const DriverAccount = require('../models/DriverAccount')
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 const driverController = {
     //Create Driver
@@ -18,10 +19,9 @@ const driverController = {
                 IMG = req.body.imgURL
             }
 
-            //Calculate Time at the moment
-            // const now = new Date();
-            // const vietnamTime = now.toLocaleString('vi-VN');
-            // const time_now = vietnamTime.split(' ')[1]; 
+            //Mã hóa mật khẩu 
+            const salt = await bcrypt.genSalt(10);
+            const hashed = await bcrypt.hash(data_input.password, salt);
 
 
             const data_driver = await new Driver({
@@ -45,7 +45,7 @@ const driverController = {
             if (data_driver_save) {
                 const data_driver_account = await new DriverAccount({
                     username: data_input.username,
-                    password: data_input.password
+                    password: hashed
                 })
 
                 //Save Data Driver Account
@@ -68,6 +68,25 @@ const driverController = {
     getAllDriver: async (req, res) => {
         try {
             const data_driver = await Driver.find();
+
+            if (data_driver) {
+                res.status(200).json(data_driver)
+            } else {
+                res.status(500).json('Error');
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    },
+
+    //Get Info Driver Detail with ID
+    getDriverWithID: async (req, res) => {
+        try {
+            const id_driver = req.params.id;
+
+            const data_driver = await Driver.findOne({ _id: id_driver });
+
+
 
             if (data_driver) {
                 res.status(200).json(data_driver)
@@ -132,7 +151,108 @@ const driverController = {
             res.status(501).json("update Fail");
 
         }
-    }
+    },
+
+    //Update one field Driver(Status Driver)
+    updateOneFieldDriver: async (req, res) => {
+        try {
+            const id_driver = req.params.id;
+
+            const dataUpdateOne = await Driver.updateOne({ _id: id_driver }, req.body, { new: true });
+            if (dataUpdateOne) {
+                res.status(201).json('update success');
+            } else {
+                res.status(501).json('update fail');
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+    //Lock Driver Account
+    lockDriverAccount: async (req, res) => {
+        try {
+            const username_driver = req.params.username;
+
+            const dataUpdateOne = await DriverAccount.updateOne({ username: username_driver }, req.body, { new: true });
+            if (dataUpdateOne) {
+                res.status(201).json('update success');
+            } else {
+                res.status(501).json('update fail');
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+    //Get Driver Account
+    getdriverAccount: async (req, res) => {
+        try {
+            const username_driver = req.params.username;
+
+            const data_driver_account = await DriverAccount.findOne({ username: username_driver })
+            if (data_driver_account) {
+                res.status(201).json(data_driver_account);
+            } else {
+                res.status(501).json('update fail');
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+
+    //Get All Driver Account
+    getall_driverAccount: async (req, res) => {
+        try {
+            const data_driver_account = await DriverAccount.find()
+            if (data_driver_account) {
+                res.status(201).json(data_driver_account);
+            } else {
+                res.status(501).json('update fail');
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+
+    //update Driver
+    updateDriver: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            // Lấy thông tin về file được upload
+            const file = req.file;
+
+            if (file) {
+                req.body.avatar = file.path
+
+                //Thực hiện xóa ảnh cũ
+                const imagePath = `${req.body.img_old}`;
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
+            } else {
+                req.body.avatar = req.body.imgURL || req.body.avatar
+            }
+    
+            const check_update = await Driver.findByIdAndUpdate(id, req.body);
+            if (check_update) {
+                res.status(201).json('Update success')
+            } else {
+                res.status(501).json('Update fail')
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e);
+        }
+    },
+
 
 }
 

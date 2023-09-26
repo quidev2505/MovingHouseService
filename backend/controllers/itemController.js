@@ -56,7 +56,7 @@ const itemController = {
                     fs.unlinkSync(imagePath);
                 }
             } else {
-                req.body.image = req.body.imgURL
+                req.body.image = req.body.imgURL || req.body.image
             }
 
             const check_update = await Item.findByIdAndUpdate(id, req.body);

@@ -7,7 +7,7 @@ import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 
-import { Space, Table, Tag, Image, Modal, Avatar } from "antd";
+import { Space, Table, Tag, Image, Modal, Avatar, Badge } from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import {
   EditOutlined,
   FolderViewOutlined,
-  DeleteOutlined,
+  LockOutlined,
   SwapOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
@@ -30,6 +30,7 @@ import axios from "axios";
 function DriverAdmin() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
+  const [statusProfile, setStatusProfile] = useState("Đang hoạt động");
 
   const columns = [
     {
@@ -43,7 +44,20 @@ function DriverAdmin() {
       key: "avatar",
       render: (avatar) => (
         <td>
-          <Avatar src={<img src={avatar} alt="avatar" />} />
+          <Badge
+            dot
+            style={{
+              backgroundColor: "green",
+              width: "8px",
+              height: "8px",
+              position: "absolute",
+              border: "1px solid white",
+              top: "5px",
+              right: "4px",
+            }}
+          >
+            <Avatar src={<img src={avatar} alt="avatar" />} />
+          </Badge>
         </td>
       ),
     },
@@ -56,29 +70,6 @@ function DriverAdmin() {
       title: "Số điện thoại",
       dataIndex: "phonenumber",
       key: "phonenumber",
-      // filters: [
-      //   {
-      //     text: "Phòng khách",
-      //     value: "Phòng khách",
-      //   },
-      //   {
-      //     text: "Phòng ngủ",
-      //     value: "Phòng ngủ",
-      //   },
-      //   {
-      //     text: "Phòng bếp",
-      //     value: "Phòng bếp",
-      //   },
-      //   {
-      //     text: "Phòng tắm",
-      //     value: "Phòng tắm",
-      //   },
-      //   {
-      //     text: "Phòng làm việc",
-      //     value: "Phòng làm việc",
-      //   },
-      // ],
-      // onFilter: (value, record) => record.category.indexOf(value) === 0,
     },
     {
       title: "Lượt giao hàng",
@@ -94,23 +85,37 @@ function DriverAdmin() {
       title: "Sao trung bình",
       dataIndex: "star_average",
       key: "star_average",
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => a.star_average - b.star_average,
       render: (star_average) => (
-        <p>
-          {star_average} &nbsp;<StarFilled style={{ color: "#f1a062" }} />
-        </p>
+        <td>
+          {star_average} &nbsp;
+          <StarFilled style={{ color: "#f1a062" }} />
+        </td>
       ),
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+      filters: [
+        {
+          text: "Sẵn sàng",
+          value: "Sẵn sàng",
+        },
+        {
+          text: "Đang bận",
+          value: "Đang bận",
+        },
+      ],
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
       render: (status, id) => (
         <div className="d-flex">
-          <Tag color={status ? "green" : "volcano"} key={status}>
-            {status ? "Sẵn sàng" : "Đang bận"}
+          <Tag color={status === "Sẵn sàng" ? "green" : "volcano"} key={status}>
+            {status === "Sẵn sàng" ? "Sẵn sàng" : "Đang bận"}
           </Tag>
           <div
-            // onClick={() => changeStatus(id, status)}
+            onClick={() => changeStatus(id, status)}
             style={{
               backgroundColor: "orange",
               borderRadius: "50%",
@@ -128,11 +133,12 @@ function DriverAdmin() {
       title: "Thao tác",
       key: "action",
       render: (
-        id //Khóa tài khoản, xem chi tiết, chỉnh sửa
+        id, //Khóa hồ sơ tài khoản, xem chi tiết, chỉnh sửa,
+        username
       ) => (
         <Space size="middle" className="icon_hover">
           <div
-            // onClick={() => nav(`/admin/service/edit/${id.id}`)}
+            onClick={() => nav(`/admin/driver/edit/${id.id}`)}
             style={{
               backgroundColor: "green",
               borderRadius: "50%",
@@ -145,7 +151,7 @@ function DriverAdmin() {
           </div>
 
           <div
-            // onClick={() => nav(`/admin/service/view/${id.id}`)}
+            onClick={() => view_detail_driver(id)}
             style={{
               backgroundColor: "blue",
               borderRadius: "50%",
@@ -159,7 +165,7 @@ function DriverAdmin() {
             />
           </div>
           <Link
-            // onClick={() => delete_service(id)}
+            onClick={() => lock_account_driver(username)}
             style={{
               backgroundColor: "red",
               borderRadius: "50%",
@@ -167,12 +173,68 @@ function DriverAdmin() {
               display: "flex",
             }}
           >
-            <DeleteOutlined style={{ color: "white", fontWeight: "bold" }} />
+            <LockOutlined style={{ color: "white", fontWeight: "bold" }} />
           </Link>
         </Space>
       ),
     },
   ];
+
+  //Khóa hồ sơ tài xế
+  const lock_account_driver = async (username) => {
+    let username_driver = username.username;
+    let data_account_driver = await axios.get(
+      `/v1/driver/getdriver_account/${username_driver}`
+    );
+
+    let status_account_driver = data_account_driver.data.status_account;
+    Swal.fire({
+      title: "Bạn muốn thay đổi trạng thái hồ sơ ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .patch(`/v1/driver/lockdriver_account/${username_driver}`, {
+              status_account: !status_account_driver,
+            })
+            .then((data) => {
+              get_driver();
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Thay đổi trạng thái hồ sơ thành công !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+            })
+            .catch((e) => {
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Thay đổi trạng thái hồ sơ thất bại !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+              console.log(e);
+            });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Thay đổi trạng thái hồ sơ thất bại !",
+          showConfirmButton: false,
+          timer: 1200,
+        });
+        console.log(e);
+      });
+  };
 
   //Search Realtime
   const [search, setSearch] = useState("");
@@ -212,321 +274,167 @@ function DriverAdmin() {
     return str;
   }
 
-  const get_driver = async () => {
-    await axios
-      .get(`/v1/driver/show_all_driver`)
-      .then((data) => {
-        let data_solve = data.data;
-        const data_item = [];
-        data_solve &&
-          data_solve.forEach((item, index) => {
-            const ob_service = {
-              id: item._id,
-              STT: index + 1,
-              avatar: item.avatar,
-              fullname: item.fullname,
-              phonenumber: item.phonenumber,
-              id_rating: item.id_rating.length,
-              id_delivery: item.id_delivery.length,
-              star_average: item.star_average,
-              status: item.status,
-            };
+  //Tài khoản bị khóa
+  const showAccountLock = () => {
+    get_driver("Bị khóa");
+    setStatusProfile("Bị khóa");
+  };
 
-            data_item.push(ob_service);
+  const get_driver = async (status_account) => {
+    try {
+      let data_account_driver = await axios.get(
+        `/v1/driver/getalldriver_account`
+      );
+
+      let arr_data_account_status = data_account_driver.data.map(
+        (item, index) => {
+          return item.status_account;
+        }
+      );
+
+      if (status_account === "Bị khóa") {
+        status_account = false;
+      } else {
+        status_account = true;
+      }
+
+      if (arr_data_account_status) {
+        await axios
+          .get(`/v1/driver/show_all_driver`)
+          .then((data) => {
+            let data_solve = data.data;
+            const data_item = [];
+            data_solve &&
+              data_solve.forEach((item, index) => {
+                if (arr_data_account_status[index] === status_account) {
+                  const ob_service = {
+                    id: item._id,
+                    STT: index + 1,
+                    avatar: item.avatar,
+                    fullname: item.fullname,
+                    phonenumber: item.phonenumber,
+                    id_rating: item.id_rating.length,
+                    id_delivery: item.id_delivery.length,
+                    star_average: item.star_average,
+                    status: item.status,
+                    status_account: arr_data_account_status[index],
+                    username: item.username,
+                  };
+                  data_item.push(ob_service);
+                }
+              });
+
+            console.log(data_item);
+            let new_arr = data_item.filter((item) => {
+              // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+              let word_Change_VN = removeVietnameseTones(item.fullname);
+              let word_search = removeVietnameseTones(search);
+              // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+              return search.toLowerCase() === ""
+                ? item
+                : word_Change_VN.toLowerCase().includes(word_search);
+            });
+            setDataSource(new_arr);
+          })
+          .catch((e) => {
+            console.log(e);
           });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-        let new_arr = data_item.filter((item) => {
-          // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-          let word_Change_VN = removeVietnameseTones(item.fullname);
-          let word_search = removeVietnameseTones(search);
-
-          // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-          return search.toLowerCase() === ""
-            ? item
-            : word_Change_VN.toLowerCase().includes(word_search);
-        });
-
-        setDataSource(new_arr);
+  //Thay đổi trạng thái tài xế
+  const changeStatus = (id, status) => {
+    let id_driver = id.id;
+    Swal.fire({
+      title: "Bạn muốn thay đổi trạng thái tài xế ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .patch(`/v1/driver/updateonefield_driver/${id_driver}`, {
+              status: status === "Sẵn sàng" ? "Đang bận" : "Sẵn sàng",
+            })
+            .then((data) => {
+              get_driver();
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Thay đổi trạng thái tài xế thành công !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+            })
+            .catch((e) => {
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Thay đổi trạng thái tài xế thất bại !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+              console.log(e);
+            });
+        }
       })
       .catch((e) => {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Thay đổi trạng thái tài xế thất bại !",
+          showConfirmButton: false,
+          timer: 1200,
+        });
         console.log(e);
       });
   };
 
-  // const changeStatus = (id, status) => {
-  //   let id_item = id.id;
-  //   Swal.fire({
-  //     title: "Bạn muốn thay đổi trạng thái vật dụng này ?",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Xác nhận",
-  //   })
-  //     .then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         await axios
-  //           .patch(`/v1/item/updateonefield_item/${id_item}`, {
-  //             status: !status,
-  //           })
-  //           .then((data) => {
-  //             get_item();
-  //             Swal.fire({
-  //               position: "center",
-  //               icon: "success",
-  //               title: "Thay đổi trạng thái vật dụng thành công !",
-  //               showConfirmButton: false,
-  //               timer: 1200,
-  //             });
-  //           })
-  //           .catch((e) => {
-  //             Swal.fire({
-  //               position: "center",
-  //               icon: "warning",
-  //               title: "Thay đổi trạng thái vật dụng thất bại !",
-  //               showConfirmButton: false,
-  //               timer: 1200,
-  //             });
-  //             console.log(e);
-  //           });
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       Swal.fire({
-  //         position: "center",
-  //         icon: "warning",
-  //         title: "Thay đổi trạng thái vật dụng thất bại !",
-  //         showConfirmButton: false,
-  //         timer: 1200,
-  //       });
-  //       console.log(e);
-  //     });
-  // };
+  const view_detail_driver = async (id) => {
+    await axios
+      .get(`/v1/driver/view_detail_driver/${id.id}`)
+      .then(async (data) => {
+        let data_result = data.data;
 
-  // const delete_item = (id) => {
-  //   let id_item = id.id;
-  //   Swal.fire({
-  //     title: "Bạn muốn xóa vật dụng này ?",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Xác nhận",
-  //   })
-  //     .then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         await axios
-  //           .delete(`/v1/item/delete_item/${id_item}`)
-  //           .then((data) => {
-  //             get_item();
-  //             Swal.fire({
-  //               position: "center",
-  //               icon: "success",
-  //               title: "Xóa vật dụng thành công!",
-  //               showConfirmButton: false,
-  //               timer: 1200,
-  //             });
-  //           })
-  //           .catch((e) => {
-  //             Swal.fire({
-  //               position: "center",
-  //               icon: "warning",
-  //               title: "Xóa vật dụng thất bại!",
-  //               showConfirmButton: false,
-  //               timer: 1200,
-  //             });
-  //             console.log(e);
-  //           });
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       Swal.fire({
-  //         position: "center",
-  //         icon: "warning",
-  //         title: "Xóa vật dụng thất bại!",
-  //         showConfirmButton: false,
-  //         timer: 1200,
-  //       });
-  //       console.log(e);
-  //     });
-  // };
-
-  // const changeStatusComment = (id, status) => {
-  //   let id_comment_blog = id;
-  //   Swal.fire({
-  //     title: "Bạn muốn thay đổi trạng thái comment này ?",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Xác nhận",
-  //   })
-  //     .then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         await axios
-  //           .patch(
-  //             `/v1/commentBlog/updateonefield_comment_blog/${id_comment_blog}`,
-  //             {
-  //               status: !status,
-  //             }
-  //           )
-  //           .then((data) => {
-  //             Swal.fire({
-  //               position: "center",
-  //               icon: "success",
-  //               title: "Thay đổi trạng thái comment thành công !",
-  //               showConfirmButton: false,
-  //               timer: 1200,
-  //             });
-  //           })
-  //           .catch((e) => {
-  //             Swal.fire({
-  //               position: "center",
-  //               icon: "warning",
-  //               title: "Thay đổi trạng thái comment thất bại !",
-  //               showConfirmButton: false,
-  //               timer: 1200,
-  //             });
-  //             console.log(e);
-  //           });
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       Swal.fire({
-  //         position: "center",
-  //         icon: "warning",
-  //         title: "Thay đổi trạng thái comment thất bại !",
-  //         showConfirmButton: false,
-  //         timer: 1200,
-  //       });
-  //       console.log(e);
-  //     });
-  // };
-
-  // const view_detail_blog = async (id) => {
-  //   await axios
-  //     .get(`/v1/blog/view_detail_blog/${id.id}`)
-  //     .then(async (data) => {
-  //       let data_result = data.data;
-
-  //       const arr_commentBlogID = data_result.comment_blog_id;
-
-  //       await axios
-  //         .post(`/v1/commentBlog/read_comment_blog_id`, arr_commentBlogID)
-  //         .then((data) => {
-  //           const data_comment_blog = data.data;
-
-  //           let DOM_LIST_COMMENT = data_comment_blog.map((item, index) => {
-  //             return (
-  //               <div
-  //                 className="d-flex"
-  //                 style={{
-  //                   backgroundColor: "#edf2f8",
-  //                   padding: "10px 10px 0 10px",
-  //                   borderRadius: "5px",
-  //                   height: "fit-content",
-  //                   marginBottom: "10px",
-  //                 }}
-  //               >
-  //                 <Avatar
-  //                   src={item.avatar}
-  //                   style={{
-  //                     border: "1px solid #66b2f9",
-  //                     backgroundColor: "black",
-  //                   }}
-  //                 />
-  //                 <div
-  //                   style={{
-  //                     marginLeft: "15px",
-  //                     justifyContent: "space-between",
-  //                     width: "100%",
-  //                   }}
-  //                   className="d-flex"
-  //                 >
-  //                   <div>
-  //                     <p
-  //                       className="name_user"
-  //                       style={{
-  //                         color: "#66b2f9",
-  //                         marginBottom: "4px",
-  //                         fontWeight: "bold",
-  //                       }}
-  //                     >
-  //                       {item.fullname}
-  //                     </p>
-  //                     <p className="comment_user" style={{ color: "#7b8082" }}>
-  //                       {item.comment_content}
-  //                     </p>
-  //                   </div>
-
-  //                   <div className="time_comment" style={{ color: "#b9babb" }}>
-  //                     {item.comment_time}
-  //                     <div className="d-flex">
-  //                       <Tag
-  //                         color={item.status ? "green" : "volcano"}
-  //                         key={item.status}
-  //                       >
-  //                         {item.status ? "Hoạt động" : "Bị cấm"}
-  //                       </Tag>
-  //                       <div
-  //                         onClick={() =>
-  //                           changeStatusComment(item.id, item.status)
-  //                         }
-  //                         style={{
-  //                           backgroundColor: "orange",
-  //                           borderRadius: "50%",
-  //                           padding: "5px",
-  //                           display: "flex",
-  //                           cursor: "pointer",
-  //                         }}
-  //                       >
-  //                         <SwapOutlined
-  //                           style={{ color: "white", fontWeight: "bold" }}
-  //                         />
-  //                       </div>
-  //                     </div>
-  //                   </div>
-  //                   <div></div>
-  //                 </div>
-  //               </div>
-  //             );
-  //           });
-
-  //           const objectBlog = {
-  //             content: data_result.content,
-  //             comment_blog_id: data_result.comment_blog_id,
-  //           };
-
-  //           Modal.success({
-  //             title: "Thông tin chi tiết Blog",
-  //             content: (
-  //               <>
-  //                 <h5>Nội dung Blog: </h5>
-  //                 <div className="content_blog_detail">
-  //                   {htmlReactParser(objectBlog.content)}
-  //                 </div>
-
-  //                 <div>
-  //                   <h5>Bình luận: </h5>
-  //                   <p>
-  //                     Số lượng :{" "}
-  //                     <span className="fw-bold">
-  //                       {objectBlog.comment_blog_id.length}
-  //                     </span>
-  //                   </p>
-  //                   <div>{DOM_LIST_COMMENT}</div>
-  //                 </div>
-  //               </>
-  //             ),
-  //             onOk() {},
-  //           });
-  //         })
-  //         .catch((e) => console.log(e));
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // };
+        Modal.success({
+          title: "Thông tin chi tiết hồ sơ tài xế",
+          content: (
+            <>
+              <div className="info_driver text-center">
+                <h4>THÔNG TIN CÁ NHÂN</h4>
+                <div>
+                  <img src={data_result.avatar} />
+                  <p>{data_result.fullname}</p>
+                  <p>{data_result.star_average}</p>
+                </div>
+                <div>
+                  <div className="row">
+                    <div className="col">{data_result.profile_code}</div>
+                    <div className="col">{data_result.gender}</div>
+                  </div>
+                  <div className="row">
+                    <div className="col">{data_result.date_of_birth}</div>
+                    <div className="col">{data_result.phonenumber}</div>
+                  </div>
+                  <div className="row">
+                    <div className="col">{data_result.email}</div>
+                    <div className="col">{data_result.address}</div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ),
+          onOk() {},
+        });
+      })
+      .catch((e) => console.log(e));
+  };
 
   return (
     <>
@@ -548,27 +456,70 @@ function DriverAdmin() {
           <BottomCssContent>
             <TopCssContent>
               <p>Tài xế</p>
-              <div
-                className="d-flex"
-                style={{ width: "300px", borderRadius: "5px" }}
-              >
-                <input
-                  type="text"
-                  id="find_blog"
-                  className="form-control form-control-lg"
-                  placeholder="Nhập vào tên tài xế..."
-                  style={{ fontSize: "17px", borderRadius: "3px" }}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                <SearchOutlined
+              <div className="d-flex">
+                <div
+                  className="d-flex"
+                  style={{ width: "300px", borderRadius: "5px" }}
+                >
+                  <input
+                    type="text"
+                    id="find_blog"
+                    className="form-control form-control-lg"
+                    placeholder="Nhập vào tên tài xế..."
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <SearchOutlined
+                    style={{
+                      backgroundColor: "#7bd6e5",
+                      padding: "13px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+
+                <div
+                  className="d-flex"
                   style={{
-                    backgroundColor: "#7bd6e5",
-                    padding: "13px",
+                    width: "fit-content",
+                    borderRadius: "5px",
+                    marginLeft: "50px",
+                    backgroundColor: "#ccc",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "10px",
                     color: "white",
                     cursor: "pointer",
                   }}
-                />
+                  onClick={() => showAccountLock()}
+                >
+                  <LockOutlined /> &nbsp; HỒ SƠ BỊ KHÓA
+                </div>
               </div>
+
+              <p
+                style={{
+                  marginLeft: "10px",
+                  marginTop: "20px",
+                  display: "inline-block",
+                  border: "1px solid #f1a062",
+                  backgroundColor: "#f1a062",
+                  color: "white",
+                  borderRadius: "5px",
+                  padding: "7px",
+                }}
+              >
+                Trạng thái hồ sơ: &nbsp;
+                <span
+                  style={{
+                    color: statusProfile === "Đang hoạt động" ? "green" : "red",
+                  }}
+                >
+                  {statusProfile}
+                </span>
+              </p>
 
               <Link to="/admin/driver/add">
                 <Button

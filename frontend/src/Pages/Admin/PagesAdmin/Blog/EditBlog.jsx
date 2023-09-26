@@ -60,6 +60,7 @@ function AddBlog() {
 
     for (const key in dataBlog) {
       if (isKeyEmpty(key)) {
+        console.log(key)
         check = false;
         break;
       }

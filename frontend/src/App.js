@@ -71,6 +71,7 @@ import OrderAdmin from "./Pages/Admin/PagesAdmin/Order/OrderAdmin";
 //Driver Admin
 import DriverAdmin from './Pages/Admin/PagesAdmin/Driver/DriverAdmin';
 import AddDriver from './Pages/Admin/PagesAdmin/Driver/AddDriver';
+import EditDriver from './Pages/Admin/PagesAdmin/Driver/EditDriver';
 
 
 
@@ -162,6 +163,7 @@ function App() {
           {/* Driver Admin CRUD */}
           <Route path="/admin/driver" element={<DriverAdmin />} />
           <Route path="/admin/driver/add" element={<AddDriver />} />
+          <Route path="/admin/driver/edit/:id" element={<EditDriver />} />
           {/* Driver Admin CRUD */}
 
 

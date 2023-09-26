@@ -32,7 +32,7 @@ function EditItem() {
   const [dataItem, setDataItem] = useState({});
 
   const onSubmit = async () => {
-    // dataBlog.thumbnail = image;
+    dataItem.image = image;
 
     const isKeyEmpty = (key) => {
       return (

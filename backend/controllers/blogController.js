@@ -61,7 +61,7 @@ const blogController = {
                     fs.unlinkSync(imagePath);
                 }
             }else{
-                req.body.thumbnail = req.body.imgURL
+                req.body.thumbnail = req.body.imgURL || req.body.thumbnail
             }
 
             const check_update = await Blog.findByIdAndUpdate(id, req.body);
