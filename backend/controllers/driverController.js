@@ -170,6 +170,23 @@ const driverController = {
         }
     },
 
+    //Update one field Driver With fullname(Status Driver)
+    updateOneFieldDriverWithFullName: async (req, res) => {
+        try {
+            const fullname_driver = req.params.fullname;
+
+            const dataUpdateOne = await Driver.updateOne({ fullname: fullname_driver }, req.body, { new: true });
+            if (dataUpdateOne) {
+                res.status(201).json('update success');
+            } else {
+                res.status(501).json('update fail');
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
     //Lock Driver Account
     lockDriverAccount: async (req, res) => {
         try {

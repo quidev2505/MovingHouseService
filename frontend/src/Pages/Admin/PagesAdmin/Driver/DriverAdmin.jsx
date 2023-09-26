@@ -7,7 +7,7 @@ import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 
-import { Space, Table, Tag, Image, Modal, Avatar, Badge } from "antd";
+import { Space, Table, Tag, Image, Modal, Avatar, Badge, Rate } from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -23,6 +23,15 @@ import {
   LockOutlined,
   SwapOutlined,
   SearchOutlined,
+  BarcodeOutlined,
+  ManOutlined,
+  WomanOutlined,
+  MailOutlined,
+  CalendarOutlined,
+  PhoneOutlined,
+  HomeOutlined,
+  TrophyOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -406,27 +415,154 @@ function DriverAdmin() {
           title: "Thông tin chi tiết hồ sơ tài xế",
           content: (
             <>
-              <div className="info_driver text-center">
-                <h4>THÔNG TIN CÁ NHÂN</h4>
+              <div
+                className="info_driver text-center"
+                style={{
+                  border: "1px solid #ea9868",
+                  borderRadius: "5px",
+                  padding: "5px",
+                }}
+              >
+                <h4 style={{ color: "#ea9868" }}>THÔNG TIN CÁ NHÂN</h4>
                 <div>
-                  <img src={data_result.avatar} />
-                  <p>{data_result.fullname}</p>
-                  <p>{data_result.star_average}</p>
+                  <img
+                    src={data_result.avatar}
+                    style={{
+                      borderRadius: "50%",
+                      width: "150px",
+                      height: "150px",
+                      objectFit: "fill",
+                      marginBottom: "5px",
+                    }}
+                    alt="anh"
+                  />
+                  <p
+                    style={{
+                      color: "#ea9868",
+                      fontWeight: "500",
+                      fontSize: "16px",
+                    }}
+                  >
+                    {data_result.fullname}
+                  </p>
+                  <p style={{ marginTop: "-10px" }}>
+                    <Rate
+                      disabled
+                      allowHalf
+                      defaultValue={data_result.star_average}
+                    />
+                  </p>
                 </div>
                 <div>
                   <div className="row">
-                    <div className="col">{data_result.profile_code}</div>
-                    <div className="col">{data_result.gender}</div>
+                    <div className="col">
+                      <BarcodeOutlined /> &nbsp;&nbsp;
+                      {data_result.profile_code}
+                    </div>
+                    <div className="col">
+                      {data_result.gender === "Nam" ? (
+                        <ManOutlined />
+                      ) : (
+                        <WomanOutlined />
+                      )}{" "}
+                      &nbsp;&nbsp;
+                      {data_result.gender}
+                    </div>
+                    <div className="col">
+                      <CalendarOutlined />
+                      &nbsp;&nbsp;{data_result.date_of_birth}
+                    </div>
                   </div>
                   <div className="row">
-                    <div className="col">{data_result.date_of_birth}</div>
-                    <div className="col">{data_result.phonenumber}</div>
+                    <div className="col">
+                      <PhoneOutlined />
+                      &nbsp;&nbsp;{data_result.phonenumber}
+                    </div>
+                    <div className="col">
+                      <MailOutlined />
+                      &nbsp;&nbsp;{data_result.email}
+                    </div>
+                    <div className="col">
+                      <HomeOutlined />
+                      &nbsp;&nbsp;{data_result.address}
+                    </div>
                   </div>
                   <div className="row">
-                    <div className="col">{data_result.email}</div>
-                    <div className="col">{data_result.address}</div>
+                    <div className="col" style={{ color: "#ea9868", fontWeight:"bold" }}>
+                      <AimOutlined /> {data_result.location_delivery}
+                    </div>
+                    <div className="col"></div>
+                    <div className="col"></div>
                   </div>
                 </div>
+              </div>
+
+              <div
+                className="thanhtich"
+                style={{
+                  border: "1px solid #ea9868",
+                  padding: "5px",
+                  marginTop: "5px",
+                  borderRadius: "5px",
+                }}
+              >
+                <h5 style={{ color: "#ea9868" }}>
+                  <TrophyOutlined />
+                  &nbsp;&nbsp; Thành tích
+                </h5>
+                <div className="row">
+                  <div className="col">
+                    Sao trung bình:{" "}
+                    <span style={{ fontWeight: "bold" }}>
+                      {" "}
+                      {data_result.star_average}
+                      <StarFilled style={{ color: "#f1a062" }} />
+                    </span>
+                  </div>
+
+                  <div className="col">
+                    Số lượt vận chuyển:{" "}
+                    <span style={{ fontWeight: "bold" }}>
+                      {data_result.id_delivery.length}
+                    </span>
+                  </div>
+                  <div className="col">
+                    Số lượt đánh giá:{" "}
+                    <span style={{ fontWeight: "bold" }}>
+                      {data_result.id_rating.length}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="lichsuvanchuyen"
+                style={{
+                  border: "1px solid #ea9868",
+                  padding: "5px",
+                  marginTop: "5px",
+                  borderRadius: "5px",
+                  textAlign: "center",
+                }}
+              >
+                <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
+                  LỊCH SỬ VẬN CHUYỂN
+                </h4>
+              </div>
+
+              <div
+                className="lichsudanhgia"
+                style={{
+                  border: "1px solid #ea9868",
+                  padding: "5px",
+                  marginTop: "5px",
+                  borderRadius: "5px",
+                  textAlign: "center",
+                }}
+              >
+                <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
+                  LỊCH SỬ ĐÁNH GIÁ
+                </h4>
               </div>
             </>
           ),

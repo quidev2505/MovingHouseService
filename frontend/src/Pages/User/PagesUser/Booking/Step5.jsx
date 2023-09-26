@@ -548,6 +548,24 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
               </>
             )}
           </div>
+
+          <div
+            style={{
+              border: "1px solid #ea9868",
+              borderRadius: "5px",
+              padding: "5px",
+            }}
+          >
+            <p className="fw-bold">- Lưu ý:</p>
+            <p style={{ fontStyle: "italic" }}>
+              + <span className="fw-bold">Tổng đơn hàng thanh toán</span> có thể sẽ thay đổi do
+              trong quá trình vận chuyển sẽ có các khoảng chi phí phát sinh.
+            </p>
+            <p style={{ fontStyle: "italic" }}>
+              + Các chi phí phát sinh có thể bao gồm: hỏng hóc, cháy nổ, chi phí
+              chờ đợi, chậm trễ trong vận chuyển...
+            </p>
+          </div>
         </div>
       </div>
     </LoadingOverlayComponent>

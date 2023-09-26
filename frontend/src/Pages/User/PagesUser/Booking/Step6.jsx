@@ -46,7 +46,7 @@ function Step6() {
           <i class="checkmark">✓</i>
         </div>
         <br></br>
-        <h1>Đặt hàng thành công</h1>
+        <h1>Đặt dịch vụ thành công</h1>
         <br></br>
         <p>
           Chúng tôi sẽ liên hệ đến bạn sớm nhất ! Thông tin chi tiết hãy theo

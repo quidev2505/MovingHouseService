@@ -44,7 +44,7 @@ function OrderUser() {
               status: item.status,
               time_get_item: `${item.time_start} - ${item.date_start}`,
               router: `${item.fromLocation} - ${item.toLocation}`,
-              driver_id: item.driver_id,
+              driver_name: item.driver_name,
               vehicle_name: item.vehicle_name,
               totalOrder: item.totalOrder,
             };
@@ -534,11 +534,11 @@ function OrderUser() {
     },
     {
       title: "Tài xế",
-      dataIndex: "driver_id",
-      key: "driver_id",
-      render: (driver_id) => (
+      dataIndex: "driver_name",
+      key: "driver_name",
+      render: (driver_name) => (
         <div className="fw-bold">
-          {driver_id === null ? (
+          {driver_name === null ? (
             <span style={{ color: "#ccc" }}>Chưa xác định</span>
           ) : (
             ""

@@ -161,7 +161,7 @@ function EditDriver() {
   return (
     <>
       <LayoutAdmin>
-        <div className="service_add_admin">
+        <div className="driver_edit_admin">
           <div>
             <Breadcrumb
               routes={[

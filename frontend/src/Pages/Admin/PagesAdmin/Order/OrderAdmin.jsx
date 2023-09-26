@@ -83,24 +83,35 @@ function OrderAdmin() {
     },
   ];
 
+  const [activeKeyTab, setActiveKeyTab] = useState("2");
+
   const onChange = (key) => {
     switch (key) {
       case "1":
+        setActiveKeyTab("1");
         show_order_customer("Đã hủy");
         break;
       case "2":
+        setActiveKeyTab("2");
         show_order_customer("Đang tìm tài xế");
         break;
       case "3":
+        setActiveKeyTab("3");
         show_order_customer("Đang thực hiện");
         break;
       case "4":
+        setActiveKeyTab("4");
+
         show_order_customer("Xác nhận hóa đơn");
         break;
       case "5":
+        setActiveKeyTab("5");
+
         show_order_customer("Thanh toán hóa đơn");
         break;
       case "6":
+        setActiveKeyTab("6");
+
         show_order_customer("Hoàn thành");
         break;
       default:
@@ -108,15 +119,33 @@ function OrderAdmin() {
     }
   };
 
-  const statusOrder = useRef("Đã hủy");
+  const statusOrder = useRef("Đang tìm tài xế");
+  const statusDriver = useRef("Chưa xác định");
+
+  // //Thay đổi trạng thái của tài xế sang đang bận sau khi đã đưa tài xế vào ca làm
+  const change_status_driver = async (driver_name, status_driver) => {
+    console.log(driver_name);
+    await axios
+      .patch(`/v1/driver/updateonefield_driver_withname/${driver_name}`, {
+        status: status_driver,
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   //Update One Field Order
   const updateOrder = async (order_id) => {
-    console.log(statusOrder.current);
+    let ob = {
+      driver_name: statusDriver.current,
+      status: "Đang thực hiện",
+    };
+
     await axios
-      .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, {
-        status: statusOrder.current,
-      })
+      .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, ob)
       .then((data) => {
         Swal.fire({
           position: "center",
@@ -125,8 +154,59 @@ function OrderAdmin() {
           showConfirmButton: false,
           timer: 1500,
         });
+
+        change_status_driver(ob.driver_name, "Đang bận");
+
         setTimeout(() => {
-          show_order_customer("Đang tìm tài xế");
+          setActiveKeyTab("3");
+          show_order_customer("Đang thực hiện");
+        }, 1100);
+        Modal.destroyAll();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  //Get List Driver Can Choose
+  const list_driver = async () => {
+    let data_arr_list_driver = await axios.get("/v1/driver/show_all_driver");
+    let arr_result = [];
+    data_arr_list_driver &&
+      data_arr_list_driver.data.forEach((item, index) => {
+        if (item.status === "Sẵn sàng") {
+          arr_result.push(item.fullname);
+        }
+      });
+
+    setListDriver(arr_result);
+  };
+
+  const [listDriver, setListDriver] = useState("");
+
+  //Hủy đơn hàng
+  const cancelOrder = async (order_id, driver_name) => {
+    let ob = {
+      driver_name: null,
+      status: "Đã hủy",
+    };
+
+    await axios
+      .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, ob)
+      .then((data) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Cập nhật đơn hàng thành công !",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        change_status_driver(driver_name.driver_name, "Sẵn sàng");
+
+        setTimeout(() => {
+          setActiveKeyTab("1");
+          show_order_customer("Đã hủy");
         }, 1100);
         Modal.destroyAll();
       })
@@ -136,7 +216,7 @@ function OrderAdmin() {
   };
 
   //Update order
-  const handle_update_order = (order_id) => {
+  const handle_update_order = (order_id, driver_name) => {
     Modal.success({
       title: "Cập nhật đơn hàng",
       content: (
@@ -147,16 +227,34 @@ function OrderAdmin() {
           </p>
           <div className="d-flex">
             <p>Cập nhật trạng thái mới:</p>
+            <button
+              className="btn btn-warning"
+              style={{ color: "white", fontWeight: "bold", marginLeft: "20px" }}
+              onClick={() => cancelOrder(order_id, driver_name)}
+            >
+              Hủy đơn hàng
+            </button>
+          </div>
+          <p>
+            Trạng thái tài xế hiện tại:{" "}
+            <span className="fw-bold">
+              {order_id.driver_name ? order_id.driver_name : "Chưa xác định"}
+            </span>
+          </p>
+          <div className="d-flex">
+            <p>Danh sách tài xế khả dụng:</p>
             <select
               style={{
                 borderRadius: "5px",
                 border: "1px solid #ccc",
                 marginLeft: "10px",
               }}
-              onChange={(e) => (statusOrder.current = e.target.value)}
+              onChange={(e) => (statusDriver.current = e.target.value)}
             >
-              <option value="Đã hủy">Đã hủy</option>
-              <option value="Đang tìm tài xế">Đang tìm tài xế</option>
+              {listDriver.map((item, index) => (
+                <option value={item}>{item}</option>
+              ))}
+              <option value="Chưa xác định">Chưa xác định</option>
             </select>
           </div>
           <div
@@ -192,7 +290,7 @@ function OrderAdmin() {
                 status: item.status,
                 time_get_item: `${item.time_start} - ${item.date_start}`,
                 router: `${item.fromLocation} - ${item.toLocation}`,
-                driver_id: item.driver_id,
+                driver_name: item.driver_name,
                 vehicle_name: item.vehicle_name,
                 totalOrder: item.totalOrder,
               };
@@ -253,11 +351,32 @@ function OrderAdmin() {
       render: (status) => (
         <div className="d-flex">
           <Tag
-            color={status === "Đang tìm tài xế" ? "blue" : status === "Đã hủy" ? 'volcano' : status === 
-          "Đang thực hiện" ? "gold" : status === "Xác nhận hóa đơn" ? "purple" : status === "Thanh toán hóa đơn" ? "magenta" : "#87d068"}
+            color={
+              status === "Đang tìm tài xế"
+                ? "blue"
+                : status === "Đã hủy"
+                ? "volcano"
+                : status === "Đang thực hiện"
+                ? "gold"
+                : status === "Xác nhận hóa đơn"
+                ? "purple"
+                : status === "Thanh toán hóa đơn"
+                ? "magenta"
+                : "#87d068"
+            }
             key={status}
           >
-            {status === "Đang tìm tài xế" ? "Đang tìm tài xế" : status === "Đã hủy" ? "Đã hủy" : status === "Đang thực hiện" ? "Đang thực hiện" : status === "Xác nhận hóa đơn" ? "Xác nhận hóa đơn" : status === "Thanh toán hóa đơn" ? "Thanh toán hóa đơn" : "Hoàn thành"}
+            {status === "Đang tìm tài xế"
+              ? "Đang tìm tài xế"
+              : status === "Đã hủy"
+              ? "Đã hủy"
+              : status === "Đang thực hiện"
+              ? "Đang thực hiện"
+              : status === "Xác nhận hóa đơn"
+              ? "Xác nhận hóa đơn"
+              : status === "Thanh toán hóa đơn"
+              ? "Thanh toán hóa đơn"
+              : "Hoàn thành"}
           </Tag>
         </div>
       ),
@@ -336,14 +455,14 @@ function OrderAdmin() {
     },
     {
       title: "Tài xế",
-      dataIndex: "driver_id",
-      key: "driver_id",
-      render: (driver_id) => (
+      dataIndex: "driver_name",
+      key: "driver_name",
+      render: (driver_name) => (
         <div className="fw-bold">
-          {driver_id === null ? (
+          {driver_name === null ? (
             <span style={{ color: "#ccc" }}>Chưa xác định</span>
           ) : (
-            ""
+            driver_name
           )}
         </div>
       ),
@@ -394,10 +513,10 @@ function OrderAdmin() {
     {
       title: "Thao tác",
       key: "action",
-      render: (order_id) => (
+      render: (order_id, driver_name) => (
         <Space size="middle" className="icon_hover">
           <div
-            onClick={() => handle_update_order(order_id)}
+            onClick={() => handle_update_order(order_id, driver_name)}
             style={{
               backgroundColor: "red",
               borderRadius: "50%",
@@ -682,6 +801,7 @@ function OrderAdmin() {
   const [search, setSearch] = useState("");
   useEffect(() => {
     show_order_customer("Đang tìm tài xế");
+    list_driver();
   }, [search]);
 
   function removeVietnameseTones(str) {
@@ -747,7 +867,7 @@ function OrderAdmin() {
               }}
             >
               <Tabs
-                defaultActiveKey="2"
+                activeKey={activeKeyTab}
                 items={items}
                 onChange={onChange}
                 itemSelectedColor={""}

@@ -548,8 +548,8 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
               </div>
               <DatalistInput
                 type="text"
-                className="data_list"
                 placeholder="Nhập vào điểm lấy hàng"
+                className="data_list"
                 style={{
                   width: "100%",
                   height: "60px",

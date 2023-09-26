@@ -870,7 +870,7 @@ th.ant-table-cell {
     }
 }
 
-.driver_add_admin .ant-select-selection-item{
+.driver_add_admin .ant-select-selection-item, .driver_edit_admin .ant-select-selection-item{
     display: flex;
     align-items: center;
 }

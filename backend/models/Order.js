@@ -28,7 +28,7 @@ const orderSchema = new mongoose.Schema({
     },//Thời gian bắt đầu
     date_end: {
         type: String,
-        default: ""
+        default: null
     },//Ngày kết thúc vận chuyển // 27 tháng 8 năm 2023
     fromLocation: {
         type:String,
@@ -42,11 +42,10 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required:true
     },//Tên phương tiện
-    driver_id:{
-        type: mongoose.Types.ObjectId,
-        ref: 'Driver',
+    driver_name:{
+        type: String,
         default: null
-    },//Id của tài xế
+    },//Tên của tài xế
     totalOrder:{
         type:Number,
         required: true

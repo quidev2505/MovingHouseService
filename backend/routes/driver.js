@@ -12,6 +12,10 @@ router.get('/show_all_driver', driverController.getAllDriver)
 //Update one field Driver (Status)
 router.patch('/updateonefield_driver/:id', driverController.updateOneFieldDriver)
 
+
+//Update one field Driver With Full name(Status)
+router.patch('/updateonefield_driver_withname/:fullname', driverController.updateOneFieldDriverWithFullName)
+
 //Lock Driver Account
 router.patch('/lockdriver_account/:username', driverController.lockDriverAccount)
 
