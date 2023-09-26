@@ -88,15 +88,6 @@ const orderController = {
         try {
             const data_all_order = await Order.find();
 
-            if (data_all_order) {
-                data_all_order.forEach(async(item, index) => {
-                    console.log(item.customer_id._id)
-                   
-                    // let result = await Customer.findOne({_id: item.customer_id});
-                    // console.log(result)
-                })
-
-            }
 
             if (data_all_order) {
                 res.status(201).json(data_all_order)

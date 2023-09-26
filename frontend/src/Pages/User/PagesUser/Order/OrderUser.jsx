@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HeaderUser from "../../ComponentUser/HeaderUser";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -29,44 +29,38 @@ function OrderUser() {
   const user = useSelector((state) => state.auth.login.currentUser); //Lấy User hiện tại ra
   const show_order_customer = async () => {
     setIsActive(false);
-    await axios
-      .get(`/v1/order/viewOrderWithCustomerId/${user._id}`)
-      .then((data) => {
-        let dataOrder = data.data;
-        const data_order = [];
-        dataOrder &&
-          dataOrder.forEach((item, index) => {
-            const ob_order = {
-              id_order_detail: item.order_detail_id,
-              STT: index + 1,
-              order_id: item.order_id,
-              service_name: item.service_name,
-              status: item.status,
-              time_get_item: `${item.time_start} - ${item.date_start}`,
-              router: `${item.fromLocation} - ${item.toLocation}`,
-              driver_name: item.driver_name,
-              vehicle_name: item.vehicle_name,
-              totalOrder: item.totalOrder,
-            };
 
-            data_order.push(ob_order);
-          });
+    let id_customer = await axios.get(
+      `/v1/customer/get_customer_with_fullname/${user.fullname}`
+    );
 
-        let new_arr = data_order.filter((item) => {
-          // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-          let word_Change_VN = removeVietnameseTones(item.order_id);
-          let word_search = removeVietnameseTones(search);
+    if (id_customer) {
+      await axios
+        .get(`/v1/order/viewOrderWithCustomerId/${id_customer.data._id}`)
+        .then((data) => {
+          let dataOrder = data.data;
+          const data_order = [];
+          dataOrder &&
+            dataOrder.forEach((item, index) => {
+              const ob_order = {
+                id_order_detail: item.order_detail_id,
+                STT: index + 1,
+                order_id: item.order_id,
+                service_name: item.service_name,
+                status: item.status,
+                time_get_item: `${item.time_start} - ${item.date_start}`,
+                router: `${item.fromLocation} - ${item.toLocation}`,
+                driver_name: item.driver_name,
+                vehicle_name: item.vehicle_name,
+                totalOrder: item.totalOrder,
+              };
 
-          // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-          return search.toLowerCase() === ""
-            ? item
-            : word_Change_VN.toLowerCase().includes(word_search);
-        });
+              data_order.push(ob_order);
+            });
 
-        if (new_arr.length === 0) {
-          let new_arr_service = data_order.filter((item) => {
+          let new_arr = data_order.filter((item) => {
             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-            let word_Change_VN = removeVietnameseTones(item.service_name);
+            let word_Change_VN = removeVietnameseTones(item.order_id);
             let word_search = removeVietnameseTones(search);
 
             // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
@@ -74,14 +68,28 @@ function OrderUser() {
               ? item
               : word_Change_VN.toLowerCase().includes(word_search);
           });
-          setDataOrder(new_arr_service);
-        } else {
-          setDataOrder(new_arr);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+
+          if (new_arr.length === 0) {
+            let new_arr_service = data_order.filter((item) => {
+              // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+              let word_Change_VN = removeVietnameseTones(item.service_name);
+              let word_search = removeVietnameseTones(search);
+
+              // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+              return search.toLowerCase() === ""
+                ? item
+                : word_Change_VN.toLowerCase().includes(word_search);
+            });
+            setDataOrder(new_arr_service);
+          } else {
+            setDataOrder(new_arr);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+   
   };
 
   const view_detail_order = async (id_order_detail) => {

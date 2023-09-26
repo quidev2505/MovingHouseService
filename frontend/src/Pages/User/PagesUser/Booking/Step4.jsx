@@ -149,7 +149,22 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     get_item();
     setIsActive(false);
     setOpen(true);
+    get_id_customer(user.fullname)
   }, []);
+
+  const [id_customer, setIdCustomer] = useState();
+
+  //Lấy Customer_id dựa vào fullname
+  const get_id_customer = async (fullname) => {
+    await axios
+      .get(`/v1/customer/get_customer_with_fullname/${fullname}`)
+      .then((data) => {
+        setIdCustomer(data.data._id);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   //Kiểm tra sau khi đã nhập đầy đủ tất cả dữ liệu
   useEffect(() => {
@@ -176,7 +191,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         noteDriver: noteDriver,
         dataChooseItem: dataChooseItem,
         price_step4_init: temp_price_order.current,
-        customer_id: user._id,
+        customer_id: id_customer,
         payment_method: "Thanh toán cho tài xế",
       };
 
