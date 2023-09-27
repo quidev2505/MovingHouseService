@@ -31,6 +31,7 @@ import {
   PhoneOutlined,
   HomeOutlined,
   TrophyOutlined,
+  UnlockOutlined,
   AimOutlined,
 } from "@ant-design/icons";
 
@@ -40,6 +41,8 @@ function DriverAdmin() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [statusProfile, setStatusProfile] = useState("Đang hoạt động");
+
+  const [checkLockAccount, setCheckLockAccount] = useState(false);
 
   const columns = [
     {
@@ -285,6 +288,7 @@ function DriverAdmin() {
 
   //Tài khoản bị khóa
   const showAccountLock = () => {
+    setCheckLockAccount(!checkLockAccount);
     get_driver("Bị khóa");
     setStatusProfile("Bị khóa");
   };
@@ -488,7 +492,10 @@ function DriverAdmin() {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col" style={{ color: "#ea9868", fontWeight:"bold" }}>
+                    <div
+                      className="col"
+                      style={{ color: "#ea9868", fontWeight: "bold" }}
+                    >
                       <AimOutlined /> {data_result.location_delivery}
                     </div>
                     <div className="col"></div>
@@ -615,29 +622,54 @@ function DriverAdmin() {
                   />
                 </div>
 
-                <div
-                  className="d-flex"
-                  style={{
-                    width: "fit-content",
-                    borderRadius: "5px",
-                    marginLeft: "50px",
-                    backgroundColor: "#ccc",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "10px",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => showAccountLock()}
-                >
-                  <LockOutlined /> &nbsp; HỒ SƠ BỊ KHÓA
-                </div>
+                {!checkLockAccount ? (
+                  <div
+                    className="d-flex"
+                    style={{
+                      width: "fit-content",
+                      borderRadius: "5px",
+                      marginLeft: "50px",
+                      backgroundColor: "#ccc",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "10px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => showAccountLock()}
+                  >
+                    <LockOutlined /> &nbsp; HỒ SƠ BỊ KHÓA
+                  </div>
+                ) : (
+                  <div
+                    className="d-flex"
+                    style={{
+                      width: "fit-content",
+                      borderRadius: "5px",
+                      marginLeft: "50px",
+                      backgroundColor: "#7bd6e5",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "10px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      get_driver();
+                      setStatusProfile("Đang hoạt động");
+                      setCheckLockAccount(!checkLockAccount);
+                    }}
+                  >
+                    <UnlockOutlined />
+                    &nbsp; HỒ SƠ HOẠT ĐỘNG
+                  </div>
+                )}
               </div>
 
               <p
                 style={{
-                  marginLeft: "10px",
                   marginTop: "20px",
                   display: "inline-block",
                   border: "1px solid #f1a062",

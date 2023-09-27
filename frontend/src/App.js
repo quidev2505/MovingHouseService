@@ -40,6 +40,8 @@ import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
 
 //Quản trị viên
 import AdministratorAdmin from './Pages/Admin/PagesAdmin/Admin/Administrator';
+import AddAdministratorAdmin from './Pages/Admin/PagesAdmin/Admin/AddAdministrator';
+import EditAdministratorAdmin from './Pages/Admin/PagesAdmin/Admin/EditAdministrator';
 
 // ServiceAdmin
 import ServiceAdmin from './Pages/Admin/PagesAdmin/Service/ServiceAdmin';
@@ -171,11 +173,12 @@ function App() {
 
 
           {/* Quản trị viên */}
-
           <Route path="/admin/administrator" element={<AdministratorAdmin />} />
+          <Route path="/admin/administrator/add" element={<AddAdministratorAdmin />} />
+          <Route path="/admin/administrator/edit/:id" element={<EditAdministratorAdmin />} />
+
           {/* In Setting Admin */}
           <Route path="/admin/change_password/:id" element={<ChangePasswordAdmin />} />
-
           {/* End Quản trị viên */}
 
 

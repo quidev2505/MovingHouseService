@@ -67,7 +67,7 @@ function EditDriver() {
   const [dataDriver, setDataDriver] = useState({});
 
   const onSubmit = async () => {
-		dataDriver.avatar = image
+    dataDriver.avatar = image;
     const isKeyEmpty = (key) => {
       return (
         dataDriver[key] === undefined ||
@@ -79,7 +79,7 @@ function EditDriver() {
     let check = true;
     for (const key in dataDriver) {
       if (isKeyEmpty(key)) {
-				console.log(key)
+        console.log(key);
         check = false;
         break;
       }
@@ -331,6 +331,7 @@ function EditDriver() {
                           </label>
                           <div className="form-outline mb-3 form_input_handle">
                             <Select
+                              value={gender}
                               defaultValue={gender}
                               style={{
                                 width: 200,
@@ -538,6 +539,7 @@ function EditDriver() {
                           </label>
                           <div className="form-outline mb-3 form_input_handle">
                             <Select
+                              value={vehicle_type}
                               defaultValue={vehicle_type}
                               style={{
                                 width: 200,
@@ -560,6 +562,7 @@ function EditDriver() {
                           </label>
                           <div className="form-outline mb-3 form_input_handle">
                             <Select
+                              value={location_delivery}
                               defaultValue={location_delivery}
                               style={{
                                 width: 200,

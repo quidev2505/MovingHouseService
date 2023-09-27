@@ -3,6 +3,7 @@ require('dotenv').config()
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
 const adminAccountRoute = require('./routes/admin_account');
+const adminRoute = require('./routes/admin');
 const serviceRoute = require('./routes/service');
 const serviceFeeRoute = require('./routes/service_fee');
 const vehicleRoute = require('./routes/vehicle');
@@ -53,6 +54,10 @@ app.use("/v1/user", userRoute);
 
 //Admin Account Route
 app.use("/v1/adminAccount", adminAccountRoute);
+
+//Admin Route
+app.use("/v1/admin", adminRoute);
+
 
 //Service Route
 app.use("/v1/service", serviceRoute);

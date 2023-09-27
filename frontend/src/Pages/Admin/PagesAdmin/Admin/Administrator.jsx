@@ -7,7 +7,17 @@ import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 
-import { Space, Table, Tag, Image, Modal, Avatar, Badge, Rate } from "antd";
+import {
+  Space,
+  Table,
+  Tag,
+  Image,
+  Modal,
+  Avatar,
+  Badge,
+  Rate,
+  Select,
+} from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -31,7 +41,10 @@ import {
   PhoneOutlined,
   HomeOutlined,
   TrophyOutlined,
+  UnlockOutlined,
+  RetweetOutlined,
   AimOutlined,
+  DoubleRightOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -40,6 +53,14 @@ function Administrator() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [statusProfile, setStatusProfile] = useState("Đang hoạt động");
+  const [department, setDepartment] = useState("Nhân Viên");
+
+  const [checkLockAccount, setCheckLockAccount] = useState(false);
+
+  //Set bộ phận phòng ban
+  const handleChangeDepartment = (value) => {
+    setDepartment(value);
+  };
 
   const columns = [
     {
@@ -71,36 +92,66 @@ function Administrator() {
       ),
     },
     {
-      title: "Tài xế",
+      title: "Tài khoản",
+      dataIndex: "username",
+      key: "username",
+    },
+    {
+      title: "Quản trị viên",
       dataIndex: "fullname",
       key: "fullname",
     },
     {
-      title: "Số điện thoại",
-      dataIndex: "phonenumber",
-      key: "phonenumber",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: "Lượt giao hàng",
-      dataIndex: "id_delivery",
-      key: "id_delivery",
-    },
-    {
-      title: "Lượt đánh giá",
-      dataIndex: "id_rating",
-      key: "id_rating",
-    },
-    {
-      title: "Sao trung bình",
-      dataIndex: "star_average",
-      key: "star_average",
-      defaultSortOrder: "ascend",
-      sorter: (a, b) => a.star_average - b.star_average,
-      render: (star_average) => (
-        <td>
-          {star_average} &nbsp;
-          <StarFilled style={{ color: "#f1a062" }} />
-        </td>
+      title: "Bộ phận",
+      dataIndex: "department",
+      key: "department",
+      filters: [
+        {
+          text: "Nhân sự",
+          value: "Nhân sự",
+        },
+        {
+          text: "Quản lý",
+          value: "Quản lý",
+        },
+        {
+          text: "Nhân viên",
+          value: "Nhân viên",
+        },
+      ],
+      onFilter: (value, record) => record.department.indexOf(value) === 0,
+      render: (department, id) => (
+        <div className="d-flex">
+          <Tag
+            color={
+              department === "Nhân viên"
+                ? "#cccccc"
+                : department === "Nhân sự"
+                ? "volcano"
+                : "orange"
+            }
+            key={department}
+          >
+            {department}
+          </Tag>
+          <div
+            onClick={() => changeDepartment(id)}
+            style={{
+              backgroundColor: "purple",
+              borderRadius: "50%",
+              padding: "5px",
+              display: "flex",
+              cursor: "pointer",
+            }}
+          >
+            <RetweetOutlined style={{ color: "white", fontWeight: "bold" }} />
+          </div>
+        </div>
       ),
     },
     {
@@ -147,7 +198,7 @@ function Administrator() {
       ) => (
         <Space size="middle" className="icon_hover">
           <div
-            onClick={() => nav(`/admin/driver/edit/${id.id}`)}
+            onClick={() => nav(`/admin/administrator/edit/${id.id}`)}
             style={{
               backgroundColor: "green",
               borderRadius: "50%",
@@ -160,7 +211,7 @@ function Administrator() {
           </div>
 
           <div
-            onClick={() => view_detail_driver(id)}
+            onClick={() => view_detail_admin(id)}
             style={{
               backgroundColor: "blue",
               borderRadius: "50%",
@@ -174,7 +225,7 @@ function Administrator() {
             />
           </div>
           <Link
-            onClick={() => lock_account_driver(username)}
+            onClick={() => lock_account_admin(username)}
             style={{
               backgroundColor: "red",
               borderRadius: "50%",
@@ -189,16 +240,125 @@ function Administrator() {
     },
   ];
 
-  //Khóa hồ sơ tài xế
-  const lock_account_driver = async (username) => {
-    let username_driver = username.username;
-    let data_account_driver = await axios.get(
-      `/v1/driver/getdriver_account/${username_driver}`
+  //Thay đổi bộ phận quản trị viên
+  const changeDepartment = (id) => {
+    Modal.success({
+      title: "",
+      content: (
+        <>
+          <div
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              width: "500px",
+              margin: "0 auto",
+              height: "fit-content",
+            }}
+          >
+            <h6
+              style={{
+                backgroundColor: "#f1a062",
+                textAlign: "center",
+                color: "white",
+                height: "30px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              Thay đổi bộ phận quản trị viên
+            </h6>
+            <div className="row" style={{ padding: "10px" }}>
+              <div className="col">
+                <Avatar src={<img src={id.avatar} alt="avatar" />} />
+              </div>
+              <div className="col">
+                <div className="row" style={{ color: "#f1a062" }}>
+                  Tài khoản
+                </div>
+                <div className="row" style={{ color: "#f1a062" }}>
+                  Quản trị viên
+                </div>
+              </div>
+              <div className="col">
+                <div className="row">{id.username}</div>
+                <div className="row">{id.fullname}</div>
+              </div>
+            </div>
+            <div
+              className="row"
+              style={{
+                marginTop: "10px",
+                display: "flex",
+                flexWrap: "nowrap",
+              }}
+            >
+              <div style={{ width: "160px" }}>
+                <input
+                  value={id.department}
+                  className="form form-control"
+                  style={{
+                    marginLeft: "20px",
+                    fontWeight: "bold",
+
+                  }}
+                  disabled
+                />
+              </div>
+
+              <div style={{ width: "50px", color: "red", display:"flex", alignItems:"center", justifyContent:"center"}}>
+                <DoubleRightOutlined />
+              </div>
+              <div style={{width:"160px"}}>
+                <Select
+                  defaultValue="Nhân viên"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: "20px",
+                  }}
+                  onChange={handleChangeDepartment}
+                  options={[
+                    {
+                      value: "Bộ phận mới",
+                      label: "Bộ phận mới",
+                    },
+                    {
+                      value: "Nhân sự",
+                      label: "Nhân sự",
+                    },
+                    {
+                      value: "Quản lý",
+                      label: "Quản lý",
+                    },
+                    {
+                      value: "Nhân viên",
+                      label: "Nhân viên",
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+            <div>
+              <button className="btn btn-success" style={{marginLeft:"20px", marginTop:"20px", marginBottom:"20px"}}>Xác nhận</button>
+            </div>
+          </div>
+        </>
+      ),
+      onOk() {},
+    });
+  };
+
+  //Khóa tài khoản quản trị viên
+  const lock_account_admin = async (username) => {
+    let username_admin = username.username;
+    let data_account_admin = await axios.get(
+      `/v1/admin/getadmin_account/${username_admin}`
     );
 
-    let status_account_driver = data_account_driver.data.status_account;
+    let status_account_admin = data_account_admin.data.status_account;
     Swal.fire({
-      title: "Bạn muốn thay đổi trạng thái hồ sơ ?",
+      title: "Bạn muốn thay đổi trạng thái tài khoản ?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -208,15 +368,15 @@ function Administrator() {
       .then(async (result) => {
         if (result.isConfirmed) {
           await axios
-            .patch(`/v1/driver/lockdriver_account/${username_driver}`, {
-              status_account: !status_account_driver,
+            .patch(`/v1/admin/lockadmin_account/${username_admin}`, {
+              status_account: !status_account_admin,
             })
             .then((data) => {
-              get_driver();
+              get_admin();
               Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Thay đổi trạng thái hồ sơ thành công !",
+                title: "Thay đổi trạng thái tài khoản thành công !",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -225,7 +385,7 @@ function Administrator() {
               Swal.fire({
                 position: "center",
                 icon: "warning",
-                title: "Thay đổi trạng thái hồ sơ thất bại !",
+                title: "Thay đổi trạng thái tài khoản thất bại !",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -237,7 +397,7 @@ function Administrator() {
         Swal.fire({
           position: "center",
           icon: "warning",
-          title: "Thay đổi trạng thái hồ sơ thất bại !",
+          title: "Thay đổi trạng thái tài khoản thất bại !",
           showConfirmButton: false,
           timer: 1200,
         });
@@ -248,7 +408,7 @@ function Administrator() {
   //Search Realtime
   const [search, setSearch] = useState("");
   useEffect(() => {
-    get_driver();
+    get_admin();
   }, [search]);
 
   function removeVietnameseTones(str) {
@@ -285,17 +445,16 @@ function Administrator() {
 
   //Tài khoản bị khóa
   const showAccountLock = () => {
-    get_driver("Bị khóa");
+    setCheckLockAccount(!checkLockAccount);
+    get_admin("Bị khóa");
     setStatusProfile("Bị khóa");
   };
 
-  const get_driver = async (status_account) => {
+  const get_admin = async (status_account) => {
     try {
-      let data_account_driver = await axios.get(
-        `/v1/driver/getalldriver_account`
-      );
+      let data_account_admin = await axios.get(`/v1/admin/getalladmin_account`);
 
-      let arr_data_account_status = data_account_driver.data.map(
+      let arr_data_account_status = data_account_admin.data.map(
         (item, index) => {
           return item.status_account;
         }
@@ -309,7 +468,7 @@ function Administrator() {
 
       if (arr_data_account_status) {
         await axios
-          .get(`/v1/driver/show_all_driver`)
+          .get(`/v1/admin/show_all_admin`)
           .then((data) => {
             let data_solve = data.data;
             const data_item = [];
@@ -320,11 +479,9 @@ function Administrator() {
                     id: item._id,
                     STT: index + 1,
                     avatar: item.avatar,
+                    email: item.email,
                     fullname: item.fullname,
-                    phonenumber: item.phonenumber,
-                    id_rating: item.id_rating.length,
-                    id_delivery: item.id_delivery.length,
-                    star_average: item.star_average,
+                    department: item.department,
                     status: item.status,
                     status_account: arr_data_account_status[index],
                     username: item.username,
@@ -333,7 +490,6 @@ function Administrator() {
                 }
               });
 
-            console.log(data_item);
             let new_arr = data_item.filter((item) => {
               // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
               let word_Change_VN = removeVietnameseTones(item.fullname);
@@ -356,9 +512,9 @@ function Administrator() {
 
   //Thay đổi trạng thái tài xế
   const changeStatus = (id, status) => {
-    let id_driver = id.id;
+    let id_admin = id.id;
     Swal.fire({
-      title: "Bạn muốn thay đổi trạng thái tài xế ?",
+      title: "Bạn muốn thay đổi trạng thái tài khoản quản trị viên ?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -368,15 +524,15 @@ function Administrator() {
       .then(async (result) => {
         if (result.isConfirmed) {
           await axios
-            .patch(`/v1/driver/updateonefield_driver/${id_driver}`, {
+            .patch(`/v1/admin/updateonefield_admin/${id_admin}`, {
               status: status === "Sẵn sàng" ? "Đang bận" : "Sẵn sàng",
             })
             .then((data) => {
-              get_driver();
+              get_admin();
               Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Thay đổi trạng thái tài xế thành công !",
+                title: "Thay đổi trạng thái quản trị viên thành công !",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -385,7 +541,7 @@ function Administrator() {
               Swal.fire({
                 position: "center",
                 icon: "warning",
-                title: "Thay đổi trạng thái tài xế thất bại !",
+                title: "Thay đổi trạng thái quản tị viên thất bại !",
                 showConfirmButton: false,
                 timer: 1200,
               });
@@ -397,7 +553,7 @@ function Administrator() {
         Swal.fire({
           position: "center",
           icon: "warning",
-          title: "Thay đổi trạng thái tài xế thất bại !",
+          title: "Thay đổi trạng thái quản trị viên thất bại !",
           showConfirmButton: false,
           timer: 1200,
         });
@@ -405,14 +561,14 @@ function Administrator() {
       });
   };
 
-  const view_detail_driver = async (id) => {
+  const view_detail_admin = async (id) => {
     await axios
-      .get(`/v1/driver/view_detail_driver/${id.id}`)
+      .get(`/v1/admin/view_detail_admin/${id.id}`)
       .then(async (data) => {
         let data_result = data.data;
-
+        console.log(data_result);
         Modal.success({
-          title: "Thông tin chi tiết hồ sơ tài xế",
+          title: "Thông tin chi tiết hồ sơ quản trị viên",
           content: (
             <>
               <div
@@ -444,13 +600,6 @@ function Administrator() {
                     }}
                   >
                     {data_result.fullname}
-                  </p>
-                  <p style={{ marginTop: "-10px" }}>
-                    <Rate
-                      disabled
-                      allowHalf
-                      defaultValue={data_result.star_average}
-                    />
                   </p>
                 </div>
                 <div>
@@ -487,85 +636,24 @@ function Administrator() {
                       &nbsp;&nbsp;{data_result.address}
                     </div>
                   </div>
+
                   <div className="row">
+                    <div className="col"></div>
                     <div
                       className="col"
-                      style={{ color: "#ea9868", fontWeight: "bold" }}
+                      style={{
+                        borderRadius: "5px",
+                        backgroundColor: "green",
+                        color: "white",
+                        fontWeight: "bold",
+                        marginTop: "5px",
+                      }}
                     >
-                      <AimOutlined /> {data_result.location_delivery}
+                      Bộ phận: &nbsp;&nbsp;{data_result.department}
                     </div>
                     <div className="col"></div>
-                    <div className="col"></div>
                   </div>
                 </div>
-              </div>
-
-              <div
-                className="thanhtich"
-                style={{
-                  border: "1px solid #ea9868",
-                  padding: "5px",
-                  marginTop: "5px",
-                  borderRadius: "5px",
-                }}
-              >
-                <h5 style={{ color: "#ea9868" }}>
-                  <TrophyOutlined />
-                  &nbsp;&nbsp; Thành tích
-                </h5>
-                <div className="row">
-                  <div className="col">
-                    Sao trung bình:{" "}
-                    <span style={{ fontWeight: "bold" }}>
-                      {" "}
-                      {data_result.star_average}
-                      <StarFilled style={{ color: "#f1a062" }} />
-                    </span>
-                  </div>
-
-                  <div className="col">
-                    Số lượt vận chuyển:{" "}
-                    <span style={{ fontWeight: "bold" }}>
-                      {data_result.id_delivery.length}
-                    </span>
-                  </div>
-                  <div className="col">
-                    Số lượt đánh giá:{" "}
-                    <span style={{ fontWeight: "bold" }}>
-                      {data_result.id_rating.length}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className="lichsuvanchuyen"
-                style={{
-                  border: "1px solid #ea9868",
-                  padding: "5px",
-                  marginTop: "5px",
-                  borderRadius: "5px",
-                  textAlign: "center",
-                }}
-              >
-                <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
-                  LỊCH SỬ VẬN CHUYỂN
-                </h4>
-              </div>
-
-              <div
-                className="lichsudanhgia"
-                style={{
-                  border: "1px solid #ea9868",
-                  padding: "5px",
-                  marginTop: "5px",
-                  borderRadius: "5px",
-                  textAlign: "center",
-                }}
-              >
-                <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
-                  LỊCH SỬ ĐÁNH GIÁ
-                </h4>
               </div>
             </>
           ),
@@ -605,7 +693,7 @@ function Administrator() {
                     type="text"
                     id="find_blog"
                     className="form-control form-control-lg"
-                    placeholder="Nhập vào tên tài xế..."
+                    placeholder="Nhập vào tên quản trị viên..."
                     style={{ fontSize: "17px", borderRadius: "3px" }}
                     onChange={(e) => setSearch(e.target.value)}
                   />
@@ -619,29 +707,54 @@ function Administrator() {
                   />
                 </div>
 
-                <div
-                  className="d-flex"
-                  style={{
-                    width: "fit-content",
-                    borderRadius: "5px",
-                    marginLeft: "50px",
-                    backgroundColor: "#ccc",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "10px",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => showAccountLock()}
-                >
-                  <LockOutlined /> &nbsp; TÀI KHOẢN BỊ KHÓA
-                </div>
+                {!checkLockAccount ? (
+                  <div
+                    className="d-flex"
+                    style={{
+                      width: "fit-content",
+                      borderRadius: "5px",
+                      marginLeft: "50px",
+                      backgroundColor: "#ccc",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "10px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => showAccountLock()}
+                  >
+                    <LockOutlined /> &nbsp; TÀI KHOẢN BỊ KHÓA
+                  </div>
+                ) : (
+                  <div
+                    className="d-flex"
+                    style={{
+                      width: "fit-content",
+                      borderRadius: "5px",
+                      marginLeft: "50px",
+                      backgroundColor: "#7bd6e5",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "10px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      get_admin();
+                      setStatusProfile("Đang hoạt động");
+                      setCheckLockAccount(!checkLockAccount);
+                    }}
+                  >
+                    <UnlockOutlined />
+                    &nbsp; TÀI KHOẢN HOẠT ĐỘNG
+                  </div>
+                )}
               </div>
 
               <p
                 style={{
-                  marginLeft: "10px",
                   marginTop: "20px",
                   display: "inline-block",
                   border: "1px solid #f1a062",
@@ -661,7 +774,7 @@ function Administrator() {
                 </span>
               </p>
 
-              <Link to="/admin/driver/add">
+              <Link to="/admin/administrator/add">
                 <Button
                   style={{
                     backgroundColor: "#344767",

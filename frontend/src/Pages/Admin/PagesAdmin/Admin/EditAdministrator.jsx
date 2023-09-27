@@ -8,158 +8,125 @@ import BottomCssContent from "../BottomCssContent";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import axios from "axios";
 
-function AddAdministrator() {
+function EditAdministrator() {
+  const params = useParams();
   const navigate = useNavigate();
-  const [gender, setGender] = useState("Nam");
-  const [department, setDepartment] =
-    useState("Nhân Viên");
-
-  //Tạo ra tên đăng nhập và mật khẩu ngẫu nhiên
-  const [createAccountRandom, setCreateAccountRandom] = useState({});
-
-  //Set giới tính
-  const handleChange = (value) => {
-    setGender(value);
-  };
-
-  //Set bộ phận phòng ban
-  const handleChangeDepartment = (value) => {
-    setDepartment(value);
-  };
-
-  //Tạo mật khẩu ngẫu nhiên
-  function generateRandomPassword() {
-    // Tạo mảng gồm 26 chữ cái và 10 số
-    const characters =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    // Tạo mật khẩu gồm 4 kí tự và 2 số
-    let password = "";
-    for (let i = 0; i < 6; i++) {
-      if (i < 4) {
-        password += characters.charAt(
-          Math.floor(Math.random() * characters.length)
-        );
-      } else {
-        password += String(Math.floor(Math.random() * 10));
-      }
-    }
-
-    return password;
-  }
-
-  //Tạo tài khoản và mật khẩu ngẫu nhiên
-  const get_account_admin = async () => {
-    let data_account = await axios.get(`/v1/admin/show_all_admin`);
-    let index_dataAccount = Number(data_account.data.length + 1);
-
-    //Tạo ra tên đăng nhập
-    const user_name_create = "QT399900" + index_dataAccount;
-
-    // Tạo và in mật khẩu
-    const password = generateRandomPassword();
-
-    if (user_name_create && password) {
-      const ob_create_random_account = {
-        username: user_name_create,
-        password: password,
-      };
-
-      setCreateAccountRandom(ob_create_random_account);
-    }
-  };
-
-  useEffect(() => {
-    get_account_admin(); //Tạo tên đăng nhập và mật khẩu ngẫu nhiên
-  }, []);
+  const [gender, setGender] = useState("");
 
   //Validation form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit } = useForm();
 
-  const [image, setImage] = useState("");
   const [imgURL, setImgURL] = useState(""); //Link hình ảnh
+  const [image, setImage] = useState("");
+  const [imageOld, setImageOld] = useState("");
 
   // Upload Img
   function uploadImg(e) {
     setImage(e.target.files[0]);
   }
 
-  const onSubmit = async (data) => {
-    try {
-      if (image || imgURL !== "") {
-        const formData = new FormData();
-        formData.append("file", image);
-        formData.append("imgURL", imgURL);
-        formData.append("username", createAccountRandom.username);
-        formData.append("password", createAccountRandom.password);
-        formData.append("profile_code", data.profile_code);
-        formData.append("gender", gender);
-        formData.append("citizen_id", data.citizen_id);
-        formData.append("phonenumber", data.phonenumber);
-        formData.append("fullname", data.fullname);
-        formData.append("date_of_birth", data.date_of_birth);
-        formData.append("email", data.email);
-        formData.append("address", data.address);
-        formData.append("department", department);
-        await axios
-          .post(`/v1/admin/create_admin`, formData)
-          .then((data) => {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Thêm hồ sơ quản trị viên thành công!",
-              showConfirmButton: false,
-              timer: 1200,
-            });
-            navigate("/admin/administrator");
-          })
-          .catch((e) => {
-            console.log(e);
-            Swal.fire({
-              position: "center",
-              icon: "error",
-              title: "Thêm hồ sơ quản trị viên thất bại!",
-              text: "Vui lòng thực hiện lại !",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-          });
-      } else {
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Thêm hồ sơ quản trị viên thất bại!",
-          text: "Dữ liệu nhập chưa đủ !",
-          showConfirmButton: false,
-          timer: 1000,
-        });
+  //Set giới tính
+  const handleChange = (value) => {
+    setGender(value);
+  };
+
+  const [dataAdmin, setDataAdmin] = useState({});
+
+  const onSubmit = async () => {
+    dataAdmin.avatar = image;
+    const isKeyEmpty = (key) => {
+      return (
+        dataAdmin[key] === undefined ||
+        dataAdmin[key] === null ||
+        dataAdmin[key] === ""
+      );
+    };
+    let check = true;
+    for (const key in dataAdmin) {
+      if (isKeyEmpty(key)) {
+        console.log(key);
+        check = false;
+        break;
       }
-    } catch (e) {
-      console.log(e);
+    }
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("imgURL", imgURL);
+    formData.append("img_old", imageOld);
+    formData.append("username", dataAdmin.username);
+    formData.append("profile_code", dataAdmin.profile_code);
+    formData.append("gender", gender);
+    formData.append("citizen_id", dataAdmin.citizen_id);
+    formData.append("phonenumber", dataAdmin.phonenumber);
+    formData.append("fullname", dataAdmin.fullname);
+    formData.append("date_of_birth", dataAdmin.date_of_birth);
+    formData.append("email", dataAdmin.email);
+    formData.append("address", dataAdmin.address);
+    if (check) {
+      await axios
+        .put(`/v1/admin/update_admin/${dataAdmin._id}`, formData)
+        .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Sửa hồ sơ quản trị viên thành công!",
+            showConfirmButton: false,
+            timer: 1200,
+          });
+          navigate("/admin/administrator");
+        })
+        .catch((e) => {
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: "Sửa hồ sơ quản trị viên thất bại!",
+            showConfirmButton: false,
+            timer: 1200,
+          });
+        });
+    } else {
       Swal.fire({
         position: "center",
-        icon: "error",
-        title: "Thêm hồ sơ quản trị viên thất bại!",
-        text: "Vui lòng thực hiện lại ! - Có thể dung lượng ảnh quá lớn !",
+        icon: "warning",
+        title: "Dữ liệu còn thiếu",
         showConfirmButton: false,
-        timer: 1000,
+        timer: 1200,
       });
     }
   };
 
+  const get_data_admin = async () => {
+    const id = params.id;
+
+    await axios
+      .get(`/v1/admin/view_detail_admin/${id}`)
+      .then((data) => {
+        const data_admin = data.data;
+        setDataAdmin(data_admin);
+        setGender(data_admin.gender);
+
+        setImage(data_admin.avatar);
+        setImageOld(data_admin.avatar);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    get_data_admin();
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       <LayoutAdmin>
-        <div className="driver_add_admin">
+        <div className="driver_edit_admin">
           <div>
             <Breadcrumb
               routes={[
@@ -170,7 +137,7 @@ function AddAdministrator() {
                   title: <Link to="/admin/administrator">Quản trị viên</Link>,
                 },
                 {
-                  title: "Thêm tài khoản quản trị viên",
+                  title: "Sửa hồ sơ quản trị viên",
                 },
               ]}
             />
@@ -178,7 +145,7 @@ function AddAdministrator() {
 
           <BottomCssContent>
             <TopCssContent>
-              <p>Thêm tài khoản quản trị viên</p>
+              <p>Sửa hồ sơ quản trị viên</p>
             </TopCssContent>
             <div>
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -216,26 +183,7 @@ function AddAdministrator() {
                             <input
                               type="text"
                               id="username"
-                              value={createAccountRandom.username}
-                              className="form-control form-control-lg"
-                              style={{ fontSize: "17px", borderRadius: "3px" }}
-                              disabled
-                            />
-                          </div>
-                        </div>
-                        <div style={{ marginBottom: "5px" }}>
-                          <label
-                            htmlFor="password"
-                            className="label-color"
-                            style={{ marginBottom: "5px" }}
-                          >
-                            Mật khẩu
-                          </label>
-                          <div className="form-outline mb-3  form_input_handle">
-                            <input
-                              type="text"
-                              id="password"
-                              value={createAccountRandom.password}
+                              value={dataAdmin.username}
                               className="form-control form-control-lg"
                               style={{ fontSize: "17px", borderRadius: "3px" }}
                               disabled
@@ -250,6 +198,7 @@ function AddAdministrator() {
                             backgroundColor: "#ed883b",
                             borderRadius: "10px",
                             padding: "10px",
+                            marginTop: "120px",
                           }}
                         >
                           Thông tin hồ sơ
@@ -271,13 +220,14 @@ function AddAdministrator() {
                               className="form-control form-control-lg"
                               placeholder="Nhập vào mã hồ sơ"
                               style={{ fontSize: "17px", borderRadius: "3px" }}
-                              {...register("profile_code", {
-                                required: true,
-                              })}
+                              value={dataAdmin.profile_code}
+                              onChange={(e) =>
+                                setDataAdmin({
+                                  ...dataAdmin,
+                                  profile_code: e.target.value,
+                                })
+                              }
                             />
-                            {errors?.profile_code?.type === "required" && (
-                              <p>Không được để trống</p>
-                            )}
                           </div>
                         </div>
 
@@ -297,13 +247,14 @@ function AddAdministrator() {
                               className="form-control form-control-lg"
                               placeholder="Nhập vào căn cước công dân hoặc chứng minh thư"
                               style={{ fontSize: "17px", borderRadius: "3px" }}
-                              {...register("citizen_id", {
-                                required: true,
-                              })}
+                              value={dataAdmin.citizen_id}
+                              onChange={(e) =>
+                                setDataAdmin({
+                                  ...dataAdmin,
+                                  citizen_id: e.target.value,
+                                })
+                              }
                             />
-                            {errors?.citizen_id?.type === "required" && (
-                              <p>Không được để trống</p>
-                            )}
                           </div>
                         </div>
 
@@ -324,13 +275,14 @@ function AddAdministrator() {
                               className="form-control form-control-lg"
                               placeholder="Nhập vào số điện thoại"
                               style={{ fontSize: "17px", borderRadius: "3px" }}
-                              {...register("phonenumber", {
-                                required: true,
-                              })}
+                              value={dataAdmin.phonenumber}
+                              onChange={(e) =>
+                                setDataAdmin({
+                                  ...dataAdmin,
+                                  phonenumber: e.target.value,
+                                })
+                              }
                             />
-                            {errors?.phonenumber?.type === "required" && (
-                              <p>Không được để trống</p>
-                            )}
                           </div>
                         </div>
 
@@ -344,7 +296,8 @@ function AddAdministrator() {
                           </label>
                           <div className="form-outline mb-3 form_input_handle">
                             <Select
-                              defaultValue="Nam"
+                              value={gender}
+                              defaultValue={gender}
                               style={{
                                 width: 200,
                                 display: "flex",
@@ -406,14 +359,15 @@ function AddAdministrator() {
 
                             {image && (
                               <img
-                                src={URL.createObjectURL(image)}
+                                src={
+                                  typeof image === "object"
+                                    ? URL.createObjectURL(image)
+                                    : image
+                                }
                                 width={100}
                                 height={100}
-                                alt="Image"
-                                style={{
-                                  objectFit: "contain",
-                                  marginTop: "-16px",
-                                }}
+                                alt="mage"
+                                style={{ objectFit: "contain" }}
                               />
                             )}
                           </div>
@@ -431,9 +385,7 @@ function AddAdministrator() {
                             }}
                           />
                         </div>
-
                         <div style={{ marginBottom: "74px" }}></div>
-
                         <div style={{ marginBottom: "5px" }}>
                           <label
                             htmlFor="fullname"
@@ -447,18 +399,18 @@ function AddAdministrator() {
                               type="text"
                               id="fullname"
                               className="form-control form-control-lg"
-                              placeholder="Nhập vào họ và tên quản trị viên"
+                              placeholder="Nhập vào họ và tên tài xế"
                               style={{ fontSize: "17px", borderRadius: "3px" }}
-                              {...register("fullname", {
-                                required: true,
-                              })}
+                              value={dataAdmin.fullname}
+                              onChange={(e) =>
+                                setDataAdmin({
+                                  ...dataAdmin,
+                                  fullname: e.target.value,
+                                })
+                              }
                             />
-                            {errors?.fullname?.type === "required" && (
-                              <p>Không được để trống</p>
-                            )}
                           </div>
                         </div>
-
                         <div style={{ marginBottom: "5px" }}>
                           <label
                             htmlFor="date_of_birth"
@@ -476,16 +428,16 @@ function AddAdministrator() {
                               id="date_of_birth"
                               className="form-control form-control-lg"
                               style={{ fontSize: "17px", borderRadius: "3px" }}
-                              {...register("date_of_birth", {
-                                required: true,
-                              })}
+                              value={dataAdmin.date_of_birth}
+                              onChange={(e) =>
+                                setDataAdmin({
+                                  ...dataAdmin,
+                                  date_of_birth: e.target.value,
+                                })
+                              }
                             />
-                            {errors?.date_of_birth?.type === "required" && (
-                              <p>Không được để trống</p>
-                            )}{" "}
                           </div>
                         </div>
-
                         <div style={{ marginBottom: "5px" }}>
                           <label
                             htmlFor="email"
@@ -501,16 +453,16 @@ function AddAdministrator() {
                               className="form-control form-control-lg"
                               placeholder="Nhập vào Email"
                               style={{ fontSize: "17px", borderRadius: "3px" }}
-                              {...register("email", {
-                                required: true,
-                              })}
+                              value={dataAdmin.email}
+                              onChange={(e) =>
+                                setDataAdmin({
+                                  ...dataAdmin,
+                                  email: e.target.value,
+                                })
+                              }
                             />
-                            {errors?.email?.type === "required" && (
-                              <p>Không được để trống</p>
-                            )}
                           </div>
                         </div>
-
                         <div style={{ marginBottom: "5px" }}>
                           <label
                             htmlFor="address"
@@ -526,50 +478,17 @@ function AddAdministrator() {
                               className="form-control form-control-lg"
                               placeholder="Nhập vào địa chỉ thường trú"
                               style={{ fontSize: "17px", borderRadius: "3px" }}
-                              {...register("address", {
-                                required: true,
-                              })}
-                            />
-                            {errors?.address?.type === "required" && (
-                              <p>Không được để trống</p>
-                            )}
-                          </div>
-                        </div>
-
-                        <div style={{ marginBottom: "5px" }}>
-                          <label
-                            htmlFor="department"
-                            className="label-color"
-                            style={{ marginBottom: "5px" }}
-                          >
-                            Thuộc bộ phận
-                          </label>
-                          <div className="form-outline mb-3 form_input_handle">
-                            <Select
-                              defaultValue="Nhân viên"
-                              style={{
-                                width: 200,
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              onChange={handleChangeDepartment}
-                              options={[
-                                {
-                                  value: "Nhân sự",
-                                  label: "Nhân sự",
-                                },
-                                {
-                                  value: "Quản lý",
-                                  label: "Quản lý",
-                                },
-                                {
-                                  value: "Nhân viên",
-                                  label: "Nhân viên",
-                                },
-                              ]}
+                              value={dataAdmin.address}
+                              onChange={(e) =>
+                                setDataAdmin({
+                                  ...dataAdmin,
+                                  address: e.target.value,
+                                })
+                              }
                             />
                           </div>
                         </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -583,4 +502,4 @@ function AddAdministrator() {
   );
 }
 
-export default AddAdministrator;
+export default EditAdministrator;
