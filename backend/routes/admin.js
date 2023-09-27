@@ -4,7 +4,7 @@ const adminController = require("../controllers/adminController");
 //Login Admin
 router.post('/login', adminController.loginAdmin)
 
-//Chang password
+//Change password
 router.put('/change_password/:id', adminController.changePasswrod)
 
 module.exports = router;

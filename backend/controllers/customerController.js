@@ -3,12 +3,44 @@ const User = require('../models/User')
 const fs = require('fs');
 
 const customerController = {
+    //Get Info User With Customer Name
+    getInfoUserWithCustomerName: async (req, res) => {
+        try {
+            let customer_name = req.params.customer_name;
+
+            const data_user = await User.findOne({ fullname: customer_name })
+
+            if (data_user) {
+                res.status(200).json(data_user)
+            } else {
+                res.status(500).json('Error');
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    },
     //Get Info Customer With Fullname
     getCustomerWithFullName: async (req, res) => {
         try {
             let fullname_customer = req.params.fullname;
 
             const data_customer = await Customer.findOne({fullname: fullname_customer})
+
+            if (data_customer) {
+                res.status(200).json(data_customer)
+            } else {
+                res.status(500).json('Error');
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    //Get Info Customer With ID Customer
+    getCustomerWithIDCustomer: async (req, res) => {
+        try {
+            let id_customer = req.params.id
+
+            const data_customer = await Customer.findOne({ _id: id_customer })
 
             if (data_customer) {
                 res.status(200).json(data_customer)

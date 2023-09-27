@@ -274,44 +274,51 @@ function OrderAdmin() {
   };
 
   const show_order_customer = async (status_input) => {
-    await axios
-      .get(`/v1/order/viewAllOrder`)
-      .then((data) => {
-        let dataOrder = data.data;
-        const data_order = [];
-        dataOrder &&
-          dataOrder.forEach((item, index) => {
-            if (item.status === status_input) {
-              const ob_order = {
-                id_order_detail: item.order_detail_id,
-                STT: index + 1,
-                order_id: item.order_id,
-                service_name: item.service_name,
-                status: item.status,
-                time_get_item: `${item.time_start} - ${item.date_start}`,
-                router: `${item.fromLocation} - ${item.toLocation}`,
-                driver_name: item.driver_name,
-                vehicle_name: item.vehicle_name,
-                totalOrder: item.totalOrder,
-              };
-              data_order.push(ob_order);
-            }
-          });
-        let new_arr = data_order.filter((item) => {
-          // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-          let word_Change_VN = removeVietnameseTones(item.order_id);
-          let word_search = removeVietnameseTones(search);
+    let arr_customer_id = await axios.get("/v1/order/viewAllOrder");
+    let arr_CI = [];
+    arr_customer_id.data.forEach((item, index) => {
+      arr_CI.push(item.customer_id);
+    });
 
-          // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-          return search.toLowerCase() === ""
-            ? item
-            : word_Change_VN.toLowerCase().includes(word_search);
-        });
+    if (arr_CI) {
+      let arr_customer_name = [];
+      for (let i = 0; i < arr_CI.length; i++) {
+        let fullname_data = await axios.get(
+          `/v1/customer/get_customer_with_id/${arr_CI[i]}`
+        );
+        arr_customer_name.push(fullname_data.data.fullname);
+      }
 
-        if (new_arr.length === 0) {
-          let new_arr_service = data_order.filter((item) => {
+      await axios
+        .get(`/v1/order/viewAllOrder`)
+        .then((data) => {
+          let dataOrder = data.data;
+          const data_order = [];
+          dataOrder &&
+            dataOrder.forEach((item, index) => {
+              if (item.status === status_input) {
+                const ob_order = {
+                  id_order_detail: item.order_detail_id,
+                  STT: index + 1,
+                  order_id: item.order_id,
+                  service_name: item.service_name,
+                  status: item.status,
+                  time_get_item: `${item.time_start} - ${item.date_start}`,
+                  router: `${item.fromLocation} - ${item.toLocation}`,
+                  driver_name: item.driver_name,
+                  vehicle_name: item.vehicle_name,
+                  totalOrder: item.totalOrder,
+                  customer_name: arr_customer_name[index],
+                };
+                data_order.push(ob_order);
+              }
+            });
+
+          console.log(data_order);
+
+          let new_arr = data_order.filter((item) => {
             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-            let word_Change_VN = removeVietnameseTones(item.service_name);
+            let word_Change_VN = removeVietnameseTones(item.order_id);
             let word_search = removeVietnameseTones(search);
 
             // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
@@ -319,15 +326,28 @@ function OrderAdmin() {
               ? item
               : word_Change_VN.toLowerCase().includes(word_search);
           });
-          setDataOrder(new_arr_service);
-        } else {
-          setDataOrder(new_arr);
-        }
-      })
 
-      .catch((e) => {
-        console.log(e);
-      });
+          if (new_arr.length === 0) {
+            let new_arr_service = data_order.filter((item) => {
+              // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+              let word_Change_VN = removeVietnameseTones(item.service_name);
+              let word_search = removeVietnameseTones(search);
+
+              // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+              return search.toLowerCase() === ""
+                ? item
+                : word_Change_VN.toLowerCase().includes(word_search);
+            });
+            setDataOrder(new_arr_service);
+          } else {
+            setDataOrder(new_arr);
+          }
+        })
+
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   };
 
   //Table Area
@@ -454,6 +474,11 @@ function OrderAdmin() {
       ),
     },
     {
+      title: "Khách hàng",
+      dataIndex: "customer_name",
+      key: "customer_name",
+    },
+    {
       title: "Tài xế",
       dataIndex: "driver_name",
       key: "driver_name",
@@ -467,6 +492,7 @@ function OrderAdmin() {
         </div>
       ),
     },
+
     {
       title: "Loại xe",
       dataIndex: "vehicle_name",
@@ -488,11 +514,11 @@ function OrderAdmin() {
       title: "Xem chi tiết",
       dataIndex: "id_order_detail",
       key: "id_order_detail",
-      render: (id_order_detail) => (
+      render: (id_order_detail, customer_name) => (
         <div
           onClick={() => {
             showDrawer();
-            view_detail_order(id_order_detail);
+            view_detail_order(id_order_detail, customer_name);
           }}
           style={{
             backgroundColor: "#29251b",
@@ -536,244 +562,216 @@ function OrderAdmin() {
     },
   ];
 
-  const view_detail_order = async (id_order_detail) => {
-    await axios
-      .get(`/v1/order/viewOrderDetail/${id_order_detail}`)
-      .then((data) => {
-        let data_order_detail = data.data;
-        let dom_result = data_order_detail.map((item, index) => (
-          <>
-            <p
-              style={{ fontWeight: "700", fontSize: "13px", color: "#c1b8b2" }}
-            >
-              LỘ TRÌNH (<span>{item.distance.toUpperCase()}</span>)
-            </p>
-            <div>
-              <Timeline
-                items={[
-                  {
-                    children: (
-                      <div>
-                        <p>{item.fromLocation_detail}</p>
-                      </div>
-                    ),
-                    color: "red",
-                  },
-                  {
-                    dot: (
-                      <EnvironmentOutlined
-                        style={{
-                          fontSize: "16px",
-                          color: "#00bab3",
-                        }}
-                      />
-                    ),
-                    children: (
-                      <div>
-                        <p>{item.toLocation_detail}</p>
-                      </div>
-                    ),
-                  },
-                ]}
-              />
-            </div>
+  const view_detail_order = async (id_order_detail, customer_name) => {
+    let user_customer = await axios.get(
+      `/v1/customer/get_info_user_with_customer_name/${customer_name.customer_name}`
+    );
 
-            <div>
-              <p
-                style={{
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  color: "#c1b8b2",
-                }}
-              >
-                THỜI GIAN DI CHUYỂN
-                <br></br>
-                <span
+    const ob_customer_info = {
+      fullname: user_customer.data.fullname,
+      email: user_customer.data.email,
+      phonenumber: user_customer.data.phonenumber,
+    };
+
+    if (ob_customer_info) {
+      await axios
+        .get(`/v1/order/viewOrderDetail/${id_order_detail}`)
+        .then((data) => {
+          let data_order_detail = data.data;
+          let dom_result = data_order_detail.map((item, index) => (
+            <>
+              <div>
+                <p
                   style={{
-                    color: "black",
-                    fontWeight: "500",
+                    fontWeight: "700",
                     fontSize: "13px",
+                    color: "#c1b8b2",
                   }}
                 >
-                  {item.duration}
-                </span>
-              </p>
-            </div>
-
-            <div>
-              <p
-                style={{
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  color: "#c1b8b2",
-                }}
-              >
-                DỊCH VỤ BỔ SUNG
-                <br></br>
-                <span
-                  style={{
-                    color: "black",
-                    fontWeight: "500",
-                    fontSize: "15px",
-                  }}
-                >
-                  {item.moving_fee.map((item, index) => (
-                    <>• {item.name} </>
-                  ))}
-                </span>
-                <span
-                  style={{
-                    color: "black",
-                    fontWeight: "500",
-                    fontSize: "15px",
-                  }}
-                >
-                  {item.service_fee.map((item, index) => (
-                    <>• {item.name} </>
-                  ))}
-                </span>
-              </p>
-            </div>
-
-            <div>
-              <p
-                style={{
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  color: "#c1b8b2",
-                }}
-              >
-                CHI TIẾT HÀNG HÓA VẬN CHUYỂN
-                <br></br>
-                <span
-                  style={{
-                    color: "black",
-                    fontWeight: "500",
-                    fontSize: "15px",
-                  }}
-                >
-                  {item.item_detail.map((item, index) => (
-                    <>+{item} </>
-                  ))}
-                </span>
-              </p>
-            </div>
-
-            <div>
-              <p
-                style={{
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  color: "#c1b8b2",
-                }}
-              >
-                GHI CHÚ CHO TÀI XẾ
-                <br></br>
-                <span
-                  style={{
-                    color: "black",
-                    fontWeight: "500",
-                    fontSize: "15px",
-                  }}
-                >
-                  {item.note_driver}
-                </span>
-              </p>
-            </div>
-
-            <div
-              className="d-flex"
-              style={{ justifyContent: "space-between", marginTop: "30px" }}
-            >
-              <p
-                style={{
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  color: "#c1b8b2",
-                }}
-              >
-                GIÁ
-              </p>
-              <p>
-                {item.payment_method === "Thanh toán cho tài xế" ? (
-                  <div>
-                    <img
-                      src="./img/ondelivery.png"
-                      alt="hinh tien mat"
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        objectFit: "contain",
-                      }}
-                    />
-                    <span style={{ marginLeft: "5px", fontSize: "13px" }}>
-                      Tiền mặt
+                  THÔNG TIN KHÁCH HÀNG
+                  <br></br>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "13px",
+                    }}
+                  >
+                    Họ và tên: &nbsp;{" "}
+                    <span className="fw-bold">{ob_customer_info.fullname}</span>
+                  </span>
+                  <br></br>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "13px",
+                    }}
+                  >
+                    Email: &nbsp;{" "}
+                    <span className="fw-bold">{ob_customer_info.email}</span>
+                  </span>
+                  <br></br>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "13px",
+                    }}
+                  >
+                    Số điện thoại: &nbsp;{" "}
+                    <span className="fw-bold">
+                      {ob_customer_info.phonenumber}
                     </span>
-                  </div>
-                ) : (
-                  <div>
-                    <img
-                      src="./img/vnpay.webp"
-                      alt="hinh chuyen khoan"
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        objectFit: "co ntain",
-                      }}
-                    />
-                    <span style={{ marginLeft: "5px", fontSize: "13px" }}>
-                      Chuyển khoản
-                    </span>
-                  </div>
-                )}
-              </p>
-            </div>
+                  </span>
+                </p>
+              </div>
 
-            <div className="d-flex" style={{ justifyContent: "space-between" }}>
-              <p>Phí thuê xe</p>
-              <p>{item.vehicle_price.toLocaleString()} đ</p>
-            </div>
-
-            <div>
-              {item.moving_fee.map((item, index) => (
-                <div
-                  className="d-flex"
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <p>{item.name.split("(")[0]}</p>
-                  <p>{item.price.toLocaleString()} đ</p>
-                </div>
-              ))}
-
-              {item.service_fee.map((item, index) => (
-                <div
-                  className="d-flex"
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <p>{item.name.split("(")[0]}</p>
-                  <p>{item.price.toLocaleString()} đ</p>
-                </div>
-              ))}
-
-              <div
-                className="d-flex"
-                style={{ justifyContent: "space-between" }}
+              <p
+                style={{
+                  fontWeight: "700",
+                  fontSize: "13px",
+                  color: "#c1b8b2",
+                }}
               >
-                <p>Tổng thanh toán cũ</p>
-                <p className="fw-bold">{item.totalOrder.toLocaleString()} đ</p>
+                LỘ TRÌNH (<span>{item.distance.toUpperCase()}</span>)
+              </p>
+              <div>
+                <Timeline
+                  items={[
+                    {
+                      children: (
+                        <div>
+                          <p>{item.fromLocation_detail}</p>
+                        </div>
+                      ),
+                      color: "red",
+                    },
+                    {
+                      dot: (
+                        <EnvironmentOutlined
+                          style={{
+                            fontSize: "16px",
+                            color: "#00bab3",
+                          }}
+                        />
+                      ),
+                      children: (
+                        <div>
+                          <p>{item.toLocation_detail}</p>
+                        </div>
+                      ),
+                    },
+                  ]}
+                />
+              </div>
+
+              <div>
+                <p
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    color: "#c1b8b2",
+                  }}
+                >
+                  THỜI GIAN DI CHUYỂN
+                  <br></br>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "13px",
+                    }}
+                  >
+                    {item.duration}
+                  </span>
+                </p>
+              </div>
+
+              <div>
+                <p
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    color: "#c1b8b2",
+                  }}
+                >
+                  DỊCH VỤ BỔ SUNG
+                  <br></br>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {item.moving_fee.map((item, index) => (
+                      <>• {item.name} </>
+                    ))}
+                  </span>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {item.service_fee.map((item, index) => (
+                      <>• {item.name} </>
+                    ))}
+                  </span>
+                </p>
+              </div>
+
+              <div>
+                <p
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    color: "#c1b8b2",
+                  }}
+                >
+                  CHI TIẾT HÀNG HÓA VẬN CHUYỂN
+                  <br></br>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {item.item_detail.map((item, index) => (
+                      <>+{item} </>
+                    ))}
+                  </span>
+                </p>
+              </div>
+
+              <div>
+                <p
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    color: "#c1b8b2",
+                  }}
+                >
+                  GHI CHÚ CHO TÀI XẾ
+                  <br></br>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {item.note_driver}
+                  </span>
+                </p>
               </div>
 
               <div
                 className="d-flex"
-                style={{ justifyContent: "space-between" }}
-              >
-                <p>Trạng thái thanh toán</p>
-                <p style={{ color: "orange" }}>{item.payment_status}</p>
-              </div>
-
-              <div
-                className="d-flex"
-                style={{ justifyContent: "space-between", marginTop: "25px" }}
+                style={{ justifyContent: "space-between", marginTop: "30px" }}
               >
                 <p
                   style={{
@@ -782,19 +780,115 @@ function OrderAdmin() {
                     color: "#c1b8b2",
                   }}
                 >
-                  TỔNG THANH TOÁN MỚI
+                  GIÁ
                 </p>
-                <p>{item.totalOrderNew.toLocaleString()} đ</p>
+                <p>
+                  {item.payment_method === "Thanh toán cho tài xế" ? (
+                    <div>
+                      <img
+                        src="./img/ondelivery.png"
+                        alt="hinh tien mat"
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          objectFit: "contain",
+                        }}
+                      />
+                      <span style={{ marginLeft: "5px", fontSize: "13px" }}>
+                        Tiền mặt
+                      </span>
+                    </div>
+                  ) : (
+                    <div>
+                      <img
+                        src="./img/vnpay.webp"
+                        alt="hinh chuyen khoan"
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          objectFit: "co ntain",
+                        }}
+                      />
+                      <span style={{ marginLeft: "5px", fontSize: "13px" }}>
+                        Chuyển khoản
+                      </span>
+                    </div>
+                  )}
+                </p>
               </div>
-            </div>
-          </>
-        ));
 
-        setDomOrderDetail(dom_result);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+              <div
+                className="d-flex"
+                style={{ justifyContent: "space-between" }}
+              >
+                <p>Phí thuê xe</p>
+                <p>{item.vehicle_price.toLocaleString()} đ</p>
+              </div>
+
+              <div>
+                {item.moving_fee.map((item, index) => (
+                  <div
+                    className="d-flex"
+                    style={{ justifyContent: "space-between" }}
+                  >
+                    <p>{item.name.split("(")[0]}</p>
+                    <p>{item.price.toLocaleString()} đ</p>
+                  </div>
+                ))}
+
+                {item.service_fee.map((item, index) => (
+                  <div
+                    className="d-flex"
+                    style={{ justifyContent: "space-between" }}
+                  >
+                    <p>{item.name.split("(")[0]}</p>
+                    <p>{item.price.toLocaleString()} đ</p>
+                  </div>
+                ))}
+
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <p>Tổng thanh toán cũ</p>
+                  <p className="fw-bold">
+                    {item.totalOrder.toLocaleString()} đ
+                  </p>
+                </div>
+
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <p>Trạng thái thanh toán</p>
+                  <p style={{ color: "orange" }}>{item.payment_status}</p>
+                </div>
+
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between", marginTop: "25px" }}
+                >
+                  <p
+                    style={{
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      color: "#c1b8b2",
+                    }}
+                  >
+                    TỔNG THANH TOÁN MỚI
+                  </p>
+                  <p>{item.totalOrderNew.toLocaleString()} đ</p>
+                </div>
+              </div>
+            </>
+          ));
+
+          setDomOrderDetail(dom_result);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   };
 
   // //Search Realtime

@@ -87,8 +87,6 @@ const orderController = {
     viewAllOrder: async (req, res) => {
         try {
             const data_all_order = await Order.find();
-
-
             if (data_all_order) {
                 res.status(201).json(data_all_order)
             } else {
