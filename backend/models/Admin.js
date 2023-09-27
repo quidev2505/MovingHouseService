@@ -1,29 +1,54 @@
 const mongoose = require('mongoose')
 
-const userSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
+    profile_code: {
+        type: String,
+        required: true
+    },//Mã hồ sơ
     username: {
         type: String,
-        required: true,
-        minlength: 5,
+        required: true
     },
-    password: {
+    gender: {
         type: String,
-        required: true,
-        minlength: 8,
-    },
-    status: {
-        type: Boolean,
-        default: true,
-    },
-    permission: {
+        required: true
+    },//Nam, Nữ, Khác
+    citizen_id: {
         type: String,
-        default: 'Nhân viên'
+        required: true
     },
+    phonenumber: {
+        type: String,
+        required: true
+    },
+    fullname: {
+        type: String,
+        required: true
+    },
+    date_of_birth: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },//Địa chỉ thường trú
     avatar: {
         type: String,
-        default: null
-    }
-
+        required: true
+    },//Ảnh đại diện người dùng
+    status: {
+        type: String,
+        default: true
+    },//Gồm 2 trạng thái: Hoạt động, tạm ngưng
+    department: {
+        type: String,
+        required: true
+    }//Bộ phận trong công ty
 }, { timestamps: true })
 
-module.exports = mongoose.model('Admin', userSchema);
+module.exports = mongoose.model('Admin', adminSchema);

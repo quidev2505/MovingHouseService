@@ -29,14 +29,17 @@ import PageNotFound from './Pages/PageNotFound';
 import ProtectRoutesAdmin from './Pages/ProtectRoutesAdmin';
 
 //Trang đăng nhập Admin
-import LoginAdmin from "./Pages/Admin/PagesAdmin/LoginAdmin";
+import LoginAdmin from "./Pages/Admin/PagesAdmin/Admin/LoginAdmin";
 
 //Import danh mục Admin
 import DashBoardAdmin from './Pages/Admin/PagesAdmin/DashboardAdmin';
 // import GetquoteAdmin from './Pages/Admin/PagesAdmin/GetquoteAdmin';
 
 import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
-import AdministratorAdmin from './Pages/Admin/PagesAdmin/Administrator';
+
+
+//Quản trị viên
+import AdministratorAdmin from './Pages/Admin/PagesAdmin/Admin/Administrator';
 
 // ServiceAdmin
 import ServiceAdmin from './Pages/Admin/PagesAdmin/Service/ServiceAdmin';
@@ -76,7 +79,7 @@ import EditDriver from './Pages/Admin/PagesAdmin/Driver/EditDriver';
 
 
 //Import trong Setting Admin
-import ChangePasswordAdmin from './Pages/Admin/PagesAdmin/ChangePasswordAdmin';
+import ChangePasswordAdmin from './Pages/Admin/PagesAdmin/Admin/ChangePasswordAdmin';
 
 
 
@@ -167,14 +170,16 @@ function App() {
           {/* Driver Admin CRUD */}
 
 
-        
-          <Route path="/admin/service_support" element={<ServiceSupportAdmin />} />
+          {/* Quản trị viên */}
+
           <Route path="/admin/administrator" element={<AdministratorAdmin />} />
-
-
-
           {/* In Setting Admin */}
           <Route path="/admin/change_password/:id" element={<ChangePasswordAdmin />} />
+
+          {/* End Quản trị viên */}
+
+
+          <Route path="/admin/service_support" element={<ServiceSupportAdmin />} />
 
           {/* End of Route */}
         </Route>

@@ -85,6 +85,29 @@ function OrderAdmin() {
 
   const [activeKeyTab, setActiveKeyTab] = useState("2");
 
+  const check_active = (input_activeKey) => {
+    let result = "";
+    if (input_activeKey === "1") {
+      result = "Đã hủy";
+    } else if (input_activeKey === "2") {
+      result = "Đang tìm tài xế";
+    }
+    if (input_activeKey === "3") {
+      result = "Đang thực hiện";
+    }
+    if (input_activeKey === "4") {
+      result = "Xác nhận hóa đơn";
+    }
+    if (input_activeKey === "5") {
+      result = "Thanh toán hóa đơn";
+    }
+    if (input_activeKey === "6") {
+      result = "Hoàn thành";
+    }
+
+    return result;
+  };
+
   const onChange = (key) => {
     switch (key) {
       case "1":
@@ -313,8 +336,6 @@ function OrderAdmin() {
                 data_order.push(ob_order);
               }
             });
-
-          console.log(data_order);
 
           let new_arr = data_order.filter((item) => {
             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
@@ -894,8 +915,8 @@ function OrderAdmin() {
   // //Search Realtime
   const [search, setSearch] = useState("");
   useEffect(() => {
-    show_order_customer("Đang tìm tài xế");
     list_driver();
+    show_order_customer(check_active(activeKeyTab));
   }, [search]);
 
   function removeVietnameseTones(str) {

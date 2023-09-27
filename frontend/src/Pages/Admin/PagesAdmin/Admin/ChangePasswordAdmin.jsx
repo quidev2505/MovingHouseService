@@ -1,7 +1,7 @@
 import React from "react";
-import LayoutAdmin from "../ComponentAdmin/LayoutAdmin";
-import TopCssContent from "./TopCssContent";
-import BottomCssContent from "./BottomCssContent";
+import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
+import TopCssContent from "../TopCssContent";
+import BottomCssContent from "../BottomCssContent";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -14,7 +14,7 @@ import { Breadcrumb } from "antd";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 // import { logOutAdmin } from "../../../redux/apiRequest";
 
-import { logOutAdminSuccess } from "../../../redux/adminSlice";
+import { logOutAdminSuccess } from "../../../../redux/adminSlice";
 
 import axios from "axios";
 
@@ -74,7 +74,7 @@ function ChangePasswordAdmin() {
       });
     } else {
       await axios
-        .put(`/v1/admin/change_password/${params.id}`, dataAdmin)
+        .put(`/v1/adminAccount/change_password/${params.id}`, dataAdmin)
         .then((data) => {
           Swal.fire({
             title: "Đổi mật khẩu thành công !",

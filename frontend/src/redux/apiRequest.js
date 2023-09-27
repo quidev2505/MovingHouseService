@@ -91,7 +91,7 @@ export const loginAdmin = async (admin, dispatch, navigate) => {
     dispatch(loginAdminStart());
 
     try {
-        const res = await axios.post("/v1/admin/login", admin);
+        const res = await axios.post("/v1/adminAccount/login", admin);
 
         await Toast.fire({
             icon: 'success',

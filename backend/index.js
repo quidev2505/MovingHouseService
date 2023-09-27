@@ -2,7 +2,7 @@ const express = require('express');
 require('dotenv').config()
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
-const adminRoute = require('./routes/admin');
+const adminAccountRoute = require('./routes/admin_account');
 const serviceRoute = require('./routes/service');
 const serviceFeeRoute = require('./routes/service_fee');
 const vehicleRoute = require('./routes/vehicle');
@@ -51,8 +51,8 @@ app.use('/uploads', express.static('uploads'))
 app.use("/v1/auth", authRoute);
 app.use("/v1/user", userRoute);
 
-//Admin Route
-app.use("/v1/admin", adminRoute);
+//Admin Account Route
+app.use("/v1/adminAccount", adminAccountRoute);
 
 //Service Route
 app.use("/v1/service", serviceRoute);
@@ -80,6 +80,8 @@ app.use("/v1/order", orderRoute)
 
 //Driver
 app.use("/v1/driver", driverRoute)
+
+
 
 //Thanh toán với VN PAY
 app.use("/v1/vnpay", vnpayRoute)

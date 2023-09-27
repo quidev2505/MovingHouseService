@@ -1,10 +1,10 @@
-const Admin = require('../models/Admin');
+const AdminAccount = require('../models/AdminAccount');
 
 const adminController = {
     //Login
     loginAdmin: async (req, res) => {
         try {
-            const admin_account = await Admin.findOne({ username: req.body.username });
+            const admin_account = await AdminAccount.findOne({ username: req.body.username });
 
             if (!admin_account) {
                 return res.status(403).json('Wrong username');
@@ -29,7 +29,7 @@ const adminController = {
         try {
             const id_input = req.params.id; //Get ID admin-account want to change
 
-            const data_old = await Admin.findOne({ _id: id_input });
+            const data_old = await AdminAccount.findOne({ _id: id_input });
 
             // console.log(data_old.password)
             // console.log(req.body.password_current);
@@ -39,12 +39,12 @@ const adminController = {
                 return res.status(400).json('Wrong Password !');
             }
 
-            const data_new = await Admin.findByIdAndUpdate(id_input, { password: req.body.password_new });
+            const data_new = await AdminAccount.findByIdAndUpdate(id_input, { password: req.body.password_new });
 
 
             if (data_new) {
                 res.status(200).json('Success update password')
-            }else{
+            } else {
                 res.status(505).json('Fail to update password !');
             }
 

@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import LoadingOverlayComponent from "../../../Components/LoadingOverlayComponent";
-import { loginAdmin } from "../../../redux/apiRequest";
+import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+import { loginAdmin } from "../../../../redux/apiRequest";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 

@@ -36,7 +36,7 @@ import {
 
 import axios from "axios";
 
-function DriverAdmin() {
+function Administrator() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [statusProfile, setStatusProfile] = useState("Đang hoạt động");
@@ -431,7 +431,7 @@ function DriverAdmin() {
                       borderRadius: "50%",
                       width: "150px",
                       height: "150px",
-                      objectFit: "cover",
+                      objectFit: "fill",
                       marginBottom: "5px",
                     }}
                     alt="anh"
@@ -488,7 +488,10 @@ function DriverAdmin() {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col" style={{ color: "#ea9868", fontWeight:"bold" }}>
+                    <div
+                      className="col"
+                      style={{ color: "#ea9868", fontWeight: "bold" }}
+                    >
                       <AimOutlined /> {data_result.location_delivery}
                     </div>
                     <div className="col"></div>
@@ -515,7 +518,7 @@ function DriverAdmin() {
                     Sao trung bình:{" "}
                     <span style={{ fontWeight: "bold" }}>
                       {" "}
-                      {data_result.star_average}&nbsp;
+                      {data_result.star_average}
                       <StarFilled style={{ color: "#f1a062" }} />
                     </span>
                   </div>
@@ -583,15 +586,105 @@ function DriverAdmin() {
                   title: "Admin",
                 },
                 {
-                  title: "Tài xế",
+                  title: "Quản trị viên",
                 },
               ]}
             />
           </div>
 
+          {/* Tài khoản quản trị viên */}
           <BottomCssContent>
             <TopCssContent>
-              <p>Tài xế</p>
+              <p>Tài khoản quản trị viên</p>
+              <div className="d-flex">
+                <div
+                  className="d-flex"
+                  style={{ width: "300px", borderRadius: "5px" }}
+                >
+                  <input
+                    type="text"
+                    id="find_blog"
+                    className="form-control form-control-lg"
+                    placeholder="Nhập vào tên tài xế..."
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <SearchOutlined
+                    style={{
+                      backgroundColor: "#7bd6e5",
+                      padding: "13px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+
+                <div
+                  className="d-flex"
+                  style={{
+                    width: "fit-content",
+                    borderRadius: "5px",
+                    marginLeft: "50px",
+                    backgroundColor: "#ccc",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "10px",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => showAccountLock()}
+                >
+                  <LockOutlined /> &nbsp; TÀI KHOẢN BỊ KHÓA
+                </div>
+              </div>
+
+              <p
+                style={{
+                  marginLeft: "10px",
+                  marginTop: "20px",
+                  display: "inline-block",
+                  border: "1px solid #f1a062",
+                  backgroundColor: "#f1a062",
+                  color: "white",
+                  borderRadius: "5px",
+                  padding: "7px",
+                }}
+              >
+                Trạng thái hồ sơ: &nbsp;
+                <span
+                  style={{
+                    color: statusProfile === "Đang hoạt động" ? "green" : "red",
+                  }}
+                >
+                  {statusProfile}
+                </span>
+              </p>
+
+              <Link to="/admin/driver/add">
+                <Button
+                  style={{
+                    backgroundColor: "#344767",
+                    color: "white",
+                    float: "right",
+                    marginBottom: "15px",
+                  }}
+                >
+                  + THÊM TÀI KHOẢN
+                </Button>
+              </Link>
+            </TopCssContent>
+
+            <div>
+              <Table columns={columns} dataSource={dataSource} />
+            </div>
+          </BottomCssContent>
+          <br></br>
+
+          {/* Tài khoản khách hàng */}
+          <BottomCssContent>
+            <TopCssContent>
+              <p>Tài khoản khách hàng</p>
               <div className="d-flex">
                 <div
                   className="d-flex"
@@ -656,19 +749,6 @@ function DriverAdmin() {
                   {statusProfile}
                 </span>
               </p>
-
-              <Link to="/admin/driver/add">
-                <Button
-                  style={{
-                    backgroundColor: "#344767",
-                    color: "white",
-                    float: "right",
-                    marginBottom: "15px",
-                  }}
-                >
-                  + THÊM HỒ SƠ TÀI XẾ
-                </Button>
-              </Link>
             </TopCssContent>
 
             <div>
@@ -681,4 +761,4 @@ function DriverAdmin() {
   );
 }
 
-export default DriverAdmin;
+export default Administrator;
