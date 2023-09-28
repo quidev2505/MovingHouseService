@@ -8,7 +8,6 @@ import {
   FcUndo,
   FcCalendar,
   FcInspection,
-  FcManager,
   FcSettings,
 } from "react-icons/fc";
 
@@ -32,11 +31,6 @@ function HeaderUser() {
       label: "Đơn hàng",
       icon: <FcInspection />,
       key: "/user/order",
-    },
-    {
-      label: "Tài xế",
-      icon: <FcManager />,
-      key: "/user/driver",
     },
     {
       label: "Thông tin cá nhân",

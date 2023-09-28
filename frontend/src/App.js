@@ -16,7 +16,6 @@ import BlogDetail from './Pages/BlogDetail';
 //Trang quản lý User
 import BookingUser from './Pages/User/PagesUser/Booking/BookingUser'
 import OrderUser from './Pages/User/PagesUser/Order/OrderUser'
-import DriverUser from './Pages/User/PagesUser/Driver/DriverUser'
 import InfoUser from './Pages/User/PagesUser/Info/InfoUser';
 
 
@@ -32,10 +31,9 @@ import ProtectRoutesAdmin from './Pages/ProtectRoutesAdmin';
 import LoginAdmin from "./Pages/Admin/PagesAdmin/Admin/LoginAdmin";
 
 //Import danh mục Admin
-import DashBoardAdmin from './Pages/Admin/PagesAdmin/DashboardAdmin';
-// import GetquoteAdmin from './Pages/Admin/PagesAdmin/GetquoteAdmin';
+import DashBoardAdmin from './Pages/Admin/PagesAdmin/DashBoard/DashboardAdmin';
 
-import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
+
 
 
 //Quản trị viên
@@ -115,7 +113,6 @@ function App() {
           {/* Trang User  */}
           <Route path="/user/booking" element={<BookingUser />} />
           <Route path="/user/order" element={<OrderUser />} />
-          <Route path="/user/driver" element={<DriverUser />} />
           <Route path="/user/info_user" element={<InfoUser />} />
         </Route>
 
@@ -126,7 +123,7 @@ function App() {
         {/* Đổi mật khẩu quản trị viên */}
         <Route path="/admin/forgot_password_admin" element={<ForgotPasswordAdmin />} />
         <Route path="/admin/verify_otp_admin" element={< VerifyOTPAdmin />} />
-        <Route path="/admin/change_password_forgot" element={< ChangePasswordForgot/>} />
+        <Route path="/admin/change_password_forgot" element={< ChangePasswordForgot />} />
 
 
 
@@ -200,9 +197,6 @@ function App() {
 
 
 
-
-
-          <Route path="/admin/service_support" element={<ServiceSupportAdmin />} />
 
           {/* End of Route */}
         </Route>

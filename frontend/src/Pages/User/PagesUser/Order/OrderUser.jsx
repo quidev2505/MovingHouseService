@@ -7,6 +7,7 @@ import {
   SearchOutlined,
   FolderViewOutlined,
   EnvironmentOutlined,
+  ReloadOutlined,
 } from "@ant-design/icons";
 
 import { Table, Tag, Drawer, Timeline } from "antd";
@@ -89,7 +90,6 @@ function OrderUser() {
           console.log(e);
         });
     }
-   
   };
 
   const view_detail_order = async (id_order_detail) => {
@@ -549,7 +549,7 @@ function OrderUser() {
           {driver_name === null ? (
             <span style={{ color: "#ccc" }}>Chưa xác định</span>
           ) : (
-            ""
+            <td className="fw-bold">{driver_name}</td>
           )}
         </div>
       ),
@@ -634,7 +634,10 @@ function OrderUser() {
         </div>
 
         <div className="content_order" style={{ marginTop: "30px" }}>
-          <div className="top_content_order">
+          <div
+            className="top_content_order d-flex"
+            style={{ justifyContent: "space-between" }}
+          >
             <h2
               style={{
                 fontSize: "28px",
@@ -644,6 +647,23 @@ function OrderUser() {
             >
               Đơn Hàng
             </h2>
+            <div
+              onClick={() => show_order_customer()}
+              style={{
+                cursor:"pointer",
+                width: "50px",
+                height: "50px",
+                backgroundColor: "#ed883b",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                borderRadius: "5px",
+                marginBottom: "10px",
+              }}
+            >
+              <ReloadOutlined />
+            </div>
           </div>
           <LoadingOverlayComponent status={isActive}>
             <div className="bottom_content_order">

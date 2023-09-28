@@ -22,6 +22,8 @@ router.patch('/lockdriver_account/:username', driverController.lockDriverAccount
 //Get Driver Account
 router.get('/getdriver_account/:username', driverController.getdriverAccount)
 
+//Get Driver With Fullname
+router.get('/getdriver_with_fullname/:fullname', driverController.getdriverWithFullname)
 
 //Get All Driver Account
 router.get('/getalldriver_account', driverController.getall_driverAccount)

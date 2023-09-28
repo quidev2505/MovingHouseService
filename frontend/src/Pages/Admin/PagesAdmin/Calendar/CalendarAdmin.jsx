@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 
 import { Breadcrumb, Button } from "antd";
@@ -25,129 +25,21 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 
+import { Collapse } from "antd";
+
 import axios from "axios";
 
 function CalendarAdmin() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
 
-  const columns = [
-    {
-      title: "STT",
-      dataIndex: "STT",
-      key: "STT",
-    },
-    {
-      title: "Hình ảnh",
-      dataIndex: "image",
-      key: "image",
-      render: (image) => (
-        <td>
-          <Image width={80} src={image} />
-        </td>
-      ),
-    },
-    {
-      title: "Tên vật dụng",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Danh mục",
-      dataIndex: "category",
-      key: "category",
-      filters: [
-        {
-          text: "Phòng khách",
-          value: "Phòng khách",
-        },
-        {
-          text: "Phòng ngủ",
-          value: "Phòng ngủ",
-        },
-        {
-          text: "Phòng bếp",
-          value: "Phòng bếp",
-        },
-        {
-          text: "Phòng tắm",
-          value: "Phòng tắm",
-        },
-        {
-          text: "Phòng làm việc",
-          value: "Phòng làm việc",
-        },
-      ],
-      onFilter: (value, record) => record.category.indexOf(value) === 0,
-    },
-    {
-      title: "Kích cỡ",
-      dataIndex: "size",
-      key: "size",
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status, id) => (
-        <div className="d-flex">
-          <Tag color={status ? "green" : "volcano"} key={status}>
-            {status ? "Hoạt động" : "Tạm ngưng"}
-          </Tag>
-          <div
-            onClick={() => changeStatus(id, status)}
-            style={{
-              backgroundColor: "orange",
-              borderRadius: "50%",
-              padding: "5px",
-              display: "flex",
-              cursor: "pointer",
-            }}
-          >
-            <SwapOutlined style={{ color: "white", fontWeight: "bold" }} />
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "Thao tác",
-      key: "action",
-      render: (id) => (
-        <Space size="middle" className="icon_hover">
-          <div
-            onClick={() => nav(`/admin/item/edit/${id.id}`)}
-            style={{
-              backgroundColor: "green",
-              borderRadius: "50%",
-              padding: "5px",
-              display: "flex",
-              cursor: "pointer",
-            }}
-          >
-            <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
-          </div>
-
-          <Link
-            onClick={() => delete_item(id)}
-            style={{
-              backgroundColor: "red",
-              borderRadius: "50%",
-              padding: "5px",
-              display: "flex",
-            }}
-          >
-            <DeleteOutlined style={{ color: "white", fontWeight: "bold" }} />
-          </Link>
-        </Space>
-      ),
-    },
-  ];
-
   //Search Realtime
   const [search, setSearch] = useState("");
+  const [dataFilter, setDateFilter] = useState("");
   useEffect(() => {
     get_item();
-  }, [search]);
+    dataDOM.current = "";
+  }, [search, dataFilter]);
 
   function removeVietnameseTones(str) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -181,91 +73,92 @@ function CalendarAdmin() {
     return str;
   }
 
+  const dataDOM = useRef("");
+
+  function convertDate(dateString) {
+    // Tách chuỗi thành 3 phần: năm, tháng, ngày
+    const [year, month, day] = dateString.split("-");
+
+    // Trả về chuỗi ngày theo định dạng dd/MM/yyyy
+    return `${day}/${month}/${year}`;
+  }
+
   const get_item = async () => {
+    let date = "";
+    if (dataFilter !== "") {
+      date = convertDate(dataFilter).toString();
+    }
+
     await axios
-      .get(`/v1/item/read_item`)
+      .get(`/v1/order/viewAllOrder`)
       .then((data) => {
         let data_solve = data.data;
         const data_item = [];
         data_solve &&
-          data_solve.forEach((item, index) => {
-            const ob_service = {
-              id: item._id,
-              STT: index + 1,
-              name: item.name,
-              category: item.category,
-              image: item.image,
-              size: item.size,
-              status: item.status,
-            };
+          data_solve.forEach(async (item, index) => {
+            if (item.status === "Đang thực hiện") {
+              let avatar_driver = await axios.get(
+                `/v1/driver/getdriver_with_fullname/${item.driver_name}`
+              );
 
-            data_item.push(ob_service);
+              let ob_service = {};
+              if (avatar_driver.data && date === item.date_start) {
+                ob_service = {
+                  id: item._id,
+                  STT: index + 1,
+                  order_id: item.order_id,
+                  date_start: item.date_start,
+                  time_start: item.time_start,
+                  driver_name: item.driver_name,
+                  fromLocation: item.fromLocation,
+                  toLocation: item.toLocation,
+                  service_name: item.service_name,
+                  vehicle_name: item.vehicle_name,
+                  avatar: avatar_driver.data,
+                };
+              }
+
+              if (date === "") {
+                ob_service = {
+                  id: item._id,
+                  STT: index + 1,
+                  order_id: item.order_id,
+                  date_start: item.date_start,
+                  time_start: item.time_start,
+                  driver_name: item.driver_name,
+                  fromLocation: item.fromLocation,
+                  toLocation: item.toLocation,
+                  service_name: item.service_name,
+                  vehicle_name: item.vehicle_name,
+                  avatar: avatar_driver.data,
+                };
+              }
+
+              data_item.push(ob_service);
+              dataDOM.current = data_item;
+            }
           });
 
-        let new_arr = data_item.filter((item) => {
-          // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-          let word_Change_VN = removeVietnameseTones(item.name);
-          let word_search = removeVietnameseTones(search);
+        setTimeout(() => {
+          const currentArray = Array.from(dataDOM.current);
+          let new_arr = currentArray.filter((item) => {
+            // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+            if (item.order_id !== undefined) {
+              let word_Change_VN = removeVietnameseTones(item.order_id);
+              let word_search = removeVietnameseTones(search);
 
-          // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-          return search.toLowerCase() === ""
-            ? item
-            : word_Change_VN.toLowerCase().includes(word_search);
-        });
+              // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+              return search.toLowerCase() === ""
+                ? item
+                : word_Change_VN.toLowerCase().includes(word_search);
+            }
+          });
 
-        setDataSource(new_arr);
+          console.log(new_arr);
+          setDataSource(new_arr);
+        }, 1100);
       })
       .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const changeStatus = (id, status) => {
-    let id_item = id.id;
-    Swal.fire({
-      title: "Bạn muốn thay đổi trạng thái vật dụng này ?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xác nhận",
-    })
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          await axios
-            .patch(`/v1/item/updateonefield_item/${id_item}`, {
-              status: !status,
-            })
-            .then((data) => {
-              get_item();
-              Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Thay đổi trạng thái vật dụng thành công !",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-            })
-            .catch((e) => {
-              Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "Thay đổi trạng thái vật dụng thất bại !",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-              console.log(e);
-            });
-        }
-      })
-      .catch((e) => {
-        Swal.fire({
-          position: "center",
-          icon: "warning",
-          title: "Thay đổi trạng thái vật dụng thất bại !",
-          showConfirmButton: false,
-          timer: 1200,
-        });
         console.log(e);
       });
   };
@@ -273,231 +166,6 @@ function CalendarAdmin() {
   useEffect(() => {
     get_item();
   }, []);
-
-  const delete_item = (id) => {
-    let id_item = id.id;
-    Swal.fire({
-      title: "Bạn muốn xóa vật dụng này ?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xác nhận",
-    })
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          await axios
-            .delete(`/v1/item/delete_item/${id_item}`)
-            .then((data) => {
-              get_item();
-              Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Xóa vật dụng thành công!",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-            })
-            .catch((e) => {
-              Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "Xóa vật dụng thất bại!",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-              console.log(e);
-            });
-        }
-      })
-      .catch((e) => {
-        Swal.fire({
-          position: "center",
-          icon: "warning",
-          title: "Xóa vật dụng thất bại!",
-          showConfirmButton: false,
-          timer: 1200,
-        });
-        console.log(e);
-      });
-  };
-
-  const changeStatusComment = (id, status) => {
-    let id_comment_blog = id;
-    Swal.fire({
-      title: "Bạn muốn thay đổi trạng thái comment này ?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xác nhận",
-    })
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          await axios
-            .patch(
-              `/v1/commentBlog/updateonefield_comment_blog/${id_comment_blog}`,
-              {
-                status: !status,
-              }
-            )
-            .then((data) => {
-              Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Thay đổi trạng thái comment thành công !",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-            })
-            .catch((e) => {
-              Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "Thay đổi trạng thái comment thất bại !",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-              console.log(e);
-            });
-        }
-      })
-      .catch((e) => {
-        Swal.fire({
-          position: "center",
-          icon: "warning",
-          title: "Thay đổi trạng thái comment thất bại !",
-          showConfirmButton: false,
-          timer: 1200,
-        });
-        console.log(e);
-      });
-  };
-
-  const view_detail_blog = async (id) => {
-    await axios
-      .get(`/v1/blog/view_detail_blog/${id.id}`)
-      .then(async (data) => {
-        let data_result = data.data;
-
-        const arr_commentBlogID = data_result.comment_blog_id;
-
-        await axios
-          .post(`/v1/commentBlog/read_comment_blog_id`, arr_commentBlogID)
-          .then((data) => {
-            const data_comment_blog = data.data;
-
-            let DOM_LIST_COMMENT = data_comment_blog.map((item, index) => {
-              return (
-                <div
-                  className="d-flex"
-                  style={{
-                    backgroundColor: "#edf2f8",
-                    padding: "10px 10px 0 10px",
-                    borderRadius: "5px",
-                    height: "fit-content",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <Avatar
-                    src={item.avatar}
-                    style={{
-                      border: "1px solid #66b2f9",
-                      backgroundColor: "black",
-                    }}
-                  />
-                  <div
-                    style={{
-                      marginLeft: "15px",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                    className="d-flex"
-                  >
-                    <div>
-                      <p
-                        className="name_user"
-                        style={{
-                          color: "#66b2f9",
-                          marginBottom: "4px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {item.fullname}
-                      </p>
-                      <p className="comment_user" style={{ color: "#7b8082" }}>
-                        {item.comment_content}
-                      </p>
-                    </div>
-
-                    <div className="time_comment" style={{ color: "#b9babb" }}>
-                      {item.comment_time}
-                      <div className="d-flex">
-                        <Tag
-                          color={item.status ? "green" : "volcano"}
-                          key={item.status}
-                        >
-                          {item.status ? "Hoạt động" : "Bị cấm"}
-                        </Tag>
-                        <div
-                          onClick={() =>
-                            changeStatusComment(item.id, item.status)
-                          }
-                          style={{
-                            backgroundColor: "orange",
-                            borderRadius: "50%",
-                            padding: "5px",
-                            display: "flex",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <SwapOutlined
-                            style={{ color: "white", fontWeight: "bold" }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div></div>
-                  </div>
-                </div>
-              );
-            });
-
-            const objectBlog = {
-              content: data_result.content,
-              comment_blog_id: data_result.comment_blog_id,
-            };
-
-            Modal.success({
-              title: "Thông tin chi tiết Blog",
-              content: (
-                <>
-                  <h5>Nội dung Blog: </h5>
-                  <div className="content_blog_detail">
-                    {htmlReactParser(objectBlog.content)}
-                  </div>
-
-                  <div>
-                    <h5>Bình luận: </h5>
-                    <p>
-                      Số lượng :{" "}
-                      <span className="fw-bold">
-                        {objectBlog.comment_blog_id.length}
-                      </span>
-                    </p>
-                    <div>{DOM_LIST_COMMENT}</div>
-                  </div>
-                </>
-              ),
-              onOk() {},
-            });
-          })
-          .catch((e) => console.log(e));
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
 
   return (
     <>
@@ -510,7 +178,7 @@ function CalendarAdmin() {
                   title: "Admin",
                 },
                 {
-                  title: "Vật dụng",
+                  title: "Lịch vận chuyển",
                 },
               ]}
             />
@@ -518,45 +186,142 @@ function CalendarAdmin() {
 
           <BottomCssContent>
             <TopCssContent>
-              <p>Vật dụng</p>
-              <div
-                className="d-flex"
-                style={{ width: "300px", borderRadius: "5px" }}
-              >
-                <input
-                  type="text"
-                  id="find_blog"
-                  className="form-control form-control-lg"
-                  placeholder="Nhập vào tên vật dụng..."
-                  style={{ fontSize: "17px", borderRadius: "3px" }}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                <SearchOutlined
-                  style={{
-                    backgroundColor: "#7bd6e5",
-                    padding: "13px",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
-                />
-              </div>
-
-              <Link to="/admin/item/add">
-                <Button
-                  style={{
-                    backgroundColor: "#344767",
-                    color: "white",
-                    float: "right",
-                    marginBottom: "15px",
-                  }}
+              <p>Lịch vận chuyển</p>
+              <div className="d-flex" style={{ width: "700px" }}>
+                <div
+                  className="d-flex"
+                  style={{ width: "350px", borderRadius: "5px" }}
                 >
-                  + THÊM VẬT DỤNG
-                </Button>
-              </Link>
+                  <input
+                    type="text"
+                    id="find_blog"
+                    className="form-control form-control-lg"
+                    placeholder="Nhập vào ID đơn hàng để tìm kiếm..."
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <SearchOutlined
+                    style={{
+                      backgroundColor: "#7bd6e5",
+                      padding: "13px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+
+                <div className="d-flex" style={{marginLeft:"50px"}}>
+                  <input
+                    type="date"
+                    name="dob"
+                    pattern="dd/mm/yyyy"
+                    placeholder="dd/mm/yyyy"
+                    id="date_of_birth"
+                    className="form-control form-control-lg"
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    value={dataFilter}
+                    onChange={(e) => setDateFilter(e.target.value)}
+                  />
+                  <SearchOutlined
+                    style={{
+                      backgroundColor: "#7bd6e5",
+                      padding: "13px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              </div>
             </TopCssContent>
 
-            <div>
-              <Table columns={columns} dataSource={dataSource} />
+            <div style={{ marginTop: "20px" }}>
+              <Space direction="vertical" style={{ width: "100%" }}>
+                {dataSource.length === 0 ? (
+                  <h5 style={{ color: "red", fontStyle: "italic" }}>
+                    Không có lịch vận chuyển nào !
+                  </h5>
+                ) : (
+                  ""
+                )}
+                {dataSource &&
+                  dataSource.map((item, index) => {
+                    return (
+                      <Collapse
+                        collapsible="header"
+                        defaultActiveKey={["1"]}
+                        items={[
+                          {
+                            key: "1",
+                            label: (
+                              <>
+                                <p style={{ color: "red" }}>
+                                  ID: {item.order_id}
+                                </p>{" "}
+                                <span style={{ color: "#ed883b" }}>
+                                  {item.service_name}
+                                </span>
+                                <span style={{ marginLeft: "20px" }}>
+                                  Xuất phát:
+                                </span>{" "}
+                                <span
+                                  style={{ color: "red", fontWeight: "bold" }}
+                                >
+                                  {item.time_start} - {item.date_start}
+                                </span>
+                              </>
+                            ),
+                            children: (
+                              <>
+                                <div className="row">
+                                  <div className="col">
+                                    <p className="fw-bold">
+                                      <span
+                                        className="fw-bold"
+                                        style={{ color: "red" }}
+                                      >
+                                        Từ địa điểm:
+                                      </span>{" "}
+                                      {item.fromLocation}
+                                    </p>
+                                    <p className="fw-bold">
+                                      {" "}
+                                      <span
+                                        className="fw-bold"
+                                        style={{ color: "#00bab3" }}
+                                      >
+                                        Đến địa điểm:
+                                      </span>{" "}
+                                      {item.toLocation}
+                                    </p>
+                                  </div>
+                                  <div className="col">
+                                    <p
+                                      style={{
+                                        color: "green",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Tài xế:{" "}
+                                    </p>
+                                    <span style={{ fontWeight: "bold" }}>
+                                      {item.driver_name}
+                                    </span>{" "}
+                                    &nbsp;
+                                    <Avatar
+                                      src={
+                                        <img src={item.avatar} alt="avatar" />
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                              </>
+                            ),
+                          },
+                        ]}
+                      />
+                    );
+                  })}
+              </Space>
             </div>
           </BottomCssContent>
         </div>

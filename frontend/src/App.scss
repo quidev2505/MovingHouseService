@@ -882,3 +882,33 @@ th.ant-table-cell {
     align-items: center;
     justify-content: center;
 }
+
+
+#components-collapse-demo-collapsible .ant-space {
+    width: 100%;
+}
+
+// Admin Dashboard
+.dash_board_admin {
+    .item_top_dashboard {
+        justify-content: space-around;
+        background-color: red;
+        border-radius: 5px;
+        padding: 5px;
+        color: white;
+        margin-right: 10px;
+        height: 120px;
+    }
+
+    .icon_top_dashboard {
+        font-size: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+    }
+
+    .content_top_dashboard p:first-child {
+        font-size: 29px;
+    }
+}

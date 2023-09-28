@@ -11,7 +11,6 @@ import {
   FcDeployment,
   FcPaid,
   FcInTransit,
-  FcFaq,
   FcBusinessman,
   FcMoneyTransfer,
   FcCalendar,
@@ -81,11 +80,6 @@ function SideMenuAdmin() {
       key: "/admin/calendar",
     },
     {
-      label: "Hỗ trợ dịch vụ",
-      icon: <FcFaq />,
-      key: "/admin/service_support",
-    },
-    {
       label: "Quản trị viên",
       icon: <FcBusinessman />,
       key: "/admin/administrator",
@@ -139,11 +133,6 @@ function SideMenuAdmin() {
         label: "Tài xế",
         icon: <FcInTransit />,
         key: "/admin/driver",
-      },
-      {
-        label: "Hỗ trợ dịch vụ",
-        icon: <FcFaq />,
-        key: "/admin/service_support",
       },
     ];
   }

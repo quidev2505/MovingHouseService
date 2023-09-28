@@ -222,6 +222,24 @@ const driverController = {
     },
 
 
+    //Get Driver With Fullname
+    getdriverWithFullname: async (req, res) => {
+        try {
+            const fullname_driver = req.params.fullname;
+
+            const data_driver = await Driver.findOne({ fullname: fullname_driver })
+            if (data_driver) {
+                res.status(201).json(data_driver.avatar);
+            } else {
+                res.status(501).json('update fail');
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+
     //Get All Driver Account
     getall_driverAccount: async (req, res) => {
         try {
