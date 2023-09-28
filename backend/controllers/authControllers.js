@@ -96,6 +96,12 @@ const authControllers = {
             if (!validPassword) {
                 return res.status(404).json("Wrong password !")
             }
+            else {
+                if (user.status === false) {
+                    return res.status(404).json("Ban Account")
+                }
+            }
+
 
             if (user && validPassword) {
                 //Tạo Access Token
@@ -113,6 +119,7 @@ const authControllers = {
                     path: "/",
                     sameSite: "strict",
                 })
+                
 
                 //Loại bỏ password ra để bảo mật
                 const { password, ...others } = user._doc;

@@ -17,7 +17,7 @@ function AddAdministrator() {
   const navigate = useNavigate();
   const [gender, setGender] = useState("Nam");
   const [department, setDepartment] =
-    useState("Nhân Viên");
+    useState("Nhân viên");
 
   //Tạo ra tên đăng nhập và mật khẩu ngẫu nhiên
   const [createAccountRandom, setCreateAccountRandom] = useState({});

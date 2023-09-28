@@ -12,10 +12,15 @@ router.get('/show_all_admin', adminController.getAllAdmin)
 //Get All Admin Account
 router.get('/getalladmin_account', adminController.getall_adminAccount)
 
+//Get Admin Account With Username
+router.get('/get_admin_account_with_username/:username', adminController.getadminAccountWithUserName)
 
 //Update one field Admin (Status)
 router.patch('/updateonefield_admin/:id', adminController.updateOneFieldAdmin)
 
+
+//Update one field Admin Account (Status)
+router.patch('/updateonefield_admin_account/:id', adminController.updateOneFieldAdminAccount)
 
 // //Update one field Driver With Full name(Status)
 // router.patch('/updateonefield_driver_withname/:fullname', driverController.updateOneFieldDriverWithFullName)

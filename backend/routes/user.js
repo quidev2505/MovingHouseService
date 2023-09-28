@@ -3,6 +3,12 @@ const userController = require("../controllers/userController");
 const middlewareController = require("../controllers/middlewareController")
 
 //GET ALL USER
+router.get("/get_all_user", userController.get_all_user)
+
+//Lock Account Customer
+router.patch('/lock_account_customer/:id', userController.lockAccountCustomer)
+
+//GET ALL USER
 router.get("/", middlewareController.verifyToken, userController.getAllUsers);
 
 //DELETE USER

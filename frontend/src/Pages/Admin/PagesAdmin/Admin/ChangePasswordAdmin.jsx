@@ -115,7 +115,7 @@ function ChangePasswordAdmin() {
                   title: "Admin",
                 },
                 {
-                  title: <Link to="/admin/dashboard">Tài khoản</Link>,
+                  title: <Link to="/admin/administrator">Tài khoản</Link>,
                   key: "Dashboard",
                 },
                 {
@@ -150,7 +150,7 @@ function ChangePasswordAdmin() {
                     style={{ fontSize: "17px", borderRadius: "3px" }}
                     {...register("password_current", {
                       required: true,
-                      minLength: 8,
+                      minLength: 6,
                     })}
                   />
                   {errors?.password_current?.type === "required" && (
@@ -169,7 +169,7 @@ function ChangePasswordAdmin() {
                     style={{ fontSize: "17px", borderRadius: "3px" }}
                     {...register("password_new", {
                       required: true,
-                      minLength: 8,
+                      minLength: 6,
                     })}
                   />
                   {errors?.password_new?.type === "required" && (
@@ -188,7 +188,7 @@ function ChangePasswordAdmin() {
                     style={{ fontSize: "17px", borderRadius: "3px" }}
                     {...register("password_reinput", {
                       required: true,
-                      minLength: 8,
+                      minLength: 6,
                     })}
                   />
                   {errors?.password_reinput?.type === "required" && (

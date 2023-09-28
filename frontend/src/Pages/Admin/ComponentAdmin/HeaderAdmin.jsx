@@ -14,12 +14,18 @@ function HeaderAdmin() {
   );
   const items = [
     {
-      label: "Đổi mật khẩu",
+      label: (
+        <span style={{ color: "#f1a062" }}>{check_admin_login.username}</span>
+      ),
       key: "0",
     },
     {
-      label: "Đăng xuất",
+      label: "Đổi mật khẩu",
       key: "1",
+    },
+    {
+      label: "Đăng xuất",
+      key: "2",
     },
   ];
 
@@ -29,10 +35,10 @@ function HeaderAdmin() {
 
   const onClick = ({ key }) => {
     // console.log('da nhấn' + key)
-    if (key === "1") {
+    if (key === "2") {
       // console.log('da nhan dang xuất')
       logOutAdmin(navigate, dispatch);
-    } else if (key === "0") {
+    } else if (key === "1") {
       navigate(`/admin/change_password/${check_admin_login._id}`);
     }
   };
@@ -67,9 +73,13 @@ function HeaderAdmin() {
           <div>
             <Space>
               <div className="container_info_admin d-flex">
-                <Skeleton loading={loading} avatar style={{marginTop:"80px"}}>
+                <Skeleton
+                  loading={loading}
+                  avatar
+                  style={{ marginTop: "80px" }}
+                >
                   <img
-                    src="/img/buoc1.png"
+                    src={check_admin_login.avatar}
                     class="img-thumbnail img_avatar"
                     alt="..."
                   ></img>

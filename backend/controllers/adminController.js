@@ -168,6 +168,22 @@ const adminController = {
             res.status(501).json(e)
         }
     },
+    //Update one field Admin Account(Status Admin)
+    updateOneFieldAdminAccount: async (req, res) => {
+        try {
+            const id_admin_account = req.params.id;
+
+            const dataUpdateOne = await AdminAccount.updateOne({ _id: id_admin_account }, req.body, { new: true });
+            if (dataUpdateOne) {
+                res.status(201).json('update success');
+            } else {
+                res.status(501).json('update fail');
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
 
     //Update one field Driver With fullname(Status Driver)
     updateOneFieldDriverWithFullName: async (req, res) => {
@@ -237,6 +253,21 @@ const adminController = {
     },
 
 
+    //Get Admin Account With ID
+    getadminAccountWithUserName: async (req, res) => {
+        try {
+            const username_account = req.params.username;
+            const data_admin_account = await AdminAccount.findOne({username: username_account});
+            if (data_admin_account) {
+                res.status(201).json(data_admin_account);
+            } else {
+                res.status(501).json('Fail');
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
     //update Admin
     updateAdmin: async (req, res) => {
         try {

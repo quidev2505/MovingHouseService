@@ -111,7 +111,7 @@ function LoginAdmin() {
                             style={{ fontSize: "17px", borderRadius: "3px" }}
                             {...register("password", {
                               required: true,
-                              minLength: 8,
+                              minLength: 6,
                             })}
                           />
 
@@ -135,7 +135,7 @@ function LoginAdmin() {
                             <p>Mật khẩu không được để trống !</p>
                           )}
                           {errors?.password?.type === "minLength" && (
-                            <p>Mật khẩu phải ít nhất là 8 kí tự !</p>
+                            <p>Mật khẩu phải ít nhất là 6 kí tự !</p>
                           )}
                         </div>
                         {/* //Quên mật khẩu */}

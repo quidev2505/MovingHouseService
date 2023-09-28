@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 
 import { Breadcrumb, Button } from "antd";
@@ -49,17 +49,27 @@ import {
 
 import axios from "axios";
 
+import { useSelector } from "react-redux";
+
 function Administrator() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
+  const [dataSource2, setDataSource2] = useState([]);
   const [statusProfile, setStatusProfile] = useState("Đang hoạt động");
-  const [department, setDepartment] = useState("Nhân Viên");
+  const [statusProfile2, setStatusProfile2] = useState("Đang hoạt động");
+  const department = useRef("Bộ phận mới");
+
+  //Dùng cái này để check xem khi người dùng là quản lý chỉ có thể thay đổi bộ phận quản lý hoặc nhân
+  const check_admin_login = useSelector(
+    (state) => state.admin.login?.currentAdmin
+  );
 
   const [checkLockAccount, setCheckLockAccount] = useState(false);
+  const [checkLockAccount2, setCheckLockAccount2] = useState(false);
 
   //Set bộ phận phòng ban
   const handleChangeDepartment = (value) => {
-    setDepartment(value);
+    department.current = value;
   };
 
   const columns = [
@@ -132,15 +142,15 @@ function Administrator() {
               department === "Nhân viên"
                 ? "#cccccc"
                 : department === "Nhân sự"
-                ? "volcano"
-                : "orange"
+                ? "#f50"
+                : "#108ee9"
             }
             key={department}
           >
             {department}
           </Tag>
           <div
-            onClick={() => changeDepartment(id)}
+            onClick={() => changeDepartment(department, id)}
             style={{
               backgroundColor: "purple",
               borderRadius: "50%",
@@ -240,113 +250,240 @@ function Administrator() {
     },
   ];
 
-  //Thay đổi bộ phận quản trị viên
-  const changeDepartment = (id) => {
-    Modal.success({
-      title: "",
-      content: (
-        <>
-          <div
+  const columns2 = [
+    {
+      title: "STT",
+      dataIndex: "STT",
+      key: "STT",
+    },
+    {
+      title: "Tên khách hàng",
+      dataIndex: "fullname",
+      key: "fullname",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Số điện thoại",
+      dataIndex: "phonenumber",
+      key: "phonenumber",
+    },
+    {
+      title: "Thao tác",
+      key: "action",
+      render: (
+        id //Khóa hồ sơ tài khoản
+      ) => (
+        <Space size="middle" className="icon_hover">
+          <Link
+            onClick={() => lock_account_customer(id)}
             style={{
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-              width: "500px",
-              margin: "0 auto",
-              height: "fit-content",
+              backgroundColor: "red",
+              borderRadius: "50%",
+              padding: "5px",
+              display: "flex",
             }}
           >
-            <h6
-              style={{
-                backgroundColor: "#f1a062",
-                textAlign: "center",
-                color: "white",
-                height: "30px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              Thay đổi bộ phận quản trị viên
-            </h6>
-            <div className="row" style={{ padding: "10px" }}>
-              <div className="col">
-                <Avatar src={<img src={id.avatar} alt="avatar" />} />
-              </div>
-              <div className="col">
-                <div className="row" style={{ color: "#f1a062" }}>
-                  Tài khoản
-                </div>
-                <div className="row" style={{ color: "#f1a062" }}>
-                  Quản trị viên
-                </div>
-              </div>
-              <div className="col">
-                <div className="row">{id.username}</div>
-                <div className="row">{id.fullname}</div>
-              </div>
-            </div>
+            <LockOutlined style={{ color: "white", fontWeight: "bold" }} />
+          </Link>
+        </Space>
+      ),
+    },
+  ];
+
+  //Thay đổi bộ phận quản trị viên
+  const changeDepartment = (department_input, id) => {
+    if (
+      check_admin_login.department === "Quản lý" &&
+      department_input === "Nhân sự"
+    ) {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Chỉ có thể thay đổi bộ phận nhân viên !",
+        showConfirmButton: false,
+        timer: 1200,
+      });
+    } else {
+      Modal.success({
+        title: "",
+        content: (
+          <>
             <div
-              className="row"
               style={{
-                marginTop: "10px",
-                display: "flex",
-                flexWrap: "nowrap",
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                width: "500px",
+                margin: "0 auto",
+                height: "fit-content",
               }}
             >
-              <div style={{ width: "160px" }}>
-                <input
-                  value={id.department}
-                  className="form form-control"
-                  style={{
-                    marginLeft: "20px",
-                    fontWeight: "bold",
-
-                  }}
-                  disabled
-                />
+              <h6
+                style={{
+                  backgroundColor: "#f1a062",
+                  textAlign: "center",
+                  color: "white",
+                  height: "30px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                Thay đổi bộ phận quản trị viên
+              </h6>
+              <div className="row" style={{ padding: "10px" }}>
+                <div className="col">
+                  <Avatar
+                    src={<img src={id.avatar} alt="avatar" />}
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      marginLeft: "20px",
+                    }}
+                  />
+                </div>
+                <div className="col">
+                  <div className="row" style={{ color: "#f1a062" }}>
+                    Tài khoản
+                  </div>
+                  <div className="row" style={{ color: "#f1a062" }}>
+                    Quản trị viên
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="row">{id.username}</div>
+                  <div className="row">{id.fullname}</div>
+                </div>
               </div>
+              <div
+                className="row"
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
+                  flexWrap: "nowrap",
+                }}
+              >
+                <div style={{ width: "160px" }}>
+                  <input
+                    value={id.department}
+                    className="form form-control"
+                    style={{
+                      marginLeft: "20px",
+                      fontWeight: "bold",
+                    }}
+                    disabled
+                  />
+                </div>
 
-              <div style={{ width: "50px", color: "red", display:"flex", alignItems:"center", justifyContent:"center"}}>
-                <DoubleRightOutlined />
-              </div>
-              <div style={{width:"160px"}}>
-                <Select
-                  defaultValue="Nhân viên"
+                <div
                   style={{
+                    width: "50px",
+                    color: "red",
                     display: "flex",
                     alignItems: "center",
-                    marginRight: "20px",
+                    justifyContent: "center",
                   }}
-                  onChange={handleChangeDepartment}
-                  options={[
-                    {
-                      value: "Bộ phận mới",
-                      label: "Bộ phận mới",
-                    },
-                    {
-                      value: "Nhân sự",
-                      label: "Nhân sự",
-                    },
-                    {
-                      value: "Quản lý",
-                      label: "Quản lý",
-                    },
-                    {
-                      value: "Nhân viên",
-                      label: "Nhân viên",
-                    },
-                  ]}
-                />
+                >
+                  <DoubleRightOutlined />
+                </div>
+                <div style={{ width: "fit-content" }} className="dropdownadmin">
+                  <Select
+                    defaultValue="Bộ phận mới"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginRight: "20px",
+                    }}
+                    onChange={handleChangeDepartment}
+                    options={[
+                      {
+                        value: "Bộ phận mới",
+                        label: "Bộ phận mới",
+                      },
+                      {
+                        value: "Nhân sự",
+                        label: "Nhân sự",
+                      },
+                      {
+                        value: "Quản lý",
+                        label: "Quản lý",
+                      },
+                      {
+                        value: "Nhân viên",
+                        label: "Nhân viên",
+                      },
+                    ]}
+                  />
+                </div>
+              </div>
+              <div>
+                <button
+                  className="btn btn-success"
+                  style={{
+                    marginLeft: "20px",
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                  }}
+                  onClick={() => changeDepartmentAccess(id)}
+                >
+                  Xác nhận
+                </button>
               </div>
             </div>
-            <div>
-              <button className="btn btn-success" style={{marginLeft:"20px", marginTop:"20px", marginBottom:"20px"}}>Xác nhận</button>
-            </div>
-          </div>
-        </>
-      ),
-      onOk() {},
-    });
+          </>
+        ),
+        onOk() {},
+      });
+    }
+  };
+
+  //Hàm thực hiện thay đổi bộ phận quản trị viên
+  const changeDepartmentAccess = async (id) => {
+    //Cập nhật trong admin Account
+    let username_admin = id.username;
+    const id_admin_account = await axios.get(
+      `/v1/admin/get_admin_account_with_username/${username_admin}`
+    );
+
+    if (id_admin_account) {
+      await axios
+        .patch(
+          `/v1/admin/updateonefield_admin_account/${id_admin_account.data._id}`,
+          {
+            department: department.current,
+          }
+        )
+        .then(async (data) => {
+          //Cập nhật trong Admin
+          await axios
+            .patch(`/v1/admin/updateonefield_admin/${id.id}`, {
+              department: department.current,
+            })
+            .then((data) => {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Thay đổi bộ phận quản trị viên thành công !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+              get_admin();
+              Modal.destroyAll();
+            })
+            .catch((e) => {
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Thay đổi bộ phận quản trị viên thất bại !",
+                showConfirmButton: false,
+                timer: 1200,
+              });
+            });
+        });
+    }
   };
 
   //Khóa tài khoản quản trị viên
@@ -405,11 +542,42 @@ function Administrator() {
       });
   };
 
+  //Khóa tài khoản quản khàng
+  const lock_account_customer = async (id) => {
+    await axios
+      .patch(`/v1/user/lock_account_customer/${id.id}`, { status: !id.status })
+      .then((data) => {
+        get_customer();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Thay đổi trạng thái tài khoản thành công !",
+          showConfirmButton: false,
+          timer: 1200,
+        });
+      })
+      .catch((e) => {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Thay đổi trạng thái tài khoản thất bại !",
+          showConfirmButton: false,
+          timer: 1200,
+        });
+      });
+  };
+
   //Search Realtime
   const [search, setSearch] = useState("");
   useEffect(() => {
     get_admin();
   }, [search]);
+
+  //Search Realtime Khách hàng
+  const [search2, setSearch2] = useState("");
+  useEffect(() => {
+    get_customer();
+  }, [search2]);
 
   function removeVietnameseTones(str) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -448,6 +616,13 @@ function Administrator() {
     setCheckLockAccount(!checkLockAccount);
     get_admin("Bị khóa");
     setStatusProfile("Bị khóa");
+  };
+
+  //Tài khoản khách hàng bị khóa
+  const showAccountLock2 = () => {
+    setCheckLockAccount2(!checkLockAccount2);
+    get_customer("Bị khóa");
+    setStatusProfile2("Bị khóa");
   };
 
   const get_admin = async (status_account) => {
@@ -500,6 +675,65 @@ function Administrator() {
                 : word_Change_VN.toLowerCase().includes(word_search);
             });
             setDataSource(new_arr);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  //Lấy tài khoản khách hàng
+  const get_customer = async (status_account) => {
+    try {
+      let data_account_customer = await axios.get(`/v1/user/get_all_user`);
+
+      let arr_data_account_status = data_account_customer.data.map(
+        (item, index) => {
+          return item.status;
+        }
+      );
+
+      if (status_account === "Bị khóa") {
+        status_account = false;
+      } else {
+        status_account = true;
+      }
+
+      if (arr_data_account_status) {
+        await axios
+          .get(`/v1/user/get_all_user`)
+          .then((data) => {
+            let data_solve = data.data;
+            const data_item = [];
+            data_solve &&
+              data_solve.forEach((item, index) => {
+                if (arr_data_account_status[index] === status_account) {
+                  const ob_service = {
+                    id: item._id,
+                    STT: index + 1,
+                    email: item.email,
+                    fullname: item.fullname,
+                    phonenumber: item.phonenumber,
+                    status: item.status,
+                    status_account: arr_data_account_status[index],
+                  };
+                  data_item.push(ob_service);
+                }
+              });
+
+            let new_arr = data_item.filter((item) => {
+              // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+              let word_Change_VN = removeVietnameseTones(item.fullname);
+              let word_search = removeVietnameseTones(search2);
+              // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+              return search2.toLowerCase() === ""
+                ? item
+                : word_Change_VN.toLowerCase().includes(word_search);
+            });
+            setDataSource2(new_arr);
           })
           .catch((e) => {
             console.log(e);
@@ -764,7 +998,7 @@ function Administrator() {
                   padding: "7px",
                 }}
               >
-                Trạng thái hồ sơ: &nbsp;
+                Trạng thái tài khoản: &nbsp;
                 <span
                   style={{
                     color: statusProfile === "Đang hoạt động" ? "green" : "red",
@@ -807,9 +1041,9 @@ function Administrator() {
                     type="text"
                     id="find_blog"
                     className="form-control form-control-lg"
-                    placeholder="Nhập vào tên tài xế..."
+                    placeholder="Nhập vào tên khách hàng..."
                     style={{ fontSize: "17px", borderRadius: "3px" }}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearch2(e.target.value)}
                   />
                   <SearchOutlined
                     style={{
@@ -821,29 +1055,54 @@ function Administrator() {
                   />
                 </div>
 
-                <div
-                  className="d-flex"
-                  style={{
-                    width: "fit-content",
-                    borderRadius: "5px",
-                    marginLeft: "50px",
-                    backgroundColor: "#ccc",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "10px",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => showAccountLock()}
-                >
-                  <LockOutlined /> &nbsp; HỒ SƠ BỊ KHÓA
-                </div>
+                {!checkLockAccount2 ? (
+                  <div
+                    className="d-flex"
+                    style={{
+                      width: "fit-content",
+                      borderRadius: "5px",
+                      marginLeft: "50px",
+                      backgroundColor: "#ccc",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "10px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => showAccountLock2()}
+                  >
+                    <LockOutlined /> &nbsp; TÀI KHOẢN BỊ KHÓA
+                  </div>
+                ) : (
+                  <div
+                    className="d-flex"
+                    style={{
+                      width: "fit-content",
+                      borderRadius: "5px",
+                      marginLeft: "50px",
+                      backgroundColor: "#7bd6e5",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "10px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      get_customer();
+                      setStatusProfile2("Đang hoạt động");
+                      setCheckLockAccount2(!checkLockAccount2);
+                    }}
+                  >
+                    <UnlockOutlined />
+                    &nbsp; TÀI KHOẢN HOẠT ĐỘNG
+                  </div>
+                )}
               </div>
 
               <p
                 style={{
-                  marginLeft: "10px",
                   marginTop: "20px",
                   display: "inline-block",
                   border: "1px solid #f1a062",
@@ -853,19 +1112,20 @@ function Administrator() {
                   padding: "7px",
                 }}
               >
-                Trạng thái hồ sơ: &nbsp;
+                Trạng thái tài khoản: &nbsp;
                 <span
                   style={{
-                    color: statusProfile === "Đang hoạt động" ? "green" : "red",
+                    color:
+                      statusProfile2 === "Đang hoạt động" ? "green" : "red",
                   }}
                 >
-                  {statusProfile}
+                  {statusProfile2}
                 </span>
               </p>
             </TopCssContent>
 
             <div>
-              <Table columns={columns} dataSource={dataSource} />
+              <Table columns={columns2} dataSource={dataSource2} />
             </div>
           </BottomCssContent>
         </div>

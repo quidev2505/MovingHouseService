@@ -16,11 +16,18 @@ import {
   FcMoneyTransfer,
 } from "react-icons/fc";
 
+import { useSelector } from "react-redux";
+
 function SideMenuAdmin() {
   const navigate = useNavigate();
 
+  const check_admin_login = useSelector(
+    (state) => state.admin.login?.currentAdmin
+  );
+
   //Link Route
-  const items = [
+  //Nhân sự và quản lý
+  let items = [
     {
       label: "Thống kê",
       icon: <FcBarChart />,
@@ -78,6 +85,62 @@ function SideMenuAdmin() {
       key: "/admin/administrator",
     },
   ];
+  //Kiểm tra xem chỉ bộ phận Nhân sự và quản lý mới được phép quản trị danh mục quản trị viên
+  if (check_admin_login.department === "Nhân viên") {
+    items = [
+      {
+        label: "Thống kê",
+        icon: <FcBarChart />,
+        key: "/admin/dashboard",
+      },
+      {
+        type: "group",
+        label: "Dịch vụ",
+        children: [
+          {
+            label: "Gói dịch vụ",
+            icon: <FcHome />,
+            key: "/admin/service",
+          },
+          {
+            label: "Chi phí",
+            icon: <FcMoneyTransfer />,
+            key: "/admin/service_fee",
+          },
+        ],
+      },
+      {
+        label: "Phương tiện",
+        icon: <FcAutomotive />,
+        key: "/admin/vehicle",
+      },
+      {
+        label: "Blog",
+        icon: <FcNews />,
+        key: "/admin/blog",
+      },
+      {
+        label: "Vật dụng",
+        icon: <FcDeployment />,
+        key: "/admin/item",
+      },
+      {
+        label: "Đơn hàng",
+        icon: <FcPaid />,
+        key: "/admin/order",
+      },
+      {
+        label: "Tài xế",
+        icon: <FcInTransit />,
+        key: "/admin/driver",
+      },
+      {
+        label: "Hỗ trợ dịch vụ",
+        icon: <FcFaq />,
+        key: "/admin/service_support",
+      },
+    ];
+  }
 
   const [collapsed, setCollapsed] = useState(false);
   // const [defautlKey, setDefaultKey] = useState(items[0].key);

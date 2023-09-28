@@ -55,14 +55,25 @@ export const loginUser = async (user, dispatch, navigate) => {
         dispatch(loginSuccess(res.data));
 
     } catch (err) {
-        Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: 'Đăng nhập thất bại',
-            text: 'Sai email hoặc mật khẩu',
-            showConfirmButton: false,
-            timer: 1000
-        })
+        if (err.response.data === "Ban Account") {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Tài khoản đã bị khóa !',
+                text: 'Hãy liên hệ với quản trị viên để được hỗ trợ !',
+                showConfirmButton: false,
+                timer: 1000
+            })
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Đăng nhập thất bại',
+                text: 'Sai tên đăng nhập hoặc mật khẩu',
+                showConfirmButton: false,
+                timer: 1000
+            })
+        }
         dispatch(loginFailed());
     }
 }
@@ -103,15 +114,26 @@ export const loginAdmin = async (admin, dispatch, navigate) => {
         dispatch(loginAdminSuccess(res.data));
 
     } catch (err) {
-        console.log(err)
-        Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: 'Đăng nhập thất bại',
-            text: 'Sai tên đăng nhập hoặc mật khẩu',
-            showConfirmButton: false,
-            timer: 1000
-        })
+        if (err.response.data === "Ban Account") {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Tài khoản đã bị khóa !',
+                text: 'Hãy liên hệ với quản trị viên để được hỗ trợ !',
+                showConfirmButton: false,
+                timer: 1000
+            })
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Đăng nhập thất bại',
+                text: 'Sai tên đăng nhập hoặc mật khẩu',
+                showConfirmButton: false,
+                timer: 1000
+            })
+        }
+
         dispatch(loginAdminFailed());
     }
 }

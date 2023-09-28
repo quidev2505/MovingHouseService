@@ -1,4 +1,5 @@
 const AdminAccount = require('../models/AdminAccount');
+const bcrypt = require('bcrypt');
 
 const adminController = {
     //Login
@@ -6,17 +7,27 @@ const adminController = {
         try {
             const admin_account = await AdminAccount.findOne({ username: req.body.username });
 
-            if (!admin_account) {
-                return res.status(403).json('Wrong username');
+            //Compare password
+            const validPassword = await bcrypt.compare(
+                req.body.password,
+                admin_account.password
+            )
+
+            if (!validPassword) {
+                return res.status(404).json("Wrong password !")
+            }else{
+                if(admin_account.status_account === false){
+                    return res.status(404).json("Ban Account")
+                }
             }
 
-            const password_input = req.body.password;
-            if (password_input === admin_account.password) {
-                const { password, ...others } = admin_account._doc;
-                return res.status(200).json(others)
-            } else {
-                return res.status(404).json('Wrong password');
-            }
+            
+
+
+            //Khi đăng nhập thành công
+            const { password, ...others } = admin_account._doc;
+            return res.status(200).json(others)
+
         } catch (err) {
             console.log(err)
             return res.status(500).json(err);
@@ -35,11 +46,22 @@ const adminController = {
             // console.log(req.body.password_current);
 
 
-            if (data_old.password !== req.body.password_current) {
-                return res.status(400).json('Wrong Password !');
+            //Compare password
+            const validPassword = await bcrypt.compare(
+                req.body.password_current,
+                data_old.password
+            )
+
+
+            if (!validPassword) {
+                return res.status(404).json("Wrong password !")
             }
 
-            const data_new = await AdminAccount.findByIdAndUpdate(id_input, { password: req.body.password_new });
+            //Mã hóa mật khẩu trước khi đưa vào
+            const salt = await bcrypt.genSalt(10);
+            const hashed = await bcrypt.hash(req.body.password_new, salt);
+
+            const data_new = await AdminAccount.findByIdAndUpdate(id_input, { password: hashed });
 
 
             if (data_new) {
