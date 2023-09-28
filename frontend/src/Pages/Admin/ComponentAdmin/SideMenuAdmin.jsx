@@ -14,6 +14,7 @@ import {
   FcFaq,
   FcBusinessman,
   FcMoneyTransfer,
+  FcCalendar,
 } from "react-icons/fc";
 
 import { useSelector } from "react-redux";
@@ -73,6 +74,11 @@ function SideMenuAdmin() {
       label: "Tài xế",
       icon: <FcInTransit />,
       key: "/admin/driver",
+    },
+    {
+      label: "Lịch vận chuyển",
+      icon: <FcCalendar />,
+      key: "/admin/calendar",
     },
     {
       label: "Hỗ trợ dịch vụ",

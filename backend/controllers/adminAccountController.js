@@ -1,4 +1,8 @@
 const AdminAccount = require('../models/AdminAccount');
+const Admin = require('../models/Admin');
+const nodemailer = require("nodemailer");
+const OTP = require('one-time-password')
+
 const bcrypt = require('bcrypt');
 
 const adminController = {
@@ -15,13 +19,13 @@ const adminController = {
 
             if (!validPassword) {
                 return res.status(404).json("Wrong password !")
-            }else{
-                if(admin_account.status_account === false){
+            } else {
+                if (admin_account.status_account === false) {
                     return res.status(404).json("Ban Account")
                 }
             }
 
-            
+
 
 
             //Khi đăng nhập thành công
@@ -73,7 +77,107 @@ const adminController = {
         } catch (e) {
             res.status(505).json(e);
         }
-    }
+    },
+
+    //Forgot password (1)
+    forgotPassword: async (req, res) => {
+        let email_otp = req.body.email_input;
+
+        //Get _id from User DB
+        let get_id = await Admin.findOne({ email: email_otp });
+        console.log(get_id)
+
+        //Generator OTP
+        // A base32-encoded key.
+        const dummyKey = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+
+        // Derive a 6-digit, time-based token from 'dummyKey'.
+        const token = OTP.generate(dummyKey);
+
+        //Update OTP into DB User
+        if (get_id) {
+            await AdminAccount.updateOne({ username: get_id.username }, { otp_code: token });
+        }
+
+        //Check Email is already register
+        let checkExistEmailRegister = await Admin.findOne({ email: email_otp });
+        if (checkExistEmailRegister) {
+            //Nodemailer - Send email !
+            const transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: "quidev2505@gmail.com",
+                    pass: process.env.PASS_GGMAIL
+                }
+            });
+
+            const mailOptions = {
+                from: "quidev2505@gmail.com",
+                to: `${email_otp}`,
+                subject: " 🚚 [FastMove]",
+                html: `Mã OTP 6 số để khôi phục mật khẩu của bạn là : <h1 style="color:red">${token}</h1>`
+            }
+
+            //Nodemailer 
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error)
+                } else {
+                    console.log("Email sent:" + info.response);
+                }
+            })
+
+
+            res.status(200).json('Send Email Successfully !');
+        } else {
+            res.status(404).json('NotRegisterEmail');
+        }
+    },
+
+    //Verify Token OTP Admin(2)
+    verifyOTP: async (req, res) => {
+        let email_otp = req.body.email_input;
+        let otp_input = req.body.otp_input;
+
+        //Get Data from Admin DB
+        let dataAdmin = await Admin.findOne({ email: email_otp });
+
+        let username_admin_account = dataAdmin.username;
+        let dataAdmin_Account = await AdminAccount.findOne({username: username_admin_account});
+        //Get OTP in DB
+        let OTP_DB = dataAdmin_Account.otp_code;
+
+        if (otp_input !== OTP_DB) {
+            res.status(404).json('Tokenisnotvalid');
+        }
+
+        res.status(200).json('Tokenistrue');
+    },
+
+    //ChangePassword (3)
+    changePasswordAdmin: async (req, res) => {
+        let email_otp = req.body.email_otp;
+        let new_password = req.body.new_password;
+
+        const salt = await bcrypt.genSalt(10);
+        const hashed = await bcrypt.hash(new_password, salt);
+
+        //Get Data from Admin DB
+        let dataAdmin = await Admin.findOne({ email: email_otp });
+
+        //Update New Password When user input new password
+        if (dataAdmin) {
+            await AdminAccount.updateOne({username: dataAdmin.username}, { otp_code: 'null' })
+            await AdminAccount.updateOne({ username: dataAdmin.username }, { password: hashed }).then((data) => {
+                res.status(200).json('Successful Change Password !')
+
+            }).catch((e) => {
+                res.status(504).json('Change Password Fail !')
+
+            })
+        }
+
+    },
 
 
 

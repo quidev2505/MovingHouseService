@@ -20,7 +20,13 @@ const adminAccountSchema = new mongoose.Schema({
     avatar: {
         type: String,
         required:true
+    },
+    otp_code: {
+        type: String,
+        maxLength: 6,
+        default: null
     }
+
 }, { timestamps: true })
 
 module.exports = mongoose.model('AdminAccount', adminAccountSchema);

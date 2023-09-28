@@ -1,17 +1,28 @@
 import { useState, useEffect } from "react";
+// import { useDispatch } from "react-redux";
+// import { loginUser } from "../redux/apiRequest";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
-import { loginAdmin } from "../../../../redux/apiRequest";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import axios from "axios";
 
-function LoginAdmin() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+function ChangePaswordForgot() {
+  const nav = useNavigate();
   const [isActive, setIsActive] = useState(true);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    let OTP_ADMIN = JSON.parse(localStorage.getItem("otp_admin"));
+    //Get from localstorage
+    if (!OTP_ADMIN) {
+      nav("/admin/forgot_password_admin");
+    }
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     setIsActive(false);
@@ -30,13 +41,42 @@ function LoginAdmin() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const newAdmin = {
-      username: data.username,
-      password: data.password,
-    };
+  const onSubmit = async (data) => {
+    let email_local = JSON.parse(localStorage.getItem("otp_admin"));
 
-    loginAdmin(newAdmin, dispatch, navigate);
+    const email_otp = email_local;
+    const new_password = data.password;
+
+    await axios
+      .post("/v1/adminAccount/changePasswordAdmin", {
+        email_otp,
+        new_password,
+      })
+      .then((data) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Đổi mật khẩu thành công !",
+          text: "Hãy đi đến đăng nhập",
+          showConfirmButton: false,
+          timer: 1700,
+        });
+        console.log(data);
+        nav("/admin/login");
+      })
+      .catch((e) => {
+        console.log(e);
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Đổi mật khẩu thất bại !",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        nav("/");
+      });
+
+    localStorage.removeItem("otp_admin");
   };
 
   return (
@@ -57,51 +97,28 @@ function LoginAdmin() {
                   >
                     <LoadingOverlayComponent status={isActive}>
                       {/* btn back */}
+                      {/* <BackPrevious path="/" /> */}
                       <div className="card-body p-5 text-center">
                         {/* //Img icon */}
-                        <div style={{ textAlign: "left" }}>
-                          <img
-                            src="/img/logo_main.png"
-                            alt="anh_logo"
-                            style={{
-                              width: "105px",
-                              height: "58px",
-                              objectFit: "contain",
-                              margiBottom: "13px",
-                              marginTop: "-44px",
-                            }}
-                          />
-                        </div>
-
-                        <h2
+                        <img
+                          src="./img/logo_main.png"
+                          alt="anh_logo"
                           style={{
-                            fontWeight: "600",
-                            fontSize: "35px",
-                            color: "#e16c27 ",
+                            width: "213px",
+                            height: "64px",
+                            objectFit: "contain",
                             marginBottom: "15px",
                           }}
+                        />
+                        <h3
+                          style={{
+                            textAlign: "center",
+                            marginTop: "5px",
+                            marginBottom: "20px",
+                          }}
                         >
-                          ADMIN LOGIN
-                        </h2>
-                        <div className="form-outline mb-4  form_input_handle">
-                          <input
-                            type="text"
-                            id="username"
-                            className="form-control form-control-lg"
-                            placeholder="Tên đăng nhập"
-                            style={{ fontSize: "17px", borderRadius: "3px" }}
-                            {...register("username", {
-                              required: true,
-                              minLength: 5,
-                            })}
-                          />
-                          {errors?.username?.type === "required" && (
-                            <p>Tên đăng nhập không được để trống !</p>
-                          )}
-                          {errors?.username?.type === "minLength" && (
-                            <p>Tên đăng nhập chưa đủ kí tự !</p>
-                          )}
-                        </div>
+                          Cài đặt lại mật khẩu
+                        </h3>
                         <div className="input-group mb-3 form-outline mb-4 form_input_handle">
                           <input
                             type="text"
@@ -111,7 +128,9 @@ function LoginAdmin() {
                             style={{ fontSize: "17px", borderRadius: "3px" }}
                             {...register("password", {
                               required: true,
-                              minLength: 6,
+                              minLength: 8,
+                              pattern:
+                                /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/,
                             })}
                           />
 
@@ -135,25 +154,16 @@ function LoginAdmin() {
                             <p>Mật khẩu không được để trống !</p>
                           )}
                           {errors?.password?.type === "minLength" && (
-                            <p>Mật khẩu phải ít nhất là 6 kí tự !</p>
+                            <p>Mật khẩu phải ít nhất là 8 kí tự !</p>
+                          )}
+                          {errors?.password?.type === "pattern" && (
+                            <p>
+                              Mật khẩu phải ít nhất 1 chữ cái viết hoa, 1 chữ số
+                              và kí tự đặc biệt !
+                            </p>
                           )}
                         </div>
-                        {/* //Quên mật khẩu */}
-                        <div
-                          className="form-check d-flex justify-content-end mb-4"
-                          style={{ color: "#f16622", marginTop: "-10px" }}
-                        >
-                          <Link
-                            to="/admin/forgot_password_admin"
-                            style={{
-                              color: "#f16622",
-                              textDecoration: "none",
-                              userSelect: "none",
-                            }}
-                          >
-                            Quên mật khẩu ?
-                          </Link>
-                        </div>
+
                         <button
                           className="btn btn-lg"
                           type="submit"
@@ -169,7 +179,7 @@ function LoginAdmin() {
                             fontWeight: "500",
                           }}
                         >
-                          Đăng nhập
+                          Xác nhận
                         </button>
                       </div>
                     </LoadingOverlayComponent>
@@ -184,4 +194,4 @@ function LoginAdmin() {
   );
 }
 
-export default LoginAdmin;
+export default ChangePaswordForgot;

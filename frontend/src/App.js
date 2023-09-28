@@ -4,9 +4,9 @@ import { Routes, Route } from 'react-router-dom'
 import Home from './Pages/Home';
 import Login from "./Pages/Login"
 import Register from "./Pages/Register"
-import ForgotPassword from './Pages/ForgotPassword';
-import ChangePassword from './Pages/ChangePassword';
-import VerifyOTP from './Pages/VerifyOTP';
+import ForgotPassword from './Pages/ForgotPassword'; //Nhập email khôi phục vào.
+import ChangePassword from './Pages/ChangePassword'; //Nhập mật khẩu mới vào.
+import VerifyOTP from './Pages/VerifyOTP'; //Nhập OTP vào .
 import ServicePrice from './Pages/ServicePrice';
 import Contact from './Pages/Contact';
 import Blog from './Pages/Blog';
@@ -42,6 +42,9 @@ import ServiceSupportAdmin from './Pages/Admin/PagesAdmin/ServiceSupportAdmin';
 import AdministratorAdmin from './Pages/Admin/PagesAdmin/Admin/Administrator';
 import AddAdministratorAdmin from './Pages/Admin/PagesAdmin/Admin/AddAdministrator';
 import EditAdministratorAdmin from './Pages/Admin/PagesAdmin/Admin/EditAdministrator';
+import ForgotPasswordAdmin from './Pages/Admin/PagesAdmin/Admin/ForgotPasswordAdmin'; //Nhập vào email cần khôi phục
+import VerifyOTPAdmin from './Pages/Admin/PagesAdmin/Admin/VerifyOTPAdmin'; //Nhập vào mã OTP
+import ChangePasswordForgot from './Pages/Admin/PagesAdmin/Admin/ChangePasswordForgot'; //Nhập vào mã OTP
 
 // ServiceAdmin
 import ServiceAdmin from './Pages/Admin/PagesAdmin/Service/ServiceAdmin';
@@ -78,6 +81,9 @@ import DriverAdmin from './Pages/Admin/PagesAdmin/Driver/DriverAdmin';
 import AddDriver from './Pages/Admin/PagesAdmin/Driver/AddDriver';
 import EditDriver from './Pages/Admin/PagesAdmin/Driver/EditDriver';
 
+//Calendar - Lịch vận chuyển
+import CalendarAdmin from './Pages/Admin/PagesAdmin/Calendar/CalendarAdmin';
+
 
 
 //Import trong Setting Admin
@@ -95,6 +101,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        {/* Đổi mật khẩu tài khoản người dùng */}
         <Route path="/forgot_password" element={<ForgotPassword />} />
         <Route path="/verify_otp" element={<VerifyOTP />} />
         <Route path="/change_password" element={<ChangePassword />} />
@@ -115,6 +122,12 @@ function App() {
 
         {/* Trang đăng nhập dành cho quản trị viên */}
         <Route path="/admin/login" element={<LoginAdmin />} />
+
+        {/* Đổi mật khẩu quản trị viên */}
+        <Route path="/admin/forgot_password_admin" element={<ForgotPasswordAdmin />} />
+        <Route path="/admin/verify_otp_admin" element={< VerifyOTPAdmin />} />
+        <Route path="/admin/change_password_forgot" element={< ChangePasswordForgot/>} />
+
 
 
         {/* Bảo vệ Route Admin - Quản trị viên*/}
@@ -162,8 +175,6 @@ function App() {
           <Route path="/admin/order" element={<OrderAdmin />} />
           {/* End order admin CRUD */}
 
-          {/* <Route path="/admin/get_quote" element={<GetquoteAdmin />} /> */}
-        
 
           {/* Driver Admin CRUD */}
           <Route path="/admin/driver" element={<DriverAdmin />} />
@@ -172,14 +183,23 @@ function App() {
           {/* Driver Admin CRUD */}
 
 
+          {/* Lịch vận chuyển */}
+          <Route path="/admin/calendar" element={<CalendarAdmin />} />
+          {/* Kết thục lịch vận chuyển */}
+
           {/* Quản trị viên */}
           <Route path="/admin/administrator" element={<AdministratorAdmin />} />
           <Route path="/admin/administrator/add" element={<AddAdministratorAdmin />} />
           <Route path="/admin/administrator/edit/:id" element={<EditAdministratorAdmin />} />
 
+
+
           {/* In Setting Admin */}
           <Route path="/admin/change_password/:id" element={<ChangePasswordAdmin />} />
           {/* End Quản trị viên */}
+
+
+
 
 
           <Route path="/admin/service_support" element={<ServiceSupportAdmin />} />
