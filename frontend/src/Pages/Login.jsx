@@ -14,6 +14,9 @@ import jwt_decode from "jwt-decode";
 
 // import { useGoogleLogin } from "@react-oauth/google";
 
+//Import Component Chatbot
+import ChatBotIcon from "../Components/ChatBotIcon";
+
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,6 +26,8 @@ function Login() {
   // const login = useGoogleLogin({
   //   onSuccess: (tokenResponse) => console.log(tokenResponse),
   // });
+
+  
 
   useEffect(() => {
     setIsActive(false);
@@ -53,6 +58,7 @@ function Login() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <ChatBotIcon/>
         <div classname="container">
           <section className="vh-100" style={{ backgroundColor: "#f9f9f9" }}>
             <div className="container py-5 h-100">

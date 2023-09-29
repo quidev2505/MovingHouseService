@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 
 import { WechatOutlined, FieldTimeOutlined } from "@ant-design/icons";
 
+//Import Component Chatbot
+import ChatBotIcon from "../Components/ChatBotIcon";
+
 function Blog() {
   const [isActive, setIsActive] = useState(true);
   const [datablog, setDataBlog] = useState([]);
@@ -207,6 +210,7 @@ function Blog() {
       <Header />
       <LoadingOverlayComponent status={isActive}>
         <div className="topContact" style={{ marginBottom: "95px" }}>
+          <ChatBotIcon/>
           <div
             className="imgService container d-flex"
             style={{ alignItems: "center", justifyContent: "center" }}

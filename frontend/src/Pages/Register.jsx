@@ -7,7 +7,8 @@ import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import BackPrevious from "../Components/BackPrevious";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+//Import Component Chatbot
+import ChatBotIcon from "../Components/ChatBotIcon";
 
 function Register() {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ function Register() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <ChatBotIcon/>
         <div classname="container">
           <section style={{ backgroundColor: "#f9f9f9", height: "100%" }}>
             <div className="container py-5 h-100">

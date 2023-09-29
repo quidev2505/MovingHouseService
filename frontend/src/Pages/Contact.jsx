@@ -9,11 +9,15 @@ import {
   faMapLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 
+//Import Component Chatbot
+import ChatBotIcon from "../Components/ChatBotIcon";
+
 function Contact() {
   return (
     <>
       <Header />
       <div className="topContact" style={{ marginBottom: "95px" }}>
+        <ChatBotIcon/>
         <div
           className="imgService container d-flex"
           style={{ alignItems: "center", justifyContent: "center" }}

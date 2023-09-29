@@ -11,6 +11,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleRight } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
+
+//Import Component Chatbot
+import ChatBotIcon from "../Components/ChatBotIcon";
+
 function ServicePrice() {
   const [isActive, setIsActive] = useState(true);
 
@@ -162,6 +166,7 @@ function ServicePrice() {
       {/* Công cụ tra cứu giá cước thuê xe tải - Start Service Search Price Hire Lorry*/}
       <LoadingOverlayComponent status={isActive}>
         <div className="tool_search_price_hireLorry">
+          <ChatBotIcon/>
           <div
             className="imgService container d-flex"
             style={{ alignItems: "center", justifyContent: "center" }}

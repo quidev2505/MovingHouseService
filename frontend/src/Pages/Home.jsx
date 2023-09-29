@@ -12,6 +12,9 @@ import { Tabs, Avatar } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+//Import Component Chatbot
+import ChatBotIcon from "../Components/ChatBotIcon";
+
 const Home = () => {
   const [dataSource, setDataSource] = useState([]);
   const [isActive, setIsActive] = useState(true);
@@ -184,6 +187,8 @@ const Home = () => {
         className="HomePage"
       >
         <LoadingOverlayComponent status={isActive}>
+          {/* Chat bot */}
+          <ChatBotIcon/>
           {/* First_service */}
           <div className="provide_service row" style={{ position: "relative" }}>
             <div
