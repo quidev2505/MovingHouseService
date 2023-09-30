@@ -364,7 +364,7 @@ const ChatBotIcon = () => {
           const stepsNew = [
             {
               id: "show_result",
-              message: "Giá thuê xe vận chuyển là: ",
+              message: "Giá thuê xe vận chuyển là ",
               trigger: "review",
             },
             {
@@ -455,11 +455,228 @@ const ChatBotIcon = () => {
           setStepInput(stepsNew);
           setOpenChatbot(true);
         }, 1500);
+
+        setTimeout(() => {
+          const steps = [
+            {
+              id: "1",
+              message: "Xin chào ! Hãy cho tôi biết tên của bạn ?",
+              trigger: "customer_name",
+            },
+            {
+              id: "customer_name",
+              user: true,
+              trigger: "3",
+            },
+            {
+              id: "3",
+              message: "Chào bạn {previousValue},	bạn có yêu cầu gì ạ ?",
+              trigger: "menu",
+            },
+            //Đưa ra 2 yêu cầu
+            {
+              id: "menu",
+              options: [
+                {
+                  value: "Chuyển trang",
+                  label: "Chuyển trang",
+                  trigger: "navigation",
+                },
+                {
+                  value: "Báo giá thuê xe",
+                  label: "Báo giá thuê xe",
+                  trigger: "get_quote",
+                },
+                {
+                  value: "Kết thúc",
+                  label: "Kết thúc",
+                  trigger: "ket_thuc",
+                },
+              ],
+            },
+            //Chuyển trang
+            {
+              id: "navigation",
+              options: [
+                { value: "/", label: "Trang chủ", trigger: "6" },
+                {
+                  value: "/service_price",
+                  label: "Giá dịch vụ",
+                  trigger: "6",
+                },
+                { value: "/blog", label: "Blog", trigger: "6" },
+                { value: "/contact", label: "Liên Hệ", trigger: "6" },
+                { value: "/login", label: "Đăng nhập", trigger: "6" },
+                { value: "/register", label: "Đăng ký", trigger: "6" },
+              ],
+            },
+            {
+              id: "6",
+              message: "Đã đi chuyển đến trang !",
+              end: true,
+            },
+            //Báo giá
+            {
+              id: "get_quote",
+              message: "Nhập vào địa chỉ bắt đầu",
+              trigger: "fromLocation",
+            },
+            {
+              id: "fromLocation",
+              user: true,
+              trigger: "tolocation_question",
+            },
+            {
+              id: "tolocation_question",
+              message: "Nhập vào địa chỉ kết thúc",
+              trigger: "toLocation",
+            },
+            {
+              id: "toLocation",
+              user: true,
+              trigger: "choose_vehicle_mess",
+            },
+            {
+              id: "choose_vehicle_mess",
+              message: "Chọn loại phương tiện vận chuyển",
+              trigger: "choose_vehicle",
+            },
+            {
+              id: "choose_vehicle",
+              options: [
+                {
+                  value: "Xe bán tải",
+                  label: "Xe bán tải",
+                  trigger: "show_result",
+                },
+                {
+                  value: "Xe van 500kg",
+                  label: "Xe van 500kg",
+                  trigger: "show_result",
+                },
+                {
+                  value: "Xe van 1 tấn",
+                  label: "Xe van 1 tấn",
+                  trigger: "show_result",
+                },
+                {
+                  value: "Xe tải 500kg",
+                  label: "Xe tải 500kg",
+                  trigger: "show_result",
+                },
+                {
+                  value: "Xe tải 1 tấn",
+                  label: "Xe tải 1 tấn",
+                  trigger: "show_result",
+                },
+                {
+                  value: "Xe tải 1.5 tấn",
+                  label: "Xe tải 1.5 tấn",
+                  trigger: "show_result",
+                },
+                {
+                  value: "Xe tải 2 tấn",
+                  label: "Xe tải 2 tấn",
+                  trigger: "show_result",
+                },
+              ],
+              end: true,
+            },
+            {
+              id: "show_result",
+              message: "Giá thuê xe vận chuyển là: ",
+              trigger: "review",
+            },
+            {
+              id: "review",
+              component: (
+                <>
+                  <table
+                    style={{
+                      border: "1px solid #ccc",
+                      width: "100%",
+                      borderRadius: "5px",
+                      padding: "5px",
+                    }}
+                  >
+                    <tbody>
+                      <tr style={{ borderBottom: "1px solid #ccc" }}>
+                        <td>Tên khách hàng</td>
+                        <td>
+                          {
+                            JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )?.customer_name
+                          }
+                        </td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid #ccc" }}>
+                        <td>Từ địa điểm</td>
+                        <td>
+                          {
+                            JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )?.fromLocation
+                          }
+                        </td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid #ccc" }}>
+                        <td>Đến địa điểm</td>
+                        <td>
+                          {
+                            JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )?.toLocation
+                          }
+                        </td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid #ccc" }}>
+                        <td>Loại xe vận chuyển</td>
+                        <td>
+                          {
+                            JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )?.name_vehicle
+                          }
+                        </td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid #ccc" }}>
+                        <td>Khoảng cách</td>
+                        <td>
+                          {
+                            JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )?.distance
+                          }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Tổng giá thuê xe</td>
+                        <td>
+                          {JSON.parse(
+                            localStorage.getItem("total_price_chatbot")
+                          )?.total_price.toLocaleString() + "đ"}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+              ),
+              end: false,
+              trigger: "ket_thuc",
+            },
+            {
+              id: "ket_thuc",
+              message: "Kết thúc trò chuyện",
+              end: true,
+            },
+          ];
+
+          setStepInput(steps);
+        }, 4000);
       } catch (e) {
         console.log(e);
       }
-
-      // setOpenChatbot(true);
     }
   };
 

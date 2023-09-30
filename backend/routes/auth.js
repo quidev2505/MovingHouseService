@@ -25,7 +25,7 @@ router.post("/verify_otp", authControllers.verifyOTP);
 router.post("/changePassword", authControllers.changePassword);
 
 //Login with google
-router.post("/loginWithGoogle", authControllers.loginWithGoogle);
+// router.post("/loginWithGoogle", authControllers.loginWithGoogle);
 
 
 module.exports = router;

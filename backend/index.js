@@ -16,6 +16,15 @@ const vnpayRoute = require('./routes/vnpay');
 const driverRoute = require('./routes/driver');
 var cookieParser = require('cookie-parser')
 
+
+const http = require('http');
+
+
+
+//Socket.io
+// const socketIO = require("socket.io");
+const { Server } = require('socket.io'); // Add this
+
 //Cors
 const cors = require("cors");
 
@@ -41,11 +50,31 @@ const connectDB = async () => {
 
 const app = express()
 
+
+
+// const corsOptions = {
+//     origin: 'http://localhost:3000',
+//     credentials: true,            //access-control-allow-credentials:true
+//     optionSuccessStatus: 200
+// }
+
 app.use(express.json())
-app.use(cors())
+app.use(cors());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use('/uploads', express.static('uploads'))
+
+const server = http.createServer(app);
+
+// Add this
+// Create an io server and allow for CORS from http://localhost:3000 with GET and POST methods
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+    },
+});
+
 
 
 //API - Routes
@@ -101,8 +130,28 @@ const PORT = 5000 || process.env.PORT
 
 //Connect first before running server
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`)
-    })
+    server.listen(PORT, () => 'Server is running on port 5000');
+    // const server = app.listen(PORT, () => {
+    //     console.log(`Server is running on port ${PORT}`)
+    // })
+
+
+    //Socket.io
+
+    // Add this
+    // Listen for when the client connects via socket.io-client
+    io.on('connection', (socket) => {
+        socket.on("message", (data) => {
+            console.log(data)
+            // Xử lý thông báo từ client
+            // Gửi thông báo đến client
+            socket.emit("message_send_from_server", {
+                message: data,
+            });
+        });
+
+        // We can write our socket event listeners in here...
+    });
+
 })
 

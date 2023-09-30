@@ -137,6 +137,8 @@ const authControllers = {
         const email = user.email;
         const fullname = user.fullname;
         const id = user.id;
+
+        console.log(req.body)
         try {
             //Tạo Access Token
             const accessToken = authControllers.generateAccessToken(user);

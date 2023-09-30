@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { loginUser, loginUserWithGoogle } from "../redux/apiRequest";
+import { loginUser } from "../redux/apiRequest";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -9,8 +9,8 @@ import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 //Oauth Google
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import jwt_decode from "jwt-decode";
+// import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+// import jwt_decode from "jwt-decode";
 
 // import { useGoogleLogin } from "@react-oauth/google";
 
@@ -26,8 +26,6 @@ function Login() {
   // const login = useGoogleLogin({
   //   onSuccess: (tokenResponse) => console.log(tokenResponse),
   // });
-
-  
 
   useEffect(() => {
     setIsActive(false);
@@ -58,7 +56,7 @@ function Login() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ChatBotIcon/>
+        <ChatBotIcon />
         <div classname="container">
           <section className="vh-100" style={{ backgroundColor: "#f9f9f9" }}>
             <div className="container py-5 h-100">
@@ -97,8 +95,7 @@ function Login() {
                             {...register("email", {
                               required: true,
                               minLength: 5,
-                              pattern:
-                                /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
+                              pattern: /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
                             })}
                           />
                           {errors?.email?.type === "required" && (
@@ -121,8 +118,7 @@ function Login() {
                             {...register("password", {
                               required: true,
                               minLength: 8,
-                              pattern:
-                                /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/,
+                              pattern: /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/,
                             })}
                           />
 
@@ -188,32 +184,14 @@ function Login() {
                         >
                           Đăng nhập
                         </button>
-                        <p style={{ color: "#b7c5d6", userSelect: "none" }}>
+                        {/* <p style={{ color: "#b7c5d6", userSelect: "none" }}>
                           HOẶC
-                        </p>
+                        </p> */}
                         {/* 
-                        <button
-                          className="btn btn-lg"
-                          type="submit"
-                          style={{
-                            height: "54px",
-                            width: "100%",
-                            backgroundColor: "#4285f4",
-                            color: "white",
-                            marginTop: "-3px",
-                            borderRadius: "5px",
-                            fontSize: "17px",
-                            marginBottom: "17px",
-                            fontWeight: "500",
-                          }}
-                          onClick={() => login()}
-                        >
-                          <i className="fab fa-google me-2" />
-                          Đăng nhập với Google
-                        </button> */}
+                
 
                         {/* Login with google */}
-                        <div className="loginGoogle">
+                        {/* <div className="loginGoogle">
                           <GoogleOAuthProvider clientId="111676382550-rum66le23duruqii92dv781tf40sd0sb.apps.googleusercontent.com">
                             <GoogleLogin
                               onSuccess={(credentialResponse) => {
@@ -238,7 +216,7 @@ function Login() {
                               }}
                             />
                           </GoogleOAuthProvider>
-                        </div>
+                        </div> */}
 
                         <p
                           style={{
