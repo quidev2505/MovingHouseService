@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 import htmlReactParser from "html-react-parser";
 
-import io from "socket.io-client";
+// import io from "socket.io-client";
 
 import {
   EditOutlined,
@@ -29,17 +29,11 @@ import {
 
 import axios from "axios";
 
-const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("http://localhost:5000");
 
 function ItemAdmin() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
-
-  socket.on("message_send_from_server", (data) => {
-    console.log("hihihih");
-    // Xử lý thông báo từ server
-    alert("Data");
-  });
 
   // const socket = io("http://localhost:3000");
 
@@ -289,6 +283,14 @@ function ItemAdmin() {
   };
 
   useEffect(() => {
+    // setTimeout(() => {
+    //   socket.emit("mess", "gửi từ client hah");
+
+    //   socket.on("message", (data) => {
+    //     alert(data)
+    //   });
+    // }, 3000);
+
     get_item();
   }, []);
 

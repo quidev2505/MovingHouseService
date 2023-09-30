@@ -22,7 +22,6 @@ const http = require('http');
 
 
 //Socket.io
-// const socketIO = require("socket.io");
 const { Server } = require('socket.io'); // Add this
 
 //Cors
@@ -51,13 +50,6 @@ const connectDB = async () => {
 const app = express()
 
 
-
-// const corsOptions = {
-//     origin: 'http://localhost:3000',
-//     credentials: true,            //access-control-allow-credentials:true
-//     optionSuccessStatus: 200
-// }
-
 app.use(express.json())
 app.use(cors());
 app.use(express.urlencoded({ extended: true }))
@@ -66,15 +58,30 @@ app.use('/uploads', express.static('uploads'))
 
 const server = http.createServer(app);
 
+// SOCKET.IO
 // Add this
 // Create an io server and allow for CORS from http://localhost:3000 with GET and POST methods
-const io = new Server(server, {
-    cors: {
-        origin: 'http://localhost:3000',
-        methods: ['GET', 'POST'],
-    },
-});
+// const io = new Server(server, {
+//     cors: {
+//         origin: 'http://localhost:3000',
+//         methods: ['GET', 'POST'],
+//     },
+// });
 
+// io.on('connection', (socket) => {
+//     console.log('New client connected');
+
+//     socket.on('disconnect', () => {
+//         console.log('Client disconnected');
+//     });
+
+//     // socket.emit("mess", 'gui tư server');
+
+//     socket.on('mess', (message) => {
+//         console.log('Received message:', message);
+//         socket.emit('message', message);
+//     });
+// });
 
 
 //API - Routes
@@ -140,18 +147,18 @@ connectDB().then(() => {
 
     // Add this
     // Listen for when the client connects via socket.io-client
-    io.on('connection', (socket) => {
-        socket.on("message", (data) => {
-            console.log(data)
-            // Xử lý thông báo từ client
-            // Gửi thông báo đến client
-            socket.emit("message_send_from_server", {
-                message: data,
-            });
-        });
+    // io.on('connection', (socket) => {
+    //     socket.on("message", (data) => {
+    //         console.log(data)
+    //         // Xử lý thông báo từ client
+    //         // Gửi thông báo đến client
+    //         socket.emit("message_send_from_server", {
+    //             message: data,
+    //         });
+    //     });
 
-        // We can write our socket event listeners in here...
-    });
+    // We can write our socket event listeners in here...
+    // });
 
 })
 

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "moving_house_mobile",
-    "slug": "moving_house_mobile",
+    "name": "moving_house_app",
+    "slug": "moving_house_app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
