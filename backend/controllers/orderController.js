@@ -8,7 +8,6 @@ const orderController = {
     //Create Order
     createOrder: async (req, res) => {
         try {
-            const data_input = req.body;
 
             // Tạo chuỗi chứa 8 ký tự số ngẫu nhiên
             let code_order_id = "";

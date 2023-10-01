@@ -43,9 +43,8 @@ const orderSchema = new mongoose.Schema({
         required:true
     },//Tên phương tiện
     driver_name:{
-        type: String,
-        default: null
-    },//Tên của tài xế
+        type: Array, of: String, default: []
+    },//Mảng tên của tài xế
     totalOrder:{
         type:Number,
         required: true
@@ -58,7 +57,7 @@ const orderSchema = new mongoose.Schema({
     status:{
         type:String,
         default: "Đang tìm tài xế"
-    }
+    },
     //6 trạng thái
     // 1.Đang tìm tài xế
     // 2.Đang thực hiện
@@ -66,6 +65,11 @@ const orderSchema = new mongoose.Schema({
     // 4.Thanh toán hóa đơn
     // 5. Hoàn thành
     // 6. Đã hủy
+    //Nếu đã hủy đơn hàng
+    reason_cancel: {
+        type: String,
+        default: null
+    }
 
 }, { timestamps: true })
 

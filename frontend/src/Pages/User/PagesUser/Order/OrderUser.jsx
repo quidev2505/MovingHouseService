@@ -546,10 +546,14 @@ function OrderUser() {
       key: "driver_name",
       render: (driver_name) => (
         <div className="fw-bold">
-          {driver_name === null ? (
+          {driver_name.length === 0 ? (
             <span style={{ color: "#ccc" }}>Chưa xác định</span>
           ) : (
-            <td className="fw-bold">{driver_name}</td>
+            driver_name.map((item, index)=>{
+              return (
+                <td className="fw-bold">{driver_name}</td>
+              )
+            })
           )}
         </div>
       ),

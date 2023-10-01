@@ -339,6 +339,7 @@ function BlogAdmin() {
                 showConfirmButton: false,
                 timer: 1200,
               });
+              Modal.destroyAll();
             })
             .catch((e) => {
               Swal.fire({

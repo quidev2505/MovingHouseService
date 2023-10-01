@@ -46,6 +46,9 @@ function OrderAdmin() {
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
 
+  //Lí do hủy đơn hàng
+  const [cancelReason, setCancelReason] = useState("");
+
   // const [statusOrder, setStatusOrder] = useState();
 
   const showDrawer = () => {
@@ -144,6 +147,7 @@ function OrderAdmin() {
 
   const statusOrder = useRef("Đang tìm tài xế");
   const statusDriver = useRef("Chưa xác định");
+  const reason_cancel_order = useRef("Chưa xác định");
 
   // //Thay đổi trạng thái của tài xế sang đang bận sau khi đã đưa tài xế vào ca làm
   const change_status_driver = async (driver_name, status_driver) => {
@@ -162,11 +166,32 @@ function OrderAdmin() {
 
   //Update One Field Order
   const updateOrder = async (order_id) => {
-    let ob = {
-      driver_name: statusDriver.current,
-      status: "Đang thực hiện",
-    };
+    let ob = {};
 
+    //Kiểm tra xem đã có tài xế thứ nhất chưa
+    if (order_id.driver_name.length > 0) {
+      //Nếu chọn chưa xác định sẽ xóa hết nhé !
+      if (statusDriver.current === "Chưa xác định") {
+        ob = {
+          driver_name: [],
+          status: "Đang tìm tài xế",
+        };
+      } else {
+        let arr_driver = order_id.driver_name.push(statusDriver.current);
+
+        ob = {
+          driver_name: order_id.driver_name,
+          status: "Đang thực hiện",
+        };
+      }
+    } else {
+      ob = {
+        driver_name: statusDriver.current,
+        status: "Đang thực hiện",
+      };
+    }
+
+    console.log(ob);
     await axios
       .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, ob)
       .then((data) => {
@@ -178,13 +203,28 @@ function OrderAdmin() {
           timer: 1500,
         });
 
-        change_status_driver(ob.driver_name, "Đang bận");
+        if (statusDriver.current === "Chưa xác định") {
+          //Trả lại trạng thái rảnh cho tài xế
+          order_id.driver_name.forEach((item, index) => {
+            console.log(item);
+            change_status_driver(item, "Sẵn sàng");
+          });
 
-        setTimeout(() => {
-          setActiveKeyTab("3");
-          show_order_customer("Đang thực hiện");
-        }, 1100);
-        Modal.destroyAll();
+          setTimeout(() => {
+            setActiveKeyTab("2");
+            show_order_customer("Đang tìm tài xế");
+            list_driver();
+          }, 1500);
+          Modal.destroyAll();
+        } else {
+          change_status_driver(statusDriver.current, "Đang bận");
+
+          setTimeout(() => {
+            setActiveKeyTab("3");
+            show_order_customer("Đang thực hiện");
+          }, 1100);
+          Modal.destroyAll();
+        }
       })
       .catch((e) => {
         console.log(e);
@@ -209,33 +249,48 @@ function OrderAdmin() {
 
   //Hủy đơn hàng
   const cancelOrder = async (order_id, driver_name) => {
-    let ob = {
-      driver_name: null,
-      status: "Đã hủy",
-    };
-
-    await axios
-      .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, ob)
-      .then((data) => {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Cập nhật đơn hàng thành công !",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-        change_status_driver(driver_name.driver_name, "Sẵn sàng");
-
-        setTimeout(() => {
-          setActiveKeyTab("1");
-          show_order_customer("Đã hủy");
-        }, 1100);
-        Modal.destroyAll();
-      })
-      .catch((e) => {
-        console.log(e);
+    if (reason_cancel_order.current === "Chưa xác định") {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Vui lòng cập nhất lý do hủy đơn",
+        showConfirmButton: false,
+        timer: 1500,
       });
+    } else {
+      let ob = {
+        driver_name: [],
+        status: "Đã hủy",
+        reason_cancel: reason_cancel_order.current,
+      };
+
+      await axios
+        .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, ob)
+        .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Cập nhật đơn hàng thành công !",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          //Trả lại trạng thái rảnh cho tài xế
+          order_id.driver_name.forEach((item, index) => {
+            console.log(item);
+            change_status_driver(item, "Sẵn sàng");
+          });
+
+          setTimeout(() => {
+            setActiveKeyTab("1");
+            show_order_customer("Đã hủy");
+          }, 1100);
+          Modal.destroyAll();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   };
 
   //Update order
@@ -244,51 +299,109 @@ function OrderAdmin() {
       title: "Cập nhật đơn hàng",
       content: (
         <>
-          <p>
-            Trạng thái đơn hàng hiện tại:{" "}
-            <span className="fw-bold">{order_id.status}</span>
-          </p>
-          <div className="d-flex">
-            <p>Cập nhật trạng thái mới:</p>
-            <button
-              className="btn btn-warning"
-              style={{ color: "white", fontWeight: "bold", marginLeft: "20px" }}
-              onClick={() => cancelOrder(order_id, driver_name)}
-            >
-              Hủy đơn hàng
-            </button>
-          </div>
-          <p>
-            Trạng thái tài xế hiện tại:{" "}
-            <span className="fw-bold">
-              {order_id.driver_name ? order_id.driver_name : "Chưa xác định"}
-            </span>
-          </p>
-          <div className="d-flex">
-            <p>Danh sách tài xế khả dụng:</p>
-            <select
+          <div className="d-flex" style={{ justifyContent: "flex-start" }}>
+            {/* Cột đơn hàng */}
+            <div
               style={{
+                border: "1px solid #eb9570",
+                padding: "10px",
                 borderRadius: "5px",
-                border: "1px solid #ccc",
-                marginLeft: "10px",
+                width: "400px",
               }}
-              onChange={(e) => (statusDriver.current = e.target.value)}
             >
-              {listDriver.map((item, index) => (
-                <option value={item}>{item}</option>
-              ))}
-              <option value="Chưa xác định">Chưa xác định</option>
-            </select>
-          </div>
-          <div
-            style={{
-              marginBottom: "50px",
-              marginTop: "20px",
-              display: "inline-block",
-            }}
-            onClick={() => updateOrder(order_id)}
-          >
-            <button className="btn btn-success">Cập nhật</button>
+              <p>
+                Trạng thái đơn hàng hiện tại:{" "}
+                <span className="fw-bold">{order_id.status}</span>
+              </p>
+              <select
+                style={{
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  width: "100%",
+                  height: "20px",
+                }}
+                onChange={(e) => (reason_cancel_order.current = e.target.value)}
+              >
+                <option value="Chưa xác định">Chưa xác định</option>
+                <option value="1.Người mua thay đổi ý định mua hàng">
+                  1.Người mua thay đổi ý định mua hàng
+                </option>
+                <option value="2.Không thể liên hệ khách hàng">
+                  2.Không thể liên hệ khách hàng
+                </option>
+                <option value="3.Khách hàng đổi thời gian vận chuyển">
+                  3.Khách hàng đổi thời gian vận chuyển
+                </option>
+              </select>
+              <div className="d-flex" style={{ marginTop: "20px" }}>
+                <p>Cập nhật trạng thái mới:</p>
+                <button
+                  className="btn btn-danger"
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginLeft: "20px",
+                  }}
+                  onClick={() => cancelOrder(order_id, driver_name)}
+                >
+                  Hủy đơn hàng
+                </button>
+              </div>
+            </div>
+
+            {/* Cột tài xế */}
+            <div
+              style={{
+                border: "1px solid #eb9570",
+                padding: "10px",
+                borderRadius: "5px",
+                marginLeft: "20px",
+              }}
+            >
+              <p>
+                Trạng thái tài xế hiện tại:{" "}
+                <span className="fw-bold">
+                  {order_id.driver_name.length !== 0 ? (
+                    <>
+                      <span style={{ color: "red" }}>Đã có tài xế</span>
+                      <ol>
+                        {order_id.driver_name.map((item, index) => {
+                          return <li>{item}</li>;
+                        })}
+                      </ol>
+                    </>
+                  ) : (
+                    "Chưa xác định"
+                  )}
+                </span>
+              </p>
+              <div className="d-flex">
+                <p>Danh sách tài xế khả dụng:</p>
+                <select
+                  style={{
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    marginLeft: "10px",
+                  }}
+                  onChange={(e) => (statusDriver.current = e.target.value)}
+                >
+                  {listDriver.map((item, index) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                  <option value="Chưa xác định">Chưa xác định</option>
+                </select>
+              </div>
+              <div
+                style={{
+                  marginBottom: "50px",
+                  marginTop: "20px",
+                  display: "inline-block",
+                }}
+                onClick={() => updateOrder(order_id)}
+              >
+                <button className="btn btn-success">Cập nhật</button>
+              </div>
+            </div>
           </div>
         </>
       ),
@@ -505,10 +618,13 @@ function OrderAdmin() {
       key: "driver_name",
       render: (driver_name) => (
         <div className="fw-bold">
-          {driver_name === null ? (
+          {driver_name && driver_name.length === 0 ? (
             <span style={{ color: "#ccc" }}>Chưa xác định</span>
           ) : (
-            driver_name
+            driver_name &&
+            driver_name.map((item, index) => {
+              return <td className="fw-bold">{item}</td>;
+            })
           )}
         </div>
       ),
