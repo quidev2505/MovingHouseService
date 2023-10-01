@@ -8,11 +8,13 @@ import DriverLogin from './Screens/Driver/DriverLogin';
 import HomeScreenDriver from './Screens/Driver/HomeScreenDriver';
 
 import CustomerLogin from './Screens/Customer/CustomerLogin'
+import HomeScreenCustomer from './Screens/Customer/HomeScreenCustomer';
 const Stack = createNativeStackNavigator();
 
 import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
+
 
 function App() {
 
@@ -23,12 +25,14 @@ function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
 
           {/* Driver */}
-            <Stack.Screen name="DriverLogin" component={DriverLogin} />
-            <Stack.Screen name="HomeScreenDriver" component={HomeScreenDriver} />
+          <Stack.Screen name="DriverLogin" component={DriverLogin} />
+          <Stack.Screen name="HomeScreenDriver" component={HomeScreenDriver} />
           {/* End Driver */}
 
           {/* Customer */}
-            <Stack.Screen name="CustomerLogin" component={CustomerLogin} />
+          <Stack.Screen name="CustomerLogin" component={CustomerLogin} />
+          <Stack.Screen name="HomeScreenCustomer" component={HomeScreenCustomer} />
+
           {/* End Customer */}
 
         </Stack.Navigator>

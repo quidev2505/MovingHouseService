@@ -1,10 +1,13 @@
 import { Text, View, TextInput, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import api_url from "../../api_url";
 
+import BackButton from "../../Components/BackButton";
+
+import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 
 export default function DriverLogin({ navigation }) {
     const [alertState, setAlertState] = useState(false)
@@ -17,11 +20,22 @@ export default function DriverLogin({ navigation }) {
         }
     });
 
+    //Lưu vào local
+    const storeData = async (value) => {
+        try {
+            await AsyncStorage.setItem('already_login_driver', value);
+        } catch (e) {
+            // saving error
+            console.log(e)
+        }
+    };
+
     //Khi xác nhận Form
     const onSubmit = async (data) => {
         if (data) {
             await axios.post(`${api_url}/v1/driverAccount/login`, data).then((data_login) => {
                 setAlertState(true)
+                storeData(data_login.data)
                 setMess("Đăng nhập thành công !")
                 navigation.navigate('HomeScreenDriver')
             }).catch((e) => {
@@ -31,28 +45,45 @@ export default function DriverLogin({ navigation }) {
         }
     }
 
+    //Hàm check xem đã đăng nhập lần nào chưa ?
+    const check_already_login = async () => {
+        try {
+            const value = await AsyncStorage.getItem('already_login_driver');
+            if (value !== null) {
+                navigation.navigate("HomeScreenDriver")
+            }
+        } catch (e) {
+            // error reading value
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        check_already_login();
+    }, [])
+
+
     return (
         <View style={{ flex: 1, backgroundColor: "white" }}>
-            <View style={{ backgroundColor: "red", position: "absolute", zIndex: 999, top: 50, left: 10, borderRadius: 5, padding: 5, backgroundColor: "white", width: 100 }}>
-
-            </View>
+            <BackButton navigation={navigation} nav_input={"Home"} />
 
             <View style={{ padding: 20, alignItems: "center", flex: 1, justifyContent: "center" }}>
 
                 <Image
-                    source={{ uri: 'https://img.freepik.com/free-vector/flat-design-house-moving-illustration-with-charaters_23-2148655568.jpg?size=626&ext=jpg&ga=GA1.1.1312927055.1692028866&semt=ais' }}
+                    source={{ uri: 'https://img.freepik.com/free-vector/house-moving-concept-illustration_23-2148651548.jpg' }}
                     style={{ width: 500, height: 500, marginTop: -200, objectFit: "contain" }}
                     resizeMode="contain"
                 />
 
 
                 <View style={{ backgroundColor: "white", borderRadius: 5, padding: 10, marginBottom: 25, marginTop: -30 }}>
-                    <Text style={{ fontSize: 50, color: "black", textAlign: "center" }}>Đăng nhập</Text>
-                    <Text style={{ fontSize: 30, color: "black", textAlign: "center", color: "orange" }}>( Tài xế ) </Text>
+                    <Text style={{ fontSize: 50, color: "black", textAlign: "center" }}>Đăng Nhập</Text>
+                    <Text style={{ fontSize:25, color: "black", textAlign: "center", color: "#ccc" }}>( Dành cho tài xế ) </Text>
                 </View>
 
 
-                <View style={{ backgroundColor: "black", padding: 15, borderRadius: 5 }}>
+                <View style={{
+                    backgroundColor: "white", padding: 15, borderRadius: 5 }}>
                     <Controller
                         control={control}
                         rules={{
@@ -135,7 +166,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginBottom: 20,
-        width: 350
+        width: 350,
+        borderWidth: 1.3,
+        borderColor:"#ccc"
     },
     error: {
         color: "red",
@@ -155,7 +188,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'orange',
         borderRadius: 5,
         padding: 10,
-        width: 380,
+        width: 350,
         marginTop: 20
     },
     text: {

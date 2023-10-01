@@ -18,12 +18,15 @@ function HomeScreen({ navigation }) {
             <View style={{height:120}}>
 
             </View>
+            <View>
+                <Text style={{fontSize:23, marginBottom:25, color:"#ccc"}}>Chọn loại tài khoản của bạn</Text>
+            </View>
             <View style={{marginBottom:-50}}>
                 {/* Tài xế */}
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DriverLogin')}>
                     <Text style={styles.buttonText}>Tài xế</Text>
                 </TouchableOpacity>
-                <Divider style={{marginTop:20, marginBottom:20}}/>
+                <Divider width={1} style={{marginTop:20, marginBottom:20}}/>
                 {/* Khách hàng */}
                 <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('CustomerLogin')}>
                     <Text style={styles.buttonText}>Khách hàng</Text>
