@@ -123,8 +123,8 @@ function DriverAdmin() {
       onFilter: (value, record) => record.status.indexOf(value) === 0,
       render: (status, id) => (
         <div className="d-flex">
-          <Tag color={status === "Sẵn sàng" ? "green" : "volcano"} key={status}>
-            {status === "Sẵn sàng" ? "Sẵn sàng" : "Đang bận"}
+          <Tag color={status === "Sẵn Sàng" ? "green" : "volcano"} key={status}>
+            {status === "Sẵn Sàng" ? "Sẵn sàng" : "Đang bận"}
           </Tag>
           <div
             onClick={() => changeStatus(id, status)}

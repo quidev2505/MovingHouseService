@@ -14,6 +14,7 @@ const itemRoute = require('./routes/item');
 const orderRoute = require('./routes/order');
 const vnpayRoute = require('./routes/vnpay');
 const driverRoute = require('./routes/driver');
+const driverAccountRoute = require('./routes/driver_account');
 var cookieParser = require('cookie-parser')
 
 
@@ -122,7 +123,8 @@ app.use("/v1/order", orderRoute)
 //Driver
 app.use("/v1/driver", driverRoute)
 
-
+//Driver Account
+app.use("/v1/driverAccount", driverAccountRoute)
 
 //Thanh toán với VN PAY
 app.use("/v1/vnpay", vnpayRoute)
