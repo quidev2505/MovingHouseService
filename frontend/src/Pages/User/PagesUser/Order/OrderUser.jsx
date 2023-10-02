@@ -8,11 +8,16 @@ import {
   FolderViewOutlined,
   EnvironmentOutlined,
   ReloadOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 
-import { Table, Tag, Drawer, Timeline } from "antd";
+import { Table, Tag, Drawer, Timeline, Space, Modal } from "antd";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+import "sweetalert2/src/sweetalert2.scss";
 
 function OrderUser() {
   const [isActive, setIsActive] = useState(true);
@@ -54,6 +59,7 @@ function OrderUser() {
                 driver_name: item.driver_name,
                 vehicle_name: item.vehicle_name,
                 totalOrder: item.totalOrder,
+                reason_cancel: item.reason_cancel,
               };
 
               data_order.push(ob_order);
@@ -435,37 +441,50 @@ function OrderUser() {
         },
       ],
       onFilter: (value, record) => record.status.indexOf(value) === 0,
-      render: (status) => (
-        <div className="d-flex">
-          <Tag
-            color={
-              status === "Đang tìm tài xế"
-                ? "blue"
+      render: (status, reason_cancel) => (
+        <>
+          <div className="d-flex">
+            <Tag
+              color={
+                status === "Đang tìm tài xế"
+                  ? "blue"
+                  : status === "Đã hủy"
+                  ? "volcano"
+                  : status === "Đang thực hiện"
+                  ? "gold"
+                  : status === "Xác nhận hóa đơn"
+                  ? "purple"
+                  : status === "Thanh toán hóa đơn"
+                  ? "magenta"
+                  : "#87d068"
+              }
+              key={status}
+            >
+              {status === "Đang tìm tài xế"
+                ? "Đang tìm tài xế"
                 : status === "Đã hủy"
-                ? "volcano"
+                ? "Đã hủy"
                 : status === "Đang thực hiện"
-                ? "gold"
+                ? "Đang thực hiện"
                 : status === "Xác nhận hóa đơn"
-                ? "purple"
+                ? "Xác nhận hóa đơn"
                 : status === "Thanh toán hóa đơn"
-                ? "magenta"
-                : "#87d068"
-            }
-            key={status}
-          >
-            {status === "Đang tìm tài xế"
-              ? "Đang tìm tài xế"
-              : status === "Đã hủy"
-              ? "Đã hủy"
-              : status === "Đang thực hiện"
-              ? "Đang thực hiện"
-              : status === "Xác nhận hóa đơn"
-              ? "Xác nhận hóa đơn"
-              : status === "Thanh toán hóa đơn"
-              ? "Thanh toán hóa đơn"
-              : "Hoàn thành"}
-          </Tag>
-        </div>
+                ? "Thanh toán hóa đơn"
+                : "Hoàn thành"}
+            </Tag>
+          </div>
+
+          {reason_cancel.reason_cancel !== null ? (
+            <>
+              <p style={{ marginTop: "10px" }}>
+                <span className="fw-bold">Lý do:</span>{" "}
+                {reason_cancel.reason_cancel}
+              </p>
+            </>
+          ) : (
+            ""
+          )}
+        </>
       ),
     },
     {
@@ -546,13 +565,16 @@ function OrderUser() {
       key: "driver_name",
       render: (driver_name) => (
         <div className="fw-bold">
-          {driver_name.length === 0 ? (
+          {driver_name && driver_name.length === 0 ? (
             <span style={{ color: "#ccc" }}>Chưa xác định</span>
           ) : (
-            driver_name.map((item, index)=>{
+            driver_name &&
+            driver_name.map((item, index) => {
               return (
-                <td className="fw-bold">{driver_name}</td>
-              )
+                <tr>
+                  <td className="fw-bold">{index+1}. {item}</td>
+                </tr>
+              );
             })
           )}
         </div>
@@ -601,7 +623,139 @@ function OrderUser() {
         </div>
       ),
     },
+    {
+      title: "Hủy đơn hàng",
+      key: "action",
+      render: (order_id, driver_name) => (
+        <Space size="middle" className="icon_hover">
+          {driver_name.driver_name.length === 0 ? (
+            <>
+              <div
+                onClick={() => modal_cancel_order(order_id)}
+                style={{
+                  backgroundColor: "red",
+                  borderRadius: "50%",
+                  padding: "5px",
+                  display: "flex",
+                  cursor: "pointer",
+                  width: "30px",
+                  height: "30px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <DeleteOutlined
+                  style={{ color: "white", fontWeight: "bold" }}
+                />
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </Space>
+      ),
+    },
   ];
+
+  const reason_cancel_order = useRef("Chưa xác định");
+
+  //Mở modal hủy đơn hàng
+  const modal_cancel_order = (order_id) => {
+    Modal.success({
+      title: "Cập nhật đơn hàng",
+      content: (
+        <>
+          <div className="d-flex" style={{ justifyContent: "flex-start" }}>
+            {/* Cột đơn hàng */}
+            <div
+              style={{
+                border: "1px solid #eb9570",
+                padding: "10px",
+                borderRadius: "5px",
+                width: "400px",
+              }}
+            >
+              <p>
+                Trạng thái đơn hàng hiện tại:{" "}
+                <span className="fw-bold">{order_id.status}</span>
+              </p>
+              <select
+                style={{
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  width: "100%",
+                  height: "37px",
+                }}
+                onChange={(e) => (reason_cancel_order.current = e.target.value)}
+              >
+                <option value="Chưa xác định">Chưa xác định</option>
+                <option value="1.Tôi muốn đổi thời gian giao hàng">
+                  1.Tôi muốn đổi thời gian giao hàng
+                </option>
+                <option value="2.Tôi muốn đổi địa chỉ khác">
+                  2.Tôi muốn đổi địa chỉ khác
+                </option>
+                <option value="3.Tôi không muốn sử dụng dịch vụ này">
+                  3.Tôi không muốn sử dụng dịch vụ này
+                </option>
+              </select>
+              <div className="d-flex" style={{ marginTop: "20px" }}>
+                <p>Cập nhật trạng thái mới:</p>
+                <button
+                  className="btn btn-danger"
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    marginLeft: "20px",
+                  }}
+                  onClick={() => cancelOrder(order_id)}
+                >
+                  Hủy đơn hàng
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      ),
+      onOk() {},
+    });
+  };
+
+  //Hủy đơn hàng
+  const cancelOrder = async (order_id) => {
+    if (reason_cancel_order.current === "Chưa xác định") {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Vui lòng cập nhất lý do hủy đơn",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      let ob = {
+        status: "Đã hủy",
+        reason_cancel: reason_cancel_order.current,
+      };
+
+      await axios
+        .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, ob)
+        .then((data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Hủy đơn hàng thành công !",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          show_order_customer();
+          Modal.destroyAll();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  };
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
@@ -654,7 +808,7 @@ function OrderUser() {
             <div
               onClick={() => show_order_customer()}
               style={{
-                cursor:"pointer",
+                cursor: "pointer",
                 width: "50px",
                 height: "50px",
                 backgroundColor: "#ed883b",

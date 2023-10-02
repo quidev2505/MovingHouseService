@@ -96,47 +96,97 @@ function CalendarAdmin() {
         const data_item = [];
         data_solve &&
           data_solve.forEach(async (item, index) => {
+            let avatar_driver = "";
+            let arr_avatar_driver = [];
             if (item.status === "Đang thực hiện") {
-              let avatar_driver = await axios.get(
-                `/v1/driver/getdriver_with_fullname/${item.driver_name}`
-              );
+              if (item.driver_name.length > 1) {
+                for (let i = 0; i < item.driver_name.length; i++) {
+                  let data_get = await axios.get(
+                    `/v1/driver/getdriver_with_fullname/${item.driver_name[i]}`
+                  );
 
-              let ob_service = {};
-              if (avatar_driver.data && date === item.date_start) {
-                ob_service = {
-                  id: item._id,
-                  STT: index + 1,
-                  order_id: item.order_id,
-                  date_start: item.date_start,
-                  time_start: item.time_start,
-                  driver_name: item.driver_name,
-                  fromLocation: item.fromLocation,
-                  toLocation: item.toLocation,
-                  service_name: item.service_name,
-                  vehicle_name: item.vehicle_name,
-                  avatar: avatar_driver.data,
-                };
+                  arr_avatar_driver.push(data_get.data);
+                }
+              } else if (item.driver_name.length === 1) {
+                avatar_driver = await axios.get(
+                  `/v1/driver/getdriver_with_fullname/${item.driver_name}`
+                );
+
+                avatar_driver = avatar_driver.data;
               }
-
-              if (date === "") {
-                ob_service = {
-                  id: item._id,
-                  STT: index + 1,
-                  order_id: item.order_id,
-                  date_start: item.date_start,
-                  time_start: item.time_start,
-                  driver_name: item.driver_name,
-                  fromLocation: item.fromLocation,
-                  toLocation: item.toLocation,
-                  service_name: item.service_name,
-                  vehicle_name: item.vehicle_name,
-                  avatar: avatar_driver.data,
-                };
-              }
-
-              data_item.push(ob_service);
-              dataDOM.current = data_item;
             }
+
+            let ob_service = {};
+            console.log(item.date_start)
+            if (date === item.date_start) {
+              if (item.driver_name.length > 1) {
+                ob_service = {
+                  id: item._id,
+                  STT: index + 1,
+                  order_id: item.order_id,
+                  date_start: item.date_start,
+                  time_start: item.time_start,
+                  driver_name: item.driver_name,
+                  fromLocation: item.fromLocation,
+                  toLocation: item.toLocation,
+                  service_name: item.service_name,
+                  vehicle_name: item.vehicle_name,
+                  avatar: arr_avatar_driver,
+                };
+              } else if (item.driver_name.length === 1) {
+                ob_service = {
+                  id: item._id,
+                  STT: index + 1,
+                  order_id: item.order_id,
+                  date_start: item.date_start,
+                  time_start: item.time_start,
+                  driver_name: item.driver_name,
+                  fromLocation: item.fromLocation,
+                  toLocation: item.toLocation,
+                  service_name: item.service_name,
+                  vehicle_name: item.vehicle_name,
+                  avatar: avatar_driver,
+                };
+              }
+
+              console.log(ob_service)
+            }
+
+            if (date === "") {
+              if (item.driver_name.length > 1) {
+                ob_service = {
+                  id: item._id,
+                  STT: index + 1,
+                  order_id: item.order_id,
+                  date_start: item.date_start,
+                  time_start: item.time_start,
+                  driver_name: item.driver_name,
+                  fromLocation: item.fromLocation,
+                  toLocation: item.toLocation,
+                  service_name: item.service_name,
+                  vehicle_name: item.vehicle_name,
+                  avatar: arr_avatar_driver,
+                };
+              } else if (item.driver_name.length === 1) {
+                ob_service = {
+                  id: item._id,
+                  STT: index + 1,
+                  order_id: item.order_id,
+                  date_start: item.date_start,
+                  time_start: item.time_start,
+                  driver_name: item.driver_name,
+                  fromLocation: item.fromLocation,
+                  toLocation: item.toLocation,
+                  service_name: item.service_name,
+                  vehicle_name: item.vehicle_name,
+                  avatar: avatar_driver,
+                };
+              }
+            }
+
+            data_item.push(ob_service);
+
+            dataDOM.current = data_item;
           });
 
         setTimeout(() => {
@@ -210,7 +260,7 @@ function CalendarAdmin() {
                   />
                 </div>
 
-                <div className="d-flex" style={{marginLeft:"50px"}}>
+                <div className="d-flex" style={{ marginLeft: "50px" }}>
                   <input
                     type="date"
                     name="dob"
@@ -303,15 +353,49 @@ function CalendarAdmin() {
                                     >
                                       Tài xế:{" "}
                                     </p>
-                                    <span style={{ fontWeight: "bold" }}>
-                                      {item.driver_name}
-                                    </span>{" "}
-                                    &nbsp;
-                                    <Avatar
-                                      src={
-                                        <img src={item.avatar} alt="avatar" />
-                                      }
-                                    />
+
+                                    {/* Nếu chỉ có 1 tài xế */}
+                                    {item.driver_name.length === 1 ? (
+                                      <div>
+                                        <span style={{ fontWeight: "bold" }}>
+                                          1. {item.driver_name[0]}
+                                        </span>{" "}
+                                        &nbsp;
+                                        <Avatar
+                                          src={
+                                            <img
+                                              src={item.avatar}
+                                              alt="avatar"
+                                            />
+                                          }
+                                        />
+                                      </div>
+                                    ) : (
+                                      ""
+                                    )}
+
+                                    {/* Nếu có từ 2 tài xế trở lên */}
+                                    {item.driver_name.length > 1 &&
+                                      item.driver_name.map((item1, index) => {
+                                        return (
+                                          <div>
+                                            <span
+                                              style={{ fontWeight: "bold" }}
+                                            >
+                                              {index+1}. {item1}
+                                            </span>{" "}
+                                            &nbsp;
+                                            <Avatar
+                                              src={
+                                                <img
+                                                  src={item.avatar[index]}
+                                                  alt="avatar"
+                                                />
+                                              }
+                                            />
+                                          </div>
+                                        );
+                                      })}
                                   </div>
                                 </div>
                               </>

@@ -175,6 +175,7 @@ function OrderAdmin() {
         ob = {
           driver_name: [],
           status: "Đang tìm tài xế",
+          reason_cancel: null,
         };
       } else {
         let arr_driver = order_id.driver_name.push(statusDriver.current);
@@ -182,12 +183,14 @@ function OrderAdmin() {
         ob = {
           driver_name: order_id.driver_name,
           status: "Đang thực hiện",
+          reason_cancel: null,
         };
       }
     } else {
       ob = {
         driver_name: statusDriver.current,
         status: "Đang thực hiện",
+        reason_cancel: null,
       };
     }
 
@@ -318,7 +321,7 @@ function OrderAdmin() {
                   borderRadius: "5px",
                   border: "1px solid #ccc",
                   width: "100%",
-                  height: "20px",
+                  height: "37px",
                 }}
                 onChange={(e) => (reason_cancel_order.current = e.target.value)}
               >
@@ -438,6 +441,7 @@ function OrderAdmin() {
                   STT: index + 1,
                   order_id: item.order_id,
                   service_name: item.service_name,
+                  reason_cancel: item.reason_cancel,
                   status: item.status,
                   time_get_item: `${item.time_start} - ${item.date_start}`,
                   router: `${item.fromLocation} - ${item.toLocation}`,
@@ -502,37 +506,49 @@ function OrderAdmin() {
       dataIndex: "status",
       key: "status",
 
-      render: (status) => (
-        <div className="d-flex">
-          <Tag
-            color={
-              status === "Đang tìm tài xế"
-                ? "blue"
+      render: (status, reason_cancel) => (
+        <>
+          <div className="d-flex">
+            <Tag
+              color={
+                status === "Đang tìm tài xế"
+                  ? "blue"
+                  : status === "Đã hủy"
+                  ? "volcano"
+                  : status === "Đang thực hiện"
+                  ? "gold"
+                  : status === "Xác nhận hóa đơn"
+                  ? "purple"
+                  : status === "Thanh toán hóa đơn"
+                  ? "magenta"
+                  : "#87d068"
+              }
+              key={status}
+            >
+              {status === "Đang tìm tài xế"
+                ? "Đang tìm tài xế"
                 : status === "Đã hủy"
-                ? "volcano"
+                ? "Đã hủy"
                 : status === "Đang thực hiện"
-                ? "gold"
+                ? "Đang thực hiện"
                 : status === "Xác nhận hóa đơn"
-                ? "purple"
+                ? "Xác nhận hóa đơn"
                 : status === "Thanh toán hóa đơn"
-                ? "magenta"
-                : "#87d068"
-            }
-            key={status}
-          >
-            {status === "Đang tìm tài xế"
-              ? "Đang tìm tài xế"
-              : status === "Đã hủy"
-              ? "Đã hủy"
-              : status === "Đang thực hiện"
-              ? "Đang thực hiện"
-              : status === "Xác nhận hóa đơn"
-              ? "Xác nhận hóa đơn"
-              : status === "Thanh toán hóa đơn"
-              ? "Thanh toán hóa đơn"
-              : "Hoàn thành"}
-          </Tag>
-        </div>
+                ? "Thanh toán hóa đơn"
+                : "Hoàn thành"}
+            </Tag>
+          </div>
+          {reason_cancel.reason_cancel !== null ? (
+            <>
+              <p style={{ marginTop: "10px" }}>
+                <span className="fw-bold">Lý do:</span>{" "}
+                {reason_cancel.reason_cancel}
+              </p>
+            </>
+          ) : (
+            ""
+          )}
+        </>
       ),
     },
     {
@@ -623,7 +639,13 @@ function OrderAdmin() {
           ) : (
             driver_name &&
             driver_name.map((item, index) => {
-              return <td className="fw-bold">{item}</td>;
+              return (
+                <tr>
+                  <td className="fw-bold">
+                    {index + 1}. {item}
+                  </td>
+                </tr>
+              );
             })
           )}
         </div>
