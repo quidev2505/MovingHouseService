@@ -198,7 +198,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
       });
 
       map &&
-        map.on("load", function () {
+        map.on("load", function() {
           var layers = map.getStyle().layers;
           // Find the index of the first symbol layer in the map style
           var firstSymbolId;
@@ -224,7 +224,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
               vehicle: "car",
             })
             .send()
-            .then(function (response) {
+            .then(function(response) {
               var directions = response.body;
               var route = directions.routes[0];
 
@@ -547,8 +547,8 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
                 1
               </div>
               <DatalistInput
-                type="text"
                 placeholder="Nhập vào điểm lấy hàng"
+                type="text"
                 className="data_list"
                 style={{
                   width: "100%",
@@ -561,7 +561,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
                   backgroundColor: "#fbfafc",
                   width: "100% !important",
                   borderRadius: "10px !important",
-                  padding: "3px !important",
+                  // padding: "3px !important",
                   border: "1px solid #ccc",
                 }}
                 value={locationFrom}

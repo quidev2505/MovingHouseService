@@ -137,8 +137,8 @@ function Step1({ check_fill, setCheckFill }) {
           document.querySelector("#date_choose") &&
           document.querySelector("#time_choose")
         ) {
-          document.querySelector("#date_choose").value = data.step1.moving_date;
-          document.querySelector("#time_choose").value = data.step1.moving_time;
+          document.querySelector("#date_choose").value = data.step1?.moving_date;
+          document.querySelector("#time_choose").value = data.step1?.moving_time;
         }
       }, 3000);
     }

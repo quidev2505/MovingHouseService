@@ -149,7 +149,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     get_item();
     setIsActive(false);
     setOpen(true);
-    get_id_customer(user.fullname)
+    get_id_customer(user.fullname);
   }, []);
 
   const [id_customer, setIdCustomer] = useState();
@@ -354,6 +354,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   //Khi nhấn vào các vật dụng chi tiết
   const onChangeCheckBox = (checkedValues) => {
     let StringChange = checkedValues + "";
+    let quantity_item = document.getElementById(`${StringChange}`).innerText;
 
     // Kiểm tra xem phần tử đã tồn tại trong mảng hay chưa
     let index = dataChooseItem.indexOf(StringChange);
@@ -364,9 +365,10 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       dataChooseItem.splice(index, 1);
     } else {
       // Thêm phần tử vào mảng
-      dataChooseItem.push(StringChange);
+      dataChooseItem.push(StringChange + ` (x${quantity_item})`);
     }
 
+    console.log(dataChooseItem);
     // Cập nhật giá trị của mảng
     setDataChooseItem(dataChooseItem);
   };
@@ -481,6 +483,27 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       });
   };
 
+  //Nhấn nút giảm
+  const decrease_quantity = (item_name_input) => {
+    let number = document.getElementById(`${item_name_input}`).innerText;
+
+    if (number == 1) {
+      number = 1;
+    } else {
+      number = number - 1;
+    }
+
+    document.getElementById(`${item_name_input}`).innerText = number;
+  };
+
+  //Nhấn nút tăng
+  const increase_quantity = (item_name_input) => {
+    let number = document.getElementById(`${item_name_input}`).innerText;
+    number = Number(number) + 1;
+
+    document.getElementById(`${item_name_input}`).innerText = number;
+  };
+
   //Lấy vật dụng từ CSDL
   const get_item = async () => {
     try {
@@ -547,6 +570,42 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                                     {item1.name}
                                   </p>
                                   <p className="fw-bold">{item1.size}</p>
+
+                                  <div>
+                                    <button
+                                      style={{
+                                        width: "30px",
+                                        height: "30px",
+                                        borderRadius: "5px",
+                                        outline: "none",
+                                        border: "none",
+                                        margin: "7px",
+                                        fontSize: "19px",
+                                      }}
+                                      onClick={() =>
+                                        decrease_quantity(item1.name)
+                                      }
+                                    >
+                                      -
+                                    </button>
+                                    <span id={item1.name}>1</span>
+                                    <button
+                                      style={{
+                                        width: "30px",
+                                        height: "30px",
+                                        borderRadius: "5px",
+                                        outline: "none",
+                                        border: "none",
+                                        margin: "7px",
+                                        fontSize: "19px",
+                                      }}
+                                      onClick={() =>
+                                        increase_quantity(item1.name)
+                                      }
+                                    >
+                                      +
+                                    </button>
+                                  </div>
                                 </div>
                               </Checkbox>
                             </div>

@@ -23,7 +23,7 @@ export default function DriverLogin({ navigation }) {
     //Lưu vào local
     const storeData = async (value) => {
         try {
-            await AsyncStorage.setItem('already_login_driver', value);
+            await AsyncStorage.setItem('already_login_driver', JSON.stringify(value));
         } catch (e) {
             // saving error
             console.log(e)

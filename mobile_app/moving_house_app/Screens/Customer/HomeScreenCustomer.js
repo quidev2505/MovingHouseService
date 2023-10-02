@@ -23,7 +23,7 @@ function HomeScreenCustomer() {
                     } else if (route.name === 'THÔNG TIN CÁ NHÂN') {
                         return (
                             <Ionicons
-                                name="settings-outline"
+                                name="person-circle-outline"
                                 size={size}
                                 color={color}
                             />

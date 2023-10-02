@@ -454,7 +454,7 @@ const ChatBotIcon = () => {
 
           setStepInput(stepsNew);
           setOpenChatbot(true);
-        }, 1500);
+        }, 2000);
 
         setTimeout(() => {
           const steps = [
@@ -672,8 +672,9 @@ const ChatBotIcon = () => {
             },
           ];
 
+          localStorage.removeItem("total_price_chatbot");
           setStepInput(steps);
-        }, 4000);
+        },4000);
       } catch (e) {
         console.log(e);
       }

@@ -29,8 +29,12 @@ router.get('/getdriver_with_fullname/:fullname', driverController.getdriverWithF
 router.get('/getalldriver_account', driverController.getall_driverAccount)
 
 
-//View Driver with ID
+//View Driver Detail with ID
 router.get('/view_detail_driver/:id', driverController.getDriverWithID)
+
+
+//View Driver Detail with username
+router.get('/view_detail_driver_with_username/:username', driverController.getDriverWithUsername)
 
 
 // //Update Driver

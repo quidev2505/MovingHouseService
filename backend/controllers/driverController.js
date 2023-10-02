@@ -97,6 +97,22 @@ const driverController = {
             console.log(e)
         }
     },
+    //Get Info Driver Detail with Username
+    getDriverWithUsername: async (req, res) => {
+        try {
+            const username_driver = req.params.username;
+
+            const data_driver = await Driver.findOne({ username: username_driver });
+
+            if (data_driver) {
+                res.status(200).json(data_driver)
+            } else {
+                res.status(500).json('Error');
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    },
     //Update Customer
     updateCustomer: async (req, res) => {
         try {
@@ -275,7 +291,7 @@ const driverController = {
             } else {
                 req.body.avatar = req.body.imgURL || req.body.avatar
             }
-    
+
             const check_update = await Driver.findByIdAndUpdate(id, req.body);
             if (check_update) {
                 res.status(201).json('Update success')

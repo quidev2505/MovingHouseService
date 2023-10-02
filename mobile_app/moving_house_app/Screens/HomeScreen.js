@@ -24,12 +24,12 @@ function HomeScreen({ navigation }) {
             <View style={{marginBottom:-50}}>
                 {/* Tài xế */}
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DriverLogin')}>
-                    <Text style={styles.buttonText}>Tài xế</Text>
+                    <Text style={styles.buttonText}>TÀI XẾ</Text>
                 </TouchableOpacity>
                 <Divider width={1} style={{marginTop:20, marginBottom:20}}/>
                 {/* Khách hàng */}
                 <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('CustomerLogin')}>
-                    <Text style={styles.buttonText}>Khách hàng</Text>
+                    <Text style={styles.buttonText}>KHÁCH HÀNG</Text>
                 </TouchableOpacity>
 
             </View>
