@@ -97,7 +97,7 @@ function CancelOrder({ navigation }) {
                 dataOrder && dataOrder.map((item, index) => {
                     return (
                         <>
-                            <TouchableOpacity onPress={() => navigation_to_detailOrder(item.order_detail_id)} key={index}> 
+                            <TouchableOpacity key={index} onPress={() => navigation_to_detailOrder(item.order_detail_id)} > 
                                 <Card key={index}>
                                     <View>
                                         <Card.Title style={{ textAlign: "left" }}>
@@ -162,7 +162,7 @@ function CancelOrder({ navigation }) {
                                             </Text>
                                             <Text>
                                                 {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định)</Text> : item.driver_name.map((item, index) => {
-                                                    return <Text key={index}> {index + 1}. {item} |</Text>
+                                                    return <Text key={item}> {index + 1}. {item} |</Text>
                                                 })}
 
                                             </Text>

@@ -98,7 +98,7 @@ function LoadingOrder({ navigation }) {
                         <>
                             <TouchableOpacity onPress={() => navigation_to_detailOrder(item.order_detail_id)} key={index}>
                                 <Card key={index}>
-                                    <View>
+                                    <View key={index}>
                                         <Card.Title style={{ textAlign: "left" }}>
                                             <Text style={{ marginRight: 20 }}>
                                                 {item.date_start}, {item.time_start} -
@@ -161,7 +161,7 @@ function LoadingOrder({ navigation }) {
                                             </Text>
                                             <Text>
                                                 {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định)</Text> : item.driver_name.map((item, index) => {
-                                                    return <Text key={index}> {index + 1}. {item} |</Text>
+                                                    return <Text key={item}> {index + 1}. {item} |</Text>
                                                 })}
                                             </Text>
                                         </View>
@@ -189,16 +189,12 @@ function LoadingOrder({ navigation }) {
                                             </Text>
                                         </View>
                                     </View>
-
-
                                 </Card>
                             </TouchableOpacity>
 
                         </>
                     )
                 })}
-
-
         </ScrollView>
     )
 }
