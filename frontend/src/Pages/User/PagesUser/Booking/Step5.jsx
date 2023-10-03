@@ -25,6 +25,11 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   //Lấy dữ liệu từ localStorage ra hiển thị
   const get_data_from_local = () => {
     let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+    const totalOrder = get_total_order(data_from_local);
+
+    data_from_local.totalOrder = totalOrder;
+    localStorage.setItem("order_moving", JSON.stringify(data_from_local));
+
     const object_data = {
       service_name: data_from_local.step1.select_service,
       moving_date: data_from_local.step1.moving_date,
@@ -45,7 +50,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       service_fee: data_from_local.step4.service_fee,
       noteDriver: data_from_local.step4.noteDriver,
       dataChooseItem: data_from_local.step4.dataChooseItem,
-      totalOrder: data_from_local.totalOrder,
+      totalOrder: totalOrder,
     };
 
     if (object_data) {
@@ -53,6 +58,28 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     }
 
     setTotalOrder(object_data.totalOrder);
+  };
+
+  const get_total_order = (dataInput) => {
+    let total = 0;
+    let price_moving_fee = 0;
+    dataInput.step4.moving_fee.forEach((item, index) => {
+      price_moving_fee += item.price;
+    });
+
+    let price_service_fee = 0;
+    dataInput.step4.service_fee.forEach((item, index) => {
+      price_service_fee += item.price;
+    });
+
+    total = Number(
+      dataInput.step3.priceStep3 +
+        dataInput.step4.man_power_count.total_price_man +
+        price_moving_fee +
+        price_service_fee
+    );
+
+    return total;
   };
 
   const check_payment_success = () => {
@@ -558,8 +585,9 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
           >
             <p className="fw-bold">- Lưu ý:</p>
             <p style={{ fontStyle: "italic" }}>
-              + <span className="fw-bold">Tổng đơn hàng thanh toán</span> có thể sẽ thay đổi do
-              trong quá trình vận chuyển sẽ có các khoảng chi phí phát sinh.
+              + <span className="fw-bold">Tổng đơn hàng thanh toán</span> có thể
+              sẽ thay đổi do trong quá trình vận chuyển sẽ có các khoảng chi phí
+              phát sinh.
             </p>
             <p style={{ fontStyle: "italic" }}>
               + Các chi phí phát sinh có thể bao gồm: hỏng hóc, cháy nổ, chi phí

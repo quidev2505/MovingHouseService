@@ -190,14 +190,44 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         service_fee: thirdPrice.current,
         noteDriver: noteDriver,
         dataChooseItem: dataChooseItem,
-        price_step4_init: temp_price_order.current,
+        price_step4_init: temp_price_order?.current,
         customer_id: id_customer,
         payment_method: "Thanh toán cho tài xế",
       };
 
-      object_order_local.step4 = step4;
+      get_data_item(
+        step4.dataChooseItem,
+        object_order_local.step3.vehicle_choose.cago_size
+      );
 
-      localStorage.setItem("order_moving", JSON.stringify(object_order_local));
+      setTimeout(() => {
+        const soluongxe = JSON.parse(localStorage.getItem("vehicle_count"));
+        const soluongxe_trave = soluongxe;
+        console.log(soluongxe_trave);
+
+        const price_step3 = object_order_local.step3.priceStep3;
+
+        object_order_local.step3.priceStep3 = Number(
+          soluongxe_trave * object_order_local.step3.priceStep3
+        );
+
+        object_order_local.step3.vehicle_choose.vehicle_name =
+          object_order_local.step3.vehicle_choose.vehicle_name +
+          " (x" +
+          soluongxe_trave +
+          ")";
+
+        //Tính giá cho xe
+        object_order_local.totalOrder =
+          price_step3 + object_order_local.totalOrder;
+
+        object_order_local.step4 = step4;
+
+        localStorage.setItem(
+          "order_moving",
+          JSON.stringify(object_order_local)
+        );
+      }, 1500);
     } else {
       setCheckFill(false);
     }
@@ -209,6 +239,100 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     dataChooseItem,
     cickUpdate,
   ]);
+
+  const get_data_item = async (dataChooseItem, kichthuocxe) => {
+    const arr_soluong = [];
+    const arr_tenVatDung = [];
+
+    //Lấy ra mảng số lượng
+    dataChooseItem.forEach((item, index) => {
+      let soluong_string = item.split("")[item.length - 2];
+      arr_soluong.push(soluong_string);
+    });
+
+    //Lấy ra tên vật dụng
+    dataChooseItem.forEach((item, index) => {
+      let teb_string = item.split("(")[0];
+      arr_tenVatDung.push(teb_string);
+    });
+
+    let arr_kichthuoc = [];
+    arr_tenVatDung.forEach(async (item, index) => {
+      await axios.get(`/v1/item/get_size_with_name/${item}`).then((data) => {
+        arr_kichthuoc.push(data.data);
+      });
+    });
+
+    setTimeout(() => {
+      let multiple_size = arr_kichthuoc.map((item, index) => {
+        return tachSo(item.toString());
+      });
+
+      console.log(multiple_size);
+      console.log(arr_soluong);
+      const kichthuocxe_m3 = tachSoXe(kichthuocxe);
+
+      const result = tinhSoXe(multiple_size, arr_soluong, kichthuocxe_m3);
+
+      localStorage.setItem("vehicle_count", result);
+    }, 1000);
+  };
+
+  //Hàm tính số lượng
+  function tinhSoXe(mangkichthuoc, mangsoluong, kichthuocxe_m3) {
+    // Tính tổng thể tích của từng loại đồ vật
+    let tong_the_tich = 0;
+
+    mangkichthuoc.forEach((item, index) => {
+      tong_the_tich += item * mangsoluong[index];
+    });
+
+    let thetichm3 = tong_the_tich / 1000000;
+
+    console.log(thetichm3);
+
+    // Tính thể tích của xe van
+    let theTichXeVan = kichthuocxe_m3;
+
+    console.log(theTichXeVan);
+
+    // Tính số xe cần thiết
+    let soXeCanThiet = Math.ceil(thetichm3 / theTichXeVan);
+
+    return soXeCanThiet;
+  }
+
+  //Hàm tách số
+  function tachSo(chuoi) {
+    // Tách chuỗi theo ký tự x
+    let mangSo = chuoi.split("x");
+
+    // Tạo biến lưu trữ kết quả
+    let ketQua = 1;
+
+    // Nhân các số lại với nhau
+    for (let so of mangSo) {
+      ketQua *= Number(so.split("cm")[0]);
+    }
+
+    return ketQua;
+  }
+
+  //Hàm tách số kích thước xe
+  function tachSoXe(chuoi) {
+    // Tách chuỗi theo ký tự x
+    let mangSo = chuoi.split("x");
+
+    // Tạo biến lưu trữ kết quả
+    let ketQua = 1;
+
+    // Nhân các số lại với nhau
+    for (let so of mangSo) {
+      ketQua *= Number(so.split("m")[0]);
+    }
+
+    return ketQua;
+  }
 
   //Chi tiết hàng hóa đã chọn
   const onChange = (checkedValues) => {
@@ -357,12 +481,13 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     let quantity_item = document.getElementById(`${StringChange}`).innerText;
 
     // Kiểm tra xem phần tử đã tồn tại trong mảng hay chưa
-    let index = dataChooseItem.indexOf(StringChange);
+    let index = dataChooseItem.indexOf(StringChange + ` (x${quantity_item})`);
 
     // Nếu phần tử đã tồn tại trong mảng
     if (index > -1) {
       // Xóa phần tử trong mảng
       dataChooseItem.splice(index, 1);
+      document.getElementById(`${StringChange}`).innerText = 1;
     } else {
       // Thêm phần tử vào mảng
       dataChooseItem.push(StringChange + ` (x${quantity_item})`);

@@ -138,7 +138,20 @@ const itemController = {
             res.status(501).json(e)
         }
     },
-
+    //Get Size with name
+    getSizeWithName: async (req, res) => {
+        try {
+            const name_item = req.params.name;
+            const data_get = await Item.findOne({ name: name_item });
+            if (data_get) {
+                res.status(201).json(data_get.size)
+            } else {
+                res.status(501).json('fail')
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    },
     //Delete Item
     deleteItem: async (req, res) => {
         try {

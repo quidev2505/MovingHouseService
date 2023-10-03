@@ -234,10 +234,15 @@ function BookingUser() {
                   confirmButtonText: "Xác nhận",
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    nav("/user/booking");
-                    setCurrent(0);
                     localStorage.removeItem("check_nav_booking");
                     localStorage.removeItem("order_moving");
+                    localStorage.removeItem("vehicle_count");
+                    setTimeout(() => {
+                      setTotalOrder(0);
+                      nav("/user/booking");
+                      setCurrent(0);
+                      setCheckFill(false);
+                    }, 1000);
                   }
                 });
               } else {
