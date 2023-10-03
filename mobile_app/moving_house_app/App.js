@@ -9,6 +9,7 @@ import HomeScreenDriver from './Screens/Driver/HomeScreenDriver';
 
 import CustomerLogin from './Screens/Customer/CustomerLogin'
 import HomeScreenCustomer from './Screens/Customer/HomeScreenCustomer';
+import OrderDetailCustomer from './Screens/Customer/OrderDetail/OrderDetailCustomer';
 const Stack = createNativeStackNavigator();
 
 import {
@@ -27,11 +28,15 @@ function App() {
           {/* Driver */}
           <Stack.Screen name="DriverLogin" component={DriverLogin} />
           <Stack.Screen name="HomeScreenDriver" component={HomeScreenDriver} />
+        
           {/* End Driver */}
 
           {/* Customer */}
           <Stack.Screen name="CustomerLogin" component={CustomerLogin} />
           <Stack.Screen name="HomeScreenCustomer" component={HomeScreenCustomer} />
+
+          {/* Chi tiết đơn hàng khách hàng */}
+          <Stack.Screen name="OrderDetailCustomer" component={OrderDetailCustomer} /> 
 
           {/* End Customer */}
 

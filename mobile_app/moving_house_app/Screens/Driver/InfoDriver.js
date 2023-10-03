@@ -233,7 +233,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: 30
   },
   button1: {
     backgroundColor: 'red',

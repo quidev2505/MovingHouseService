@@ -63,7 +63,7 @@ const orderSchema = new mongoose.Schema({
     // 2.Đang thực hiện
     // 3. Xác nhận hóa đơn
     // 4.Thanh toán hóa đơn
-    // 5. Hoàn thành
+    // 5. Đã Hoàn thành
     // 6. Đã hủy
     //Nếu đã hủy đơn hàng
     reason_cancel: {
