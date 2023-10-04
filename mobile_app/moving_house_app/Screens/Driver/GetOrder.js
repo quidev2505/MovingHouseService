@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, Image, TouchableOpacity, RefreshControl } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 import axios from 'axios';
 import api_url from "../../api_url"
@@ -41,12 +41,11 @@ function GetOrder({ navigation }) {
                             const data_order = []
                             dataOrder &&
                                 dataOrder.forEach((item, index) => {
-                                    if (item.status === "Đang tìm tài xế") {
+                                    if (item.status !== "Đã hủy" && status_driver === "Sẵn sàng") {
                                         check_location_order(item.fromLocation)
                                         const quantity_driver = item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]
-                                        
+
                                         const ob_order = {
-                                            id_order: item._id,
                                             STT: index + 1,
                                             order_id: item.order_id,
                                             service_name: item.service_name,
@@ -63,7 +62,8 @@ function GetOrder({ navigation }) {
                                             status: item.status,
                                             locationOrder: location_order.current,
                                             fullname_driver: fullname_driver,
-                                            quantity_driver: quantity_driver
+                                            quantity_driver: quantity_driver,
+                                            customer_id: item.customer_id
                                         };
 
                                         data_order.push(ob_order);
@@ -135,13 +135,28 @@ function GetOrder({ navigation }) {
     }, [])
 
 
-    const navigation_to_detailOrder = (order_detail_id, driver_name, id_order, fullname_driver, quantity_driver) => {
-        navigation.navigate('OrderDetailDriver', { data_order: order_detail_id, driver_name: driver_name, id_order: id_order, fullname_driver: fullname_driver, quantity_driver: quantity_driver })
+    //Chuyển trang
+    const navigation_to_detailOrder = (order_detail_id, driver_name, order_id, fullname_driver, quantity_driver, customer_id) => {
+        navigation.navigate('OrderDetailDriver', { data_order: order_detail_id, driver_name: driver_name, order_id: order_id, fullname_driver: fullname_driver, quantity_driver: quantity_driver, customer_id })
     }
 
 
+    //Load page khi kéo xuống
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            get_info_all_order()
+            setRefreshing(false);
+        }, 1000);
+    }, []);
+
+
     return (
-        <ScrollView>
+        <ScrollView refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
             {/* Hiển thị trạng thái tài xế */}
             <View style={{ display: "flex", flexDirection: "row" }}>
                 <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: 150, borderRadius: 50, textAlign: "center" }}>Trạng thái làm việc: {statusDriver}</Text>
@@ -164,7 +179,7 @@ function GetOrder({ navigation }) {
                     return (
                         <>
                             <Card key={item}>
-                                <View key={item}>
+                                <View key={index}>
                                     <Card.Title style={{ textAlign: "left" }}>
                                         <Text style={{ marginRight: 20 }}>
                                             {item.date_start}, {item.time_start} -
@@ -227,10 +242,10 @@ function GetOrder({ navigation }) {
                                             />
                                         </Text>
                                         <Text>
-                                            {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định) </Text> : item.driver_name.map((item, index) => {
-                                                return <Text key={item}> {index + 1}. {item} |</Text>
+                                            {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định) </Text> : item.driver_name.map((item1, index) => {
+                                                return <Text key={item1} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '', color: item1 === item.fullname_driver ? 'purple' : '' }}> {index + 1}. {item1} |</Text>
                                             })}
-                                            <Text>- Cần {item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1]} tài xế</Text>
+                                            <Text style={{ fontWeight: "bold" }}>- Cần ({item.driver_name.length}/{item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]}) tài xế</Text>
                                         </Text>
                                     </View>
                                     <View style={{ display: "flex", flexDirection: "row", marginTop: 10, marginBottom: 10 }}>
@@ -258,7 +273,7 @@ function GetOrder({ navigation }) {
                                     </View>
                                 </View>
                                 <View style={{ borderTopColor: "#ccc", borderTopWidth: 1, paddingTop: 10 }}>
-                                    <TouchableOpacity style={{ display: "flex", justifyContent: "center", flexDirection: "row", backgroundColor: "red", padding: 5, borderRadius: 5, height: 30, alignItems: "center" }} onPress={() => navigation_to_detailOrder(item.order_detail_id, item.driver_name, item.id_order, item.fullname_driver, item.quantity_driver)}>
+                                    <TouchableOpacity style={{ display: "flex", justifyContent: "center", flexDirection: "row", backgroundColor: "red", padding: 5, borderRadius: 5, height: 30, alignItems: "center" }} onPress={() => navigation_to_detailOrder(item.order_detail_id, item.driver_name, item.order_id, item.fullname_driver, item.quantity_driver, item.customer_id)}>
                                         <Text style={{ color: "white" }}>XEM CHI TIẾT</Text>
                                     </TouchableOpacity>
                                 </View>

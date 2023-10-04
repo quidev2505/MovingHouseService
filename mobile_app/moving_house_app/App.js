@@ -15,7 +15,11 @@ const Stack = createNativeStackNavigator();
 import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
+
+//Tài xế
 import OrderDetailDriver from './Screens/Driver/OrderDetail/OrderDetailDriver';
+import ContactCustomer from './Screens/Driver/StepDelivery/ContactCustomer';
+import StepByStep from './Screens/Driver/StepDelivery/StepByStep';
 
 
 function App() {
@@ -31,8 +35,13 @@ function App() {
           <Stack.Screen name="HomeScreenDriver" component={HomeScreenDriver} />
 
           {/* Chi tiết đơn hàng tài xế */}
-          <Stack.Screen name="OrderDetailDriver" component={OrderDetailDriver} /> 
-        
+          <Stack.Screen name="OrderDetailDriver" component={OrderDetailDriver} />
+          {/* Các bước trong quy trình giao hàng */}
+          {/* Liên hệ khách hàng */}
+          <Stack.Screen name="ContactCustomer" component={ContactCustomer} />
+          {/* Hoàn thành giao hàng */}
+          <Stack.Screen name="StepByStep" component={StepByStep} />
+
           {/* End Driver */}
 
           {/* Customer */}
@@ -40,7 +49,7 @@ function App() {
           <Stack.Screen name="HomeScreenCustomer" component={HomeScreenCustomer} />
 
           {/* Chi tiết đơn hàng khách hàng */}
-          <Stack.Screen name="OrderDetailCustomer" component={OrderDetailCustomer} /> 
+          <Stack.Screen name="OrderDetailCustomer" component={OrderDetailCustomer} />
 
           {/* End Customer */}
 

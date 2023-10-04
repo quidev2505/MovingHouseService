@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, ScrollView, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import api_url from '../../../api_url';
 import axios from 'axios';
+
 
 import { Card } from '@rneui/themed';
 
 function OrderDetailDriver({ route, navigation }) {
 
+    const [nextStep, setNextStep] = useState(false)
     const [dataOrderDetail, setDataOrderDetail] = useState({});
 
+    //ID khách hàng
+    const [customerID, setCustomerID] = useState("")
 
-    const get_detail_order = async (id_input, driver_name, id_order, fullname_driver, quantity_driver) => {
+
+    const get_detail_order = async (id_input, driver_name, order_id, fullname_driver, quantity_driver, customer_id) => {
+
 
         await axios.get(`${api_url}/v1/order/viewOrderDetail/${id_input}`).then((data) => {
             const data_customer = data.data[0];
             const ob_detail_order = {
-                id_order: id_order,
+                order_id: order_id,
                 driver_name: driver_name,
                 fullname_driver: fullname_driver,
                 quantity_driver: quantity_driver,
@@ -34,10 +40,19 @@ function OrderDetailDriver({ route, navigation }) {
                 service_fee: data_customer.service_fee,//
                 totalOrder: data_customer.totalOrder,//
                 totalOrderNew: data_customer.totalOrderNew,
-                vehicle_price: data_customer.vehicle_price//
+                vehicle_price: data_customer.vehicle_price,//
+                customer_id: customer_id
             }
 
+            //Kiểm tra xem đủ tài xế chưa
+            if (quantity_driver == ob_detail_order.driver_name.length) {
+                setNextStep(true)
+            }
+
+
+            setCustomerID(ob_detail_order.customer_id)
             setDataOrderDetail(ob_detail_order)
+
         }).catch((e) => {
             console.log(e)
         })
@@ -45,9 +60,9 @@ function OrderDetailDriver({ route, navigation }) {
 
     useEffect(() => {
         /* 2. Get the param */
-        const { data_order, driver_name, id_order, fullname_driver, quantity_driver } = route.params;
+        const { data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id } = route.params;
 
-        get_detail_order(data_order, driver_name, id_order, fullname_driver, quantity_driver)
+        get_detail_order(data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id)
 
     }, [])
 
@@ -57,18 +72,60 @@ function OrderDetailDriver({ route, navigation }) {
 
     //Cập nhật lại tài xế vào đơn hàng
     const get_order = async (id_order, driver_name, fullname_driver, quantity_driver) => {
+        try {
+            const arr_driver_name = driver_name.map((item, index) => {
+                return item;
+            })
+
+            if (arr_driver_name.includes(fullname_driver)) {
+                Alert.alert('Thông báo', 'Bạn đã nhận đơn hàng này rồi !', [
+                    { text: 'Xác nhận', onPress: () => navigation.navigate("NHẬN ĐƠN") },
+                ]);
+            } else {
+                arr_driver_name.push(fullname_driver)
 
 
-        await axios.patch(`${api_url}/v1/order/updateonefield_order/${id_order}`, {
-            driver_name: [fullname_driver],
+                await axios.patch(`${api_url}/v1/order/updateonefield_order/${id_order}`, {
+                    driver_name: arr_driver_name,
+                }).then((data) => {
+                    Alert.alert('Thông báo', 'Nhận đơn hàng thành công !', [
+                        { text: 'Xác nhận', onPress: () => navigation.navigate("NHẬN ĐƠN") },
+                    ]);
+
+
+                }).catch((e) => {
+                    console.log(e)
+                })
+
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    //Khi nhấn nút tiếp theo
+    const check_info_customer = async () => {
+        //Lấy thông tin khách hàng ra
+        let data_customer = await axios.get(`${api_url}/v1/customer/get_customer_with_id/${customerID}`)
+
+        //Lấy thông tin số điện thoại, email khách hàng, tên ra
+        let data_user = await axios.get(`${api_url}/v1/customer/get_info_user_with_customer_name/${data_customer.data.fullname}`)
+
+        const data_user_object = {
+            fullname: data_user.data.fullname,
+            phonenumber: data_user.data.phonenumber,
+            email: data_user.data.email
+        }
+
+        //Cập nhật lại trạng thái đơn hàng
+        await axios.patch(`${api_url}/v1/order/updateonefield_order/${dataOrderDetail.order_id}`, {
+            status: "Đang thực hiện"
         }).then((data) => {
-            console.log(data)
-            // navigation.navigate("NHẬN ĐƠN")
-
+            navigation.navigate('ContactCustomer', { data_user: data_user_object, data_order: dataOrderDetail })
         }).catch((e) => {
             console.log(e)
         })
-
     }
 
 
@@ -84,7 +141,9 @@ function OrderDetailDriver({ route, navigation }) {
                             color="orange"
                         />
                         <Text style={{ fontSize: 20 }}>Chi tiết đơn hàng</Text>
-                        <Text></Text>
+                        <TouchableOpacity onPress={() => check_info_customer()}>
+                            <Text style={{ backgroundColor: "orange", color: "white", borderRadius: 5, padding: 5, fontWeight: "bold", display: nextStep ? 'flex' : 'none' }}>Tiếp theo</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -241,7 +300,7 @@ function OrderDetailDriver({ route, navigation }) {
                                             Phí dịch vụ được dựa trên nhiều yếu tố như tình hình giao thông, kích thước hàng hóa, phí cầu đường, phí gửi xe, các phụ phí khác...Vì vậy tổng giá dịch vụ sẽ có thể thay đổi. Giá hiển thị tại thời điểm đặt đơn có thể không giữ nguyên nếu có thay đổi về chi tiết đơn hàng.</Text>
                                     </View>
 
-                                    <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.id_order, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver)}>
+                                    <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
                                         <Text style={styles.buttonText}>Nhấn để nhận đơn
                                         </Text>
 

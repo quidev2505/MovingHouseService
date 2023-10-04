@@ -219,11 +219,11 @@ const orderController = {
     //Update one field Order
     updateOneFieldOrder: async (req, res) => {
         try {
-            console.log(req.body)
+        
             const id_order = req.params.id_order;
             const dataUpdateOne = await Order.updateOne({ order_id: id_order }, req.body, { new: true });
             if (dataUpdateOne) {
-                res.status(201).json('update success');
+                res.status(201).json(dataUpdateOne);
             } else {
                 res.status(501).json('update fail');
 
