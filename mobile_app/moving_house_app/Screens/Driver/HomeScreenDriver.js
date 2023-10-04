@@ -16,7 +16,6 @@ function HomeScreenDriver() {
             return (
               <Ionicons
                 name="download-outline"
-
                 size={size}
                 color={color}
               />

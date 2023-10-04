@@ -147,7 +147,7 @@ function CancelOrder({ navigation }) {
                                                 />
                                             </Text>
                                             <Text>
-                                                {item.fromLocation}
+                                                {item.toLocation}
                                             </Text>
                                         </View>
                                     </View>

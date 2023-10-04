@@ -43,7 +43,8 @@ function InfoDriver({ navigation }) {
               citizen_id: data_driver.citizen_id,
               date_of_birth: data_driver.date_of_birth,
               id_rating: data_driver.id_rating,
-              id_delivery: data_driver.id_delivery
+              id_delivery: data_driver.id_delivery,
+              status: data_driver.status
             }
 
             setDataDriver(ob);
@@ -88,6 +89,19 @@ function InfoDriver({ navigation }) {
     }
 
     console.log('Done.')
+  }
+
+  //Thay đổi trạng thái tài xế
+  const changeStatusDriver = async (status, fullname) => {
+    await axios.patch(`${api_url}/v1/driver/updateonefield_driver_withname/${fullname}`, { status: status === "Sẵn sàng" ? "Đang bận" : "Sẵn sàng" }).then((data) => {
+      Alert.alert('Thông báo', 'Thay đổi trạng thái tài xế thành công !', [
+        { text: 'Xác nhận' },
+      ]);
+
+      get_info_driver()
+    }).catch((e) => {
+      console.log(e)
+    })
   }
 
   return (
@@ -180,6 +194,24 @@ function InfoDriver({ navigation }) {
             />
             <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.username}</Text>
           </View>
+
+          <View style={{ display: "flex", flexDirection: "row", marginTop: 17, borderColor: "#ccc", borderWidth: 1, borderRadius: 5, padding: 5 }}>
+            <Ionicons
+              name="radio-button-on-sharp"
+              size={25}
+              color={dataDriver.status === "Sẵn sàng" ? "green" : "red"}
+            />
+            <Text style={{ marginRight: 10, marginLeft: 10, fontSize: 17, color: dataDriver.status === "Sẵn sàng" ? "green" : "red" }}>{dataDriver.status}</Text>
+
+            <TouchableOpacity onPress={() => changeStatusDriver(dataDriver.status, dataDriver.fullname)}>
+              <Ionicons
+                name="sync-sharp"
+                size={25}
+                color={dataDriver.status === "Sẵn sàng" ? "green" : "red"}
+              />
+            </TouchableOpacity>
+          </View>
+
         </View>
 
 

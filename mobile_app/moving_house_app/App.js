@@ -15,6 +15,7 @@ const Stack = createNativeStackNavigator();
 import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
+import OrderDetailDriver from './Screens/Driver/OrderDetail/OrderDetailDriver';
 
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
           {/* Driver */}
           <Stack.Screen name="DriverLogin" component={DriverLogin} />
           <Stack.Screen name="HomeScreenDriver" component={HomeScreenDriver} />
+
+          {/* Chi tiết đơn hàng tài xế */}
+          <Stack.Screen name="OrderDetailDriver" component={OrderDetailDriver} /> 
         
           {/* End Driver */}
 

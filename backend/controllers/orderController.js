@@ -219,6 +219,7 @@ const orderController = {
     //Update one field Order
     updateOneFieldOrder: async (req, res) => {
         try {
+            console.log(req.body)
             const id_order = req.params.id_order;
             const dataUpdateOne = await Order.updateOne({ order_id: id_order }, req.body, { new: true });
             if (dataUpdateOne) {

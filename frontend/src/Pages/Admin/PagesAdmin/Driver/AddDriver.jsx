@@ -116,7 +116,7 @@ function AddDriver() {
     setImage(e.target.files[0]);
   }
 
-  const onSubmit = async (data) => {						
+  const onSubmit = async (data) => {
     try {
       if (image || imgURL !== "") {
         const formData = new FormData();
@@ -133,7 +133,7 @@ function AddDriver() {
         formData.append("email", data.email);
         formData.append("address", data.address);
         formData.append("vehicle_type", vehicle_type);
-        formData.append("location_delivery",location_delivery);
+        formData.append("location_delivery", location_delivery);
 
         await axios
           .post(`/v1/driver/create_driver`, formData)
@@ -343,8 +343,8 @@ function AddDriver() {
                           <div className="form-outline mb-3  form_input_handle">
                             <input
                               type="text"
-															minLength={10}
-															maxLength={11}
+                              minLength={10}
+                              maxLength={11}
                               id="phonenumber"
                               className="form-control form-control-lg"
                               placeholder="Nhập vào số điện thoại"
@@ -428,14 +428,17 @@ function AddDriver() {
                               type="file"
                               onChange={uploadImg}
                             />
-                           
+
                             {image && (
                               <img
                                 src={URL.createObjectURL(image)}
                                 width={100}
                                 height={100}
                                 alt="Image"
-                                style={{ objectFit: "contain",  marginTop: "-16px" }}
+                                style={{
+                                  objectFit: "contain",
+                                  marginTop: "-16px",
+                                }}
                               />
                             )}
                           </div>
@@ -605,10 +608,6 @@ function AddDriver() {
                                 {
                                   value: "Hà Nội và tỉnh lân cận",
                                   label: "Hà Nội và tỉnh lân cận",
-                                },
-                                {
-                                  value: "Đà Nẵng và tỉnh lân cận",
-                                  label: "Đà Nẵng và tỉnh lân cận",
                                 },
                               ]}
                             />

@@ -140,7 +140,7 @@ function CompletedOrder() {
                                             />
                                         </Text>
                                         <Text>
-                                            {item.fromLocation}
+                                            {item.toLocation}
                                         </Text>
                                     </View>
                                 </View>
