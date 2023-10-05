@@ -50,7 +50,15 @@ const orderDetailSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    vehicle_price:{
+    more_fee_name: {
+        type: String,
+        default: null
+    },
+    more_fee_price: {
+        type: Number,
+        default: 0
+    },
+    vehicle_price: {
         type: Number,
         required: true
     },//Giá thuê xe

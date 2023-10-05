@@ -20,6 +20,8 @@ router.get('/viewOrderDetail/:order_detail_id', orderController.viewOrderWithOrd
 //Update one field Order
 router.patch('/updateonefield_order/:id_order', orderController.updateOneFieldOrder)
 
+//Update one field Order Detail
+router.patch('/updateonefield_order_detail/:id_order_detail', orderController.updateOneFieldOrderDetail)
 
 
 // //Update one field Blog

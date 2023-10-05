@@ -219,9 +219,27 @@ const orderController = {
     //Update one field Order
     updateOneFieldOrder: async (req, res) => {
         try {
-        
+
             const id_order = req.params.id_order;
             const dataUpdateOne = await Order.updateOne({ order_id: id_order }, req.body, { new: true });
+            if (dataUpdateOne) {
+                res.status(201).json(dataUpdateOne);
+            } else {
+                res.status(501).json('update fail');
+
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+    //Update one field Order Detail
+    updateOneFieldOrderDetail: async (req, res) => {
+        try {
+
+            const id_order_detail = req.params.id_order_detail;
+            const dataUpdateOne = await OrderDetail.updateOne({ _id: id_order_detail }, req.body, { new: true });
             if (dataUpdateOne) {
                 res.status(201).json(dataUpdateOne);
             } else {

@@ -12,17 +12,17 @@ const orderSchema = new mongoose.Schema({
     },
     date_created: {
         type: String,
-        required:true
+        required: true
     },//Ngày tạo đơn hàng - giờ
     service_name: {
-        type:String,
+        type: String,
         required: true
     },
     date_start: {
-        type:String,
-        required: true 
+        type: String,
+        required: true
     },//Ngày vận chuyển // 27 tháng 8 năm 2023
-    time_start:{
+    time_start: {
         type: String,
         required: true
     },//Thời gian bắt đầu
@@ -31,40 +31,39 @@ const orderSchema = new mongoose.Schema({
         default: null
     },//Ngày kết thúc vận chuyển // 27 tháng 8 năm 2023
     fromLocation: {
-        type:String,
+        type: String,
         required: true
     }, //Dạng: địa chỉ 
     toLocation: {
         type: String,
         required: true
     }, //Dạng: địa chỉ
-    vehicle_name:{
+    vehicle_name: {
         type: String,
-        required:true
+        required: true
     },//Tên phương tiện
-    driver_name:{
+    driver_name: {
         type: Array, of: String, default: []
     },//Mảng tên của tài xế
-    totalOrder:{
-        type:Number,
+    totalOrder: {
+        type: Number,
         required: true
     },//Tổng đơn hàng hiện tại
-    order_detail_id:{
+    order_detail_id: {
         type: mongoose.Types.ObjectId,
         ref: 'OrderDetail',
         required: true
     },
-    status:{
-        type:String,
+    status: {
+        type: String,
         default: "Đang tìm tài xế"
     },
     //6 trạng thái
     // 1.Đang tìm tài xế
     // 2.Đang thực hiện
-    // 3. Xác nhận hóa đơn
-    // 4.Thanh toán hóa đơn
-    // 5. Đã Hoàn thành
-    // 6. Đã hủy
+    // 3.Thanh toán hóa đơn
+    // 4. Đã Hoàn thành
+    // 5. Đã hủy
     //Nếu đã hủy đơn hàng
     reason_cancel: {
         type: String,

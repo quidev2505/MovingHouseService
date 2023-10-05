@@ -16,12 +16,13 @@ function OrderDetailDriver({ route, navigation }) {
     const [customerID, setCustomerID] = useState("")
 
 
-    const get_detail_order = async (id_input, driver_name, order_id, fullname_driver, quantity_driver, customer_id) => {
+    const get_detail_order = async (id_input, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location) => {
 
 
         await axios.get(`${api_url}/v1/order/viewOrderDetail/${id_input}`).then((data) => {
             const data_customer = data.data[0];
             const ob_detail_order = {
+                order_detail_id: id_input,
                 order_id: order_id,
                 driver_name: driver_name,
                 fullname_driver: fullname_driver,
@@ -41,7 +42,9 @@ function OrderDetailDriver({ route, navigation }) {
                 totalOrder: data_customer.totalOrder,//
                 totalOrderNew: data_customer.totalOrderNew,
                 vehicle_price: data_customer.vehicle_price,//
-                customer_id: customer_id
+                customer_id: customer_id,
+                from_location: from_location,
+                to_location: to_location
             }
 
             //Kiểm tra xem đủ tài xế chưa
@@ -60,9 +63,9 @@ function OrderDetailDriver({ route, navigation }) {
 
     useEffect(() => {
         /* 2. Get the param */
-        const { data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id } = route.params;
+        const { data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location } = route.params;
 
-        get_detail_order(data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id)
+        get_detail_order(data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location)
 
     }, [])
 

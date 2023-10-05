@@ -136,8 +136,8 @@ function GetOrder({ navigation }) {
 
 
     //Chuyển trang
-    const navigation_to_detailOrder = (order_detail_id, driver_name, order_id, fullname_driver, quantity_driver, customer_id) => {
-        navigation.navigate('OrderDetailDriver', { data_order: order_detail_id, driver_name: driver_name, order_id: order_id, fullname_driver: fullname_driver, quantity_driver: quantity_driver, customer_id })
+    const navigation_to_detailOrder = (order_detail_id, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location) => {
+        navigation.navigate('OrderDetailDriver', { data_order: order_detail_id, driver_name: driver_name, order_id: order_id, fullname_driver: fullname_driver, quantity_driver: quantity_driver, customer_id, from_location, to_location })
     }
 
 
@@ -178,8 +178,8 @@ function GetOrder({ navigation }) {
                 dataOrder && dataOrder.map((item, index) => {
                     return (
                         <>
-                            <Card key={item}>
-                                <View key={index}>
+                            <Card key={item.toString()}>
+                                <View>
                                     <Card.Title style={{ textAlign: "left" }}>
                                         <Text style={{ marginRight: 20 }}>
                                             {item.date_start}, {item.time_start} -
@@ -243,7 +243,7 @@ function GetOrder({ navigation }) {
                                         </Text>
                                         <Text>
                                             {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định) </Text> : item.driver_name.map((item1, index) => {
-                                                return <Text key={item1} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '', color: item1 === item.fullname_driver ? 'purple' : '' }}> {index + 1}. {item1} |</Text>
+                                                return <Text key={index + 3} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '', color: item1 === item.fullname_driver ? 'purple' : '' }}> {index + 1}. {item1} |</Text>
                                             })}
                                             <Text style={{ fontWeight: "bold" }}>- Cần ({item.driver_name.length}/{item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]}) tài xế</Text>
                                         </Text>
@@ -273,7 +273,7 @@ function GetOrder({ navigation }) {
                                     </View>
                                 </View>
                                 <View style={{ borderTopColor: "#ccc", borderTopWidth: 1, paddingTop: 10 }}>
-                                    <TouchableOpacity style={{ display: "flex", justifyContent: "center", flexDirection: "row", backgroundColor: "red", padding: 5, borderRadius: 5, height: 30, alignItems: "center" }} onPress={() => navigation_to_detailOrder(item.order_detail_id, item.driver_name, item.order_id, item.fullname_driver, item.quantity_driver, item.customer_id)}>
+                                    <TouchableOpacity style={{ display: "flex", justifyContent: "center", flexDirection: "row", backgroundColor: "red", padding: 5, borderRadius: 5, height: 30, alignItems: "center" }} onPress={() => navigation_to_detailOrder(item.order_detail_id, item.driver_name, item.order_id, item.fullname_driver, item.quantity_driver, item.customer_id, item.fromLocation, item.toLocation)}>
                                         <Text style={{ color: "white" }}>XEM CHI TIẾT</Text>
                                     </TouchableOpacity>
                                 </View>
