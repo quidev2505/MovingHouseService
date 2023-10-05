@@ -72,17 +72,14 @@ function OrderAdmin() {
       key: "3",
       label: "ĐANG THỰC HIỆN",
     },
+
     {
       key: "4",
-      label: "XÁC NHẬN HÓA ĐƠN",
-    },
-    {
-      key: "5",
       label: "THANH TOÁN HÓA ĐƠN",
     },
     {
-      key: "6",
-      label: "HOÀN THÀNH",
+      key: "5",
+      label: "ĐÃ HOÀN THÀNH",
     },
   ];
 
@@ -99,13 +96,10 @@ function OrderAdmin() {
       result = "Đang thực hiện";
     }
     if (input_activeKey === "4") {
-      result = "Xác nhận hóa đơn";
-    }
-    if (input_activeKey === "5") {
       result = "Thanh toán hóa đơn";
     }
-    if (input_activeKey === "6") {
-      result = "Hoàn thành";
+    if (input_activeKey === "5") {
+      result = "Đã hoàn thành";
     }
 
     return result;
@@ -128,17 +122,11 @@ function OrderAdmin() {
       case "4":
         setActiveKeyTab("4");
 
-        show_order_customer("Xác nhận hóa đơn");
+        show_order_customer("Thanh toán hóa đơn");
         break;
       case "5":
         setActiveKeyTab("5");
-
-        show_order_customer("Thanh toán hóa đơn");
-        break;
-      case "6":
-        setActiveKeyTab("6");
-
-        show_order_customer("Hoàn thành");
+        show_order_customer("Đã hoàn thành");
         break;
       default:
         break;
@@ -517,8 +505,6 @@ function OrderAdmin() {
                   ? "volcano"
                   : status === "Đang thực hiện"
                   ? "gold"
-                  : status === "Xác nhận hóa đơn"
-                  ? "purple"
                   : status === "Thanh toán hóa đơn"
                   ? "magenta"
                   : "#87d068"
@@ -531,11 +517,9 @@ function OrderAdmin() {
                 ? "Đã hủy"
                 : status === "Đang thực hiện"
                 ? "Đang thực hiện"
-                : status === "Xác nhận hóa đơn"
-                ? "Xác nhận hóa đơn"
                 : status === "Thanh toán hóa đơn"
                 ? "Thanh toán hóa đơn"
-                : "Hoàn thành"}
+                : "Đã hoàn thành"}
             </Tag>
           </div>
           {reason_cancel.reason_cancel !== null ? (
@@ -1015,6 +999,30 @@ function OrderAdmin() {
                   </p>
                 </div>
 
+                {item.more_fee_name !== null ? (
+                  <>
+                    <div
+                      className="d-flex"
+                      style={{ justifyContent: "space-between" }}
+                    >
+                      <p className="fw-bold">* Chi phí phát sinh: </p>
+                      <p className="fw-bold"></p>
+                    </div>
+
+                    <div
+                      className="d-flex"
+                      style={{ justifyContent: "space-between" }}
+                    >
+                      <p>{item.more_fee_name}</p>
+                      <p className="fw-bold" style={{ color: "green" }}>
+                        {item.more_fee_price.toLocaleString()} đ
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
+
                 <div
                   className="d-flex"
                   style={{ justifyContent: "space-between" }}
@@ -1036,7 +1044,9 @@ function OrderAdmin() {
                   >
                     TỔNG THANH TOÁN MỚI
                   </p>
-                  <p>{item.totalOrderNew.toLocaleString()} đ</p>
+                  <p className="fw-bold" style={{ color: "red" }}>
+                    {item.totalOrderNew.toLocaleString()} đ
+                  </p>
                 </div>
               </div>
             </>

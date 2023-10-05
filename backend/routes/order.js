@@ -13,6 +13,7 @@ router.get('/viewAllOrder', orderController.viewAllOrder)
 // View Order with customer_id
 router.get('/viewOrderWithCustomerId/:id_customer', orderController.viewOrderWithIdCustomer)
 
+
 // View Order Detail with id order detail
 router.get('/viewOrderDetail/:order_detail_id', orderController.viewOrderWithOrderDetailId)
 

@@ -8,7 +8,6 @@ import { Toast } from "../../../../Components/ToastColor";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
-
 import axios from "axios";
 
 function Step1({ check_fill, setCheckFill }) {
@@ -30,7 +29,13 @@ function Step1({ check_fill, setCheckFill }) {
       return current && current < dayjs().endOf("day");
     } else {
       // Can not select days before yesterday and yesterday -> Có thể chọn ngày hiện tại
-      return current && current < dayjs().subtract(1, "day").endOf("day");
+      return (
+        current &&
+        current <
+          dayjs()
+            .subtract(1, "day")
+            .endOf("day")
+      );
     }
   };
 
@@ -137,8 +142,8 @@ function Step1({ check_fill, setCheckFill }) {
           document.querySelector("#date_choose") &&
           document.querySelector("#time_choose")
         ) {
-          document.querySelector("#date_choose").value = data.step1?.moving_date;
-          document.querySelector("#time_choose").value = data.step1?.moving_time;
+          document.querySelector("#date_choose").value = data.step1.moving_date;
+          document.querySelector("#time_choose").value = data.step1.moving_time;
         }
       }, 3000);
     }
@@ -151,7 +156,7 @@ function Step1({ check_fill, setCheckFill }) {
       setSelectService(data_service_Choose);
     }
     get_service();
-    setIsActive(false)
+    setIsActive(false);
   }, []);
 
   return (

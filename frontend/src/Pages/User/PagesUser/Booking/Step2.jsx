@@ -41,9 +41,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   //Thiết lập địa lấy hàng FROM
   const get_location_list = async () => {
     await axios
-      .get(
-        `https://nominatim.openstreetmap.org/search?q=${locationFrom}&format=json`
-      )
+      .get(`https://geocode.maps.co/search?q=${locationFrom}&format=json`)
       .then((data) => {
         let result = data.data;
         if (result) {
@@ -120,9 +118,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   //Thiết lập địa điểm nhận hàng TO
   const get_location_list_to = async () => {
     await axios
-      .get(
-        `https://nominatim.openstreetmap.org/search?q=${locationTo}&format=json`
-      )
+      .get(`https://geocode.maps.co/search?q=${locationTo}&format=json`)
       .then((data) => {
         let result = data.data;
         if (result) {
@@ -304,30 +300,30 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
       title: "Xin vui lòng chờ cập nhật lại địa điểm !",
     });
     const data = await axios.get(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&1`
+      `https://geocode.maps.co/reverse?lat=${lat}&lon=${lng}&1`
     );
     let data_location = data.data;
-    // Sử dụng DOM parser để parse đoạn String XML
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data_location, "text/xml");
+    // // Sử dụng DOM parser để parse đoạn String XML
+    // const parser = new DOMParser();
+    // const doc = parser.parseFromString(data_location, "text/xml");
 
-    // Lấy ra element <result>
-    const resultElement = doc.querySelector("result");
+    // // Lấy ra element <result>
+    // const resultElement = doc.querySelector("result");
 
-    // Lấy ra text content của element <result>
-    const resultText = resultElement.textContent;
+    // // Lấy ra text content của element <result>
+    // const resultText = resultElement.textContent;
 
     // Trả về text content của element <result>
     const ob = {
       lat: Number(lat),
       lon: Number(lng),
-      display_name: resultText,
+      display_name: data_location.display_name,
     };
 
     const ob_new = {
       lat: Number(lat),
       lng: Number(lng),
-      name: resultText,
+      name: data_location.display_name,
     };
 
     setLocationFromChoose(ob);
@@ -352,31 +348,31 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
 
   const changeLocation_To = async (lng, lat) => {
     const data = await axios.get(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&1`
+      `https://geocode.maps.co/reverse?lat=${lat}&lon=${lng}&1`
     );
     let data_location = data.data;
-    console.log(data_location);
-    // Sử dụng DOM parser để parse đoạn String XML
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data_location, "text/xml");
+    // console.log(data_location);
+    // // Sử dụng DOM parser để parse đoạn String XML
+    // const parser = new DOMParser();
+    // const doc = parser.parseFromString(data_location, "text/xml");
 
-    // Lấy ra element <result>
-    const resultElement = doc.querySelector("result");
+    // // Lấy ra element <result>
+    // const resultElement = doc.querySelector("result");
 
-    // Lấy ra text content của element <result>
-    const resultText = resultElement.textContent;
+    // // Lấy ra text content của element <result>
+    // const resultText = resultElement.textContent;
 
     // Trả về text content của element <result>
     const ob = {
       lat: Number(lat),
       lon: Number(lng),
-      display_name: resultText,
+      display_name: data_location.display_name,
     };
 
     const ob_new = {
       lat: Number(lat),
       lng: Number(lng),
-      name: resultText,
+      name: data_location.display_name,
     };
 
     setLocationToChoose(ob);

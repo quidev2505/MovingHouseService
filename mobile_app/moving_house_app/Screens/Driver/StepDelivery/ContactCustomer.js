@@ -62,7 +62,7 @@ function ContactCustomer({ route, navigation }) {
                             {dataUser.phonenumber}
                         </Text>
                     </Text>
-                    <Text style={{ fontSize: 20, marginTop: 10, padding: 10 }}>
+                    <Text style={{ fontSize: 20, marginTop: 10, padding: 10, borderWidth:2, borderColor:"orange", borderRadius:5 }}>
                         Lưu ý:
                         {"\n"}
                         + Cần xác nhận với khách hàng về các loại chi phí phát sinh.

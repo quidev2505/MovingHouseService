@@ -7,12 +7,10 @@ import axios from 'axios';
 
 import { Card } from '@rneui/themed';
 
-function OrderDetailDriver({ route, navigation }) {
+function OrderDetail({ route, navigation }) {
 
     const [nextStep, setNextStep] = useState(false)
     const [dataOrderDetail, setDataOrderDetail] = useState({});
-
-    const [cancelOrder, setCancelOrder] = useState(false)
 
     //ID khách hàng
     const [customerID, setCustomerID] = useState("")
@@ -51,12 +49,6 @@ function OrderDetailDriver({ route, navigation }) {
                 time_start: time_start
             }
 
-            //Kiểm tra xem đã có tài xế này tham gia chưa
-            if (ob_detail_order.driver_name.includes(fullname_driver)) {
-                setCancelOrder(true)
-            }
-
-
             //Kiểm tra xem đủ tài xế chưa
             if (quantity_driver == ob_detail_order.driver_name.length) {
                 setNextStep(true)
@@ -74,77 +66,15 @@ function OrderDetailDriver({ route, navigation }) {
     useEffect(() => {
         /* 2. Get the param */
         const { data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start } = route.params;
-        
+
         get_detail_order(data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start)
 
     }, [])
 
     const back = () => {
-        navigation.navigate("NHẬN ĐƠN")
+        navigation.navigate("ĐƠN HÀNG")
     }
 
-    //Cập nhật lại tài xế vào đơn hàng
-    const get_order = async (id_order, driver_name, fullname_driver, quantity_driver) => {
-        try {
-            const arr_driver_name = driver_name.map((item, index) => {
-                return item;
-            })
-
-
-            arr_driver_name.push(fullname_driver)
-
-
-            await axios.patch(`${api_url}/v1/order/updateonefield_order/${id_order}`, {
-                driver_name: arr_driver_name,
-            }).then((data) => {
-                Alert.alert('Thông báo', 'Nhận đơn hàng thành công !', [
-                    { text: 'Xác nhận', onPress: () => navigation.navigate("NHẬN ĐƠN") },
-                ]);
-
-
-            }).catch((e) => {
-                console.log(e)
-            })
-
-
-
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-
-    //Hủy đơn hàng -> Loại bỏ tài xế khỏi đơn hàng
-    const cancel_order = async (id_order, driver_name, fullname_driver, quantity_driver) => {
-        try {
-            const arr_driver_name = driver_name.map((item, index) => {
-                return item;
-            })
-
-            if (arr_driver_name.includes(fullname_driver)) {
-                arr_driver_name.splice(arr_driver_name.indexOf(fullname_driver), 1)
-            }
-
-
-
-            await axios.patch(`${api_url}/v1/order/updateonefield_order/${id_order}`, {
-                driver_name: arr_driver_name,
-            }).then((data) => {
-                Alert.alert('Thông báo', 'Hủy đơn hàng thành công !', [
-                    { text: 'Xác nhận', onPress: () => navigation.navigate("NHẬN ĐƠN") },
-                ]);
-
-
-            }).catch((e) => {
-                console.log(e)
-            })
-
-
-
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
 
     //Khi nhấn nút tiếp theo
@@ -184,9 +114,7 @@ function OrderDetailDriver({ route, navigation }) {
                             color="orange"
                         />
                         <Text style={{ fontSize: 20 }}>Chi tiết đơn hàng</Text>
-                        <TouchableOpacity onPress={() => check_info_customer()}>
-                            <Text style={{ backgroundColor: "orange", color: "white", borderRadius: 5, padding: 5, fontWeight: "bold", display: nextStep ? 'flex' : 'none' }}>Tiếp theo</Text>
-                        </TouchableOpacity>
+                        <Text></Text>
                     </View>
                 </View>
 
@@ -344,18 +272,6 @@ function OrderDetailDriver({ route, navigation }) {
                                     </View>
 
 
-
-                                    {cancelOrder ? <TouchableOpacity style={styles.button1} onPress={() => cancel_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
-                                        <Text style={styles.buttonText}>Hủy đơn
-                                        </Text>
-
-                                    </TouchableOpacity> : (
-                                        <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
-                                            <Text style={styles.buttonText}>Nhấn để nhận đơn
-                                            </Text>
-
-                                        </TouchableOpacity>
-                                    )}
                                 </View>
                             </View>
                         </View>
@@ -422,4 +338,4 @@ const styles = StyleSheet.create({
 
 
 
-export default OrderDetailDriver
+export default OrderDetail

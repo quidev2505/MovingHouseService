@@ -18,6 +18,7 @@ import {
 
 //Tài xế
 import OrderDetailDriver from './Screens/Driver/OrderDetail/OrderDetailDriver';
+import OrderDetail from './Screens/Driver/OrderDetail/OrderDetail';
 import ContactCustomer from './Screens/Driver/StepDelivery/ContactCustomer';
 import StepByStep from './Screens/Driver/StepDelivery/StepByStep';
 
@@ -42,6 +43,8 @@ function App() {
           {/* Hoàn thành giao hàng */}
           <Stack.Screen name="StepByStep" component={StepByStep} />
 
+          {/* Chi tiết đơn hàng đã hoàn thành*/}
+          <Stack.Screen name="OrderDetail" component={OrderDetail} />
           {/* End Driver */}
 
           {/* Customer */}

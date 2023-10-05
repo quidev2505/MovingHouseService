@@ -325,6 +325,30 @@ function OrderUser() {
                 <p className="fw-bold">{item.totalOrder.toLocaleString()} đ</p>
               </div>
 
+              {item.more_fee_name !== null ? (
+                <>
+                  <div
+                    className="d-flex"
+                    style={{ justifyContent: "space-between" }}
+                  >
+                    <p className="fw-bold">* Chi phí phát sinh: </p>
+                    <p className="fw-bold"></p>
+                  </div>
+
+                  <div
+                    className="d-flex"
+                    style={{ justifyContent: "space-between" }}
+                  >
+                    <p>{item.more_fee_name}</p>
+                    <p className="fw-bold" style={{ color: "green" }}>
+                      {item.more_fee_price.toLocaleString()} đ
+                    </p>
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
+
               <div
                 className="d-flex"
                 style={{ justifyContent: "space-between" }}
@@ -346,7 +370,9 @@ function OrderUser() {
                 >
                   TỔNG THANH TOÁN MỚI
                 </p>
-                <p>{item.totalOrderNew.toLocaleString()} đ</p>
+                <p className="fw-bold" style={{ color: "red" }}>
+                  {item.totalOrderNew.toLocaleString()} đ
+                </p>
               </div>
             </div>
           </>
@@ -423,17 +449,14 @@ function OrderUser() {
           text: "Đang thực hiện",
           value: "Đang thực hiện",
         },
-        {
-          text: "Xác nhận hóa đơn",
-          value: "Xác nhận hóa đơn",
-        },
+
         {
           text: "Thanh toán hóa đơn",
           value: "Thanh toán hóa đơn",
         },
         {
-          text: "Hoàn thành",
-          value: "Hoàn thành",
+          text: "Đã hoàn thành",
+          value: "Đã hoàn thành",
         },
         {
           text: "Đã hủy",
@@ -572,7 +595,9 @@ function OrderUser() {
             driver_name.map((item, index) => {
               return (
                 <tr>
-                  <td className="fw-bold">{index+1}. {item}</td>
+                  <td className="fw-bold">
+                    {index + 1}. {item}
+                  </td>
                 </tr>
               );
             })
