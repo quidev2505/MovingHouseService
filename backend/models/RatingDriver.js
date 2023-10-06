@@ -6,7 +6,7 @@ const ratingDriverSchema = new mongoose.Schema({
         required: true
     },
     star: {
-        type: String,
+        type: Number,
         required: true
     },
     comment: {
@@ -17,9 +17,8 @@ const ratingDriverSchema = new mongoose.Schema({
         type: String,
         required: true
     },//Tên của khách hàng
-    driver_id: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Driver',
+    driver_name: {
+        type: String,
         required: true
     }
 }, { timestamps: true })

@@ -33,6 +33,7 @@ import {
   TrophyOutlined,
   UnlockOutlined,
   AimOutlined,
+  CarOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -410,6 +411,40 @@ function DriverAdmin() {
   };
 
   const view_detail_driver = async (id) => {
+    let data_rating_driver = await axios.get(
+      `/v1/ratingDriver/get_rating_driver/${id.fullname}`
+    );
+
+    let arr_rating_driver = data_rating_driver.data.map((item, index) => {
+      const ob = {
+        star: item.star,
+        comment: item.comment,
+        customer_name: item.customer_name,
+        rating_date: item.rating_date,
+      };
+      return ob;
+    });
+
+    let data_delivery_driver = await axios.get(`/v1/order/viewAllOrder`);
+    let arr_delivery_driver = data_delivery_driver.data.map((item, index) => {
+      if (
+        item.status === "Đã hoàn thành" &&
+        item.driver_name.includes(id.fullname)
+      ) {
+        const ob = {
+          fromLocation: item.fromLocation,
+          toLocation: item.toLocation,
+          service_name: item.service_name,
+          date_start: item.date_start,
+          date_end: item.date_end,
+        };
+
+        return ob;
+      }
+    });
+
+    console.log(arr_delivery_driver);
+
     await axios
       .get(`/v1/driver/view_detail_driver/${id.id}`)
       .then(async (data) => {
@@ -555,6 +590,39 @@ function DriverAdmin() {
                 <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
                   LỊCH SỬ VẬN CHUYỂN
                 </h4>
+                <div>
+                  {arr_delivery_driver &&
+                    arr_delivery_driver.map((item, index) => (
+                      <>
+                        <div
+                          className="d-flex"
+                          style={{
+                            justifyContent: "space-between",
+                            border: "1px solid #ccc",
+                            padding: "7px",
+                            borderRadius: "5px",
+                            margin: "5px",
+                          }}
+                        >
+                          <div>
+                            <CarOutlined />
+                          </div>
+                          <div>
+                            <span style={{ color: "red" }}>
+                              {item?.fromLocation} -
+                            </span>
+                            <span style={{ color: "#7bd6e5" }}>
+                              {item?.toLocation}
+                            </span>
+                            -{" "}
+                          </div>
+                          <div>
+                            {item?.date_start} - {item?.date_end}
+                          </div>
+                        </div>
+                      </>
+                    ))}
+                </div>
               </div>
 
               <div
@@ -570,6 +638,35 @@ function DriverAdmin() {
                 <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
                   LỊCH SỬ ĐÁNH GIÁ
                 </h4>
+                <div>
+                  {arr_rating_driver &&
+                    arr_rating_driver.map((item, index) => (
+                      <>
+                        <div
+                          className="d-flex"
+                          style={{
+                            justifyContent: "space-between",
+                            border: "1px solid #ccc",
+                            padding: "7px",
+                            borderRadius: "5px",
+                            margin: "5px",
+                          }}
+                        >
+                          <div>
+                            <Rate disabled defaultValue={item.star} />
+                          </div>
+                          <div>
+                            {item.comment} - (Khách hàng đánh giá :
+                            <span className="fw-bold">
+                              {item.customer_name}
+                            </span>
+                            )
+                          </div>
+                          <div>{item.rating_date}</div>
+                        </div>
+                      </>
+                    ))}
+                </div>
               </div>
             </>
           ),

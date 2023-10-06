@@ -324,70 +324,78 @@ const orderController = {
             if (save_rating_service) {
                 //Check xem có bao nhiêu tài xế trong đơn hàng
                 const driver_name = req.body.driver_name
-                const create_ratingDriver = await new RatingDriver({
+
+                const ob_rating_driver = {
                     rating_date: date_now + time_now,
-                    // star: req.body.star_driver,
-                    // comment: req.body.comment_driver,
                     customer_name: req.body.customer_name,
-                })
+                }
+
 
                 //Nếu có từ 2 tài xế trở lên
                 if (driver_name.length > 1) {
                     driver_name.forEach(async (item, index) => {
                         //Lưu vào bảng đánh giá tài xế
-                        create_ratingDriver.driver_name = item;
-                        create_ratingDriver.star = req.body.star[index]
-                        create_ratingDriver.comment = req.body.comment[index]
-                        const saveRatingDriver = await create_ratingDriver.save();
-                    })
-                }
+                        ob_rating_driver.driver_name = item;
+                        ob_rating_driver.star = req.body.star_driver[index]
+                        ob_rating_driver.comment = req.body.comment_driver[index]
+                        const create_ratingDriver = await new RatingDriver(ob_rating_driver)
+                        await create_ratingDriver.save()
 
-                //Nếu chỉ có 1 tài xế
-                //Lưu vào bảng đánh giá tài xế
-                create_ratingDriver.driver_name = driver_name[0]
-                create_ratingDriver.comment = req.body.comment_driver[0]
-                create_ratingDriver.star = req.body.star[0]
-                const save_rating_driver = await create_ratingDriver.save();
-
-
-                if (save_rating_driver) {
-                    //Lưu vào cơ sở dữ liệu của bảng tài xế
-                    if (driver_name.length > 1) {
-                        driver_name.forEach(async (item, index) => {
-                            const dataDriver = await Driver.findOne({ fullname: item });
-                            const arr_rating_id_driver = dataDriver.id_rating;
-                            arr_rating_id_driver.push(save_rating_driver._id)
-
-                            //Cập nhật sao trung bình cho tài xế
-                            let data_rating_driver = await RatingDriver.find({ driver_name: item })
-                            let avg_star = 0;
-                            let arr_star = data_rating_driver.map((item, index) => {
-                                return item.star
-                            })
-
-                            avg_star = arr_star.reduce((a, b) => a + b, 0) / arr_star.length;
-
-
-                            await Driver.updateOne({ fullname: item }, { id_raing: arr_rating_id_driver, star_average: avg_star }, { new: true })
-                        })
-                    } else {
-                        const dataDriver = await Driver.findOne({ fullname: driver_name[0] });
+                        const dataDriver = await Driver.findOne({ fullname: item });
                         const arr_rating_id_driver = dataDriver.id_rating;
-                        arr_rating_id_driver.push(save_rating_driver._id)
+                        arr_rating_id_driver.push(create_ratingDriver._id)
 
                         //Cập nhật sao trung bình cho tài xế
-                        let data_rating_driver = await RatingDriver.find({ driver_name: driver_name[0] })
-                        let avg_star = 0;
+                        let data_rating_driver = await RatingDriver.find({ driver_name: item })
+                        let sum = 0;
                         let arr_star = data_rating_driver.map((item, index) => {
                             return item.star
                         })
 
-                        avg_star = arr_star.reduce((a, b) => a + b, 0) / arr_star.length;
+                        arr_star.forEach((item, index) => {
+                            sum += item
+                        })
 
 
-                        await Driver.updateOne({ fullname: item }, { id_raing: arr_rating_id_driver, start_average: avg_star }, { new: true })
-                    }
+                        console.log(arr_star)
+                        avg_star = Math.floor(sum / arr_star.length);
+                        console.log(avg_star)
+
+
+                        await Driver.updateOne({ fullname: item }, { id_rating: arr_rating_id_driver, star_average: avg_star }, { new: true })
+
+                    })
+                } else {
+                    //Nếu chỉ có 1 tài xế
+                    //Lưu vào bảng đánh giá tài xế
+                    ob_rating_driver.driver_name = driver_name[0]
+                    ob_rating_driver.comment = req.body.comment_driver[0]
+                    ob_rating_driver.star = req.body.star_driver[0]
+                    // const save_rating_driver = await create_ratingDriver.save();
+                    const create_ratingDriver = await new RatingDriver(ob_rating_driver)
+                    await create_ratingDriver.save()
+
+                    const dataDriver = await Driver.findOne({ fullname: driver_name[0] });
+                    const arr_rating_id_driver = dataDriver.id_rating;
+                    arr_rating_id_driver.push(create_ratingDriver._id)
+
+                    //Cập nhật sao trung bình cho tài xế
+                    let data_rating_driver = await RatingDriver.find({ driver_name: driver_name[0] })
+                    let sum = 0;
+                    let arr_star = data_rating_driver.map((item, index) => {
+                        return item.star
+                    })
+
+                    arr_star.forEach((item, index) => {
+                        sum += item
+                    })
+
+                    avg_star = Math.floor(sum / arr_star.length);
+
+                    await Driver.updateOne({ fullname: driver_name[0] }, { id_rating: arr_rating_id_driver, start_average: avg_star }, { new: true })
                 }
+
+
 
                 res.status(201).json("Success")
             }
@@ -395,6 +403,16 @@ const orderController = {
         } catch (e) {
             console.log(e)
             res.status(501).json(e)
+        }
+    },
+
+    //Lấy đánh giá đơn hàng ra
+    getRatingOrder: async (req, res) => {
+        const data_rating_service = await RatingService.find({ order_id: req.params.order_id })
+        if (data_rating_service) {
+            res.status(201).json(data_rating_service)
+        } else {
+            res.status(501).json('Error')
         }
     }
 

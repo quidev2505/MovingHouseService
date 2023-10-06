@@ -32,6 +32,8 @@ router.patch('/updateonefield_order_detail/:id_order_detail', orderController.up
 //Đánh giá dịch vụ và tài xế
 router.post(`/rating_order/:order_id`, orderController.ratingOrder);
 
+//Lấy đánh giá đơn hàng ra
+router.get(`/getRating_Order/:order_id`, orderController.getRatingOrder)
 
 // //Update one field Blog
 // router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)

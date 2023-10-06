@@ -14,6 +14,7 @@ const itemRoute = require('./routes/item');
 const orderRoute = require('./routes/order');
 const vnpayRoute = require('./routes/vnpay');
 const driverRoute = require('./routes/driver');
+const ratingDriverRoute = require('./routes/rating_driver');
 const driverAccountRoute = require('./routes/driver_account');
 var cookieParser = require('cookie-parser')
 
@@ -122,6 +123,9 @@ app.use("/v1/order", orderRoute)
 
 //Driver
 app.use("/v1/driver", driverRoute)
+
+//Driver
+app.use("/v1/ratingDriver", ratingDriverRoute)
 
 //Driver Account
 app.use("/v1/driverAccount", driverAccountRoute)
