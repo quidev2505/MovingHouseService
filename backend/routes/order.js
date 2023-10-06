@@ -25,6 +25,10 @@ router.patch('/updateonefield_order/:id_order', orderController.updateOneFieldOr
 router.patch('/updateonefield_order_detail/:id_order_detail', orderController.updateOneFieldOrderDetail)
 
 
+//Đánh giá dịch vụ và tài xế
+router.post(`/rating_order/:order_id`, orderController.ratingOrder);
+
+
 // //Update one field Blog
 // router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)
 

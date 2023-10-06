@@ -245,7 +245,7 @@ const driverController = {
 
             const data_driver = await Driver.findOne({ fullname: fullname_driver })
             if (data_driver) {
-                res.status(201).json(data_driver.avatar);
+                res.status(201).json(data_driver);
             } else {
                 res.status(501).json('update fail');
             }

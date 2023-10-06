@@ -46,7 +46,9 @@ function OrderDetail({ route, navigation }) {
                 from_location: from_location,
                 to_location: to_location,
                 date_start: date_start,
-                time_start: time_start
+                time_start: time_start,
+                more_fee_name: data_customer.more_fee_name,
+                more_fee_price: data_customer.more_fee_price,
             }
 
             //Kiểm tra xem đủ tài xế chưa
@@ -260,9 +262,24 @@ function OrderDetail({ route, navigation }) {
                                         <Text style={{ color: "green", fontWeight: "bold" }}>{dataOrderDetail.totalOrder?.toLocaleString()} đ</Text>
                                     </View>
 
+                                    {dataOrderDetail.more_fee_name !== "" ? (
+                                        <>
+                                            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
+                                                <Text>Chi phí phát sinh </Text>
+                                                <Text style={{ color: "green", fontWeight: "bold" }}></Text>
+                                            </View>
+
+                                            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
+                                                <Text>{dataOrderDetail.more_fee_name} </Text>
+                                                <Text style={{ color: "green", fontWeight: "bold" }}>{dataOrderDetail.more_fee_price?.toLocaleString()} đ</Text>
+                                            </View>
+
+                                        </>
+                                    ) : ''}
+
                                     <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
                                         <Text>Tổng đơn hàng mới: </Text>
-                                        <Text style={{ color: "green", fontWeight: "bold" }}>{dataOrderDetail.totalOrderNew?.toLocaleString()} đ</Text>
+                                        <Text style={{ color: "red", fontWeight: "bold", fontSize: 20 }}>{dataOrderDetail.totalOrderNew?.toLocaleString()} đ</Text>
                                     </View>
 
 

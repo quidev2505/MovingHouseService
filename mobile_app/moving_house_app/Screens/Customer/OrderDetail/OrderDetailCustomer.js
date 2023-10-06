@@ -29,7 +29,9 @@ function OrderDetail({ route, navigation }) {
         service_fee: data_customer.service_fee,//
         totalOrder: data_customer.totalOrder,//
         totalOrderNew: data_customer.totalOrderNew,
-        vehicle_price: data_customer.vehicle_price//
+        vehicle_price: data_customer.vehicle_price,//
+        more_fee_name: data_customer.more_fee_name,
+        more_fee_price: data_customer.more_fee_price
       }
 
       setDataOrderDetail(ob_detail_order)
@@ -179,19 +181,19 @@ function OrderDetail({ route, navigation }) {
 
                   <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
                     <Text>Giá thuê xe vận chuyển ({dataOrderDetail.distance}): </Text>
-                    <Text style={{fontWeight:"bold"}}>{dataOrderDetail.vehicle_price?.toLocaleString()} đ</Text>
+                    <Text style={{ fontWeight: "bold" }}>{dataOrderDetail.vehicle_price?.toLocaleString()} đ</Text>
                   </View>
 
                   <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
                     <Text>Nhân công bốc vác (x{dataOrderDetail.man_power_quantity}): </Text>
-                    <Text style={{fontWeight:"bold"}}>{dataOrderDetail.man_power_price?.toLocaleString()} đ</Text>
+                    <Text style={{ fontWeight: "bold" }}>{dataOrderDetail.man_power_price?.toLocaleString()} đ</Text>
                   </View>
 
                   {dataOrderDetail.service_fee?.map((item, index) => {
                     return (
                       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }} key={index}>
                         <Text>{item.name}: </Text>
-                        <Text style={{fontWeight:"bold"}}>{item.price?.toLocaleString()} đ</Text>
+                        <Text style={{ fontWeight: "bold" }}>{item.price?.toLocaleString()} đ</Text>
                       </View>
                     )
                   })}
@@ -200,7 +202,7 @@ function OrderDetail({ route, navigation }) {
                     return (
                       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }} key={index}>
                         <Text>{item.name}: </Text>
-                        <Text style={{fontWeight:"bold"}}>{item.price?.toLocaleString()} đ</Text>
+                        <Text style={{ fontWeight: "bold" }}>{item.price?.toLocaleString()} đ</Text>
                       </View>
                     )
                   })}
@@ -211,15 +213,31 @@ function OrderDetail({ route, navigation }) {
                     <Text style={{ color: "green", fontWeight: "bold" }}>{dataOrderDetail.totalOrder?.toLocaleString()} đ</Text>
                   </View>
 
+                  {dataOrderDetail.more_fee_name !== null ? (
+                    <>
+                      <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
+                        <Text>Chi phí phát sinh: </Text>
+                        <Text style={{ color: "green", fontWeight: "bold" }}></Text>
+                      </View>
+
+
+                      <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
+                        <Text>{dataOrderDetail.more_fee_name}</Text>
+                        <Text style={{ color: "green", fontWeight: "bold" }}>{dataOrderDetail.more_fee_price?.toLocaleString()} đ</Text>
+                      </View>
+                    </>
+                  ) : ''}
+                 
+
                   <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
                     <Text>Tổng đơn hàng mới: </Text>
-                    <Text style={{ color: "green", fontWeight: "bold" }}>{dataOrderDetail.totalOrderNew?.toLocaleString()} đ</Text>
+                    <Text style={{ color: "red", fontWeight: "bold", fontSize: 25 }}>{dataOrderDetail.totalOrderNew?.toLocaleString()} đ</Text>
                   </View>
 
 
                   <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
-                    <Text style={{textAlign:"justify", fontStyle:"italic", marginTop:10}}><Text style={{fontWeight:"bold"}}>Lưu ý: </Text>{"\n"}
-                  Phí dịch vụ được dựa trên nhiều yếu tố như tình hình giao thông, kích thước hàng hóa, phí cầu đường, phí gửi xe, các phụ phí khác...Vì vậy tổng giá dịch vụ sẽ có thể thay đổi. Giá hiển thị tại thời điểm đặt đơn có thể không giữ nguyên nếu có thay đổi về chi tiết đơn hàng.</Text>
+                    <Text style={{ textAlign: "justify", fontStyle: "italic", marginTop: 10 }}><Text style={{ fontWeight: "bold" }}>Lưu ý: </Text>{"\n"}
+                      Phí dịch vụ được dựa trên nhiều yếu tố như tình hình giao thông, kích thước hàng hóa, phí cầu đường, phí gửi xe, các phụ phí khác...Vì vậy tổng giá dịch vụ sẽ có thể thay đổi. Giá hiển thị tại thời điểm đặt đơn có thể không giữ nguyên nếu có thay đổi về chi tiết đơn hàng.</Text>
                   </View>
                 </View>
               </View>

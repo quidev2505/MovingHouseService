@@ -1,6 +1,9 @@
 const Order = require('../models/Order');
 const OrderDetail = require('../models/OrderDetail');
 const Customer = require("../models/Customer");
+const RatingDriver = require("../models/RatingDriver")
+const RatingService = require("../models/RatingService")
+const Driver = require("../models/Driver")
 const fs = require('fs');
 
 
@@ -271,6 +274,109 @@ const orderController = {
             } else {
                 res.status(501).json('Error');
             }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+    //Đánh giá dịch vụ và tài xế
+    ratingOrder: async (req, res) => {
+        try {
+            //Xử lý giờ
+            //Calculate Time at the moment
+            const now = new Date();
+            const vietnamTime = now.toLocaleString('vi-VN');
+            const date_now = vietnamTime.split(' ')[0];
+            const time_now = vietnamTime.split(' ')[1];
+
+            //Đánh giá dịch vụ trước
+            const order_id_input = req.params.order_id;
+
+            const create_ratingService = await new RatingService({
+                customer_name: req.body.customer_name,
+                order_id: order_id_input,
+                star: req.body.star_service,
+                comment: req.body.comment_service,
+                service_name: req.body.service_name,
+                rating_date: date_now + time_now
+            })
+
+            //Lưu đánh giá dịch vụ
+            const save_rating_service = await create_ratingService.save();
+
+            //Tiếp theo tới đánh giá tài xế
+            if (save_rating_service) {
+                //Check xem có bao nhiêu tài xế trong đơn hàng
+                const driver_name = req.body.driver_name
+                const create_ratingDriver = await new RatingDriver({
+                    rating_date: date_now + time_now,
+                    // star: req.body.star_driver,
+                    // comment: req.body.comment_driver,
+                    customer_name: req.body.customer_name,
+                })
+
+                //Nếu có từ 2 tài xế trở lên
+                if (driver_name.length > 1) {
+                    driver_name.forEach(async (item, index) => {
+                        //Lưu vào bảng đánh giá tài xế
+                        create_ratingDriver.driver_name = item;
+                        create_ratingDriver.star = req.body.star[index]
+                        create_ratingDriver.comment = req.body.comment[index]
+                        const saveRatingDriver = await create_ratingDriver.save();
+                    })
+                }
+
+                //Nếu chỉ có 1 tài xế
+                //Lưu vào bảng đánh giá tài xế
+                create_ratingDriver.driver_name = driver_name[0]
+                create_ratingDriver.comment = req.body.comment_driver[0]
+                create_ratingDriver.star = req.body.star[0]
+                const save_rating_driver = await create_ratingDriver.save();
+
+
+                if (save_rating_driver) {
+                    //Lưu vào cơ sở dữ liệu của bảng tài xế
+                    if (driver_name.length > 1) {
+                        driver_name.forEach(async (item, index) => {
+                            const dataDriver = await Driver.findOne({ fullname: item });
+                            const arr_rating_id_driver = dataDriver.id_rating;
+                            arr_rating_id_driver.push(save_rating_driver._id)
+
+                            //Cập nhật sao trung bình cho tài xế
+                            let data_rating_driver = await RatingDriver.find({ driver_name: item })
+                            let avg_star = 0;
+                            let arr_star = data_rating_driver.map((item, index) => {
+                                return item.star
+                            })
+
+                            avg_star = arr_star.reduce((a, b) => a + b, 0) / arr_star.length;
+
+
+                            await Driver.updateOne({ fullname: item }, { id_raing: arr_rating_id_driver, star_average: avg_star }, { new: true })
+                        })
+                    } else {
+                        const dataDriver = await Driver.findOne({ fullname: driver_name[0] });
+                        const arr_rating_id_driver = dataDriver.id_rating;
+                        arr_rating_id_driver.push(save_rating_driver._id)
+
+                        //Cập nhật sao trung bình cho tài xế
+                        let data_rating_driver = await RatingDriver.find({ driver_name: driver_name[0] })
+                        let avg_star = 0;
+                        let arr_star = data_rating_driver.map((item, index) => {
+                            return item.star
+                        })
+
+                        avg_star = arr_star.reduce((a, b) => a + b, 0) / arr_star.length;
+
+
+                        await Driver.updateOne({ fullname: item }, { id_raing: arr_rating_id_driver, start_average: avg_star }, { new: true })
+                    }
+                }
+
+                res.status(201).json("Success")
+            }
+
         } catch (e) {
             console.log(e)
             res.status(501).json(e)

@@ -24,11 +24,10 @@ function StepByStep({ route, navigation }) {
         let fromLocationReceive = await axios.get(`https://geocode.maps.co/search?q=${from_location}&format=json`)
 
         const ob_from_location = {
-            lat: fromLocationReceive.data[0].lat,
-            lon: fromLocationReceive.data[0].lon,
+            lat: fromLocationReceive.data[0]?.lat,
+            lon: fromLocationReceive.data[0]?.lon,
             name: fromLocationDetail
         }
-
 
 
         setFromLocation(ob_from_location)
@@ -46,8 +45,8 @@ function StepByStep({ route, navigation }) {
         // }
 
         const ob_to_location = {
-            lat: toLocationReceive.data[0].lat,
-            lon: toLocationReceive.data[0].lon,
+            lat: toLocationReceive.data[0]?.lat,
+            lon: toLocationReceive.data[0]?.lon,
             name: toLocationDetail
         }
 
@@ -485,20 +484,37 @@ function StepByStep({ route, navigation }) {
                     const date_end = data_order.date_start + ',' + result
 
 
+                    //Lấy ra mảng các ID đơn hàng tài xế đã giao
+                    let arr_driver = data_order.driver_name;
 
-                    //Cập nhật đơn hàng
-                    await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
-                        date_end: date_end,
-                        status: "Đã hoàn thành",
-                    }).then((data) => {
-                        Alert.alert('Thông báo', 'Hoàn tất giao nhận đơn hàng !', [
-                            { text: 'Xác nhận', onPress: () => navigation.navigate('ĐƠN HÀNG') },
-                        ]);
 
-                    }).catch((e) => {
-                        console.log(e)
+                    arr_driver.forEach(async (item, index) => {
+                        let arr_driver = await axios.get(`${api_url}/v1/driver/getdriver_with_fullname/${item}`)
+
+                        let arr_delivery_id_driver = arr_driver.data.id_delivery;
+
+                        arr_delivery_id_driver.push(data_order.order_id);
+
+                        if (arr_delivery_id_driver) {
+                            //Cập nhật lịch sử đơn hàng cho tài xế
+                            await axios.patch(`${api_url}/v1/driver/updateonefield_driver_withname/${item}`, {
+                                id_delivery: arr_delivery_id_driver
+                            })
+
+                            //Cập nhật đơn hàng
+                            await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
+                                date_end: date_end,
+                                status: "Đã hoàn thành",
+                            }).then((data) => {
+                                Alert.alert('Thông báo', 'Hoàn tất giao nhận đơn hàng !', [
+                                    { text: 'Xác nhận', onPress: () => navigation.navigate('ĐƠN HÀNG') },
+                                ]);
+
+                            }).catch((e) => {
+                                console.log(e)
+                            })
+                        }
                     })
-
 
 
                 } catch (e) {

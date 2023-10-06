@@ -9,6 +9,7 @@ import {
   EnvironmentOutlined,
   ReloadOutlined,
   DeleteOutlined,
+  StarOutlined,
 } from "@ant-design/icons";
 
 import { Table, Tag, Drawer, Timeline, Space, Modal } from "antd";
@@ -20,6 +21,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
 
 function OrderUser() {
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isActive, setIsActive] = useState(true);
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
@@ -493,7 +495,7 @@ function OrderUser() {
                 ? "Xác nhận hóa đơn"
                 : status === "Thanh toán hóa đơn"
                 ? "Thanh toán hóa đơn"
-                : "Hoàn thành"}
+                : "Đã hoàn thành"}
             </Tag>
           </div>
 
@@ -672,6 +674,36 @@ function OrderUser() {
                 <DeleteOutlined
                   style={{ color: "white", fontWeight: "bold" }}
                 />
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </Space>
+      ),
+    },
+    {
+      title: "Đánh giá",
+      key: "rating",
+      render: (order_id, driver_name) => (
+        <Space size="middle" className="icon_hover">
+          {order_id.status === "Đã hoàn thành" ? (
+            <>
+              <div
+                onClick={() => setIsModalVisible(true)}
+                style={{
+                  backgroundColor: "blue",
+                  borderRadius: "50%",
+                  padding: "5px",
+                  display: "flex",
+                  cursor: "pointer",
+                  width: "30px",
+                  height: "30px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <StarOutlined style={{ color: "white", fontWeight: "bold" }} />
               </div>
             </>
           ) : (
@@ -863,6 +895,84 @@ function OrderUser() {
               >
                 {DomOrderDetail}
               </Drawer>
+
+              {isModalVisible ? (
+                <>
+                  {/* Khu vực đánh giá đơn hàng */}
+                  <div
+                    style={{
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      backgroundColor: "rgba(0,0,0,0.6)",
+                      zIndex: 999999,
+                    }}
+                  >
+                    <div
+                      className="modal_rating"
+                      style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        top: "30%",
+                        left: "50%",
+                        width: "50px",
+                        height: "50px",
+                        transform: "translate(-50%,-50%)",
+                        backgroundColor: "white",
+                        width: "fit-content",
+                        height: "fit-content",
+                        border: "1px solid #ccc",
+                        borderRadius: "10px",
+                        padding: "10px",
+                      }}
+                    >
+                      <div
+                        className="rating_service"
+                        style={{ width: "600px", border: "1px solid #ccc" }}
+                      >
+                        <h4
+                          style={{
+                            backgroundColor: "orange",
+                            color: "white",
+                            fontWeight: "500",
+                            padding: "5px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Đánh giá dịch vụ
+                        </h4>
+                        <div>
+                          <div>
+                            <p>Nhận xét</p>
+                            <textarea placeholder="Nhập vào đánh giá"></textarea>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rating_driver"></div>
+
+                      <div
+                        style={{ display: "flex", justifyContent: "flex-end" }}
+                      >
+                        <button className="btn btn-success">CẬP NHẬT</button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => setIsModalVisible(false)}
+                        >
+                          ĐÓNG
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
             </div>
           </LoadingOverlayComponent>
         </div>
