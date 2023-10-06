@@ -10,6 +10,10 @@ router.post('/create_order', orderController.createOrder)
 router.get('/viewAllOrder', orderController.viewAllOrder)
 
 
+// View Order With Order Id
+router.get('/viewOrderWithOrderId/:order_id', orderController.ViewOrderWithOrderId)
+
+
 // View Order with customer_id
 router.get('/viewOrderWithCustomerId/:id_customer', orderController.viewOrderWithIdCustomer)
 

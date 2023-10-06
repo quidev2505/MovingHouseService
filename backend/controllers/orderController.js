@@ -98,6 +98,21 @@ const orderController = {
             res.status(501).json(e)
         }
     },
+    //View Order With Order id
+    ViewOrderWithOrderId: async (req, res) => {
+        try {
+            const order_id_input = req.params.order_id;
+
+            const data_order = await Order.findOne({ order_id: order_id_input });
+            if (data_order) {
+                res.status(201).json(data_order)
+            } else {
+                res.status(501).json(e)
+            }
+        } catch (e) {
+            res.status(501).json(e)
+        }
+    },
 
     //View Order With Id_Customer
     viewOrderWithIdCustomer: async (req, res) => {

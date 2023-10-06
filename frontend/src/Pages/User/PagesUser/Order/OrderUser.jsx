@@ -12,7 +12,7 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 
-import { Table, Tag, Drawer, Timeline, Space, Modal } from "antd";
+import { Table, Tag, Drawer, Timeline, Space, Modal, Rate, Avatar } from "antd";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
@@ -20,11 +20,15 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 
 import "sweetalert2/src/sweetalert2.scss";
 
+import { useNavigate } from "react-router-dom";
+
 function OrderUser() {
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isActive, setIsActive] = useState(true);
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
+
+  const nav = useNavigate();
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -685,12 +689,14 @@ function OrderUser() {
     {
       title: "Đánh giá",
       key: "rating",
-      render: (order_id, driver_name) => (
+      render: (order_id) => (
         <Space size="middle" className="icon_hover">
           {order_id.status === "Đã hoàn thành" ? (
             <>
               <div
-                onClick={() => setIsModalVisible(true)}
+                onClick={() => {
+                  nav(`/user/order/rating/${order_id.order_id}`);
+                }}
                 style={{
                   backgroundColor: "blue",
                   borderRadius: "50%",
@@ -814,9 +820,105 @@ function OrderUser() {
     }
   };
 
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
+  const onChange = (pagination, filters, sorter, extra) => {};
+
+  // const [commentRating, setCommentRating] = useState("");
+  // const [arrDriver, setArrayDriver] = useState([]);
+
+  // const [dom_RatingDriver, setDOMRatingDriver] = useState();
+
+  // const openRating = async (order_id) => {
+  //   // Lấy mảng tên tài xế
+  //   let arr_driver_name = order_id.driver_name;
+
+  //   // Lặp qua mảng tên tài xế và thực hiện truy vấn API
+  //   arr_driver_name.forEach(async (item, index) => {
+  //     // Thực hiện truy vấn API
+  //     let result = await axios.get(
+  //       `/v1/driver/getdriver_with_fullname/${item}`
+  //     );
+
+  //     // Tạo đối tượng `ob` chứa thông tin về tài xế
+  //     let ob = {
+  //       fullname: result.data.fullname,
+  //       avatar: result.data.avatar,
+  //     };
+
+  //     arrDriver.push(ob);
+
+  //     setArrayDriver(arrDriver);
+  //   });
+
+  //   //Tạo DOM gắn vào tài xế
+  //   if (arrDriver.length > 0) {
+  //     let DOM_DRIVER = arrDriver.map((item, index) => {
+  //       return (
+  //         <>
+  //           <div className="d-flex">
+  //             <Avatar src={<img src={item.avatar} alt="avatar" />} />
+  //             <h5>{item.fullname}</h5>
+  //           </div>
+  //           <div style={{ padding: "10px" }}>
+  //             <div
+  //               className="d-flex"
+  //               style={{
+  //                 justifyContent: "space-between",
+  //                 alignItems: "center",
+  //                 paddingLeft: "15px",
+  //                 width: "300px",
+  //               }}
+  //             >
+  //               <p style={{ marginBottom: "0px" }}>Đánh giá</p>
+  //               <span>
+  //                 <Rate
+  //                   tooltips={desc}
+  //                   onChange={setValueStar}
+  //                   value={valueStar}
+  //                 />
+  //                 {valueStar ? (
+  //                   <span className="ant-rate-text">{desc[valueStar - 1]}</span>
+  //                 ) : (
+  //                   ""
+  //                 )}
+  //               </span>
+  //             </div>
+  //             <div
+  //               className="d-flex"
+  //               style={{
+  //                 justifyContent: "space-between",
+  //                 alignItems: "center",
+  //                 paddingLeft: "15px",
+  //                 marginTop: "40px",
+  //               }}
+  //             >
+  //               <p>Nhận xét</p>
+  //               <textarea
+  //                 placeholder="Nhập vào đánh giá"
+  //                 value={commentRating}
+  //                 onChange={(e) => setCommentRating(e.target.value)}
+  //                 style={{
+  //                   height: "100px",
+  //                   width: "100%",
+  //                   padding: "10px",
+  //                   border: "1px solid #ccc",
+  //                 }}
+  //               ></textarea>
+  //             </div>
+  //           </div>
+  //         </>
+  //       );
+  //     });
+
+  //     setDOMRatingDriver(DOM_DRIVER);
+  //   }
+  // };
+
+  // //Đánh giá đơn hàng
+  // const desc = ["Rất tệ", "Tệ", "Bình thường", "Tốt", "Tuyệt vời"];
+  // const [valueStar, setValueStar] = useState(3); //đánh giá sao
+  // const create_rating = () => {
+  //   console.log(commentRating);
+  // };
 
   return (
     <>
@@ -895,85 +997,9 @@ function OrderUser() {
               >
                 {DomOrderDetail}
               </Drawer>
-
-              {isModalVisible ? (
-                <>
-                  {/* Khu vực đánh giá đơn hàng */}
-                  <div
-                    style={{
-                      position: "fixed",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      backgroundColor: "rgba(0,0,0,0.6)",
-                      zIndex: 999999,
-                    }}
-                  >
-                    <div
-                      className="modal_rating"
-                      style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        top: "30%",
-                        left: "50%",
-                        width: "50px",
-                        height: "50px",
-                        transform: "translate(-50%,-50%)",
-                        backgroundColor: "white",
-                        width: "fit-content",
-                        height: "fit-content",
-                        border: "1px solid #ccc",
-                        borderRadius: "10px",
-                        padding: "10px",
-                      }}
-                    >
-                      <div
-                        className="rating_service"
-                        style={{ width: "600px", border: "1px solid #ccc" }}
-                      >
-                        <h4
-                          style={{
-                            backgroundColor: "orange",
-                            color: "white",
-                            fontWeight: "500",
-                            padding: "5px",
-                            textAlign: "center",
-                          }}
-                        >
-                          Đánh giá dịch vụ
-                        </h4>
-                        <div>
-                          <div>
-                            <p>Nhận xét</p>
-                            <textarea placeholder="Nhập vào đánh giá"></textarea>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="rating_driver"></div>
-
-                      <div
-                        style={{ display: "flex", justifyContent: "flex-end" }}
-                      >
-                        <button className="btn btn-success">CẬP NHẬT</button>
-                        <button
-                          className="btn btn-danger"
-                          onClick={() => setIsModalVisible(false)}
-                        >
-                          ĐÓNG
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
             </div>
+
+  
           </LoadingOverlayComponent>
         </div>
       </div>
