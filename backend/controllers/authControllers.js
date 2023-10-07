@@ -52,7 +52,7 @@ const authControllers = {
         }
     },
 
- 
+
     //GENERATE ACCESS TOKEN
     generateAccessToken: (user) => {
         return jwt.sign(
@@ -81,10 +81,12 @@ const authControllers = {
     //Login
     loginUser: async (req, res) => {
         try {
-            const user = await User.findOne({ email: req.body.email })
+            let user = await User.findOne({ email: req.body.email }) //Check xem đăng nhập với Email
 
             if (!user) {
-                return res.status(404).json("Wrong Email !");
+                //Check xem đăng nhập với số điện thoại
+                user = await User.findOne({ phonenumber: req.body.email })
+
             }
 
             //Compare password
@@ -119,7 +121,7 @@ const authControllers = {
                     path: "/",
                     sameSite: "strict",
                 })
-                
+
 
                 //Loại bỏ password ra để bảo mật
                 const { password, ...others } = user._doc;

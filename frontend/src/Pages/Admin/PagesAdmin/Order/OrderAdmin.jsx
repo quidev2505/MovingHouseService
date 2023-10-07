@@ -4,6 +4,7 @@ import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 import { Breadcrumb, Button } from "antd";
 import TopCssContent from "../TopCssContent";
 import BottomCssContent from "../BottomCssContent";
+import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
 import { Link } from "react-router-dom";
 
@@ -46,6 +47,7 @@ function OrderAdmin() {
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
 
+  const [isActive, setIsActive] = useState(true);
   //Lí do hủy đơn hàng
   const [cancelReason, setCancelReason] = useState("");
 
@@ -401,6 +403,7 @@ function OrderAdmin() {
   };
 
   const show_order_customer = async (status_input) => {
+    setIsActive(true);
     let arr_customer_id = await axios.get("/v1/order/viewAllOrder");
     let arr_CI = [];
     arr_customer_id.data.forEach((item, index) => {
@@ -468,6 +471,8 @@ function OrderAdmin() {
           } else {
             setDataOrder(new_arr);
           }
+
+          setIsActive(false);
         })
 
         .catch((e) => {
@@ -1166,8 +1171,9 @@ function OrderAdmin() {
               </div>
             </TopCssContent>
             <div>
-              <Table columns={columns} dataSource={dataOrder} />
-
+              <LoadingOverlayComponent status={isActive}>
+                <Table columns={columns} dataSource={dataOrder} />
+              </LoadingOverlayComponent>
               <Drawer
                 title="# Chi tiết đơn hàng"
                 placement="right"

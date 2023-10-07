@@ -119,7 +119,19 @@ function InfoUser() {
       <LoadingOverlayComponent status={isActive}>
         <div className="infoUser">
           <div>
-            <h1 style={{ fontWeight: "700", marginBottom: "60px" }}>
+            <h1
+              style={{
+                fontWeight: "700",
+                marginBottom: "60px",
+                width: "700px",
+                textAlign: "center",
+                backgroundColor: "orange",
+                color: "white",
+                bordeRadius: "10px",
+                padding: "5px",
+                overflow:"hidden"
+              }}
+            >
               Thông tin cá nhân
             </h1>
             <p style={{ fontStyle: "italic", color: "#737375 " }}>
@@ -279,8 +291,8 @@ function InfoUser() {
                     <img
                       style={{
                         borderRadius: "50%",
-                        border: "1px solid #ccc",
-                        boxShadow:"2px 3px 6px #ccc",
+                        border: "1px solid orange",
+                        boxShadow: "2px 3px 6px #ccc",
                         backgroundColor: "black",
                         width: "250px",
                         marginLeft: "70px",

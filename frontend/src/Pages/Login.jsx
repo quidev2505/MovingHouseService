@@ -87,26 +87,26 @@ function Login() {
                         />
                         <div className="form-outline mb-4  form_input_handle">
                           <input
-                            type="email"
+                            type="text"
                             id="email"
                             className="form-control form-control-lg"
-                            placeholder="Email"
+                            placeholder="Email hoặc Số điện thoại"
                             style={{ fontSize: "17px", borderRadius: "3px" }}
                             {...register("email", {
                               required: true,
                               minLength: 5,
-                              pattern: /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
+                              // pattern: /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g ||
                             })}
                           />
                           {errors?.email?.type === "required" && (
-                            <p>Email không được để trống !</p>
+                            <p>Không được để trống !</p>
                           )}
                           {errors?.email?.type === "minLength" && (
-                            <p>Email chưa đủ kí tự !</p>
+                            <p>Chưa đủ kí tự !</p>
                           )}
-                          {errors?.email?.type === "pattern" && (
+                          {/* {errors?.email?.type === "pattern" && (
                             <p>Email chưa đúng định dạng !</p>
-                          )}
+                          )} */}
                         </div>
                         <div className="input-group mb-3 form-outline mb-4 form_input_handle">
                           <input

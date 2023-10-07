@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 
 import htmlReactParser from "html-react-parser";
 
+import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+
 import {
   EditOutlined,
   FolderViewOutlined,
@@ -30,6 +32,7 @@ import { Collapse } from "antd";
 import axios from "axios";
 
 function CalendarAdmin() {
+  const [isActive, setIsActive] = useState(true);
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
 
@@ -89,16 +92,22 @@ function CalendarAdmin() {
       date = convertDate(dataFilter).toString();
     }
 
+    setIsActive(true);
+
     await axios
       .get(`/v1/order/viewAllOrder`)
       .then((data) => {
         let data_solve = data.data;
+        console.log(data_solve);
         const data_item = [];
         data_solve &&
           data_solve.forEach(async (item, index) => {
             let avatar_driver = "";
             let arr_avatar_driver = [];
-            if (item.status === "Đang thực hiện") {
+            if (
+              item.status === "Đang thực hiện" ||
+              item.status === "Thanh toán hóa đơn"
+            ) {
               if (item.driver_name.length > 1) {
                 for (let i = 0; i < item.driver_name.length; i++) {
                   let data_get = await axios.get(
@@ -114,79 +123,79 @@ function CalendarAdmin() {
 
                 avatar_driver = avatar_driver.data;
               }
-            }
 
-            let ob_service = {};
-            console.log(item.date_start)
-            if (date === item.date_start) {
-              if (item.driver_name.length > 1) {
-                ob_service = {
-                  id: item._id,
-                  STT: index + 1,
-                  order_id: item.order_id,
-                  date_start: item.date_start,
-                  time_start: item.time_start,
-                  driver_name: item.driver_name,
-                  fromLocation: item.fromLocation,
-                  toLocation: item.toLocation,
-                  service_name: item.service_name,
-                  vehicle_name: item.vehicle_name,
-                  avatar: arr_avatar_driver,
-                };
-              } else if (item.driver_name.length === 1) {
-                ob_service = {
-                  id: item._id,
-                  STT: index + 1,
-                  order_id: item.order_id,
-                  date_start: item.date_start,
-                  time_start: item.time_start,
-                  driver_name: item.driver_name,
-                  fromLocation: item.fromLocation,
-                  toLocation: item.toLocation,
-                  service_name: item.service_name,
-                  vehicle_name: item.vehicle_name,
-                  avatar: avatar_driver,
-                };
+              let ob_service = {};
+              console.log(item.date_start);
+              if (date === item.date_start) {
+                if (item.driver_name.length > 1) {
+                  ob_service = {
+                    id: item._id,
+                    STT: index + 1,
+                    order_id: item.order_id,
+                    date_start: item.date_start,
+                    time_start: item.time_start,
+                    driver_name: item.driver_name,
+                    fromLocation: item.fromLocation,
+                    toLocation: item.toLocation,
+                    service_name: item.service_name,
+                    vehicle_name: item.vehicle_name,
+                    avatar: arr_avatar_driver,
+                  };
+                } else if (item.driver_name.length === 1) {
+                  ob_service = {
+                    id: item._id,
+                    STT: index + 1,
+                    order_id: item.order_id,
+                    date_start: item.date_start,
+                    time_start: item.time_start,
+                    driver_name: item.driver_name,
+                    fromLocation: item.fromLocation,
+                    toLocation: item.toLocation,
+                    service_name: item.service_name,
+                    vehicle_name: item.vehicle_name,
+                    avatar: avatar_driver,
+                  };
+                }
+
+                console.log(ob_service);
               }
 
-              console.log(ob_service)
-            }
-
-            if (date === "") {
-              if (item.driver_name.length > 1) {
-                ob_service = {
-                  id: item._id,
-                  STT: index + 1,
-                  order_id: item.order_id,
-                  date_start: item.date_start,
-                  time_start: item.time_start,
-                  driver_name: item.driver_name,
-                  fromLocation: item.fromLocation,
-                  toLocation: item.toLocation,
-                  service_name: item.service_name,
-                  vehicle_name: item.vehicle_name,
-                  avatar: arr_avatar_driver,
-                };
-              } else if (item.driver_name.length === 1) {
-                ob_service = {
-                  id: item._id,
-                  STT: index + 1,
-                  order_id: item.order_id,
-                  date_start: item.date_start,
-                  time_start: item.time_start,
-                  driver_name: item.driver_name,
-                  fromLocation: item.fromLocation,
-                  toLocation: item.toLocation,
-                  service_name: item.service_name,
-                  vehicle_name: item.vehicle_name,
-                  avatar: avatar_driver,
-                };
+              if (date === "") {
+                if (item.driver_name.length > 1) {
+                  ob_service = {
+                    id: item._id,
+                    STT: index + 1,
+                    order_id: item.order_id,
+                    date_start: item.date_start,
+                    time_start: item.time_start,
+                    driver_name: item.driver_name,
+                    fromLocation: item.fromLocation,
+                    toLocation: item.toLocation,
+                    service_name: item.service_name,
+                    vehicle_name: item.vehicle_name,
+                    avatar: arr_avatar_driver,
+                  };
+                } else if (item.driver_name.length === 1) {
+                  ob_service = {
+                    id: item._id,
+                    STT: index + 1,
+                    order_id: item.order_id,
+                    date_start: item.date_start,
+                    time_start: item.time_start,
+                    driver_name: item.driver_name,
+                    fromLocation: item.fromLocation,
+                    toLocation: item.toLocation,
+                    service_name: item.service_name,
+                    vehicle_name: item.vehicle_name,
+                    avatar: avatar_driver,
+                  };
+                }
               }
+
+              data_item.push(ob_service);
+
+              dataDOM.current = data_item;
             }
-
-            data_item.push(ob_service);
-
-            dataDOM.current = data_item;
           });
 
         setTimeout(() => {
@@ -205,7 +214,9 @@ function CalendarAdmin() {
           });
 
           console.log(new_arr);
+
           setDataSource(new_arr);
+          setIsActive(false);
         }, 1100);
       })
       .catch((e) => {
@@ -265,7 +276,7 @@ function CalendarAdmin() {
                     type="date"
                     name="dob"
                     pattern="dd/mm/yyyy"
-                    placeholder="dd/mm/yyyy"
+                    placeholder="DD/MM/YYYY"
                     id="date_of_birth"
                     className="form-control form-control-lg"
                     style={{ fontSize: "17px", borderRadius: "3px" }}
@@ -284,129 +295,133 @@ function CalendarAdmin() {
               </div>
             </TopCssContent>
 
-            <div style={{ marginTop: "20px" }}>
-              <Space direction="vertical" style={{ width: "100%" }}>
-                {dataSource.length === 0 ? (
-                  <h5 style={{ color: "red", fontStyle: "italic" }}>
-                    Không có lịch vận chuyển nào !
-                  </h5>
-                ) : (
-                  ""
-                )}
-                {dataSource &&
-                  dataSource.map((item, index) => {
-                    return (
-                      <Collapse
-                        collapsible="header"
-                        defaultActiveKey={["1"]}
-                        items={[
-                          {
-                            key: "1",
-                            label: (
-                              <>
-                                <p style={{ color: "red" }}>
-                                  ID: {item.order_id}
-                                </p>{" "}
-                                <span style={{ color: "#ed883b" }}>
-                                  {item.service_name}
-                                </span>
-                                <span style={{ marginLeft: "20px" }}>
-                                  Xuất phát:
-                                </span>{" "}
-                                <span
-                                  style={{ color: "red", fontWeight: "bold" }}
-                                >
-                                  {item.time_start} - {item.date_start}
-                                </span>
-                              </>
-                            ),
-                            children: (
-                              <>
-                                <div className="row">
-                                  <div className="col">
-                                    <p className="fw-bold">
-                                      <span
-                                        className="fw-bold"
-                                        style={{ color: "red" }}
-                                      >
-                                        Từ địa điểm:
-                                      </span>{" "}
-                                      {item.fromLocation}
-                                    </p>
-                                    <p className="fw-bold">
-                                      {" "}
-                                      <span
-                                        className="fw-bold"
-                                        style={{ color: "#00bab3" }}
-                                      >
-                                        Đến địa điểm:
-                                      </span>{" "}
-                                      {item.toLocation}
-                                    </p>
-                                  </div>
-                                  <div className="col">
-                                    <p
-                                      style={{
-                                        color: "green",
-                                        fontWeight: "bold",
-                                      }}
-                                    >
-                                      Tài xế:{" "}
-                                    </p>
-
-                                    {/* Nếu chỉ có 1 tài xế */}
-                                    {item.driver_name.length === 1 ? (
-                                      <div>
-                                        <span style={{ fontWeight: "bold" }}>
-                                          1. {item.driver_name[0]}
+            <LoadingOverlayComponent status={isActive}>
+              <div style={{ marginTop: "20px" }}>
+                <Space direction="vertical" style={{ width: "100%" }}>
+                  {dataSource.length === 0 ? (
+                    <h5 style={{ color: "red", fontStyle: "italic" }}>
+                      Không có lịch vận chuyển nào !
+                    </h5>
+                  ) : (
+                    ""
+                  )}
+                  {dataSource &&
+                    dataSource.map((item, index) => {
+                      return (
+                        <Collapse
+                          collapsible="header"
+                          defaultActiveKey={["1"]}
+                          items={[
+                            {
+                              key: "1",
+                              label: (
+                                <>
+                                  <p style={{ color: "red" }}>
+                                    ID: {item.order_id}
+                                  </p>{" "}
+                                  <span style={{ color: "#ed883b" }}>
+                                    {item.service_name}
+                                  </span>
+                                  <span style={{ marginLeft: "20px" }}>
+                                    Xuất phát:
+                                  </span>{" "}
+                                  <span
+                                    style={{ color: "red", fontWeight: "bold" }}
+                                  >
+                                    {item.time_start} - {item.date_start}
+                                  </span>
+                                </>
+                              ),
+                              children: (
+                                <>
+                                  <div className="row">
+                                    <div className="col">
+                                      <p className="fw-bold">
+                                        <span
+                                          className="fw-bold"
+                                          style={{ color: "red" }}
+                                        >
+                                          Từ địa điểm:
                                         </span>{" "}
-                                        &nbsp;
-                                        <Avatar
-                                          src={
-                                            <img
-                                              src={item.avatar}
-                                              alt="avatar"
-                                            />
-                                          }
-                                        />
-                                      </div>
-                                    ) : (
-                                      ""
-                                    )}
+                                        {item.fromLocation}
+                                      </p>
+                                      <p className="fw-bold">
+                                        {" "}
+                                        <span
+                                          className="fw-bold"
+                                          style={{ color: "#00bab3" }}
+                                        >
+                                          Đến địa điểm:
+                                        </span>{" "}
+                                        {item.toLocation}
+                                      </p>
+                                    </div>
+                                    <div className="col">
+                                      <p
+                                        style={{
+                                          color: "green",
+                                          fontWeight: "bold",
+                                        }}
+                                      >
+                                        Tài xế:{" "}
+                                      </p>
 
-                                    {/* Nếu có từ 2 tài xế trở lên */}
-                                    {item.driver_name.length > 1 &&
-                                      item.driver_name.map((item1, index) => {
-                                        return (
-                                          <div>
-                                            <span
-                                              style={{ fontWeight: "bold" }}
-                                            >
-                                              {index+1}. {item1}
-                                            </span>{" "}
-                                            &nbsp;
-                                            <Avatar
-                                              src={
-                                                <img
-                                                  src={item.avatar[index]}
-                                                  alt="avatar"
-                                                />
-                                              }
-                                            />
-                                          </div>
-                                        );
-                                      })}
+                                      {/* Nếu chỉ có 1 tài xế */}
+                                      {item.driver_name.length === 1 ? (
+                                        <div>
+                                          <span style={{ fontWeight: "bold" }}>
+                                            1. {item.driver_name[0]}
+                                          </span>{" "}
+                                          &nbsp;
+                                          <Avatar
+                                            src={
+                                              <img
+                                                src={item.avatar.avatar}
+                                                alt="avatar"
+                                              />
+                                            }
+                                          />
+                                        </div>
+                                      ) : (
+                                        ""
+                                      )}
+
+                                      {/* Nếu có từ 2 tài xế trở lên */}
+                                      {item.driver_name.length > 1 &&
+                                        item.driver_name.map((item1, index) => {
+                                          return (
+                                            <div>
+                                              <span
+                                                style={{ fontWeight: "bold" }}
+                                              >
+                                                {index + 1}. {item1}
+                                              </span>{" "}
+                                              &nbsp;
+                                              <Avatar
+                                                src={
+                                                  <img
+                                                    src={
+                                                      item.avatar[index].avatar
+                                                    }
+                                                    alt="avatar"
+                                                  />
+                                                }
+                                              />
+                                            </div>
+                                          );
+                                        })}
+                                    </div>
                                   </div>
-                                </div>
-                              </>
-                            ),
-                          },
-                        ]}
-                      />
-                    );
-                  })}
-              </Space>
-            </div>
+                                </>
+                              ),
+                            },
+                          ]}
+                        />
+                      );
+                    })}
+                </Space>
+              </div>
+            </LoadingOverlayComponent>
           </BottomCssContent>
         </div>
       </LayoutAdmin>
