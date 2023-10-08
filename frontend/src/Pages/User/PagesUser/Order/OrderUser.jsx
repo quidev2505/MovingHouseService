@@ -49,6 +49,14 @@ function OrderUser() {
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
 
+  //Khoảng thời gian
+  const [startRange, setStartRange] = useState(""); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState(""); //Thời gian cuối
+
+  //Khoảng tổng giá đơn hàng
+  const [startRangePrice, setStartRangePrice] = useState(""); //Giá bắt đầu
+  const [endRangePrice, setEndRangePrice] = useState(""); //Giá kết thúc
+
   const nav = useNavigate();
 
   const showDrawer = () => {
@@ -74,24 +82,85 @@ function OrderUser() {
         .then((data) => {
           let dataOrder = data.data;
           const data_order = [];
+          let ob_order = {};
+          console.log(startRange);
+          console.log(endRange);
           dataOrder &&
             dataOrder.forEach((item, index) => {
-              const ob_order = {
-                id_order_detail: item.order_detail_id,
-                STT: index + 1,
-                order_id: item.order_id,
-                service_name: item.service_name,
-                status: item.status,
-                time_get_item: `${item.time_start} - ${item.date_start}`,
-                router: `${item.fromLocation} - ${item.toLocation}`,
-                driver_name: item.driver_name,
-                vehicle_name: item.vehicle_name,
-                totalOrder: item.totalOrder,
-                reason_cancel: item.reason_cancel,
-              };
+              //Trường hợp khi đã nhấn nút lọc theo khoảng thời gian
+              if (startRange !== "" && endRange !== "") {
+                if (
+                  startRange <= item.date_start &&
+                  item.date_start <= endRange
+                ) {
+                  ob_order = {
+                    id_order_detail: item.order_detail_id,
+                    STT: index + 1,
+                    order_id: item.order_id,
+                    service_name: item.service_name,
+                    status: item.status,
+                    time_get_item: `${item.time_start} - ${item.date_start}`,
+                    router: `${item.fromLocation} - ${item.toLocation}`,
+                    date_end: item.date_end,
+                    driver_name: item.driver_name,
+                    vehicle_name: item.vehicle_name,
+                    totalOrder: item.totalOrder,
+                    reason_cancel: item.reason_cancel,
+                  };
 
-              data_order.push(ob_order);
+                  data_order.push(ob_order);
+                }
+              } else if (startRangePrice !== "" && endRangePrice !== "") {
+                //Trường hợp khi đã chọn vào giá đơn hàng
+                if (
+                  Number(startRangePrice * 100000) <= item.totalOrder &&
+                  item.totalOrder <= Number(endRangePrice * 100000)
+                ) {
+                  ob_order = {
+                    id_order_detail: item.order_detail_id,
+                    STT: index + 1,
+                    order_id: item.order_id,
+                    service_name: item.service_name,
+                    status: item.status,
+                    time_get_item: `${item.time_start} - ${item.date_start}`,
+                    router: `${item.fromLocation} - ${item.toLocation}`,
+                    date_end: item.date_end,
+                    driver_name: item.driver_name,
+                    vehicle_name: item.vehicle_name,
+                    totalOrder: item.totalOrder,
+                    reason_cancel: item.reason_cancel,
+                  };
+
+                  data_order.push(ob_order);
+                }
+              } else {
+                ob_order = {
+                  id_order_detail: item.order_detail_id,
+                  STT: index + 1,
+                  order_id: item.order_id,
+                  service_name: item.service_name,
+                  status: item.status,
+                  date_end: item.date_end,
+                  time_get_item: `${item.time_start} - ${item.date_start}`,
+                  router: `${item.fromLocation} - ${item.toLocation}`,
+                  driver_name: item.driver_name,
+                  vehicle_name: item.vehicle_name,
+                  totalOrder: item.totalOrder,
+                  reason_cancel: item.reason_cancel,
+                };
+                data_order.push(ob_order);
+              }
             });
+
+          //Nếu đã chọn thời gian
+          if (startRange !== "" && endRange !== "") {
+            setDataOrder(data_order);
+          }
+
+          //Nếu đã chọn giá tiền
+          if (startRangePrice !== "" && endRangePrice !== "") {
+            setDataOrder(data_order);
+          }
 
           let new_arr = data_order.filter((item) => {
             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
@@ -126,7 +195,7 @@ function OrderUser() {
     }
   };
 
-  const view_detail_order = async (id_order_detail) => {
+  const view_detail_order = async (id_order_detail, date_end) => {
     await axios
       .get(`/v1/order/viewOrderDetail/${id_order_detail}`)
       .then((data) => {
@@ -167,6 +236,34 @@ function OrderUser() {
                 ]}
               />
             </div>
+
+            {date_end !== null ? (
+              <>
+                <div>
+                  <p
+                    style={{
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      color: "#c1b8b2",
+                    }}
+                  >
+                    <span style={{ color: "blue" }}>THỜI GIAN NHẬN HÀNG</span>
+                    <br></br>
+                    <span
+                      style={{
+                        color: "black",
+                        fontWeight: "500",
+                        fontSize: "13px",
+                      }}
+                    >
+                      {date_end}
+                    </span>
+                  </p>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
 
             <div>
               <p
@@ -686,6 +783,7 @@ function OrderUser() {
       title: "Lộ trình",
       dataIndex: "router",
       key: "router",
+      ...getColumnSearchProps("router"),
       render: (router) => (
         <>
           <div className="col" style={{ fontSize: "12px" }}>
@@ -777,11 +875,11 @@ function OrderUser() {
       title: "Xem chi tiết",
       dataIndex: "id_order_detail",
       key: "id_order_detail",
-      render: (id_order_detail) => (
+      render: (id_order_detail, date_end) => (
         <div
           onClick={() => {
             showDrawer();
-            view_detail_order(id_order_detail);
+            view_detail_order(id_order_detail, date_end.date_end);
           }}
           style={{
             backgroundColor: "#29251b",
@@ -967,103 +1065,29 @@ function OrderUser() {
 
   const onChange = (pagination, filters, sorter, extra) => {};
 
-  // const [commentRating, setCommentRating] = useState("");
-  // const [arrDriver, setArrayDriver] = useState([]);
+  //Thiết lập lọc theo khoảng thời gian
+  const changeRangeTime = (a, b, c) => {
+    //b là range thời gian
+    setStartRange(b[0]);
+    setEndRange(b[1]);
+  };
 
-  // const [dom_RatingDriver, setDOMRatingDriver] = useState();
+  //Khi bấm nút Search
+  const filterRangeTime = () => {
+    show_order_customer();
+  };
 
-  // const openRating = async (order_id) => {
-  //   // Lấy mảng tên tài xế
-  //   let arr_driver_name = order_id.driver_name;
+  //Thiết lập lọc theo tổng giá đơn hàng
+  const changeRangePrice = (a) => {
+    //a là range thời gian
+    setStartRangePrice(a[0]);
+    setEndRangePrice(a[1]);
+  };
 
-  //   // Lặp qua mảng tên tài xế và thực hiện truy vấn API
-  //   arr_driver_name.forEach(async (item, index) => {
-  //     // Thực hiện truy vấn API
-  //     let result = await axios.get(
-  //       `/v1/driver/getdriver_with_fullname/${item}`
-  //     );
-
-  //     // Tạo đối tượng `ob` chứa thông tin về tài xế
-  //     let ob = {
-  //       fullname: result.data.fullname,
-  //       avatar: result.data.avatar,
-  //     };
-
-  //     arrDriver.push(ob);
-
-  //     setArrayDriver(arrDriver);
-  //   });
-
-  //   //Tạo DOM gắn vào tài xế
-  //   if (arrDriver.length > 0) {
-  //     let DOM_DRIVER = arrDriver.map((item, index) => {
-  //       return (
-  //         <>
-  //           <div className="d-flex">
-  //             <Avatar src={<img src={item.avatar} alt="avatar" />} />
-  //             <h5>{item.fullname}</h5>
-  //           </div>
-  //           <div style={{ padding: "10px" }}>
-  //             <div
-  //               className="d-flex"
-  //               style={{
-  //                 justifyContent: "space-between",
-  //                 alignItems: "center",
-  //                 paddingLeft: "15px",
-  //                 width: "300px",
-  //               }}
-  //             >
-  //               <p style={{ marginBottom: "0px" }}>Đánh giá</p>
-  //               <span>
-  //                 <Rate
-  //                   tooltips={desc}
-  //                   onChange={setValueStar}
-  //                   value={valueStar}
-  //                 />
-  //                 {valueStar ? (
-  //                   <span className="ant-rate-text">{desc[valueStar - 1]}</span>
-  //                 ) : (
-  //                   ""
-  //                 )}
-  //               </span>
-  //             </div>
-  //             <div
-  //               className="d-flex"
-  //               style={{
-  //                 justifyContent: "space-between",
-  //                 alignItems: "center",
-  //                 paddingLeft: "15px",
-  //                 marginTop: "40px",
-  //               }}
-  //             >
-  //               <p>Nhận xét</p>
-  //               <textarea
-  //                 placeholder="Nhập vào đánh giá"
-  //                 value={commentRating}
-  //                 onChange={(e) => setCommentRating(e.target.value)}
-  //                 style={{
-  //                   height: "100px",
-  //                   width: "100%",
-  //                   padding: "10px",
-  //                   border: "1px solid #ccc",
-  //                 }}
-  //               ></textarea>
-  //             </div>
-  //           </div>
-  //         </>
-  //       );
-  //     });
-
-  //     setDOMRatingDriver(DOM_DRIVER);
-  //   }
-  // };
-
-  // //Đánh giá đơn hàng
-  // const desc = ["Rất tệ", "Tệ", "Bình thường", "Tốt", "Tuyệt vời"];
-  // const [valueStar, setValueStar] = useState(3); //đánh giá sao
-  // const create_rating = () => {
-  //   console.log(commentRating);
-  // };
+  //Khi bấm nút Search
+  const filterRangePrice = () => {
+    show_order_customer();
+  };
 
   return (
     <>
@@ -1082,7 +1106,7 @@ function OrderUser() {
         <div className="content_order" style={{ marginTop: "30px" }}>
           <div
             className="top_content_order d-flex"
-            style={{ justifyContent: "space-between" }}
+            style={{ justifyContent: "space-between", alignItems: "center" }}
           >
             <div
               className="d-flex"
@@ -1098,6 +1122,9 @@ function OrderUser() {
                   padding: "13px",
                   color: "white",
                   cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               />
               <input
@@ -1110,14 +1137,76 @@ function OrderUser() {
               />
             </div>
 
-            <div>
-              <RangePicker
-                defaultValue={[
-                  dayjs("09/10/2023", dateFormat),
-                  dayjs("10/10/2023", dateFormat),
-                ]}
-                format={dateFormat}
-              />
+            {/* Chọn thời gian */}
+            <div
+              style={{
+                padding: "5px",
+                border: "1px solid orange",
+                borderRadius: "5px",
+                display: "flex",
+              }}
+            >
+              <div>
+                <h6 className="text-center fw-bold">Thời gian lấy hàng</h6>
+                <div className="d-flex">
+                  <RangePicker
+                    defaultValue={[
+                      dayjs("09/10/2023", dateFormat),
+                      dayjs("10/10/2023", dateFormat),
+                    ]}
+                    format={dateFormat}
+                    onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
+                  />
+                  <SearchOutlined
+                    onClick={() => filterRangeTime()}
+                    style={{
+                      backgroundColor: "#ed883b",
+                      padding: "13px",
+                      color: "white",
+                      cursor: "pointer",
+                      marginLeft: "10px",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Chọn khoảng giá */}
+            <div
+              style={{
+                width: "30%",
+                flexDirection: "column",
+                border: "1px solid orange",
+                padding: "10px",
+                borderRadius: "5px",
+              }}
+              className="d-flex"
+            >
+              <div className="d-flex">
+                <Slider
+                  style={{ width: "100%" }}
+                  range={{
+                    draggableTrack: true,
+                  }}
+                  defaultValue={[0, 10]}
+                  tooltip={{
+                    open: true,
+                  }}
+                  onChange={(a, b) => changeRangePrice(a, b)}
+                />
+                <SearchOutlined
+                  onClick={() => filterRangePrice()}
+                  style={{
+                    backgroundColor: "#ed883b",
+                    padding: "13px",
+                    color: "white",
+                    cursor: "pointer",
+                    marginLeft: "10px",
+                  }}
+                />
+              </div>
+
+              <h6 className="text-center fw-bold">Tổng giá đơn hàng</h6>
             </div>
 
             <div
@@ -1139,14 +1228,6 @@ function OrderUser() {
             </div>
           </div>
           <LoadingOverlayComponent status={isActive}>
-            <div>
-              <Slider
-                defaultValue={30}
-                tooltip={{
-                  open: true,
-                }}
-              />
-            </div>
             <div className="bottom_content_order" style={{ marginTop: "20px" }}>
               <Table
                 columns={columns}
