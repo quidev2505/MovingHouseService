@@ -2,6 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import HeaderUser from "../../ComponentUser/HeaderUser";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import Highlighter from "react-highlight-words";
+
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+import "sweetalert2/src/sweetalert2.scss";
+
+import { useNavigate } from "react-router-dom";
 
 import {
   SearchOutlined,
@@ -12,15 +19,30 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 
-import { Table, Tag, Drawer, Timeline, Space, Modal, Rate, Avatar } from "antd";
+import {
+  Table,
+  Tag,
+  Drawer,
+  Timeline,
+  Space,
+  Modal,
+  Rate,
+  Avatar,
+  Input,
+  Button,
+  DatePicker,
+  Slider,
+} from "antd";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
-import Swal from "sweetalert2/dist/sweetalert2.js";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
-import "sweetalert2/src/sweetalert2.scss";
+const { RangePicker } = DatePicker;
 
-import { useNavigate } from "react-router-dom";
+const dateFormat = "DD/MM/YYYY";
 
 function OrderUser() {
   const [isActive, setIsActive] = useState(true);
@@ -429,6 +451,127 @@ function OrderUser() {
     return str;
   }
 
+  //Tính năng lọc theo Search
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
   //Table Area
   const columns = [
     {
@@ -520,6 +663,7 @@ function OrderUser() {
       title: "Tên dịch vụ",
       dataIndex: "service_name",
       key: "service_name",
+      ...getColumnSearchProps("service_name"),
     },
     {
       title: "Thời gian lấy hàng",
@@ -592,8 +736,9 @@ function OrderUser() {
       title: "Tài xế",
       dataIndex: "driver_name",
       key: "driver_name",
+      ...getColumnSearchProps("driver_name"),
       render: (driver_name) => (
-        <div className="fw-bold">
+        <div>
           {driver_name && driver_name.length === 0 ? (
             <span style={{ color: "#ccc" }}>Chưa xác định</span>
           ) : (
@@ -601,8 +746,8 @@ function OrderUser() {
             driver_name.map((item, index) => {
               return (
                 <tr>
-                  <td className="fw-bold">
-                    {index + 1}. {item}
+                  <td>
+                    <span className="fw-bold">{index + 1}.</span> {item}
                   </td>
                 </tr>
               );
@@ -924,52 +1069,63 @@ function OrderUser() {
     <>
       <HeaderUser />
       <div className="orderUser" style={{ padding: "30px" }}>
-        <div
-          className="d-flex"
+        <h2
           style={{
-            width: "420px",
-            borderRadius: "5px 0 0 5px",
-            overflow: "hidden",
+            fontSize: "28px",
+            fontWeight: "700",
+            marginBottom: "20px",
           }}
         >
-          <SearchOutlined
-            style={{
-              backgroundColor: "#ed883b",
-              padding: "13px",
-              color: "white",
-              cursor: "pointer",
-            }}
-          />
-          <input
-            type="text"
-            id="find_service"
-            className="form-control form-control-lg"
-            placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
-            style={{ fontSize: "17px", borderRadius: "3px" }}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+          Đơn Hàng
+        </h2>
 
         <div className="content_order" style={{ marginTop: "30px" }}>
           <div
             className="top_content_order d-flex"
             style={{ justifyContent: "space-between" }}
           >
-            <h2
+            <div
+              className="d-flex"
               style={{
-                fontSize: "28px",
-                fontWeight: "700",
-                marginBottom: "20px",
+                width: "420px",
+                borderRadius: "5px 0 0 5px",
+                overflow: "hidden",
               }}
             >
-              Đơn Hàng
-            </h2>
+              <SearchOutlined
+                style={{
+                  backgroundColor: "#ed883b",
+                  padding: "13px",
+                  color: "white",
+                  cursor: "pointer",
+                }}
+              />
+              <input
+                type="text"
+                id="find_service"
+                className="form-control form-control-lg"
+                placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
+                style={{ fontSize: "17px", borderRadius: "3px" }}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <RangePicker
+                defaultValue={[
+                  dayjs("09/10/2023", dateFormat),
+                  dayjs("10/10/2023", dateFormat),
+                ]}
+                format={dateFormat}
+              />
+            </div>
+
             <div
               onClick={() => show_order_customer()}
               style={{
                 cursor: "pointer",
-                width: "50px",
-                height: "50px",
+                width: "30px",
+                height: "30px",
                 backgroundColor: "#ed883b",
                 display: "flex",
                 alignItems: "center",
@@ -983,7 +1139,15 @@ function OrderUser() {
             </div>
           </div>
           <LoadingOverlayComponent status={isActive}>
-            <div className="bottom_content_order">
+            <div>
+              <Slider
+                defaultValue={30}
+                tooltip={{
+                  open: true,
+                }}
+              />
+            </div>
+            <div className="bottom_content_order" style={{ marginTop: "20px" }}>
               <Table
                 columns={columns}
                 dataSource={dataOrder}
@@ -998,8 +1162,6 @@ function OrderUser() {
                 {DomOrderDetail}
               </Drawer>
             </div>
-
-  
           </LoadingOverlayComponent>
         </div>
       </div>
