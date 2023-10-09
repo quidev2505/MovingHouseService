@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import Order from './Order';
 import GetOrder from './GetOrder';
 import InfoDriver from './InfoDriver';
-import Map from './Map';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,7 +46,7 @@ function HomeScreenDriver() {
     >
       <Tab.Screen name="NHẬN ĐƠN" component={GetOrder} />
       <Tab.Screen name="ĐƠN HÀNG" component={Order} />
-      <Tab.Screen name="BẢN ĐỒ" component={Map} />
+      {/* <Tab.Screen name="BẢN ĐỒ" component={Map} /> */}
       <Tab.Screen name="THÔNG TIN CÁ NHÂN" component={InfoDriver} />
     </Tab.Navigator>
 

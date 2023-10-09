@@ -7,6 +7,7 @@ import BottomCssContent from "../BottomCssContent";
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 import Highlighter from "react-highlight-words";
 
+import * as XLSX from "xlsx"; //Xử lý file Excel
 import { Link } from "react-router-dom";
 
 import {
@@ -42,6 +43,8 @@ import {
   EnvironmentOutlined,
   ColumnWidthOutlined,
   ditOutlined,
+  ReloadOutlined,
+  FileExcelOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -1391,6 +1394,88 @@ function OrderAdmin() {
     return str;
   }
 
+  //Xử lý xuất ra file Excel
+  //Download Excel
+  const download_data_xslx = () => {
+    Swal.fire({
+      title: "Bạn muốn tải xuống thông tin các đơn hàng ?",
+      text: "Hãy nhấn vào xác nhận để tải xuống !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          //Create file xsls Excel
+          // flatten object like this {id: 1, title:'', category: ''};
+          const rows =
+            dataOrder &&
+            dataOrder.map((item, index) => ({
+              STT: index + 1,
+              order_id: item.order_id,
+              status: item.status,
+              service_name: item.service_name,
+              reason_cancel: item.reason_cancel,
+              time_get_item: item.time_get_item,
+              router: item.router,
+              date_end: item.date_end,
+              customer_name: item.customer_name,
+              driver_name: item.driver_name.join("-"),
+              date_created: item.date_created,
+              vehicle_name: item.vehicle_name,
+              totalOrder: item.totalOrder,
+            }));
+
+          // create workbook and worksheet
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(rows);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+          // customize header names
+          XLSX.utils.sheet_add_aoa(worksheet, [
+            [
+              "Số thứ tự",
+              "ID đơn hàng",
+              "Trạng thái đơn hàng",
+              "Tên dịch vụ",
+              "Lý do hủy đơn",
+              "Thời gian lấy hàng",
+              "Lộ trình",
+              "Thời gian nhận hàng",
+              "Tên khách hàng",
+              "Tài xế",
+              "Ngày tạo đơn hàng",
+              "Loại xe vận chuyển (Số lượng)",
+              "Tổng đơn hàng",
+            ],
+          ]);
+
+          XLSX.writeFile(workbook, "DonHangDichVu.xlsx", {
+            compression: true,
+          });
+          Swal.fire({
+            title: "Tải xuống thành công !",
+            text: "Hoàn thành !",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Tải xuống thất bại!",
+          text: "Đơn hàng !",
+          icon: "fail",
+          confirmButtonText: "Xác nhận",
+        });
+        console.log(e);
+      });
+  };
+
   return (
     <>
       <LayoutAdmin>
@@ -1437,32 +1522,78 @@ function OrderAdmin() {
                   borderRadius: "5px 0 0 5px",
                   overflow: "hidden",
                   marginBottom: "20px",
+                  alignContent: "flex-end",
                 }}
               >
-                <div
-                  className="d-flex"
-                  style={{
-                    width: "420px",
-                    height: "100px",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <SearchOutlined
+                <div className="d-flex" style={{ flexDirection: "column" }}>
+                  <div
+                    className="d-flex"
                     style={{
-                      backgroundColor: "#ed883b",
-                      padding: "13px",
-                      color: "white",
-                      cursor: "pointer",
+                      width: "420px",
+                      height: "100px",
+                      alignItems: "flex-start",
                     }}
-                  />
-                  <input
-                    type="text"
-                    id="find_service"
-                    className="form-control form-control-lg"
-                    placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
-                    style={{ fontSize: "17px", borderRadius: "3px" }}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
+                  >
+                    <SearchOutlined
+                      style={{
+                        backgroundColor: "#ed883b",
+                        padding: "13px",
+                        color: "white",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <input
+                      type="text"
+                      id="find_service"
+                      className="form-control form-control-lg"
+                      placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
+                      style={{ fontSize: "17px", borderRadius: "3px" }}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="d-flex">
+                    {/* Nút xuất ra file excel */}
+                    <div
+                      onClick={() => download_data_xslx()}
+                      style={{
+                        cursor: "pointer",
+                        width: "40px",
+                        height: "40px",
+                        backgroundColor: "green",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                        borderRadius: "5px",
+                        marginBottom: "10px",
+                        marginRight: "20px",
+                      }}
+                    >
+                      <FileExcelOutlined />
+                    </div>
+
+                    {/* Nút reload lại dữ liệu */}
+                    <div
+                      onClick={() =>
+                        show_order_customer(check_active(activeKeyTab))
+                      }
+                      style={{
+                        cursor: "pointer",
+                        width: "40px",
+                        height: "40px",
+                        backgroundColor: "#ed883b",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                        borderRadius: "5px",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <ReloadOutlined />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Chọn thời gian */}

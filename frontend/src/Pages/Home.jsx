@@ -7,13 +7,20 @@ import Footer from "../Components/partials/Footer";
 
 import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 
-import { Tabs, Avatar } from "antd";
+import { Tabs, Avatar, Rate, Carousel } from "antd";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 //Import Component Chatbot
 import ChatBotIcon from "../Components/ChatBotIcon";
+
+const contentStyle = {
+  height: "500px",
+  color: "#fff",
+  textAlign: "center",
+  background: "#364d79",
+};
 
 const Home = () => {
   const [dataSource, setDataSource] = useState([]);
@@ -169,13 +176,69 @@ const Home = () => {
       .catch((e) => console.log(e));
   };
 
+  const [responseCustomer, setResponseCustomer] = useState();
+
   //Lấy đánh giá khách hàng
   const get_rating_service = async () => {
     let data_rating_service = await axios.get(
       "/v1/ratingService/get_all_rating"
     );
+    //Phản hồi từ phía khách hàng
+    const DOM_result = data_rating_service.data.map((item, index) => {
+      return (
+        <>
+          <div>
+            <div style={contentStyle}>
+              <div
+                className="d-flex"
+                style={{
+                  flexDirection: "column",
+                  marginTop: "-150px",
+                  paddingTop: "170px",
+                }}
+              >
+                <p
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img
+                    src={item.avatar}
+                    alt="anh_dai_dien"
+                    style={{
+                      borderRadius: "50%",
+                      width: "60px",
+                      height: "60px",
+                      border: "2px solid white",
+                      marginBottom: "50px",
+                      objectFit:"cover"
+                    }}
+                  />
+                </p>
 
-    console.log(data_rating_service.data);
+                <p>Dịch vụ: {item.service_name}</p>
+                <p>
+                  Đánh giá: <Rate disabled defaultValue={item.star} />
+                </p>
+                
+                <p style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}>
+                  {"\""+item.comment+"\""}
+                </p>
+                <p style={{ marginTop: "30px", fontWeight: "bold",color:"orange" }}>
+                  {item.customer_name}
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    });
+
+    console.log(DOM_result);
+
+    setResponseCustomer(DOM_result);
   };
 
   useEffect(() => {
@@ -548,125 +611,7 @@ const Home = () => {
           <h1 style={{ marginBottom: "60px", color: "#e16d2a " }}>
             Phản hồi từ phía khách hàng
           </h1>
-          <div>
-            <div
-              id="carouselExampleIndicators"
-              className="carousel slide"
-              data-bs-ride="carousel"
-            >
-              <div className="carousel-inner">
-                <div className="carousel-item active">
-                  <img
-                    src="./img/person_1.png"
-                    alt="..."
-                    style={{
-                      borderRadius: "50%",
-                      width: "50px",
-                      height: "50px",
-                      border: "2px solid #e16c27",
-                      marginBottom: "50px",
-                      boxShadow: "5px 1px 1px #ccc",
-                    }}
-                  />
-
-                  <p
-                    style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
-                  >
-                    "Tôi rất hài lòng với dịch vụ chuyển nhà của công ty. Đội
-                    ngũ nhân viên chuyên nghiệp, nhiệt tình, làm việc nhanh
-                    chóng, gọn gàng. Đồ đạc được đóng gói cẩn thận, không bị hư
-                    hỏng. Tôi sẽ giới thiệu dịch vụ này cho bạn bè và người thân
-                    của mình."
-                  </p>
-
-                  <p style={{ marginTop: "50px", fontWeight: "bold" }}>
-                    Anh Nguyễn Văn T
-                  </p>
-                </div>
-
-                <div className="carousel-item">
-                  <img
-                    src="./img/person_2.png"
-                    alt="..."
-                    style={{
-                      borderRadius: "50%",
-                      width: "50px",
-                      height: "50px",
-                      border: "2px solid #e16c27",
-                      marginBottom: "50px",
-                      boxShadow: "5px 1px 1px #ccc",
-                    }}
-                  />
-
-                  <p
-                    style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
-                  >
-                    "Tôi đã sử dụng dịch vụ chuyển nhà của công ty nhiều lần và
-                    luôn cảm thấy hài lòng. Giá cả hợp lý, chất lượng dịch vụ
-                    tốt. Tôi sẽ tiếp tục sử dụng dịch vụ này trong tương lai."
-                  </p>
-
-                  <p style={{ marginTop: "50px", fontWeight: "bold" }}>
-                    Người dùng ẩn tên
-                  </p>
-                </div>
-
-                <div className="carousel-item">
-                  <img
-                    src="./img/person_3.png"
-                    alt="..."
-                    style={{
-                      borderRadius: "50%",
-                      width: "50px",
-                      height: "50px",
-                      border: "2px solid #e16c27",
-                      marginBottom: "50px",
-                      boxShadow: "5px 1px 1px #ccc",
-                    }}
-                  />
-
-                  <p
-                    style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}
-                  >
-                    "Tôi rất lo lắng khi chuyển nhà vì đồ đạc của tôi rất nhiều
-                    và giá trị. Tuy nhiên, sau khi sử dụng dịch vụ của công ty,
-                    tôi hoàn toàn yên tâm. Đồ đạc được vận chuyển cẩn thận,
-                    không bị hư hỏng. Tôi rất hài lòng với dịch vụ này."
-                  </p>
-
-                  <p style={{ marginTop: "50px", fontWeight: "bold" }}>
-                    Trần Văn K
-                  </p>
-                </div>
-              </div>
-              <button
-                className="carousel-control-prev"
-                type="button"
-                data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev"
-              >
-                <span
-                  className="carousel-control-prev-icon"
-                  aria-hidden="true"
-                  style={{ backgroundColor: "#e16c27", borderRadius: "50%" }}
-                />
-                <span className="visually-hidden">Lùi</span>
-              </button>
-              <button
-                className="carousel-control-next"
-                type="button"
-                data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next"
-              >
-                <span
-                  className="carousel-control-next-icon"
-                  aria-hidden="true"
-                  style={{ backgroundColor: "#e16c27", borderRadius: "50%" }}
-                />
-                <span className="visually-hidden">Tiến tới</span>
-              </button>
-            </div>
-          </div>
+          <Carousel autoplay>{responseCustomer}</Carousel>
         </div>
         {/* End Four Service */}
 

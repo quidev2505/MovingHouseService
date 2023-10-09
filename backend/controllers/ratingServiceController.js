@@ -87,29 +87,32 @@ const ratingServiceController = {
             let arr_avatar_all = []
             for (let i = 0; i < data_rating_service.length; i++) {
                 const arr_avatar = await Customer.findOne({ fullname: data_rating_service[i].customer_name })
+                arr_avatar_all.push(arr_avatar.avatar)
+            }
 
-                console.log(arr_avatar)
+            if (arr_avatar_all) {
+                const arr_result = data_rating_service.map((item, index) => {
+                    const ob = {
+                        star: item.star,
+                        service_name: item.service_name,
+                        comment: item.comment,
+                        customer_name: item.customer_name,
+                        avatar: arr_avatar_all[index]
+                    }
+                    return ob;
+                })
+
+
+                if (arr_result) {
+                    res.status(201).json(arr_result)
+                } else {
+                    res.status(401).json('Error')
+                }
+
+
             }
 
 
-
-
-            // const arr_result = data_rating_service.map(async (item, index) => {
-            //     const data_customer = await Customer.findOne({ fullname: item.customer_name });
-            //     const ob = {
-            //         item,
-            //         avatar: data_customer.avatar
-            //     }
-            //     return ob;
-            // })
-
-            // console.log(arr_result)
-
-            if (data_rating_service) {
-                res.status(201).json(data_rating_service)
-            } else {
-                res.status(401).json('Error')
-            }
 
         } catch (e) {
             console.log(e)

@@ -54,13 +54,14 @@ function OrderDetailDriver({ route, navigation }) {
             //Kiểm tra xem đã có tài xế này tham gia chưa
             if (ob_detail_order.driver_name.includes(fullname_driver)) {
                 setCancelOrder(true)
+                //Kiểm tra xem đủ tài xế chưa //Nếu đã đủ sẽ hiện nút "Tiếp theo"
+                if (quantity_driver == ob_detail_order.driver_name.length) {
+                    setNextStep(true)
+                }
             }
 
 
-            //Kiểm tra xem đủ tài xế chưa
-            if (quantity_driver == ob_detail_order.driver_name.length) {
-                setNextStep(true)
-            }
+
 
 
             setCustomerID(ob_detail_order.customer_id)
@@ -74,7 +75,7 @@ function OrderDetailDriver({ route, navigation }) {
     useEffect(() => {
         /* 2. Get the param */
         const { data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start } = route.params;
-        
+
         get_detail_order(data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start)
 
     }, [])

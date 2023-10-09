@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu và
 import axios from 'axios';
 import api_url from "../../api_url"
 import { Ionicons } from '@expo/vector-icons';
+import { Tab, TabView } from '@rneui/themed';
+
 
 import { Card, Divider } from '@rneui/themed';
 
@@ -155,6 +157,9 @@ function GetOrder({ navigation }) {
     }, []);
 
 
+    //Làm việc với Tab
+    const [index, setIndex] = React.useState(0);
+
     return (
         <ScrollView refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -164,6 +169,9 @@ function GetOrder({ navigation }) {
                 <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: 150, borderRadius: 50, textAlign: "center" }}>Trạng thái làm việc: {statusDriver}</Text>
                 <Text style={{ marginRight: 10, marginTop: 10, padding: 10, width: 225, color: "white", backgroundColor: location_delivery === "TPHCM và tỉnh lân cận" ? "red" : "purple", borderRadius: 50, textAlign: "center", marginLeft: 10 }}>Khu vực vận chuyển: {"\n"} {location_delivery}</Text>
             </View>
+
+
+
 
             {dataOrder.length === 0 ? (
                 <>
@@ -180,7 +188,7 @@ function GetOrder({ navigation }) {
                 dataOrder && dataOrder.map((item, index) => {
                     return (
                         <>
-                            <Card key="{item.toString() + 'a'}"
+                            <Card key={item.date_start}
                             >
                                 <View>
                                     <Card.Title style={{ textAlign: "left" }}>
@@ -246,7 +254,7 @@ function GetOrder({ navigation }) {
                                         </Text>
                                         <Text>
                                             {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định) </Text> : item.driver_name.map((item1, index) => {
-                                                return <Text key={item1.toString() + 'b'} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '400', color: item1 === item.fullname_driver ? 'purple' : 'black' }}> {index + 1}. {item1} |</Text>
+                                                return <Text key={item1.fullname_driver} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '400', color: item1 === item.fullname_driver ? 'purple' : 'black' }}> {index + 1}. {item1} |</Text>
                                             })}
                                             <Text style={{ fontWeight: "bold" }}>- Cần ({item.driver_name.length}/{item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]}) tài xế</Text>
                                         </Text>

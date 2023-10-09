@@ -176,7 +176,7 @@ function Order({ navigation }) {
                 dataOrder && dataOrder.map((item, index) => {
                     return (
                         <>
-                            <Card key="{item.toString() + 'c'}">
+                            <Card key={item.status}>
                                 <View>
                                     <Card.Title style={{ textAlign: "left" }}>
                                         <Text style={{ marginRight: 20 }}>
@@ -241,7 +241,7 @@ function Order({ navigation }) {
                                         </Text>
                                         <Text>
                                             {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định) </Text> : item.driver_name.map((item1, index) => {
-                                                return <Text key={item1.toString() + 'd'} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '', color: item1 === item.fullname_driver ? 'purple' : '' }}> {index + 1}. {item1} |</Text>
+                                                return <Text key={item1.fullname_driver} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '', color: item1 === item.fullname_driver ? 'purple' : '' }}> {index + 1}. {item1} |</Text>
                                             })}
                                             <Text style={{ fontWeight: "bold" }}>- Cần ({item.driver_name.length}/{item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]}) tài xế</Text>
                                         </Text>
