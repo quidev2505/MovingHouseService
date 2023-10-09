@@ -17,6 +17,7 @@ import {
   ReloadOutlined,
   DeleteOutlined,
   StarOutlined,
+  ColumnWidthOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -54,8 +55,8 @@ function OrderUser() {
   const [endRange, setEndRange] = useState(""); //Thời gian cuối
 
   //Khoảng tổng giá đơn hàng
-  const [startRangePrice, setStartRangePrice] = useState(""); //Giá bắt đầu
-  const [endRangePrice, setEndRangePrice] = useState(""); //Giá kết thúc
+  const [startRangePrice, setStartRangePrice] = useState(1); //Giá bắt đầu
+  const [endRangePrice, setEndRangePrice] = useState(90); //Giá kết thúc
 
   const nav = useNavigate();
 
@@ -70,7 +71,7 @@ function OrderUser() {
 
   const user = useSelector((state) => state.auth.login.currentUser); //Lấy User hiện tại ra
   const show_order_customer = async () => {
-    setIsActive(false);
+    setIsActive(true);
 
     let id_customer = await axios.get(
       `/v1/customer/get_customer_with_fullname/${user.fullname}`
@@ -83,8 +84,7 @@ function OrderUser() {
           let dataOrder = data.data;
           const data_order = [];
           let ob_order = {};
-          console.log(startRange);
-          console.log(endRange);
+
           dataOrder &&
             dataOrder.forEach((item, index) => {
               //Trường hợp khi đã nhấn nút lọc theo khoảng thời gian
@@ -102,6 +102,7 @@ function OrderUser() {
                     time_get_item: `${item.time_start} - ${item.date_start}`,
                     router: `${item.fromLocation} - ${item.toLocation}`,
                     date_end: item.date_end,
+                    date_created: item.date_created,
                     driver_name: item.driver_name,
                     vehicle_name: item.vehicle_name,
                     totalOrder: item.totalOrder,
@@ -113,8 +114,8 @@ function OrderUser() {
               } else if (startRangePrice !== "" && endRangePrice !== "") {
                 //Trường hợp khi đã chọn vào giá đơn hàng
                 if (
-                  Number(startRangePrice * 100000) <= item.totalOrder &&
-                  item.totalOrder <= Number(endRangePrice * 100000)
+                  Number(startRangePrice * 1000000) <= item.totalOrder &&
+                  item.totalOrder <= Number(endRangePrice * 1000000)
                 ) {
                   ob_order = {
                     id_order_detail: item.order_detail_id,
@@ -125,6 +126,7 @@ function OrderUser() {
                     time_get_item: `${item.time_start} - ${item.date_start}`,
                     router: `${item.fromLocation} - ${item.toLocation}`,
                     date_end: item.date_end,
+                    date_created: item.date_created,
                     driver_name: item.driver_name,
                     vehicle_name: item.vehicle_name,
                     totalOrder: item.totalOrder,
@@ -141,6 +143,7 @@ function OrderUser() {
                   service_name: item.service_name,
                   status: item.status,
                   date_end: item.date_end,
+                  date_created: item.date_created,
                   time_get_item: `${item.time_start} - ${item.date_start}`,
                   router: `${item.fromLocation} - ${item.toLocation}`,
                   driver_name: item.driver_name,
@@ -188,6 +191,8 @@ function OrderUser() {
           } else {
             setDataOrder(new_arr);
           }
+
+          setIsActive(false);
         })
         .catch((e) => {
           console.log(e);
@@ -195,13 +200,64 @@ function OrderUser() {
     }
   };
 
-  const view_detail_order = async (id_order_detail, date_end) => {
+  const view_detail_order = async (id_order_detail, date_created, date_end) => {
     await axios
       .get(`/v1/order/viewOrderDetail/${id_order_detail}`)
       .then((data) => {
         let data_order_detail = data.data;
         let dom_result = data_order_detail.map((item, index) => (
           <>
+            {/* Ngày tạo đơn */}
+            <div>
+              <p
+                style={{
+                  fontWeight: "700",
+                  fontSize: "13px",
+                  color: "red",
+                }}
+              >
+                NGÀY TẠO ĐƠN
+                <br></br>
+                <span
+                  style={{
+                    color: "black",
+                    fontWeight: "500",
+                    fontSize: "13px",
+                  }}
+                >
+                  {date_created}
+                </span>
+              </p>
+            </div>
+
+            {date_end !== null ? (
+              <>
+                <div>
+                  <p
+                    style={{
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      color: "#c1b8b2",
+                    }}
+                  >
+                    <span style={{ color: "blue" }}>THỜI GIAN NHẬN HÀNG</span>
+                    <br></br>
+                    <span
+                      style={{
+                        color: "black",
+                        fontWeight: "500",
+                        fontSize: "13px",
+                      }}
+                    >
+                      {date_end}
+                    </span>
+                  </p>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+
             <p
               style={{ fontWeight: "700", fontSize: "13px", color: "#c1b8b2" }}
             >
@@ -236,34 +292,6 @@ function OrderUser() {
                 ]}
               />
             </div>
-
-            {date_end !== null ? (
-              <>
-                <div>
-                  <p
-                    style={{
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      color: "#c1b8b2",
-                    }}
-                  >
-                    <span style={{ color: "blue" }}>THỜI GIAN NHẬN HÀNG</span>
-                    <br></br>
-                    <span
-                      style={{
-                        color: "black",
-                        fontWeight: "500",
-                        fontSize: "13px",
-                      }}
-                    >
-                      {date_end}
-                    </span>
-                  </p>
-                </div>
-              </>
-            ) : (
-              ""
-            )}
 
             <div>
               <p
@@ -514,7 +542,7 @@ function OrderUser() {
   const [search, setSearch] = useState("");
   useEffect(() => {
     show_order_customer();
-  }, [search]);
+  }, [search, startRange, endRange, startRangePrice, endRangePrice]);
 
   function removeVietnameseTones(str) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -875,11 +903,15 @@ function OrderUser() {
       title: "Xem chi tiết",
       dataIndex: "id_order_detail",
       key: "id_order_detail",
-      render: (id_order_detail, date_end) => (
+      render: (id_order_detail, order_id) => (
         <div
           onClick={() => {
             showDrawer();
-            view_detail_order(id_order_detail, date_end.date_end);
+            view_detail_order(
+              id_order_detail,
+              order_id.date_created,
+              order_id.date_end
+            );
           }}
           style={{
             backgroundColor: "#29251b",
@@ -1072,21 +1104,11 @@ function OrderUser() {
     setEndRange(b[1]);
   };
 
-  //Khi bấm nút Search
-  const filterRangeTime = () => {
-    show_order_customer();
-  };
-
   //Thiết lập lọc theo tổng giá đơn hàng
   const changeRangePrice = (a) => {
     //a là range thời gian
     setStartRangePrice(a[0]);
     setEndRangePrice(a[1]);
-  };
-
-  //Khi bấm nút Search
-  const filterRangePrice = () => {
-    show_order_customer();
   };
 
   return (
@@ -1141,7 +1163,8 @@ function OrderUser() {
             <div
               style={{
                 padding: "5px",
-                border: "1px solid orange",
+                border: "1px solid #ccc",
+                boxShadow: "1px 1px 2px #ccc",
                 borderRadius: "5px",
                 display: "flex",
               }}
@@ -1157,16 +1180,6 @@ function OrderUser() {
                     format={dateFormat}
                     onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
                   />
-                  <SearchOutlined
-                    onClick={() => filterRangeTime()}
-                    style={{
-                      backgroundColor: "#ed883b",
-                      padding: "13px",
-                      color: "white",
-                      cursor: "pointer",
-                      marginLeft: "10px",
-                    }}
-                  />
                 </div>
               </div>
             </div>
@@ -1176,37 +1189,60 @@ function OrderUser() {
               style={{
                 width: "30%",
                 flexDirection: "column",
-                border: "1px solid orange",
+                border: "1px solid #ccc",
+                boxShadow: "1px 1px 2px #ccc",
                 padding: "10px",
                 borderRadius: "5px",
+                textAlign: "center",
               }}
               className="d-flex"
             >
               <div className="d-flex">
-                <Slider
-                  style={{ width: "100%" }}
-                  range={{
-                    draggableTrack: true,
-                  }}
-                  defaultValue={[0, 10]}
-                  tooltip={{
-                    open: true,
-                  }}
-                  onChange={(a, b) => changeRangePrice(a, b)}
-                />
-                <SearchOutlined
-                  onClick={() => filterRangePrice()}
-                  style={{
-                    backgroundColor: "#ed883b",
-                    padding: "13px",
-                    color: "white",
-                    cursor: "pointer",
-                    marginLeft: "10px",
-                  }}
-                />
+                <div className="d-flex" style={{ flexDirection: "column" }}>
+                  <h6 className="text-center fw-bold">Tổng giá đơn hàng</h6>
+                  <Slider
+                    style={{ width: "100%" }}
+                    range={{
+                      draggableTrack: true,
+                    }}
+                    defaultValue={[1, 10]}
+                    onChange={(a, b) => changeRangePrice(a, b)}
+                  />
+                  <div
+                    className="d-flex"
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      style={{
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                        padding: "5px",
+                        width: "fit-content",
+                      }}
+                      value={
+                        (startRangePrice * 1000000).toLocaleString() + " đ"
+                      }
+                    />{" "}
+                    <ColumnWidthOutlined
+                      style={{ color: "orange", margin: "10px" }}
+                    />
+                    <input
+                      type="text"
+                      style={{
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                        padding: "5px",
+                        width: "fit-content",
+                      }}
+                      value={(endRangePrice * 1000000).toLocaleString() + " đ"}
+                    />{" "}
+                  </div>
+                </div>
               </div>
-
-              <h6 className="text-center fw-bold">Tổng giá đơn hàng</h6>
             </div>
 
             <div

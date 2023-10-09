@@ -3,6 +3,19 @@ const User = require('../models/User')
 const fs = require('fs');
 
 const customerController = {
+    //Get All Customer
+    getAllCustomer: async (req, res) => {
+        try{
+            let customer = await Customer.find();
+            if(customer){
+                res.status(200).json(customer)
+            }else{
+                res.status(404).json('Error')
+            }
+        }catch(e){
+            console.log(e)
+        }
+    },
     //Get Info User With Customer Name
     getInfoUserWithCustomerName: async (req, res) => {
         try {

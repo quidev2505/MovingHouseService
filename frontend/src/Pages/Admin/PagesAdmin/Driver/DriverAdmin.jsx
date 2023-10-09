@@ -34,6 +34,7 @@ import {
   UnlockOutlined,
   AimOutlined,
   CarOutlined,
+  ArrowRightOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -443,8 +444,6 @@ function DriverAdmin() {
       }
     });
 
-    console.log(arr_delivery_driver);
-
     await axios
       .get(`/v1/driver/view_detail_driver/${id.id}`)
       .then(async (data) => {
@@ -546,9 +545,12 @@ function DriverAdmin() {
                   padding: "5px",
                   marginTop: "5px",
                   borderRadius: "5px",
+                  textAlign: "center",
+                  marginBottom: "10px",
+                  marginTop: "10px",
                 }}
               >
-                <h5 style={{ color: "#ea9868" }}>
+                <h5 style={{ color: "#ea9868", marginBottom: "10px" }}>
                   <TrophyOutlined />
                   &nbsp;&nbsp; Thành tích
                 </h5>
@@ -585,6 +587,8 @@ function DriverAdmin() {
                   marginTop: "5px",
                   borderRadius: "5px",
                   textAlign: "center",
+                  marginBottom: "10px",
+                  marginTop: "10px",
                 }}
               >
                 <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
@@ -609,12 +613,12 @@ function DriverAdmin() {
                           </div>
                           <div>
                             <span style={{ color: "red" }}>
-                              {item?.fromLocation} -
+                              1. {item?.fromLocation}
                             </span>
+                            <ArrowRightOutlined style={{ color: "orange" }} />
                             <span style={{ color: "#7bd6e5" }}>
-                              {item?.toLocation}
+                              2. {item?.toLocation}
                             </span>
-                            -{" "}
                           </div>
                           <div>
                             {item?.date_start} - {item?.date_end}
@@ -633,6 +637,8 @@ function DriverAdmin() {
                   marginTop: "5px",
                   borderRadius: "5px",
                   textAlign: "center",
+                  marginBottom: "10px",
+                  marginTop: "10px",
                 }}
               >
                 <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
@@ -662,7 +668,7 @@ function DriverAdmin() {
                             </span>
                             )
                           </div>
-                          <div>{item.rating_date}</div>
+                          <div style={{color:"#ccc"}}>{item.rating_date}</div>
                         </div>
                       </>
                     ))}

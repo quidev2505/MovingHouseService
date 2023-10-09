@@ -4,6 +4,10 @@ const  customerController  = require('../controllers/customerController');
 //Upload
 const upload = require("../middlewares/upload");
 
+//Get All Customer
+router.get('/get_all_customer', customerController.getAllCustomer)
+
+
 //Get Info with Customer_name
 router.get('/get_info_user_with_customer_name/:customer_name', customerController.getInfoUserWithCustomerName)
 

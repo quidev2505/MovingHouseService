@@ -5,6 +5,7 @@ import { Breadcrumb, Button } from "antd";
 import TopCssContent from "../TopCssContent";
 import BottomCssContent from "../BottomCssContent";
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
+import Highlighter from "react-highlight-words";
 
 import { Link } from "react-router-dom";
 
@@ -19,6 +20,9 @@ import {
   Timeline,
   Drawer,
   ConfigProvider,
+  DatePicker,
+  Slider,
+  Input,
 } from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -36,10 +40,19 @@ import {
   SwapOutlined,
   SearchOutlined,
   EnvironmentOutlined,
+  ColumnWidthOutlined,
   ditOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
+
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+
+const { RangePicker } = DatePicker;
+
+const dateFormat = "DD/MM/YYYY";
 
 function OrderAdmin() {
   const nav = useNavigate();
@@ -51,6 +64,14 @@ function OrderAdmin() {
   //Lí do hủy đơn hàng
   const [cancelReason, setCancelReason] = useState("");
 
+  //Khoảng thời gian
+  const [startRange, setStartRange] = useState(""); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState(""); //Thời gian cuối
+
+  //Khoảng tổng giá đơn hàng
+  const [startRangePrice, setStartRangePrice] = useState(1); //Giá bắt đầu
+  const [endRangePrice, setEndRangePrice] = useState(90); //Giá kết thúc
+
   // const [statusOrder, setStatusOrder] = useState();
 
   const showDrawer = () => {
@@ -58,6 +79,20 @@ function OrderAdmin() {
   };
   const onClose = () => {
     setOpen(false);
+  };
+
+  //Thiết lập lọc theo khoảng thời gian
+  const changeRangeTime = (a, b, c) => {
+    //b là range thời gian
+    setStartRange(b[0]);
+    setEndRange(b[1]);
+  };
+
+  //Thiết lập lọc theo tổng giá đơn hàng
+  const changeRangePrice = (a, b) => {
+    //a là range thời gian
+    setStartRangePrice(a[0]);
+    setEndRangePrice(a[1]);
   };
 
   //Thanh Tab
@@ -306,40 +341,49 @@ function OrderAdmin() {
                 Trạng thái đơn hàng hiện tại:{" "}
                 <span className="fw-bold">{order_id.status}</span>
               </p>
-              <select
-                style={{
-                  borderRadius: "5px",
-                  border: "1px solid #ccc",
-                  width: "100%",
-                  height: "37px",
-                }}
-                onChange={(e) => (reason_cancel_order.current = e.target.value)}
-              >
-                <option value="Chưa xác định">Chưa xác định</option>
-                <option value="1.Người mua thay đổi ý định mua hàng">
-                  1.Người mua thay đổi ý định mua hàng
-                </option>
-                <option value="2.Không thể liên hệ khách hàng">
-                  2.Không thể liên hệ khách hàng
-                </option>
-                <option value="3.Khách hàng đổi thời gian vận chuyển">
-                  3.Khách hàng đổi thời gian vận chuyển
-                </option>
-              </select>
-              <div className="d-flex" style={{ marginTop: "20px" }}>
-                <p>Cập nhật trạng thái mới:</p>
-                <button
-                  className="btn btn-danger"
-                  style={{
-                    color: "white",
-                    fontWeight: "bold",
-                    marginLeft: "20px",
-                  }}
-                  onClick={() => cancelOrder(order_id, driver_name)}
-                >
-                  Hủy đơn hàng
-                </button>
-              </div>
+
+              {order_id.status !== "Đã hoàn thành" ? (
+                <>
+                  <select
+                    style={{
+                      borderRadius: "5px",
+                      border: "1px solid #ccc",
+                      width: "100%",
+                      height: "37px",
+                    }}
+                    onChange={(e) =>
+                      (reason_cancel_order.current = e.target.value)
+                    }
+                  >
+                    <option value="Chưa xác định">Chưa xác định</option>
+                    <option value="1.Người mua thay đổi ý định mua hàng">
+                      1.Người mua thay đổi ý định mua hàng
+                    </option>
+                    <option value="2.Không thể liên hệ khách hàng">
+                      2.Không thể liên hệ khách hàng
+                    </option>
+                    <option value="3.Khách hàng đổi thời gian vận chuyển">
+                      3.Khách hàng đổi thời gian vận chuyển
+                    </option>
+                  </select>
+                  <div className="d-flex" style={{ marginTop: "20px" }}>
+                    <p>Cập nhật trạng thái mới:</p>
+                    <button
+                      className="btn btn-danger"
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        marginLeft: "20px",
+                      }}
+                      onClick={() => cancelOrder(order_id, driver_name)}
+                    >
+                      Hủy đơn hàng
+                    </button>
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
             </div>
 
             {/* Cột tài xế */}
@@ -426,7 +470,63 @@ function OrderAdmin() {
           const data_order = [];
           dataOrder &&
             dataOrder.forEach((item, index) => {
-              if (item.status === status_input) {
+              //Trường hợp khi đã nhấn nút lọc theo khoảng thời gian
+              if (
+                item.status === status_input &&
+                startRange !== "" &&
+                endRange !== ""
+              ) {
+                if (
+                  startRange <= item.date_start &&
+                  item.date_start <= endRange
+                ) {
+                  const ob_order = {
+                    id_order_detail: item.order_detail_id,
+                    STT: index + 1,
+                    order_id: item.order_id,
+                    service_name: item.service_name,
+                    reason_cancel: item.reason_cancel,
+                    status: item.status,
+                    date_end: item.date_end,
+                    date_created: item.date_created,
+                    time_get_item: `${item.time_start} - ${item.date_start}`,
+                    router: `${item.fromLocation} - ${item.toLocation}`,
+                    driver_name: item.driver_name,
+                    vehicle_name: item.vehicle_name,
+                    totalOrder: item.totalOrder,
+                    customer_name: arr_customer_name[index],
+                  };
+                  data_order.push(ob_order);
+                }
+              } else if (
+                startRangePrice !== "" &&
+                endRangePrice !== "" &&
+                item.status === status_input
+              ) {
+                //Trường hợp khi đã chọn vào giá đơn hàng
+                if (
+                  Number(startRangePrice * 1000000) <= item.totalOrder &&
+                  item.totalOrder <= Number(endRangePrice * 1000000)
+                ) {
+                  const ob_order = {
+                    id_order_detail: item.order_detail_id,
+                    STT: index + 1,
+                    order_id: item.order_id,
+                    service_name: item.service_name,
+                    reason_cancel: item.reason_cancel,
+                    status: item.status,
+                    date_end: item.date_end,
+                    date_created: item.date_created,
+                    time_get_item: `${item.time_start} - ${item.date_start}`,
+                    router: `${item.fromLocation} - ${item.toLocation}`,
+                    driver_name: item.driver_name,
+                    vehicle_name: item.vehicle_name,
+                    totalOrder: item.totalOrder,
+                    customer_name: arr_customer_name[index],
+                  };
+                  data_order.push(ob_order);
+                }
+              } else if (item.status === status_input) {
                 const ob_order = {
                   id_order_detail: item.order_detail_id,
                   STT: index + 1,
@@ -434,6 +534,8 @@ function OrderAdmin() {
                   service_name: item.service_name,
                   reason_cancel: item.reason_cancel,
                   status: item.status,
+                  date_end: item.date_end,
+                  date_created: item.date_created,
                   time_get_item: `${item.time_start} - ${item.date_start}`,
                   router: `${item.fromLocation} - ${item.toLocation}`,
                   driver_name: item.driver_name,
@@ -444,6 +546,16 @@ function OrderAdmin() {
                 data_order.push(ob_order);
               }
             });
+
+          //Nếu đã chọn thời gian
+          if (startRange !== "" && endRange !== "") {
+            setDataOrder(data_order);
+          }
+
+          //Nếu đã chọn giá tiền
+          if (startRangePrice !== "" && endRangePrice !== "") {
+            setDataOrder(data_order);
+          }
 
           let new_arr = data_order.filter((item) => {
             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
@@ -480,6 +592,127 @@ function OrderAdmin() {
         });
     }
   };
+
+  //Tính năng lọc theo Search
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
 
   //Table Area
   const columns = [
@@ -544,6 +777,7 @@ function OrderAdmin() {
       title: "Tên dịch vụ",
       dataIndex: "service_name",
       key: "service_name",
+      ...getColumnSearchProps("service_name"),
     },
     {
       title: "Thời gian lấy hàng",
@@ -566,6 +800,7 @@ function OrderAdmin() {
       title: "Lộ trình",
       dataIndex: "router",
       key: "router",
+      ...getColumnSearchProps("router"),
       render: (router) => (
         <>
           <div className="col" style={{ fontSize: "12px" }}>
@@ -621,8 +856,9 @@ function OrderAdmin() {
       title: "Tài xế",
       dataIndex: "driver_name",
       key: "driver_name",
+      ...getColumnSearchProps("driver_name"),
       render: (driver_name) => (
-        <div className="fw-bold">
+        <div>
           {driver_name && driver_name.length === 0 ? (
             <span style={{ color: "#ccc" }}>Chưa xác định</span>
           ) : (
@@ -630,8 +866,8 @@ function OrderAdmin() {
             driver_name.map((item, index) => {
               return (
                 <tr>
-                  <td className="fw-bold">
-                    {index + 1}. {item}
+                  <td>
+                    <span className="fw-bold">{index + 1}.</span> {item}
                   </td>
                 </tr>
               );
@@ -662,7 +898,7 @@ function OrderAdmin() {
       title: "Xem chi tiết",
       dataIndex: "id_order_detail",
       key: "id_order_detail",
-      render: (id_order_detail, customer_name) => (
+      render: (id_order_detail, customer_name, order_id) => (
         <div
           onClick={() => {
             showDrawer();
@@ -711,6 +947,7 @@ function OrderAdmin() {
   ];
 
   const view_detail_order = async (id_order_detail, customer_name) => {
+    console.log(customer_name);
     let user_customer = await axios.get(
       `/v1/customer/get_info_user_with_customer_name/${customer_name.customer_name}`
     );
@@ -774,6 +1011,56 @@ function OrderAdmin() {
                   </span>
                 </p>
               </div>
+
+              <div>
+                <p
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    color: "red",
+                  }}
+                >
+                  NGÀY TẠO ĐƠN
+                  <br></br>
+                  <span
+                    style={{
+                      color: "black",
+                      fontWeight: "500",
+                      fontSize: "13px",
+                    }}
+                  >
+                    {customer_name.date_created}
+                  </span>
+                </p>
+              </div>
+
+              {customer_name.date_end !== null ? (
+                <>
+                  <div>
+                    <p
+                      style={{
+                        fontWeight: "700",
+                        fontSize: "13px",
+                        color: "#c1b8b2",
+                      }}
+                    >
+                      <span style={{ color: "blue" }}>THỜI GIAN NHẬN HÀNG</span>
+                      <br></br>
+                      <span
+                        style={{
+                          color: "black",
+                          fontWeight: "500",
+                          fontSize: "13px",
+                        }}
+                      >
+                        {customer_name.date_end}
+                      </span>
+                    </p>
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
 
               <p
                 style={{
@@ -1070,7 +1357,7 @@ function OrderAdmin() {
   useEffect(() => {
     list_driver();
     show_order_customer(check_active(activeKeyTab));
-  }, [search]);
+  }, [search, startRange, endRange, startRangePrice, endRangePrice]);
 
   function removeVietnameseTones(str) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -1146,28 +1433,127 @@ function OrderAdmin() {
               <div
                 className="d-flex"
                 style={{
-                  width: "420px",
+                  justifyContent: "space-between",
                   borderRadius: "5px 0 0 5px",
                   overflow: "hidden",
                   marginBottom: "20px",
                 }}
               >
-                <SearchOutlined
+                <div
+                  className="d-flex"
                   style={{
-                    backgroundColor: "#ed883b",
-                    padding: "13px",
-                    color: "white",
-                    cursor: "pointer",
+                    width: "420px",
+                    height: "100px",
+                    alignItems: "flex-start",
                   }}
-                />
-                <input
-                  type="text"
-                  id="find_service"
-                  className="form-control form-control-lg"
-                  placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
-                  style={{ fontSize: "17px", borderRadius: "3px" }}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+                >
+                  <SearchOutlined
+                    style={{
+                      backgroundColor: "#ed883b",
+                      padding: "13px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <input
+                    type="text"
+                    id="find_service"
+                    className="form-control form-control-lg"
+                    placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
+
+                {/* Chọn thời gian */}
+                <div
+                  style={{
+                    padding: "5px",
+                    border: "1px solid #ccc",
+                    boxShadow: "1px 1px 2px #ccc",
+                    borderRadius: "5px",
+                    display: "flex",
+                    height: "fit-content",
+                    display: "200px",
+                    alignItems: "center",
+                  }}
+                >
+                  <div>
+                    <h6 className="text-center fw-bold">Thời gian lấy hàng</h6>
+                    <div className="d-flex">
+                      <RangePicker
+                        defaultValue={[
+                          dayjs("09/10/2023", dateFormat),
+                          dayjs("10/10/2023", dateFormat),
+                        ]}
+                        format={dateFormat}
+                        onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* Chọn khoảng giá */}
+                <div
+                  style={{
+                    width: "36.5%",
+                    flexDirection: "column",
+                    border: "1px solid #ccc",
+                    boxShadow: "1px 1px 2px #ccc",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    textAlign: "center",
+                  }}
+                  className="d-flex"
+                >
+                  <div className="d-flex">
+                    <div className="d-flex" style={{ flexDirection: "column" }}>
+                      <h6 className="text-center fw-bold">Tổng giá đơn hàng</h6>
+                      <Slider
+                        style={{ width: "100%" }}
+                        range={{
+                          draggableTrack: true,
+                        }}
+                        defaultValue={[1, 10]}
+                        onChange={(a, b) => changeRangePrice(a, b)}
+                      />
+                      <div
+                        className="d-flex"
+                        style={{
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <input
+                          type="text"
+                          style={{
+                            border: "1px solid #ccc",
+                            borderRadius: "5px",
+                            padding: "5px",
+                            width: "fit-content",
+                          }}
+                          value={
+                            (startRangePrice * 1000000).toLocaleString() + " đ"
+                          }
+                        />{" "}
+                        <ColumnWidthOutlined
+                          style={{ color: "orange", margin: "10px" }}
+                        />
+                        <input
+                          type="text"
+                          style={{
+                            border: "1px solid #ccc",
+                            borderRadius: "5px",
+                            padding: "5px",
+                            width: "fit-content",
+                          }}
+                          value={
+                            (endRangePrice * 1000000).toLocaleString() + " đ"
+                          }
+                        />{" "}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </TopCssContent>
             <div>
