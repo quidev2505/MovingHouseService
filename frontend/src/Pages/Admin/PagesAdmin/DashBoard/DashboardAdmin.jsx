@@ -73,6 +73,7 @@ function DashBoardAdmin() {
     // Tỉnh tổng doanh thu
     let sum_all_order = arr_order.reduce((sum, a) => {
       if ((a.status = "Đã hoàn thành")) return Number(sum + a.totalOrder);
+      return sum;
     }, 0);
 
     setTotalRevenue(sum_all_order);

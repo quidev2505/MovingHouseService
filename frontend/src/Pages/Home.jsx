@@ -169,10 +169,20 @@ const Home = () => {
       .catch((e) => console.log(e));
   };
 
+  //Lấy đánh giá khách hàng
+  const get_rating_service = async () => {
+    let data_rating_service = await axios.get(
+      "/v1/ratingService/get_all_rating"
+    );
+
+    console.log(data_rating_service.data);
+  };
+
   useEffect(() => {
     setIsActive(false);
     get_service();
     get_vehicle();
+    get_rating_service();
   }, []);
 
   const onChange = (key) => {
@@ -188,7 +198,7 @@ const Home = () => {
       >
         <LoadingOverlayComponent status={isActive}>
           {/* Chat bot */}
-          <ChatBotIcon/>
+          <ChatBotIcon />
           {/* First_service */}
           <div className="provide_service row" style={{ position: "relative" }}>
             <div

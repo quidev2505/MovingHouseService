@@ -7,7 +7,7 @@ import axios from "axios";
 import DatalistInput from "react-datalist-input";
 
 // eslint-disable-next-line
-import "react-datalist-input/dist/styles.css";
+import "react-datalist-input/dist/styles.css"; // eslint-disable-next-line
 // eslint-disable-next-line
 
 import goongjs from "@goongmaps/goong-js";

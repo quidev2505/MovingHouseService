@@ -15,7 +15,10 @@ const orderRoute = require('./routes/order');
 const vnpayRoute = require('./routes/vnpay');
 const driverRoute = require('./routes/driver');
 const ratingDriverRoute = require('./routes/rating_driver');
+const ratingServiceRoute = require('./routes/rating_service');
 const driverAccountRoute = require('./routes/driver_account');
+
+
 var cookieParser = require('cookie-parser')
 
 
@@ -129,6 +132,9 @@ app.use("/v1/ratingDriver", ratingDriverRoute)
 
 //Driver Account
 app.use("/v1/driverAccount", driverAccountRoute)
+
+//Rating Service
+app.use("/v1/ratingService", ratingServiceRoute)
 
 //Thanh toán với VN PAY
 app.use("/v1/vnpay", vnpayRoute)

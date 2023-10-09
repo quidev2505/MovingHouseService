@@ -10,6 +10,8 @@ import "sweetalert2/src/sweetalert2.scss";
 
 import { useNavigate } from "react-router-dom";
 
+import * as XLSX from "xlsx"; //Xử lý file Excel
+
 import {
   SearchOutlined,
   FolderViewOutlined,
@@ -18,6 +20,7 @@ import {
   DeleteOutlined,
   StarOutlined,
   ColumnWidthOutlined,
+  FileExcelOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -100,7 +103,7 @@ function OrderUser() {
                     service_name: item.service_name,
                     status: item.status,
                     time_get_item: `${item.time_start} - ${item.date_start}`,
-                    router: `${item.fromLocation} - ${item.toLocation}`,
+                    router: `${item.fromLocation} -> ${item.toLocation}`,
                     date_end: item.date_end,
                     date_created: item.date_created,
                     driver_name: item.driver_name,
@@ -124,7 +127,7 @@ function OrderUser() {
                     service_name: item.service_name,
                     status: item.status,
                     time_get_item: `${item.time_start} - ${item.date_start}`,
-                    router: `${item.fromLocation} - ${item.toLocation}`,
+                    router: `${item.fromLocation} -> ${item.toLocation}`,
                     date_end: item.date_end,
                     date_created: item.date_created,
                     driver_name: item.driver_name,
@@ -145,7 +148,7 @@ function OrderUser() {
                   date_end: item.date_end,
                   date_created: item.date_created,
                   time_get_item: `${item.time_start} - ${item.date_start}`,
-                  router: `${item.fromLocation} - ${item.toLocation}`,
+                  router: `${item.fromLocation} -> ${item.toLocation}`,
                   driver_name: item.driver_name,
                   vehicle_name: item.vehicle_name,
                   totalOrder: item.totalOrder,
@@ -259,7 +262,11 @@ function OrderUser() {
             )}
 
             <p
-              style={{ fontWeight: "700", fontSize: "13px", color: "#c1b8b2" }}
+              style={{
+                fontWeight: "700",
+                fontSize: "13px",
+                color: "#c1b8b2",
+              }}
             >
               LỘ TRÌNH (<span>{item.distance.toUpperCase()}</span>)
             </p>
@@ -398,7 +405,10 @@ function OrderUser() {
 
             <div
               className="d-flex"
-              style={{ justifyContent: "space-between", marginTop: "30px" }}
+              style={{
+                justifyContent: "space-between",
+                marginTop: "30px",
+              }}
             >
               <p
                 style={{
@@ -421,7 +431,12 @@ function OrderUser() {
                         objectFit: "contain",
                       }}
                     />
-                    <span style={{ marginLeft: "5px", fontSize: "13px" }}>
+                    <span
+                      style={{
+                        marginLeft: "5px",
+                        fontSize: "13px",
+                      }}
+                    >
                       Tiền mặt
                     </span>
                   </div>
@@ -436,7 +451,12 @@ function OrderUser() {
                         objectFit: "contain",
                       }}
                     />
-                    <span style={{ marginLeft: "5px", fontSize: "13px" }}>
+                    <span
+                      style={{
+                        marginLeft: "5px",
+                        fontSize: "13px",
+                      }}
+                    >
                       Chuyển khoản
                     </span>
                   </div>
@@ -453,7 +473,9 @@ function OrderUser() {
               {item.moving_fee.map((item, index) => (
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
                   <p>{item.name.split("(")[0]}</p>
                   <p>{item.price.toLocaleString()} đ</p>
@@ -463,7 +485,9 @@ function OrderUser() {
               {item.service_fee.map((item, index) => (
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
                   <p>{item.name.split("(")[0]}</p>
                   <p>{item.price.toLocaleString()} đ</p>
@@ -472,7 +496,9 @@ function OrderUser() {
 
               <div
                 className="d-flex"
-                style={{ justifyContent: "space-between" }}
+                style={{
+                  justifyContent: "space-between",
+                }}
               >
                 <p>Tổng thanh toán cũ</p>
                 <p className="fw-bold">{item.totalOrder.toLocaleString()} đ</p>
@@ -482,7 +508,9 @@ function OrderUser() {
                 <>
                   <div
                     className="d-flex"
-                    style={{ justifyContent: "space-between" }}
+                    style={{
+                      justifyContent: "space-between",
+                    }}
                   >
                     <p className="fw-bold">* Chi phí phát sinh: </p>
                     <p className="fw-bold"></p>
@@ -490,7 +518,9 @@ function OrderUser() {
 
                   <div
                     className="d-flex"
-                    style={{ justifyContent: "space-between" }}
+                    style={{
+                      justifyContent: "space-between",
+                    }}
                   >
                     <p>{item.more_fee_name}</p>
                     <p className="fw-bold" style={{ color: "green" }}>
@@ -504,7 +534,9 @@ function OrderUser() {
 
               <div
                 className="d-flex"
-                style={{ justifyContent: "space-between" }}
+                style={{
+                  justifyContent: "space-between",
+                }}
               >
                 <p>Trạng thái thanh toán</p>
                 <p style={{ color: "orange" }}>{item.payment_status}</p>
@@ -512,7 +544,10 @@ function OrderUser() {
 
               <div
                 className="d-flex"
-                style={{ justifyContent: "space-between", marginTop: "25px" }}
+                style={{
+                  justifyContent: "space-between",
+                  marginTop: "25px",
+                }}
               >
                 <p
                   style={{
@@ -800,7 +835,11 @@ function OrderUser() {
             {time_get_item.split("-")[0]}
           </div>
           <div
-            style={{ fontWeight: "400", fontSize: "13px", color: "#737373" }}
+            style={{
+              fontWeight: "400",
+              fontSize: "13px",
+              color: "#737373",
+            }}
           >
             {time_get_item.split("-")[1]}
           </div>
@@ -832,7 +871,7 @@ function OrderUser() {
               >
                 1
               </span>
-              <p>{router.split("-")[0]}</p>
+              <p>{router.split("->")[0]}</p>
             </div>
 
             <div className="d-flex">
@@ -852,7 +891,7 @@ function OrderUser() {
               >
                 2
               </span>
-              <p>{router.split("-")[1]}</p>
+              <p>{router.split("->")[1]}</p>
             </div>
           </div>
         </>
@@ -951,7 +990,10 @@ function OrderUser() {
                 }}
               >
                 <DeleteOutlined
-                  style={{ color: "white", fontWeight: "bold" }}
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
                 />
               </div>
             </>
@@ -984,7 +1026,12 @@ function OrderUser() {
                   justifyContent: "center",
                 }}
               >
-                <StarOutlined style={{ color: "white", fontWeight: "bold" }} />
+                <StarOutlined
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                />
               </div>
             </>
           ) : (
@@ -1111,6 +1158,87 @@ function OrderUser() {
     setEndRangePrice(a[1]);
   };
 
+  //Xử lý xuất ra file Excel
+  //Download Excel
+  const download_data_xslx = () => {
+    Swal.fire({
+      title: "Bạn muốn tải xuống thông tin các đơn hàng ?",
+      text: "Hãy nhấn vào xác nhận để tải xuống !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          //Create file xsls Excel
+          // flatten object like this {id: 1, title:'', category: ''};
+
+          const rows =
+            dataOrder &&
+            dataOrder.map((item, index) => ({
+              STT: index + 1,
+              order_id: item.order_id,
+              date_created: item.date_created,
+              service_name: item.service_name,
+              status: item.status,
+              time_get_item: item.time_get_item,
+              router: item.router,
+              driver_name: item.driver_name.join("-"),
+              date_end: item.date_end,
+              vehicle_name: item.vehicle_name,
+              totalOrder: item.totalOrder,
+              reason_cancel: item.reason_cancel,
+            }));
+
+          // create workbook and worksheet
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(rows);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+          // customize header names
+          XLSX.utils.sheet_add_aoa(worksheet, [
+            [
+              "Số thứ tự",
+              "ID đơn hàng",
+              "Ngày tạo đơn hàng",
+              "Tên dịch vụ",
+              "Trạng thái đơn hàng",
+              "Thời gian lấy hàng",
+              "Lộ trình",
+              "Tài xế",
+              "Thời gian nhận hàng",
+              "Loại xe vận chuyển (Số lượng)",
+              "Tổng đơn hàng",
+              "Lý do hủy đơn",
+            ],
+          ]);
+
+          XLSX.writeFile(workbook, "DonHangDichVu.xlsx", {
+            compression: true,
+          });
+          Swal.fire({
+            title: "Tải xuống thành công !",
+            text: "Hoàn thành !",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Tải xuống thất bại!",
+          text: "Đơn hàng !",
+          icon: "fail",
+          confirmButtonText: "Xác nhận",
+        });
+        console.log(e);
+      });
+  };
+
   return (
     <>
       <HeaderUser />
@@ -1128,7 +1256,10 @@ function OrderUser() {
         <div className="content_order" style={{ marginTop: "30px" }}>
           <div
             className="top_content_order d-flex"
-            style={{ justifyContent: "space-between", alignItems: "center" }}
+            style={{
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+            }}
           >
             <div
               className="d-flex"
@@ -1154,11 +1285,13 @@ function OrderUser() {
                 id="find_service"
                 className="form-control form-control-lg"
                 placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
-                style={{ fontSize: "17px", borderRadius: "3px" }}
+                style={{
+                  fontSize: "17px",
+                  borderRadius: "3px",
+                }}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-
             {/* Chọn thời gian */}
             <div
               style={{
@@ -1183,7 +1316,6 @@ function OrderUser() {
                 </div>
               </div>
             </div>
-
             {/* Chọn khoảng giá */}
             <div
               style={{
@@ -1228,7 +1360,10 @@ function OrderUser() {
                       }
                     />{" "}
                     <ColumnWidthOutlined
-                      style={{ color: "orange", margin: "10px" }}
+                      style={{
+                        color: "orange",
+                        margin: "10px",
+                      }}
                     />
                     <input
                       type="text"
@@ -1244,13 +1379,32 @@ function OrderUser() {
                 </div>
               </div>
             </div>
+            {/* Nút xuất ra file excel */}
+            <div
+              onClick={() => download_data_xslx()}
+              style={{
+                cursor: "pointer",
+                width: "40px",
+                height: "40px",
+                backgroundColor: "green",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                borderRadius: "5px",
+                marginBottom: "10px",
+              }}
+            >
+              <FileExcelOutlined />
+            </div>
 
+            {/* Nút reload lại dữ liệu */}
             <div
               onClick={() => show_order_customer()}
               style={{
                 cursor: "pointer",
-                width: "30px",
-                height: "30px",
+                width: "40px",
+                height: "40px",
                 backgroundColor: "#ed883b",
                 display: "flex",
                 alignItems: "center",
