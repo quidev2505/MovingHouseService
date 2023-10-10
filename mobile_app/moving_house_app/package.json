@@ -16,6 +16,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-native-fontawesome": "^0.3.0",
     "@freakycoder/react-native-text-area": "^0.1.5",
+    "@maplibre/maplibre-react-native": "^9.1.0",
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/drawer": "^6.6.4",
@@ -38,7 +39,9 @@
     "react-native-element-dropdown": "^2.10.0",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "^2.13.1",
+    "react-native-map4d-map": "^2.7.0",
     "react-native-maps": "1.7.1",
+    "react-native-open-maps": "^0.4.3",
     "react-native-pager-view": "^6.2.1",
     "react-native-progress-steps": "^1.3.4",
     "react-native-reanimated": "^3.5.4",
@@ -48,7 +51,8 @@
     "react-native-stepper-ui": "^0.0.9",
     "react-native-svg": "^13.14.0",
     "react-native-tab-view": "^3.5.2",
-    "react-native-webview": "^13.6.0"
+    "react-native-webview": "^13.6.0",
+    "typescript": "^5.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

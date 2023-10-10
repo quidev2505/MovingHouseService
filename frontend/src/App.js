@@ -88,7 +88,8 @@ import CalendarAdmin from './Pages/Admin/PagesAdmin/Calendar/CalendarAdmin';
 //Import trong Setting Admin
 import ChangePasswordAdmin from './Pages/Admin/PagesAdmin/Admin/ChangePasswordAdmin';
 
-
+//Phần làm việc với Map trên mobile
+import ShowMap from './Pages/Map_App_ Native/ShowMap';
 
 
 
@@ -197,13 +198,14 @@ function App() {
           {/* In Setting Admin */}
           <Route path="/admin/change_password/:id" element={<ChangePasswordAdmin />} />
           {/* End Quản trị viên */}
-
-
-
-
           {/* End of Route */}
         </Route>
 
+
+
+        {/* Phần làm việc với app */}
+        {/* Show Map trên mobile */}
+        <Route path="/showmap" element={<ShowMap />} />
 
         {/* Trang không tìm thấy */}
         <Route path="*" element={<PageNotFound />} />
