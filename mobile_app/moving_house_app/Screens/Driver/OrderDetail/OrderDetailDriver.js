@@ -13,6 +13,7 @@ function OrderDetailDriver({ route, navigation }) {
     const [dataOrderDetail, setDataOrderDetail] = useState({});
 
     const [cancelOrder, setCancelOrder] = useState(false)
+    const [fullDriver, setFullDriver] = useState(false)//Kiểm tra đủ tài xế
 
     //ID khách hàng
     const [customerID, setCustomerID] = useState("")
@@ -54,10 +55,23 @@ function OrderDetailDriver({ route, navigation }) {
             //Kiểm tra xem đã có tài xế này tham gia chưa
             if (ob_detail_order.driver_name.includes(fullname_driver)) {
                 setCancelOrder(true)
+                setFullDriver(true)
                 //Kiểm tra xem đủ tài xế chưa //Nếu đã đủ sẽ hiện nút "Tiếp theo"
                 if (quantity_driver == ob_detail_order.driver_name.length) {
                     setNextStep(true)
+
                 }
+            } else {
+                //Nếu không có tên tài xế trong đơn hàng
+                //Kiểm tra xem đủ tài xế chưa //Nếu đã đủ sẽ hiện nút "Tiếp theo"
+                if (quantity_driver == ob_detail_order.driver_name.length) {
+                    setCancelOrder(true)
+                    setFullDriver(true)
+                } else {
+                    setCancelOrder(false)
+                    setFullDriver(false)
+                }
+
             }
 
 
@@ -346,17 +360,23 @@ function OrderDetailDriver({ route, navigation }) {
 
 
 
-                                    {cancelOrder ? <TouchableOpacity style={styles.button1} onPress={() => cancel_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
-                                        <Text style={styles.buttonText}>Hủy đơn
+                                    {cancelOrder === true && fullDriver === true ? <TouchableOpacity style={styles.button_full}>
+                                        <Text style={styles.buttonText}>Đã đủ số lượng tài xế
                                         </Text>
+                                    </TouchableOpacity> :
+                                        cancelOrder === true ? (
+                                            <TouchableOpacity style={styles.button1} onPress={() => cancel_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
+                                                <Text style={styles.buttonText}>Hủy đơn
+                                                </Text>
 
-                                    </TouchableOpacity> : (
-                                        <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
-                                            <Text style={styles.buttonText}>Nhấn để nhận đơn
-                                            </Text>
+                                            </TouchableOpacity>
+                                        ) : (
+                                            <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
+                                                <Text style={styles.buttonText}>Nhấn để nhận đơn
+                                                </Text>
 
-                                        </TouchableOpacity>
-                                    )}
+                                            </TouchableOpacity>
+                                        )}
                                 </View>
                             </View>
                         </View>
@@ -394,6 +414,18 @@ const styles = StyleSheet.create({
     },
     button1: {
         backgroundColor: 'red',
+        borderRadius: 10,
+        padding: 10,
+        height: "fit-content",
+        width: 350,
+        marginTop: 30,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    button_full: {
+        backgroundColor: '#ccc',
         borderRadius: 10,
         padding: 10,
         height: "fit-content",

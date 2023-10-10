@@ -14,7 +14,13 @@ function GetOrder({ navigation }) {
     const [statusDriver, setStatusDriver] = useState("");
     const [location_delivery, setLocationDelivery] = useState("")
 
+
+    //Tên tài xế hiện tại
+    const [driverName, setDriverName] = useState("")
+
     const location_order = useRef("TPHCM và tỉnh lân cận")
+
+    const inputStatus = useRef("Hiện có")
 
     //Lấy thông tin tất cả đơn hàng
     const get_info_all_order = async () => {
@@ -34,46 +40,86 @@ function GetOrder({ navigation }) {
                         const status_driver = data_driver.status;
                         const location_delivery = data_driver.location_delivery;
                         const fullname_driver = data_driver.fullname
+
+                        setDriverName(fullname_driver)
+
                         setStatusDriver(status_driver)
                         setLocationDelivery(location_delivery)
+
 
                         //Lấy ra tất cả các đơn hàng
                         await axios.get(`${api_url}/v1/order/viewAllOrder`).then((data) => {
                             let dataOrder = data.data;
                             const data_order = []
+                            console.log(inputStatus.current)
                             dataOrder &&
                                 dataOrder.forEach((item, index) => {
-                                    if (item.status !== "Đã hủy" && status_driver === "Sẵn sàng" && item.status !== "Đã hoàn thành") {
-                                        check_location_order(item.fromLocation)
-                                        const quantity_driver = item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]
+                                    if (inputStatus.current === "Đã nhận") {
+                                        if (status_driver === "Sẵn sàng" && item.status !== "Đã hủy" && item.status !== "Đã hoàn thành" && item.driver_name.includes(fullname_driver) === true) {
+                                            check_location_order(item.fromLocation)
+                                            const quantity_driver = item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]
 
-                                        const ob_order = {
-                                            STT: index + 1,
-                                            order_id: item.order_id,
-                                            service_name: item.service_name,
-                                            status: item.status,
-                                            date_start: item.date_start,
-                                            time_start: item.time_start,
-                                            fromLocation: item.fromLocation,
-                                            toLocation: item.toLocation,
-                                            driver_name: item.driver_name,
-                                            vehicle_name: item.vehicle_name,
-                                            totalOrder: item.totalOrder,
-                                            reason_cancel: item.reason_cancel,
-                                            order_detail_id: item.order_detail_id,
-                                            status: item.status,
-                                            locationOrder: location_order.current,
-                                            fullname_driver: fullname_driver,
-                                            quantity_driver: quantity_driver,
-                                            customer_id: item.customer_id
-                                        };
 
-                                        data_order.push(ob_order);
+
+                                            const ob_order = {
+                                                STT: index + 1,
+                                                order_id: item.order_id,
+                                                service_name: item.service_name,
+                                                status: item.status,
+                                                date_start: item.date_start,
+                                                time_start: item.time_start,
+                                                fromLocation: item.fromLocation,
+                                                toLocation: item.toLocation,
+                                                driver_name: item.driver_name,
+                                                vehicle_name: item.vehicle_name,
+                                                totalOrder: item.totalOrder,
+                                                reason_cancel: item.reason_cancel,
+                                                order_detail_id: item.order_detail_id,
+                                                status: item.status,
+                                                locationOrder: location_order.current,
+                                                fullname_driver: fullname_driver,
+                                                quantity_driver: quantity_driver,
+                                                customer_id: item.customer_id
+                                            };
+
+                                            data_order.push(ob_order);
+                                        }
+                                    } else {
+                                        if (status_driver === "Sẵn sàng" && item.status !== "Đã hủy" && item.status !== "Đã hoàn thành" && item.driver_name.includes(fullname_driver) === false) {
+                                            check_location_order(item.fromLocation)
+                                            const quantity_driver = item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]
+
+
+
+                                            const ob_order = {
+                                                STT: index + 1,
+                                                order_id: item.order_id,
+                                                service_name: item.service_name,
+                                                status: item.status,
+                                                date_start: item.date_start,
+                                                time_start: item.time_start,
+                                                fromLocation: item.fromLocation,
+                                                toLocation: item.toLocation,
+                                                driver_name: item.driver_name,
+                                                vehicle_name: item.vehicle_name,
+                                                totalOrder: item.totalOrder,
+                                                reason_cancel: item.reason_cancel,
+                                                order_detail_id: item.order_detail_id,
+                                                status: item.status,
+                                                locationOrder: location_order.current,
+                                                fullname_driver: fullname_driver,
+                                                quantity_driver: quantity_driver,
+                                                customer_id: item.customer_id
+                                            };
+
+                                            data_order.push(ob_order);
+                                        }
                                     }
 
-                                });
 
+                                });
                             setDataOrder(data_order)
+
                         })
                     })
                 }
@@ -133,9 +179,9 @@ function GetOrder({ navigation }) {
 
 
     useEffect(() => {
-        setInterval(() => {
-            get_info_all_order();
-        }, 2000)
+
+        get_info_all_order();
+
     }, [])
 
 
@@ -156,23 +202,52 @@ function GetOrder({ navigation }) {
 
     }, []);
 
+    const [colorTab, setColorTab] = useState(true);
+    //Lọc đơn hàng
+    const filterOrder = (inputOrder) => {
+        if (inputOrder === "Đã nhận") {
+            //Hiển thị lên
+            setColorTab(false)
+            inputStatus.current = "Đã nhận"
+            get_info_all_order();
+        } else {
+            //Hiển thị lên
+            setColorTab(true)
+            inputStatus.current = "Hiện có"
+            get_info_all_order();
+        }
+    }
 
-    //Làm việc với Tab
-    const [index, setIndex] = React.useState(0);
 
     return (
         <ScrollView refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
             {/* Hiển thị trạng thái tài xế */}
-            <View style={{ display: "flex", flexDirection: "row" }}>
-                <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: 150, borderRadius: 50, textAlign: "center" }}>Trạng thái làm việc: {statusDriver}</Text>
-                <Text style={{ marginRight: 10, marginTop: 10, padding: 10, width: 225, color: "white", backgroundColor: location_delivery === "TPHCM và tỉnh lân cận" ? "red" : "purple", borderRadius: 50, textAlign: "center", marginLeft: 10 }}>Khu vực vận chuyển: {"\n"} {location_delivery}</Text>
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", paddingLeft: 13 }}>
+                <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: "fit-content", borderRadius: 10, textAlign: "center", height: "fit-content" }}>{statusDriver}</Text>
+
+
+                <Text style={{ marginRight: 10, marginTop: 10, padding: 10, width: 225, color: "white", backgroundColor: location_delivery === "TPHCM và tỉnh lân cận" ? "red" : "purple", borderRadius: 50, textAlign: "center", marginLeft: 10 }}>
+                    <Ionicons
+                        name="location-sharp"
+                        size={20}
+                        color="white"
+                    />{location_delivery}</Text>
+            </View>
+
+            {/* Lọc ra đơn hiện đang có và đơn đã nhận hàng. */}
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", marginTop: 10, height: 40 }}>
+                <TouchableOpacity style={{ backgroundColor: colorTab ? 'orange' : '#ccc', padding: 5, borderRadius: 5, height: "fit-content" }} onPress={() => filterOrder("Hiện có")}>
+                    <Text style={{ color: "white", fontWeight: "bold" }}>Danh sách đơn hiện có</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ backgroundColor: colorTab ? '#ccc' : 'orange', color: "white", padding: 5, borderRadius: 5, height: "fit-content" }} onPress={() => filterOrder("Đã nhận")}>
+                    <Text style={{ color: "white", fontWeight: "bold" }}>Danh sách đơn đã nhận</Text>
+                </TouchableOpacity>
             </View>
 
 
-
-
+            {/* Khu vực hiển thị danh sách đơn hàng hiện có */}
             {dataOrder.length === 0 ? (
                 <>
                     <Image

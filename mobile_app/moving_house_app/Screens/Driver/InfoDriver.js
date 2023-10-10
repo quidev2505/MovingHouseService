@@ -104,6 +104,16 @@ function InfoDriver({ navigation }) {
     })
   }
 
+  //Chuyển qua lịch sử vận chuyển
+  const navigate_to_deliveryHistory = () => {
+    navigation.navigate("DeliveryHistory")
+  }
+
+  //Chuyển qua lịch sử đánh giá
+  const navigate_to_ratingHistory = () => {
+    navigation.navigate("RatingHistory")
+  }
+
   return (
     <ScrollView>
       <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-start", backgroundColor: "white" }}>
@@ -215,14 +225,13 @@ function InfoDriver({ navigation }) {
         </View>
 
 
-        <TouchableOpacity style={styles.button1} onPress={createTwoButtonAlert}>
+        <TouchableOpacity style={styles.vanchuyen} onPress={navigate_to_deliveryHistory}>
           <Text style={styles.buttonText}>Lịch sử vận chuyển
-
           </Text>
-
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button1} onPress={createTwoButtonAlert}>
+
+        <TouchableOpacity style={styles.button1} onPress={navigate_to_ratingHistory}>
           <Text style={styles.buttonText}>Lịch sử đánh giá
 
           </Text>
@@ -270,6 +279,18 @@ const styles = StyleSheet.create({
   },
   button1: {
     backgroundColor: 'red',
+    borderRadius: 10,
+    padding: 10,
+    height: "fit-content",
+    width: 350,
+    marginTop: 30,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  vanchuyen: {
+    backgroundColor: 'blue',
     borderRadius: 10,
     padding: 10,
     height: "fit-content",

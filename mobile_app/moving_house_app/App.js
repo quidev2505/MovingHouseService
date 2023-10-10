@@ -21,6 +21,8 @@ import OrderDetailDriver from './Screens/Driver/OrderDetail/OrderDetailDriver';
 import OrderDetail from './Screens/Driver/OrderDetail/OrderDetail';
 import ContactCustomer from './Screens/Driver/StepDelivery/ContactCustomer';
 import StepByStep from './Screens/Driver/StepDelivery/StepByStep';
+import DeliveryHistory from './Screens/Driver/DeliveryHistory';
+import RatingHistory from './Screens/Driver/RatingHistory';
 
 
 function App() {
@@ -45,6 +47,12 @@ function App() {
 
           {/* Chi tiết đơn hàng đã hoàn thành*/}
           <Stack.Screen name="OrderDetail" component={OrderDetail} />
+
+          {/* Lịch sử vận chuyển*/}
+          <Stack.Screen name="DeliveryHistory" component={DeliveryHistory} />
+
+          {/* Lịch sử đánh giá*/}
+          <Stack.Screen name="RatingHistory" component={RatingHistory} />
           {/* End Driver */}
 
           {/* Customer */}
