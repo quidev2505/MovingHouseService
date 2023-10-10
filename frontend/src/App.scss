@@ -30,7 +30,7 @@
     // overflow-x:hidden;
 }
 
-html{
+html {
     scroll-behavior: smooth;
 }
 
@@ -916,3 +916,26 @@ th.ant-table-cell {
     }
 }
 
+.showMap {
+    .overlay {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
+    .overlay button {
+        font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background-color: #3386c0;
+        color: #fff;
+        display: inline-block;
+        margin: 0;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .overlay button:hover {
+        background-color: #4ea0da;
+    }
+}
