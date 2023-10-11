@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 
-import * as turf from "@turf/turf";
-
 // app.js
 import "@goongmaps/goong-js/dist/goong-js.css";
 
@@ -10,14 +8,20 @@ import polyline from "@mapbox/polyline";
 
 import goongjs from "@goongmaps/goong-js";
 
+import { useNavigate, useParams } from "react-router-dom";
+
 function ShowMap() {
+  const params = useParams();
+
   const get_from_location = () => {
+    const location = params.location;
+    console.log(location)
     goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";
     var map = new goongjs.Map({
       container: "map",
       style: "https://tiles.goong.io/assets/goong_map_web.json",
       center: [105.864323, 20.981971],
-      zoom: 18,
+      zoom: 10,
     });
 
     var size = 200;
@@ -79,253 +83,47 @@ function ShowMap() {
       },
     };
 
-    // San Francisco
-    var origin = [105.864323, 20.981971];
-
-    // Washington DC
-    var destination = [105.783206, 21.031011];
-
-    // A simple line from origin to destination.
-    var route = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: [origin, destination],
-          },
-        },
-      ],
-    };
-
-    // A single point that animates along the route.
-    // Coordinates are initially set to origin.
-    var point = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "Point",
-            coordinates: origin,
-          },
-        },
-      ],
-    };
-
-    // Calculate the distance in kilometers between route start/end point.
-    var lineDistance = turf.lineDistance(route.features[0], "kilometers");
-
-    var arc = [];
-
-    // Number of steps to use in the arc and animation, more steps means
-    // a smoother arc and animation, but too many steps will result in a
-    // low frame rate
-    var steps = 2000;
-
-    // Draw an arc between the `origin` & `destination` of the two points
-    for (var i = 0; i < lineDistance; i += lineDistance / steps) {
-      var segment = turf.along(route.features[0], i, "kilometers");
-      arc.push(segment.geometry.coordinates);
-    }
-
-    // Update the route with calculated arc coordinates
-    route.features[0].geometry.coordinates = arc;
-
-    // Used to increment the value of the point measurement against the route.
-    var counter = 0;
     map.on("load", function() {
-      //Trên đây vẽ tuyến đường ra
-      var layers = map.getStyle().layers;
-      // Find the index of the first symbol layer in the map style
-      var firstSymbolId;
-      for (var i = 0; i < layers.length; i++) {
-        if (layers[i].type === "symbol") {
-          firstSymbolId = layers[i].id;
-          break;
-        }
-      }
-      const goongClient = require("@goongmaps/goong-sdk");
-      const goongDirections = require("@goongmaps/goong-sdk/services/directions");
-
-      const baseClient = goongClient({
-        accessToken: "5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy",
+      map.addImage("pulsing-dot", pulsingDot, {
+        pixelRatio: 2,
       });
-      const directionService = goongDirections(baseClient);
-      // Get Directions
-      directionService
-        .getDirections({
-          origin: "20.981971, 105.864323",
-          destination: "21.031011,105.783206",
-          vehicle: "car",
-        })
-        .send()
-        .then(function(response) {
-          var directions = response.body;
-          var route = directions.routes[0];
 
-          let arr_check = route.legs[0].steps.map((item, index) => {
-            return [item.start_location.lng, item.start_location.lng];
-          });
-
-					//Coi lại đoạn
-          // route.features[0].geometry.coordinates = arr_check
-
-          var geometry_string = route.overview_polyline.points;
-          var geoJSON = polyline.toGeoJSON(geometry_string);
-          map.addSource("route", {
-            type: "geojson",
-            data: geoJSON,
-          });
-          // Add route layer below symbol layers
-          map.addLayer(
+      map.addSource("points", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
             {
-              id: "route",
-              type: "line",
-              source: "route",
-              layout: {
-                "line-join": "round",
-                "line-cap": "round",
+              type: "Feature",
+              properties: {
+                message: "Foo",
+                iconSize: [60, 60],
               },
-              paint: {
-                "line-color": "#1e88e5",
-                "line-width": 8,
+              geometry: {
+                type: "Point",
+                coordinates: [105.7652286, 10.0165936],
               },
             },
-            firstSymbolId
-          );
-        });
-
-      //Dưới đây để vẽ máy bay ra
-      // Add a source and layer displaying a point which will be animated in a circle.
-      // map.addSource("route", {
-      //   type: "geojson",
-      //   data: route,
-      // });
-
-      map.addSource("point", {
-        type: "geojson",
-        data: point,
-      });
-
-      map.addLayer({
-        id: "route",
-        source: "route",
-        type: "line",
-        paint: {
-          "line-width": 2,
-          "line-color": "#007cbf",
+          ],
         },
       });
-
       map.addLayer({
-        id: "point",
-        source: "point",
+        id: "points",
         type: "symbol",
+        source: "points",
         layout: {
-          "icon-image": "airport-15",
-          "icon-rotate": ["get", "bearing"],
-          "icon-rotation-alignment": "map",
-          "icon-allow-overlap": true,
-          "icon-ignore-placement": true,
+          "icon-image": "pulsing-dot",
         },
       });
 
-      function animate() {
-        // Update point geometry to a new position based on counter denoting
-        // the index to access the arc.
+      // var popup = new goongjs.Popup({ closeOnClick: false })
+      //   .setLngLat([105.7652286, 10.0165936])
+      //   .setHTML("<h1>Đây là vị trí của bạn</h1>")
+      //   .addTo(map);
 
-        point.features[0].geometry.coordinates =
-          route.features[0].geometry.coordinates[counter];
-
-        // Calculate the bearing to ensure the icon is rotated to match the route arc
-        // The bearing is calculate between the current point and the next point, except
-        // at the end of the arc use the previous point and the current point
-        point.features[0].properties.bearing = turf.bearing(
-          turf.point(
-            route.features[0].geometry.coordinates[
-              counter >= steps ? counter - 1 : counter
-            ]
-          ),
-          turf.point(
-            route.features[0].geometry.coordinates[
-              counter >= steps ? counter : counter + 1
-            ]
-          )
-        );
-
-        // Update the source with this new data.
-        map.getSource("point").setData(point);
-
-        // Request the next frame of animation so long the end has not been reached.
-        if (counter < steps) {
-          requestAnimationFrame(animate);
-        }
-
-        counter = counter + 1;
-      }
-
-      document.getElementById("replay").addEventListener("click", function() {
-        // Set the coordinates of the original point back to origin
-        point.features[0].geometry.coordinates = origin;
-
-        // Update the source layer
-        map.getSource("point").setData(point);
-
-        // Reset the counter
-        counter = 0;
-
-        // Restart the animation.
-        animate(counter);
-      });
-
-      // Start the animation.
-      animate(counter);
+      // Add zoom and rotation controls to the map.
+      map.addControl(new goongjs.NavigationControl());
     });
-
-    // map.on("load", function() {
-    //   map.addImage("pulsing-dot", pulsingDot, {
-    //     pixelRatio: 2,
-    //   });
-
-    //   map.addSource("points", {
-    //     type: "geojson",
-    //     data: {
-    //       type: "FeatureCollection",
-    //       features: [
-    //         {
-    //           type: "Feature",
-    //           properties: {
-    //             message: "Foo",
-    //             iconSize: [60, 60],
-    //           },
-    //           geometry: {
-    //             type: "Point",
-    //             coordinates: [105.7652286, 10.0165936],
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   });
-    //   map.addLayer({
-    //     id: "points",
-    //     type: "symbol",
-    //     source: "points",
-    //     layout: {
-    //       "icon-image": "pulsing-dot",
-    //     },
-    //   });
-
-    //   var popup = new goongjs.Popup({ closeOnClick: false })
-    //     .setLngLat([105.7652286, 10.0165936])
-    //     .setHTML("<h1>Hello World!</h1>")
-    //     .addTo(map);
-
-    //   // Add zoom and rotation controls to the map.
-    //   map.addControl(new goongjs.NavigationControl());
-    // });
   };
 
   useEffect(() => {
@@ -346,9 +144,6 @@ function ShowMap() {
         id="map"
         style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
       ></div>
-      <div class="overlay">
-        <button id="replay">Replay</button>
-      </div>
     </div>
   );
 }

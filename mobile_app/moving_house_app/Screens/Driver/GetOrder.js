@@ -179,8 +179,13 @@ function GetOrder({ navigation }) {
 
 
     useEffect(() => {
+        
+        get_info_all_order()
+        // setInterval(() => {
 
-        get_info_all_order();
+
+        //     get_info_all_order();
+        // }, 3000)
 
     }, [])
 

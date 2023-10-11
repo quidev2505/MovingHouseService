@@ -4,7 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import Order from './Order';
 import GetOrder from './GetOrder';
 import InfoDriver from './InfoDriver';
-import Map from "./Map";
+
+import MapLocation from './MapLocation';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,6 +31,15 @@ function HomeScreenDriver() {
               />
             );
           }
+          else if (route.name === 'BẢN ĐỒ') {
+            return (
+              <Ionicons
+                name="map-outline"
+                size={size}
+                color={color}
+              />
+            )
+          }
           else if (route.name === 'THÔNG TIN CÁ NHÂN') {
             return (
               <Ionicons
@@ -47,7 +57,7 @@ function HomeScreenDriver() {
     >
       <Tab.Screen name="NHẬN ĐƠN" component={GetOrder} />
       <Tab.Screen name="ĐƠN HÀNG" component={Order} />
-      <Tab.Screen name="BẢN ĐỒ" component={Map} />
+      <Tab.Screen name="BẢN ĐỒ" component={MapLocation} />
       <Tab.Screen name="THÔNG TIN CÁ NHÂN" component={InfoDriver} />
     </Tab.Navigator>
 

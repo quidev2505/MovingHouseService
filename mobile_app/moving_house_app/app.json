@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Cho phép ứng dụng sử dụng vị trí của bạn ?"
+        }
+      ]
+    ],
     "name": "moving_house_app",
     "slug": "moving_house_app",
     "version": "1.0.0",
@@ -11,9 +19,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -26,7 +32,8 @@
         "googleMaps": {
           "apiKey": "AIzaSyA66KwUrjxcFG5u0exynlJ45CrbrNe3hEc"
         }
-      }
+      },
+      "package": "com.quidev2505.moving_house_app"
     },
     "web": {
       "favicon": "./assets/favicon.png"

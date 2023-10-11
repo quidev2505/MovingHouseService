@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView, RefreshControl } from "react-native"
 import { Icon } from "@rneui/base";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 import api_url from "../../api_url";
@@ -114,8 +114,23 @@ function InfoDriver({ navigation }) {
     navigation.navigate("RatingHistory")
   }
 
+
+
+  //Load page khi kéo xuống
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    get_info_driver();
+    setRefreshing(false);
+
+  }, []);
+
   return (
-    <ScrollView>
+    <ScrollView refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-start", backgroundColor: "white" }}>
         <View style={{ marginTop: 20 }}>
           <Avatar

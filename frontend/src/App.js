@@ -205,7 +205,7 @@ function App() {
 
         {/* Phần làm việc với app */}
         {/* Show Map trên mobile */}
-        <Route path="/showmap" element={<ShowMap />} />
+        <Route path="/showmap/:location" element={<ShowMap />} />
 
         {/* Trang không tìm thấy */}
         <Route path="*" element={<PageNotFound />} />
