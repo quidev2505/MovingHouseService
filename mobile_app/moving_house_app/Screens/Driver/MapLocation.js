@@ -47,8 +47,6 @@ function MapLocation() {
     }
   }
 
-
-
   useEffect(() => {
     get_location_driver()
   }, [])
@@ -57,7 +55,7 @@ function MapLocation() {
     <>
       <SafeAreaView style={{ flex: 1 }}>
         <WebView
-          source={{ uri: `http://10.0.2.2:3000/showmap/${locationObject.lat-locationObject.lon-locationObject.display_name}` }}
+          source={{ uri: `http://10.0.2.2:3000/showmap/${locationObject.lat}-${locationObject.lon}-${locationObject.display_name}` }}
         />
       </SafeAreaView>
 

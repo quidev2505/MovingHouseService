@@ -36,7 +36,8 @@ const driverController = {
                 address: data_input.address,
                 vehicle_type: data_input.vehicle_type,
                 location_delivery: data_input.location_delivery,
-                avatar: IMG
+                avatar: IMG,
+                current_position: data_input.address
             })
 
             //Save Data Driver

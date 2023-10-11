@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView, RefreshControl } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView, RefreshControl, KeyboardAvoidingView } from "react-native"
 import { Icon } from "@rneui/base";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 import api_url from "../../api_url";
@@ -10,8 +10,40 @@ import { Avatar } from '@rneui/themed';
 
 import { Ionicons } from '@expo/vector-icons';
 
+
+import DatalistInput from '@avul/react-native-datalist-input';
+
 function InfoDriver({ navigation }) {
   const [dataDriver, setDataDriver] = useState({})
+
+
+  const [valueList, setValueList] = useState(''); //Giá trị datalistinput
+  const [dataList, setDataList] = useState([])
+
+
+  //Hiển thị ra dữ liệu
+  const update_data_list = async () => {
+    await axios
+      .get(`https://geocode.maps.co/search?q=${valueList}&format=json`)
+      .then((data) => {
+        let result = data.data;
+        if (result) {
+          let arr_result = result.map((item, index) => {
+            return item.display_name
+          });
+
+          setDataList(arr_result)
+        }
+      }).catch((e) => {
+        console.log(e)
+      })
+
+  }
+
+
+  useEffect(() => {
+    update_data_list()
+  }, [valueList])
 
   //Lấy thông tin tài xế
   const get_info_driver = async () => {
@@ -44,7 +76,8 @@ function InfoDriver({ navigation }) {
               date_of_birth: data_driver.date_of_birth,
               id_rating: data_driver.id_rating,
               id_delivery: data_driver.id_delivery,
-              status: data_driver.status
+              status: data_driver.status,
+              current_position: data_driver.current_position
             }
 
             setDataDriver(ob);
@@ -220,21 +253,91 @@ function InfoDriver({ navigation }) {
             <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.username}</Text>
           </View>
 
-          <View style={{ display: "flex", flexDirection: "row", marginTop: 17, borderColor: "#ccc", borderWidth: 1, borderRadius: 5, padding: 5 }}>
-            <Ionicons
-              name="radio-button-on-sharp"
-              size={25}
-              color={dataDriver.status === "Sẵn sàng" ? "green" : "red"}
-            />
-            <Text style={{ marginRight: 10, marginLeft: 10, fontSize: 17, color: dataDriver.status === "Sẵn sàng" ? "green" : "red" }}>{dataDriver.status}</Text>
+          <View style={{ display: "flex", flexDirection: "column", marginTop: 17, borderColor: "#ccc", borderWidth: 1, borderRadius: 5, padding: 5 }}>
+            <View>
+              <Text style={{ color: "black", fontSize: 17, fontWeight: "bold", marginBottom: 5 }}>Trạng thái:     </Text>
 
-            <TouchableOpacity onPress={() => changeStatusDriver(dataDriver.status, dataDriver.fullname)}>
-              <Ionicons
-                name="sync-sharp"
-                size={25}
-                color={dataDriver.status === "Sẵn sàng" ? "green" : "red"}
-              />
-            </TouchableOpacity>
+            </View>
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+              <View style={{ display: "flex", flexDirection: "row" }}>
+                <Ionicons
+                  name="radio-button-on-sharp"
+                  size={25}
+                  color={dataDriver.status === "Sẵn sàng" ? "green" : "red"}
+                />
+                <Text style={{ marginRight: 10, marginLeft: 10, fontSize: 17, color: dataDriver.status === "Sẵn sàng" ? "green" : "red" }}>{dataDriver.status}</Text>
+              </View>
+
+
+              <TouchableOpacity onPress={() => changeStatusDriver(dataDriver.status, dataDriver.fullname)}>
+
+                <Ionicons
+                  name="sync-circle-sharp"
+                  size={25}
+                  color={dataDriver.status === "Sẵn sàng" ? "green" : "red"}
+                />
+              </TouchableOpacity>
+            </View>
+
+          </View>
+
+          {/* Vị trí hiện tại */}
+          <View style={{ display: "flex", flexDirection: "column", marginTop: 17, borderColor: "#ccc", borderWidth: 1, borderRadius: 5, padding: 5 }}>
+            <View>
+              <Text style={{ color: "black", fontSize: 17, fontWeight: "bold", marginBottom: 5 }}>Vị trí hiện tại:     </Text>
+
+            </View>
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+              <View style={{ display: "flex", flexDirection: "row" }}>
+                <Ionicons
+                  name="radio-button-on-sharp"
+                  size={25}
+                  color="purple"
+                />
+                <Text style={{ marginRight: 10, marginLeft: 10, fontSize: 17, color: "purple" }}>{dataDriver.current_position}</Text>
+
+              </View>
+
+              <TouchableOpacity onPress={() => changeStatusDriver(dataDriver.status, dataDriver.fullname)}>
+
+                <Ionicons
+                  name="sync-circle-sharp"
+                  size={25}
+                  color="purple"
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ marginTop: 20 }}>
+              <View style={styles.screen}>
+                <Text style={styles.titleStyle}>THAY ĐỔI VỊ TRÍ</Text>
+                <KeyboardAvoidingView behavior="padding" style={styles.container}>
+                  <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                    <DatalistInput
+                      containerStyle={styles.containerStyle}
+                      value={valueList}
+                      onChangeText={text => setValueList(text)}
+                      data={dataList}
+                      style={styles.inputStyle}
+                      placeholder="Nhập vào vị trí muốn chuyển đổi..."
+                      placeholderTextColor="#cdcdcd"
+                    />
+                    <TouchableOpacity onPress={() => {setValueList('')
+                    console.log(dataList)
+                  }} style={{ marginTop: -25, marginLeft: 10 }}>
+
+                      <Ionicons
+                        name="close-circle-sharp"
+                        size={35}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  </View>
+
+                </KeyboardAvoidingView>
+              </View>
+            </View>
+
           </View>
 
         </View>
@@ -330,6 +433,27 @@ const styles = StyleSheet.create({
   },
   rating: {
     paddingVertical: 10,
+  },
+  screen: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: 'grey',
+    justifyContent: 'center',
+  },
+  containerStyle: {
+    width: '80%',
+    color: "white",
+    height: 100
+  },
+  inputStyle: {
+    color: 'white',
+    marginTop: 10
+  },
+  titleStyle: {
+    color: 'white',
+    fontSize: 18,
+    marginBottom: 15,
+    marginTop: 10
   },
 });
 

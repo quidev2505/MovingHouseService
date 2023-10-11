@@ -10,6 +10,7 @@ import MapLocation from './MapLocation';
 const Tab = createBottomTabNavigator();
 
 function HomeScreenDriver() {
+  console.disableYellowBox = true;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
