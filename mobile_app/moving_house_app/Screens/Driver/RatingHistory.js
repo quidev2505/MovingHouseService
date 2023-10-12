@@ -9,6 +9,7 @@ import axios from "axios";
 
 
 function RatingHistory({ navigation }) {
+  console.disableYellowBox = true;
   //Xử lý nút trở lại
   const back = () => {
     navigation.navigate("THÔNG TIN CÁ NHÂN")

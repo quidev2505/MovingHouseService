@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView, RefreshControl, KeyboardAvoidingView } from "react-native"
 import { Icon } from "@rneui/base";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
@@ -14,6 +14,10 @@ import { Ionicons } from '@expo/vector-icons';
 import DatalistInput from '@avul/react-native-datalist-input';
 
 function InfoDriver({ navigation }) {
+  console.disableYellowBox = true;
+
+  const [check_show_dropdown, setCheckShowDropDown] = useState(false)
+
   const [dataDriver, setDataDriver] = useState({})
 
 
@@ -160,6 +164,20 @@ function InfoDriver({ navigation }) {
 
   }, []);
 
+
+  //Cập nhật lại vị trí hiện tại của tài xế
+  const update_current_position = async (fullname) => {
+    await axios.patch(`${api_url}/v1/driver/updateonefield_driver_withname/${fullname}`, { current_position: valueList }).then((data) => {
+      Alert.alert('Thông báo', 'Thay đổi vị trí hiện tại thành công !', [
+        { text: 'Xác nhận' },
+      ]);
+
+      get_info_driver()
+    }).catch((e) => {
+      console.log(e)
+    })
+  }
+
   return (
     <ScrollView refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -287,7 +305,7 @@ function InfoDriver({ navigation }) {
               <Text style={{ color: "black", fontSize: 17, fontWeight: "bold", marginBottom: 5 }}>Vị trí hiện tại:     </Text>
 
             </View>
-            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <View style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <View style={{ display: "flex", flexDirection: "row" }}>
                 <Ionicons
                   name="radio-button-on-sharp"
@@ -298,17 +316,13 @@ function InfoDriver({ navigation }) {
 
               </View>
 
-              <TouchableOpacity onPress={() => changeStatusDriver(dataDriver.status, dataDriver.fullname)}>
+              <TouchableOpacity onPress={() => setCheckShowDropDown((e) => !e)}>
 
-                <Ionicons
-                  name="sync-circle-sharp"
-                  size={25}
-                  color="purple"
-                />
+                <Text style={{ backgroundColor: "purple", width: 100, textAlign: "center", borderRadius: 5, padding: 5, color: "white", marginTop: 20 }}>{check_show_dropdown ? 'Ẩn' : 'Hiển thị'}</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={{ marginTop: 20 }}>
+            <View style={{ marginTop: 20, display: check_show_dropdown ? 'flex' : 'none' }}>
               <View style={styles.screen}>
                 <Text style={styles.titleStyle}>THAY ĐỔI VỊ TRÍ</Text>
                 <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -322,12 +336,10 @@ function InfoDriver({ navigation }) {
                       placeholder="Nhập vào vị trí muốn chuyển đổi..."
                       placeholderTextColor="#cdcdcd"
                     />
-                    <TouchableOpacity onPress={() => {setValueList('')
-                    console.log(dataList)
-                  }} style={{ marginTop: -25, marginLeft: 10 }}>
+                    <TouchableOpacity onPressIn={() => { update_current_position(dataDriver.fullname) }} style={{ marginTop: -25, marginLeft: 10 }}>
 
                       <Ionicons
-                        name="close-circle-sharp"
+                        name="cloud-upload-outline"
                         size={35}
                         color="white"
                       />
@@ -393,7 +405,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 30
+    marginBottom: 30,
+    zIndex: -1
   },
   button1: {
     backgroundColor: 'red',
@@ -405,7 +418,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    zIndex: -1
   },
   vanchuyen: {
     backgroundColor: 'blue',
@@ -417,13 +431,14 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    zIndex: -1
   },
   button2: {
     backgroundColor: 'orange',
     borderRadius: 10,
     padding: 10,
-    width: 325
+    width: 325,
   },
   buttonText: {
     fontSize: 30,
@@ -443,11 +458,12 @@ const styles = StyleSheet.create({
   containerStyle: {
     width: '80%',
     color: "white",
-    height: 100
+    minHeight: 100,
   },
   inputStyle: {
     color: 'white',
-    marginTop: 10
+    marginTop: 10,
+    padding: 5,
   },
   titleStyle: {
     color: 'white',

@@ -8,6 +8,7 @@ import axios from "axios";
 
 
 function DeliveryHistory({ navigation }) {
+    console.disableYellowBox = true;
     //Xử lý nút trở lại
     const back = () => {
         navigation.navigate("THÔNG TIN CÁ NHÂN")

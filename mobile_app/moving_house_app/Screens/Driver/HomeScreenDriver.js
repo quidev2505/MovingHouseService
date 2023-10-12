@@ -6,11 +6,14 @@ import GetOrder from './GetOrder';
 import InfoDriver from './InfoDriver';
 
 import MapLocation from './MapLocation';
+import { LogBox } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 function HomeScreenDriver() {
   console.disableYellowBox = true;
+  //Ignore all log notifications
+  LogBox.ignoreAllLogs();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, Image, TouchableOpacity, StyleSheet, RefreshControl } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 import axios from 'axios';
 import api_url from '../../../api_url';
@@ -8,9 +8,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card, Divider } from '@rneui/themed';
 import { executeNativeBackPress } from 'react-native-screens';
 
-function CompletedOrder({navigation}) {
+function CompletedOrder({ navigation }) {
     const [dataOrder, setDataOrder] = useState([])
 
+    //Load page khi kéo xuống
+    const [refreshing, setRefreshing] = React.useState(false);
 
     const navigation_to_detailOrder = (order_detail_id) => {
         navigation.navigate('OrderDetailCustomer', { status: "Đã hoàn thành", data: order_detail_id })
@@ -80,9 +82,17 @@ function CompletedOrder({navigation}) {
         get_info_order();
     }, [])
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        get_info_order();
 
+        setRefreshing(false);
+
+    }, []);
     return (
-        <ScrollView>
+        <ScrollView refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
             {dataOrder.length === 0 ? (
                 <>
                     <Image
@@ -193,6 +203,10 @@ function CompletedOrder({navigation}) {
                                     </View>
 
 
+                                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RatingOrder', { status: "Đã hoàn thành", data: item.order_id })}>
+                                        <Text style={styles.buttonText}>Đánh giá đơn hàng</Text>
+                                    </TouchableOpacity>
+
                                 </Card>
                             </TouchableOpacity>
                         </>
@@ -206,4 +220,25 @@ function CompletedOrder({navigation}) {
     )
 }
 
+
+
+
 export default CompletedOrder
+
+const styles = StyleSheet.create({
+
+    button: {
+        backgroundColor: 'orange',
+        borderRadius: 5,
+        padding: 10,
+        width: 350,
+        marginTop: 20
+    },
+
+    buttonText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: "center"
+    }
+})

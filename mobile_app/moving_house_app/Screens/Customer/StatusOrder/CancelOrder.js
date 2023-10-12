@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, Image, TouchableOpacity, RefreshControl } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 import axios from 'axios';
 import api_url from '../../../api_url';
@@ -10,6 +10,8 @@ import { Card, Divider } from '@rneui/themed';
 
 function CancelOrder({ navigation }) {
     const [dataOrder, setDataOrder] = useState([])
+    //Load page khi kéo xuống
+    const [refreshing, setRefreshing] = React.useState(false);
 
     //Lấy thông tin khách hàng
     const get_info_order = async () => {
@@ -52,7 +54,8 @@ function CancelOrder({ navigation }) {
                                             vehicle_name: item.vehicle_name,
                                             totalOrder: item.totalOrder,
                                             reason_cancel: item.reason_cancel,
-                                            order_detail_id: item.order_detail_id
+                                            order_detail_id: item.order_detail_id,
+                                            reason_cancel: item.reason_cancel
                                         };
 
                                         data_order.push(ob_order);
@@ -74,14 +77,22 @@ function CancelOrder({ navigation }) {
         get_info_order();
     }, [])
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        get_info_order();
 
+        setRefreshing(false);
+
+    }, []);
     const navigation_to_detailOrder = (order_detail_id) => {
         navigation.navigate('OrderDetailCustomer', { status: "Đã hủy", data: order_detail_id })
     }
 
 
     return (
-        <ScrollView>
+        <ScrollView refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
             {dataOrder.length === 0 ? (
                 <>
                     <Image
@@ -97,7 +108,7 @@ function CancelOrder({ navigation }) {
                 dataOrder && dataOrder.map((item, index) => {
                     return (
                         <>
-                            <TouchableOpacity key={index} onPress={() => navigation_to_detailOrder(item.order_detail_id)} > 
+                            <TouchableOpacity key={index} onPress={() => navigation_to_detailOrder(item.order_detail_id)} >
                                 <Card key={index}>
                                     <View>
                                         <Card.Title style={{ textAlign: "left" }}>
@@ -192,7 +203,17 @@ function CancelOrder({ navigation }) {
                                         </View>
                                     </View>
 
-
+                                    <View style={{ borderTopColor: "#ccc", borderTopWidth: 1, paddingTop: 10 }}>
+                                        <View style={{ display: "flex", justifyContent: "space-between", flexDirection: "row", backgroundColor: "red", padding: 5, borderRadius: 5 }}>
+                                            <Text style={{ color: "white" }}>
+                                                Lí do hủy đơn: 
+                                            </Text>
+                                            <Text style={{ color: "white", fontWeight: "bold" }}>
+                                                {item.reason_cancel}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                    
                                 </Card>
                             </TouchableOpacity>
 

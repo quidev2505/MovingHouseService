@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card, Divider } from '@rneui/themed';
 
 function Order({ navigation }) {
+    console.disableYellowBox = true;
     const [dataOrder, setDataOrder] = useState([])
     const [statusDriver, setStatusDriver] = useState("");
     const [location_delivery, setLocationDelivery] = useState("")

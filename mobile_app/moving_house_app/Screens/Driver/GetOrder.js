@@ -12,6 +12,7 @@ import { FAB } from 'react-native-elements';
 import { Card, Divider } from '@rneui/themed';
 
 function GetOrder({ navigation }) {
+    console.disableYellowBox = true;
     const [dataOrder, setDataOrder] = useState([])
     const [statusDriver, setStatusDriver] = useState("");
     const [location_delivery, setLocationDelivery] = useState("")

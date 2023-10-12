@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Image, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, Image, TouchableOpacity, RefreshControl } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 import axios from 'axios';
 import api_url from '../../../api_url';
@@ -9,6 +9,8 @@ import { Card, Divider } from '@rneui/themed';
 
 function LoadingOrder({ navigation }) {
     const [dataOrder, setDataOrder] = useState([])
+    //Load page khi kéo xuống
+    const [refreshing, setRefreshing] = React.useState(false);
 
     //Lấy thông tin khách hàng
     const get_info_order = async () => {
@@ -78,9 +80,18 @@ function LoadingOrder({ navigation }) {
         navigation.navigate('OrderDetailCustomer', { status: "Đang tải", data: order_detail_id })
     }
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        get_info_order();
+
+        setRefreshing(false);
+
+    }, []);
 
     return (
-        <ScrollView>
+        <ScrollView refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
             {dataOrder.length === 0 ? (
                 <>
                     <Image

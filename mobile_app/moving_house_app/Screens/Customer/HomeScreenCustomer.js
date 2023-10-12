@@ -3,10 +3,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import Order from './Order';
 import InfoCustomer from './InfoCustomer';
+import { LogBox } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 function HomeScreenCustomer() {
+    console.disableYellowBox = true;
+    //Ignore all log notifications
+    LogBox.ignoreAllLogs();
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({

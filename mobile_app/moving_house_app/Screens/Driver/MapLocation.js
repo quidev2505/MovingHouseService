@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Button } from "react-native"
+import { View, Text, Button, TouchableOpacity } from "react-native"
 import { SafeAreaView } from "react-native";
 import { WebView } from 'react-native-webview';
+import { Ionicons } from '@expo/vector-icons';
 import axios from "axios";
 
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
@@ -20,7 +21,7 @@ function MapLocation() {
           await axios.get(`${api_url}/v1/driver/view_detail_driver_with_username/${username}`).then(async (data) => {
             const data_driver = data.data;
 
-            let addres_driver_current = data_driver.address;
+            let addres_driver_current = data_driver.current_position;
 
             await axios
               .get(`https://geocode.maps.co/search?q=${addres_driver_current}&format=json`)
@@ -33,7 +34,7 @@ function MapLocation() {
                     lon: result.lon
                   };
 
-                  console.log(ob)
+
                   setLocationObject(ob)
                 }
               })
@@ -57,6 +58,26 @@ function MapLocation() {
         <WebView
           source={{ uri: `http://10.0.2.2:3000/showmap/${locationObject.lat}-${locationObject.lon}-${locationObject.display_name}` }}
         />
+        <View style={{
+          position: "absolute",
+          bottom: 10,
+          right: 7,
+          backgroundColor: "orange",
+          width: 50, height: 50,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 10
+        }}>
+          <TouchableOpacity onPress={() => get_location_driver()}>
+            <Ionicons
+              name="refresh-circle-sharp"
+              size={25}
+              color="white"
+            />
+          </TouchableOpacity>
+
+        </View>
       </SafeAreaView>
 
     </>

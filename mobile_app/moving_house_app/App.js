@@ -23,6 +23,7 @@ import ContactCustomer from './Screens/Driver/StepDelivery/ContactCustomer';
 import StepByStep from './Screens/Driver/StepDelivery/StepByStep';
 import DeliveryHistory from './Screens/Driver/DeliveryHistory';
 import RatingHistory from './Screens/Driver/RatingHistory';
+import RatingOrder from './Screens/Customer/RatingOrder/RatingOrder';
 
 
 function App() {
@@ -62,6 +63,9 @@ function App() {
           {/* Chi tiết đơn hàng khách hàng */}
           <Stack.Screen name="OrderDetailCustomer" component={OrderDetailCustomer} />
 
+
+          {/* Đánh giá đơn hàng đã hoàn thành*/}
+          <Stack.Screen name="RatingOrder" component={RatingOrder} />
           {/* End Customer */}
 
         </Stack.Navigator>
