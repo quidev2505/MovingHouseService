@@ -19,167 +19,9 @@ function RatingOrder({ route, navigation }) {
     const [driverName, setDriverName] = useState("");
 
 
-    const [dom_RatingDriver, setDOMRatingDriver] = useState();
 
-
-    const check = useRef('')
-    //Lấy dữ liệu đánh giá show ra
-    const get_data_order = async (dataOrder) => {
-        try {
-            await axios.get(
-                `${api_url}/v1/order/viewOrderWithOrderId/${dataOrder}`
-            ).then((data) => {
-                let arr_driver = data.data.driver_name;
-                setDriverName(arr_driver);
-                let service_name = data.data.service_name;
-                setServiceName(service_name);
-
-                // Khởi tạo biến arr_check có kích thước 0
-                var arr_check = new Array(0);
-
-                // Lập qua mang tên tài xế và thực hiện truy vấn API
-                arr_driver.forEach(async(item, index) => {
-                    // Thực hiện truy vấn API
-                    let result = await axios.get(
-                        `${api_url}/v1/driver/getdriver_with_fullname/${item}`
-                    );
-
-                    // Tạo đối tượng ob chứa thông tin về tài xế
-                    let ob = {
-                        fullname: result.data.fullname,
-                        avatar: result.data.avatar,
-                    };
-
-                    // Thêm đối tượng ob vào mảng arr_check
-                    arr_check.push(ob);
-                });
-
-                console.log(arr_check);
-
-
-
-
-
-
-                // setTimeout(() => {
-                //     // Tạo DOM gắn vào tài xế
-                //     //Tạo DOM gắn vào tài xế
-                //     if (arrDriver.length > 0) {
-                //         let DOM_DRIVER = arrDriver.map((item, index) => {
-                //             return (
-                //                 <>
-                //                     <View
-                //                         className="d-flex"
-                //                         style={{
-                //                             alignItems: "center",
-                //                             borderTopWidth: 1,
-                //                             borderTopColor: "#ccc",
-                //                             paddingTop: 10
-                //                         }}
-                //                     >
-                //                         <Avatar
-                //                             size={64}
-                //                             rounded
-                //                             source={item.avatar}
-                //                         />
-                //                         <Text
-                //                             style={{
-                //                                 color: "orange",
-                //                                 marginLeft: 15,
-                //                                 marginTop: 5,
-                //                             }}
-                //                         >
-                //                             {item.fullname}
-                //                         </Text>
-                //                     </View>
-                //                     <View style={{ padding: "10px" }}>
-                //                         <View
-                //                             style={{
-                //                                 display: "flex",
-                //                                 flexDirection: "row",
-                //                                 justifyContent: "space-between",
-                //                                 alignItems: "center",
-                //                                 paddingLeft: 15,
-                //                                 width: 250,
-                //                             }}
-                //                         >
-                //                             <Text style={{ marginBottom: "0px" }}>Đánh giá</Text>
-                //                             <Text>
-                //                                 <AirbnbRating reviews={[
-                //                                     'Rất Tệ',
-                //                                     'Tệ',
-                //                                     'Bình thường',
-                //                                     'Hoàn hảo',
-                //                                     'Xuất sắc',
-                //                                 ]}
-                //                                     size={20}
-                //                                     onFinishRating={ratingService}
-                //                                 />
-
-                //                             </Text>
-                //                         </View>
-                //                         <View
-
-                //                             style={{
-                //                                 display: "flex",
-                //                                 flexDirection: "row",
-                //                                 justifyContent: "space-between",
-                //                                 alignItems: "center",
-                //                                 paddingLeft: 15,
-                //                                 marginTop: 40,
-                //                             }}
-                //                         >
-                //                             <Text>Nhận xét</Text>
-                //                             <Input
-                //                                 containerStyle={{}}
-                //                                 disabledInputStyle={{ background: "#ddd" }}
-                //                                 inputContainerStyle={{}}
-
-                //                                 value={commentService}
-                //                                 onChangeText={(e) => setCommentService(e)}
-                //                                 placeholder="Nhập vào nhận xét"
-                //                             />
-                //                         </View>
-                //                     </View>
-                //                 </>
-                //             );
-                //         });
-
-                //         setDOMRatingDriver(DOM_DRIVER);
-                //     }
-                // }, [1500]);
-            }).catch((e) => {
-                console.log('loi r')
-            })
-
-        } catch (e) {
-            console.log(e)
-        }
-
-
-    }
-
-
-    const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        get_data_order()
-        setRefreshing(false);
-    }, []);
-
-
-
-    useEffect(() => {
-        /* 2. Get the param */
-        const { status, data } = route.params;
-        get_data_order(data)
-
-        setNavigateOri(status)
-    }, [])
-
-    //Nút quay trở lại
-    const back = () => {
-        navigation.navigate(navigate_ori)
-    }
+    const [dataOrder, setDataOrder] = useState("")
+    const [dom_RatingDriver, setDOMRatingDriver] = useState("");
 
 
     //Đánh giá dịch vụ
@@ -189,6 +31,53 @@ function RatingOrder({ route, navigation }) {
         console.log(e)
         console.log(commentService)
     }
+
+    const [arrDriverRating, setArrDriverRating] = useState([])
+
+    //Lấy dữ liệu đánh giá show ra
+    const get_data_order = async (data_input) => {
+        if (data_input === null) {
+            return;
+        }
+
+        try {
+            const dataOrder_get = await axios.get(`${api_url}/v1/order/viewOrderWithOrderId/${data_input}`);
+            const arr_driver_name = dataOrder_get.data.driver_name;
+
+            if (arr_driver_name.length > 0) {
+                const data = await axios.post(`${api_url}/v1/driver/get_arr_driver_info`, arr_driver_name);
+                setArrDriverRating(data.data)
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        get_data_order(dataOrder)
+        setRefreshing(false);
+    }, []);
+
+
+
+    useEffect(() => {
+        /* 2. Get the param */
+        const { status, data } = route.params;
+        setDataOrder(data)
+        setNavigateOri(status)
+        setTimeout(() => {
+
+            get_data_order(data)
+        }, 1000)
+    }, [])
+
+    //Nút quay trở lại
+    const back = () => {
+        navigation.navigate(navigate_ori)
+    }
+
 
     return (
         <ScrollView refreshControl={
@@ -245,7 +134,74 @@ function RatingOrder({ route, navigation }) {
 
             <View style={{ backgroundColor: "white", marginTop: 10 }}>
                 {/* Đánh giá tài xế */}
-                {dom_RatingDriver ? dom_RatingDriver : ''}
+                {arrDriverRating && arrDriverRating.map((item, index) => {
+                    return (
+                        <>
+                            <View
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    borderTopWidth: 1,
+                                    borderTopColor: "#ccc",
+                                    paddingTop: 10,
+                                }}
+                            >
+                                <Avatar
+                                    size={65}
+                                    rounded
+                                    source={{ uri: `${item.avatar.split("\\")[0] !== "uploads"}` ? item.avatar : `${api_url}+'/'+${item.avatar}` }} />
+                                <Text
+                                    style={{
+                                        color: "orange",
+                                        marginLeft: 15,
+                                        marginTop: 5,
+                                    }}
+                                >
+                                    {item.fullname}
+                                </Text>
+                            </View>
+                            <View style={{ padding: 10 }}>
+                                <View
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        paddingLeft: 15,
+                                        width: 250,
+                                    }}
+                                >
+                                    <Text style={{ marginBottom: 0 }}>Đánh giá</Text>
+                                    <Text>
+                                        <AirbnbRating reviews={[
+                                            'Rất Tệ',
+                                            'Tệ',
+                                            'Bình thường',
+                                            'Hoàn hảo',
+                                            'Xuất sắc',
+                                        ]}
+                                            size={20}
+                                            onFinishRating={ratingService}
+                                        />
+                                    </Text>
+                                </View>
+                                <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: 10, marginLeft: -6 }}>
+
+                                    <Input
+                                        containerStyle={{}}
+                                        disabledInputStyle={{ background: "#ddd" }}
+                                        inputContainerStyle={{}}
+
+                                        value={commentService}
+                                        onChangeText={(e) => setCommentService(e)}
+                                        placeholder="Nhập vào nhận xét"
+                                    />
+                                </View>
+                            </View>
+                        </>
+                    )
+                })}
             </View>
         </ScrollView>
     )

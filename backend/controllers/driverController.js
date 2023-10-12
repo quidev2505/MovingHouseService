@@ -98,6 +98,32 @@ const driverController = {
             console.log(e)
         }
     },
+    //Lấy mảng thông tin tài xế
+    getArrDriverInfo: async (req, res) => {
+        try {
+            const arr_name_driver = req.body;
+
+            if (arr_name_driver.length === 0) {
+                return res.status(404).json({
+                    message: 'Không còi tại xe nào để tìm kiếm',
+                });
+            }
+
+            const arr_data_driver = await Promise.all(arr_name_driver.map(async (item) => {
+                const data_get = await Driver.findOne({ fullname: item });
+                const ob = {
+                    avatar: data_get.avatar,
+                    fullname: data_get.fullname,
+                };
+                return ob;
+            }));
+
+
+            res.status(201).json(arr_data_driver);
+        } catch (e) {
+            res.status(500).json(e);
+        }
+    },
     //Get Info Driver Detail with Username
     getDriverWithUsername: async (req, res) => {
         try {
@@ -242,13 +268,15 @@ const driverController = {
     //Get Driver With Fullname
     getdriverWithFullname: async (req, res) => {
         try {
+
             const fullname_driver = req.params.fullname;
+            console.log(fullname_driver)
 
             const data_driver = await Driver.findOne({ fullname: fullname_driver })
             if (data_driver) {
                 res.status(201).json(data_driver);
             } else {
-                res.status(501).json('update fail');
+                res.status(501).json('Get fail');
             }
         } catch (e) {
             console.log(e)

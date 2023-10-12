@@ -36,6 +36,8 @@ router.get('/view_detail_driver/:id', driverController.getDriverWithID)
 //View Driver Detail with username
 router.get('/view_detail_driver_with_username/:username', driverController.getDriverWithUsername)
 
+//Lấy dữ liệu đánh giá tài xế
+router.post('/get_arr_driver_info', driverController.getArrDriverInfo)
 
 // //Update Driver
 router.put('/update_driver/:id', upload.single("file"), driverController.updateDriver)

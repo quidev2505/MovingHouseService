@@ -90,12 +90,11 @@ export default function CustomerLogin({ navigation }) {
                         rules={{
                             required: true,
                             minLength: 5,
-                            pattern: /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
                         }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput
                                 style={styles.input}
-                                placeholder="Email"
+                                placeholder="Email hoặc Số điện thoại"
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
@@ -105,7 +104,7 @@ export default function CustomerLogin({ navigation }) {
                     />
                     {errors?.email?.type === "required" && <Text style={styles.error}>Không được để trống !</Text>}
                     {errors?.email?.type === "minLength" && <Text style={styles.error}>Email chưa đủ kí tự !</Text>}
-                    {errors?.email?.type === "pattern" && <Text style={styles.error}>Email chưa đúng định dạng !</Text>}
+
 
                     <Controller
                         control={control}
