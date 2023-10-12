@@ -54,7 +54,7 @@ function InfoCustomer({ navigation }) {
     }, [])
 
 
-    const createTwoButtonAlert = () =>
+    const createTwoButtonAlert = () => {
         Alert.alert('Thông báo', 'Bạn muốn đăng xuất khỏi tài khoản ?', [
             {
                 text: 'Hủy',
@@ -62,6 +62,8 @@ function InfoCustomer({ navigation }) {
             },
             { text: 'Xác nhận', onPress: () => log_out_local() },
         ]);
+    }
+
 
 
     const log_out_local = async () => {

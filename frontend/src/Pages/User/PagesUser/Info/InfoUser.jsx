@@ -8,6 +8,10 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 import { updateUser } from "../../../../redux/apiRequest";
 import { useDispatch } from "react-redux";
 
+import { KeyOutlined } from "@ant-design/icons";
+
+import { useNavigate } from "react-router-dom";
+
 function InfoUser() {
   const user = useSelector((state) => state.auth.login.currentUser);
 
@@ -18,6 +22,9 @@ function InfoUser() {
 
   const [image, setImage] = useState("");
   const [image_old, setImageOld] = useState("");
+
+  const nav = useNavigate();
+
   // Upload Img
   function uploadImg(e) {
     setImage(e.target.files[0]);
@@ -129,7 +136,7 @@ function InfoUser() {
                 color: "white",
                 bordeRadius: "10px",
                 padding: "5px",
-                overflow:"hidden"
+                overflow: "hidden",
               }}
             >
               Thông tin cá nhân
@@ -254,7 +261,32 @@ function InfoUser() {
                 </tr>
                 <br></br>
                 <tr>
-                  <td></td>
+                  <td>
+                    <button
+                      type="submit"
+                      onClick={() =>
+                        nav(`/user/info_user/change_password/${user._id}`)
+                      }
+                      style={{
+                        backgroundColor: "red",
+                        color: "white",
+                        float: "left",
+                        marginBottom: "12px",
+                        width: "fit-content",
+                        height: "50px",
+                        padding: "5px",
+                        borderRadius: "5px",
+                        outline: "none",
+                        border: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      Đổi mật khẩu
+                      <KeyOutlined style={{ marginLeft: "10px" }} />
+                    </button>
+                  </td>
                   <td>
                     <button
                       type="submit"

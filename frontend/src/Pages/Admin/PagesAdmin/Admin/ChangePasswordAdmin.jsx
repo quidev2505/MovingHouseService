@@ -42,6 +42,7 @@ function ChangePasswordAdmin() {
       btnVisible_2.type = "text";
       btnVisible_3.type = "text";
     }
+  
   }, [visible]);
 
   //Validation form

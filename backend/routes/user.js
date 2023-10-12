@@ -14,4 +14,8 @@ router.get("/", middlewareController.verifyToken, userController.getAllUsers);
 //DELETE USER
 router.delete("/:id", middlewareController.verifyTokenAndAdminAuth,userController.deleteUser);
 
+//Change password User
+router.put('/change_password/:id', userController.changePassword)
+
+
 module.exports = router;

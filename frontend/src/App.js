@@ -18,7 +18,7 @@ import BookingUser from './Pages/User/PagesUser/Booking/BookingUser'
 import OrderUser from './Pages/User/PagesUser/Order/OrderUser'
 import InfoUser from './Pages/User/PagesUser/Info/InfoUser';
 import RatingOrder from './Pages/User/PagesUser/Order/RatingOrder';
-
+import ChangePasswordUser from './Pages/User/PagesUser/Info/ChangePasswordUser';
 
 // Bảo vệ Route
 import ProtectRoutes from './Pages/ProtectRoutes'
@@ -93,6 +93,7 @@ import ShowMap from './Pages/Map_App_ Native/ShowMap';
 
 
 
+
 function App() {
 
   return (
@@ -116,8 +117,9 @@ function App() {
           {/* Trang User  */}
           <Route path="/user/booking" element={<BookingUser />} />
           <Route path="/user/order" element={<OrderUser />} />
-          <Route path="/user/info_user" element={<InfoUser />} />
           <Route path="/user/order/rating/:order_id" element={<RatingOrder />} />
+          <Route path="/user/info_user" element={<InfoUser />} />
+          <Route path="/user/info_user/change_password/:id_user" element={<ChangePasswordUser />} />
         </Route>
 
 
