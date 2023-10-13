@@ -939,3 +939,11 @@ th.ant-table-cell {
         background-color: #4ea0da;
     }
 }
+
+
+.dash_board_admin {
+    .ant-table-content {
+        overflow: hidden !important;
+        height:fit-content;
+    }
+}

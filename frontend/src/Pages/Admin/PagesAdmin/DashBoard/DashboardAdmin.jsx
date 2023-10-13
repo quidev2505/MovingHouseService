@@ -3,8 +3,13 @@ import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 import TopCssContent from "../TopCssContent";
 import { Pie } from "react-chartjs-2";
 
-import axios from "axios";
+import { EyeFilled } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
+import { StarFilled } from "@ant-design/icons";
+
+import axios from "axios";
+import { Image, Table, Avatar } from "antd";
 import {
   FaMoneyCheckDollar,
   FaTruckFront,
@@ -67,6 +72,8 @@ function DashBoardAdmin() {
   const [totalCountOrder, setTotalCountOrder] = useState(0);
   const [totalCountDriver, setTotalCountDriver] = useState(0);
   const [totalCountCustomer, setTotalCountCustomer] = useState(0);
+
+  const nav = useNavigate();
 
   const [filterDashBoard, setFilterDashBoard] = useState(
     "THỐNG KÊ DOANH THU THEO THÁNG"
@@ -486,9 +493,384 @@ function DashBoardAdmin() {
     setIsActive(false);
   };
 
+  const [arrServiceRank, setArrServiceRank] = useState([]);
+  //Bảng xếp hàng doanh thu dịch vụ
+  const service_total_rank = async () => {
+    const api_get_order = await axios.get(`/v1/order/viewAllOrder`);
+    const dataOrder = api_get_order.data;
+
+    //Lấy ra tất cả dịch vụ
+    //Lấy dữ liệu dịch vụ
+    var call_api_service = await axios.get(`/v1/service/list_service`);
+    var name_service = call_api_service.data;
+    const arr_service = name_service.map((item, index) => {
+      return item.name;
+    });
+
+    //Xử dụng mảng dịch vụ chạy ra tổng doanh thu theo từng loại dịch vụ
+    let arr_sum_service_totalOrder = [];
+    arr_service.forEach((item, index) => {
+      let sum = 0;
+      dataOrder.forEach((item1, index) => {
+        if (item1.status === "Đã hoàn thành" && item1.service_name === item) {
+          sum += item1.totalOrder;
+        }
+      });
+      arr_sum_service_totalOrder.push(sum);
+    });
+
+    //Đưa Object vào mảng
+    const arr_total_order_service = arr_sum_service_totalOrder.map(
+      (item, index) => {
+        const ob = {
+          image: name_service[index].image,
+          name: name_service[index].name,
+          total: item,
+        };
+
+        return ob;
+      }
+    );
+
+    // Sắp xếp mảng theo giá giảm dần
+    arr_total_order_service.sort((a, b) => b.total - a.total);
+
+    const arr_final = arr_total_order_service.map((item, index) => {
+      item.stt = index + 1;
+      return item;
+    });
+
+    setArrServiceRank(arr_final);
+  };
+
+  //Bảng xếp hạng doanh thu dịch vụ
+  const columns_Service = [
+    {
+      title: "Xếp hạng",
+      dataIndex: "stt",
+      key: "stt",
+      render: (stt) => (
+        <td
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p
+            style={{
+              backgroundColor:
+                stt == 1
+                  ? "green"
+                  : stt == 2
+                  ? "red"
+                  : stt == 3
+                  ? "#7bd6e5"
+                  : "grey",
+              color: "white",
+              borderRadius: "50%",
+              height: "50px",
+              width: "50px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {stt}
+          </p>
+        </td>
+      ),
+      align: "center",
+    },
+    {
+      title: "Tên dịch vụ",
+      dataIndex: "name",
+      key: "name",
+      render: (name) => (
+        <td>
+          <p style={{ color: "#1e95ff", fontWeight: "bold" }}>{name}</p>
+        </td>
+      ),
+    },
+    {
+      title: "Ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (image) => (
+        <td>
+          <Image width={80} src={image} />
+        </td>
+      ),
+    },
+    {
+      title: "Doanh thu",
+      dataIndex: "total",
+      key: "total",
+      render: (total) => (
+        <td>
+          <p style={{ color: "#f1c82d" }}>{total.toLocaleString()} đ</p>
+        </td>
+      ),
+    },
+  ];
+
+  const [arrDriverRank, setArrDriverRank] = useState([]);
+
+  //Bảng xếp hạng đánh giá tài xế
+  const driver_rating_rank = async () => {
+    const api_get_driver = await axios.get(`/v1/driver/show_all_driver`);
+    const dataDriver = api_get_driver.data;
+
+    //Đưa Object vào mảng
+    const arr_total_order_service = dataDriver.map((item, index) => {
+      const ob = {
+        profile_code: item.profile_code,
+        avatar: item.avatar,
+        fullname: item.fullname,
+        rating: item.id_rating.length,
+        star_average: item.star_average,
+      };
+
+      return ob;
+    });
+
+    // Sắp xếp mảng theo giá giảm dần
+    arr_total_order_service.sort((a, b) => b.star_average - a.star_average);
+
+    const arr_final = arr_total_order_service.map((item, index) => {
+      item.stt = index + 1;
+      return item;
+    });
+
+    console.log(arr_final);
+    setArrDriverRank(arr_final);
+  };
+
+  //Bảng xếp hạng đánh giá tài xế
+  const columns_Driver = [
+    {
+      title: "Xếp hạng",
+      dataIndex: "stt",
+      key: "stt",
+      render: (stt) => (
+        <td
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p
+            style={{
+              backgroundColor:
+                stt == 1
+                  ? "green"
+                  : stt == 2
+                  ? "red"
+                  : stt == 3
+                  ? "#7bd6e5"
+                  : "grey",
+              color: "white",
+              borderRadius: "50%",
+              height: "50px",
+              width: "50px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {stt}
+          </p>
+        </td>
+      ),
+      align: "center",
+    },
+    {
+      title: "Mã hồ sơ",
+      dataIndex: "profile_code",
+      key: "profile_code",
+    },
+    {
+      title: "Tài xế",
+      dataIndex: "fullname",
+      key: "fullname",
+      render: (fullname, avatar) => (
+        <td className="d-flex">
+          <Avatar src={<img src={avatar.avatar} alt="avatar" />} />
+          <p style={{ color: "#559aff", marginLeft: "10px" }}>{fullname}</p>
+        </td>
+      ),
+    },
+    {
+      title: "Lượt đánh giá",
+      dataIndex: "rating",
+      key: "rating",
+    },
+    {
+      title: "Sao trung bình",
+      dataIndex: "star_average",
+      key: "star_average",
+      render: (star_average) => (
+        <td className="d-flex" style={{ alignItems: "center" }}>
+          {star_average}&nbsp;
+          <StarFilled style={{ color: "#f1a062" }} />
+        </td>
+      ),
+    },
+  ];
+
+  const [arrCustomerRank, setArrCustomerRank] = useState([]);
+
+  //Bảng xếp hạng thanh toán khách hàng
+  const customer_payment_rank = async () => {
+    //Lấy ra dữ liệu toàn bộ đơn hàng "đã thanh toán"
+    const api_get_order = await axios.get(`/v1/order/viewAllOrder`);
+    const dataOrder = api_get_order.data;
+
+    const arr_customerID = [];
+    dataOrder.map((item, index) => {
+      if (item.status === "Đã hoàn thành") {
+        arr_customerID.push(item.customer_id);
+      }
+    });
+
+    const arr_not_duplicated = arr_customerID.filter(
+      (el, i) => arr_customerID.indexOf(el, i + 1) === -1
+    );
+
+    // //Lấy ra dữ liệu khách hàng
+    const customer_data = await Promise.all(
+      arr_not_duplicated.map(async (item, index) => {
+        const customer_data_get = await axios.get(
+          `/v1/customer/get_customer_with_id/${item}`
+        );
+        const data_customer = customer_data_get.data;
+        const ob = {
+          fullname: data_customer.fullname,
+          avatar: data_customer.avatar,
+          address: data_customer.address,
+        };
+
+        return ob;
+      })
+    );
+
+    //Tính tổng đơn hàng đã bỏ ra của khách hàng
+    const totalOrder_item = arr_not_duplicated.map((item, index) => {
+      let sum = 0;
+      dataOrder.forEach((item1, index) => {
+        if (item1.customer_id === item && item1.status === "Đã hoàn thành") {
+          sum += item1.totalOrder;
+        }
+      });
+
+      return sum;
+    });
+
+    //Đưa Object vào mảng
+    const arr_total_customer = customer_data.map((item, index) => {
+      const ob = {
+        fullname: item.fullname,
+        avatar: item.avatar,
+        address: item.address,
+        totalOrder: totalOrder_item[index],
+      };
+
+      return ob;
+    });
+
+    // Sắp xếp mảng theo giá giảm dần
+    arr_total_customer.sort((a, b) => b.totalOrder - a.totalOrder);
+
+    const arr_final = arr_total_customer.map((item, index) => {
+      item.stt = index + 1;
+      return item;
+    });
+
+    setArrCustomerRank(arr_final);
+  };
+
+  //Bảng xếp hạng đánh giá khách hàng
+  const columns_Customer = [
+    {
+      title: "Xếp hạng",
+      dataIndex: "stt",
+      key: "stt",
+      render: (stt) => (
+        <td
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p
+            style={{
+              backgroundColor:
+                stt == 1
+                  ? "green"
+                  : stt == 2
+                  ? "red"
+                  : stt == 3
+                  ? "#7bd6e5"
+                  : "grey",
+              color: "white",
+              borderRadius: "50%",
+              height: "50px",
+              width: "50px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {stt}
+          </p>
+        </td>
+      ),
+      align: "center",
+    },
+    {
+      title: "Tên khách hàng",
+      dataIndex: "fullname",
+      key: "fullname",
+      render: (fullname) => <td style={{ color: "#559aff" }}>{fullname}</td>
+    },
+    {
+      title: "Ảnh",
+      dataIndex: "avatar",
+      key: "avatar",
+      render: (avatar) => (
+        <td className="d-flex">
+          <Avatar src={<img src={avatar} alt="avatar" />} />
+        </td>
+      ),
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Tổng thanh toán",
+      dataIndex: "totalOrder",
+      key: "totalOrder",
+      render: (totalOrder) => (
+        <td className="d-flex" style={{ alignItems: "center", color:"orange" }}>
+          {totalOrder.toLocaleString()} đ
+        </td>
+      ),
+    },
+  ];
+
   //Khởi tạo khi chạy lại Web
   useEffect(() => {
     get_dashboard_data();
+    //Bảng xếp hạng doanh thu dịch vụ
+    service_total_rank();
+    //Bảng xếp hạng đánh giá tài xế
+    driver_rating_rank();
+    //Bảng xếp hạng thanh toán khách hàng
+    customer_payment_rank();
   }, [
     filterDashBoard,
     yearFilter,
@@ -511,77 +893,186 @@ function DashBoardAdmin() {
               <div
                 className="item_top_dashboard d-flex col"
                 style={{
-                  justifyContent: "space-between",
+                  flexDirection: "column",
                 }}
               >
-                <div className="icon_top_dashboard">
-                  <FaMoneyCheckDollar></FaMoneyCheckDollar>
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <div className="icon_top_dashboard">
+                    <FaMoneyCheckDollar></FaMoneyCheckDollar>
+                  </div>
+
+                  <div
+                    className="content_top_dashboard"
+                    style={{
+                      padding: "20px",
+                      marginBottom: "-25px",
+                      textAlign: "right",
+                    }}
+                  >
+                    {/* Tính tổng doanh thu */}
+                    <p>{totalRevenue.toLocaleString()} đ</p>
+                    <p>Tổng doanh thu</p>
+                  </div>
                 </div>
 
                 <div
-                  className="content_top_dashboard"
-                  style={{ padding: "10px" }}
+                  className="d-flex"
+                  style={{
+                    justifyContent: "space-between",
+                    padding: "10px",
+                    backgroundColor: "white",
+                    color: "black",
+                    borderRadius: "5px",
+                    border: "1px solid red",
+                    boxShadow: "0px 1px 2px 0px red",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => nav("/admin/order")}
                 >
-                  {/* Tính tổng doanh thu */}
-                  <p>{totalRevenue.toLocaleString()} đ</p>
-                  <p>Tổng doanh thu</p>
+                  <span>Xem chi tiết</span>
+                  <EyeFilled />
                 </div>
               </div>
 
               <div
                 className="item_top_dashboard d-flex col"
                 style={{
-                  justifyContent: "space-between",
                   backgroundColor: "#4ab89f",
+                  flexDirection: "column",
                 }}
               >
-                <div className="icon_top_dashboard">
-                  <FaTruckFront></FaTruckFront>
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <div className="icon_top_dashboard">
+                    <FaTruckFront></FaTruckFront>
+                  </div>
+                  <div
+                    className="content_top_dashboard"
+                    style={{
+                      padding: "20px",
+                      marginBottom: "-25px",
+                      textAlign: "right",
+                    }}
+                  >
+                    <p style={{ textAlign: "right" }}>{totalCountOrder}</p>
+                    <p>Tổng số đơn hàng</p>
+                  </div>
                 </div>
                 <div
-                  className="content_top_dashboard"
-                  style={{ padding: "10px" }}
+                  className="d-flex"
+                  style={{
+                    justifyContent: "space-between",
+                    padding: "10px",
+                    backgroundColor: "white",
+                    color: "black",
+                    borderRadius: "5px",
+                    border: "1px solid #4ab89f",
+                    boxShadow: "0px 1px 2px 0px #4ab89f",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => nav("/admin/order")}
                 >
-                  <p style={{ textAlign: "right" }}>{totalCountOrder}</p>
-                  <p>Tổng số đơn hàng</p>
+                  <span>Xem chi tiết</span>
+                  <EyeFilled />
                 </div>
               </div>
 
               <div
                 className="item_top_dashboard d-flex col"
                 style={{
-                  justifyContent: "space-between",
+                  flexDirection: "column",
                   backgroundColor: "#3396c5",
                 }}
               >
-                <div className="icon_top_dashboard">
-                  <FaUserTie></FaUserTie>
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <div className="icon_top_dashboard">
+                    <FaUserTie></FaUserTie>
+                  </div>
+                  <div
+                    className="content_top_dashboard"
+                    style={{
+                      padding: "20px",
+                      marginBottom: "-25px",
+                      textAlign: "right",
+                    }}
+                  >
+                    <p style={{ textAlign: "right" }}>{totalCountDriver}</p>
+                    <p>Tài xế</p>
+                  </div>
                 </div>
                 <div
-                  className="content_top_dashboard"
-                  style={{ padding: "10px" }}
+                  className="d-flex"
+                  style={{
+                    justifyContent: "space-between",
+                    padding: "10px",
+                    backgroundColor: "white",
+                    color: "black",
+                    borderRadius: "5px",
+                    border: "1px solid #3396c5",
+                    boxShadow: "0px 1px 2px 0px #3396c5",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => nav("/admin/driver")}
                 >
-                  <p style={{ textAlign: "right" }}>{totalCountDriver}</p>
-                  <p>Tài xế</p>
+                  <span>Xem chi tiết</span>
+                  <EyeFilled />
                 </div>
               </div>
 
               <div
                 className="item_top_dashboard d-flex col"
                 style={{
-                  justifyContent: "space-between",
+                  flexDirection: "column",
                   backgroundColor: "#dbd956",
                 }}
               >
-                <div className="icon_top_dashboard">
-                  <FaBuildingUser></FaBuildingUser>
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <div className="icon_top_dashboard">
+                    <FaBuildingUser></FaBuildingUser>
+                  </div>
+                  <div
+                    className="content_top_dashboard"
+                    style={{
+                      padding: "20px",
+                      marginBottom: "-25px",
+                      textAlign: "right",
+                    }}
+                  >
+                    <p style={{ textAlign: "right" }}>{totalCountCustomer}</p>
+                    <p>Khách hàng</p>
+                  </div>
                 </div>
                 <div
-                  className="content_top_dashboard"
-                  style={{ padding: "10px" }}
+                  className="d-flex"
+                  style={{
+                    justifyContent: "space-between",
+                    padding: "10px",
+                    backgroundColor: "white",
+                    color: "black",
+                    borderRadius: "5px",
+                    border: "1px solid #dbd956",
+                    boxShadow: "0px 1px 2px 0px #dbd956",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => nav("/admin/administrator")}
                 >
-                  <p style={{ textAlign: "right" }}>{totalCountCustomer}</p>
-                  <p>Khách hàng</p>
+                  <span>Xem chi tiết</span>
+                  <EyeFilled />
                 </div>
               </div>
             </div>
@@ -591,7 +1082,7 @@ function DashBoardAdmin() {
                 className="chart_dashboard"
                 style={{
                   backgroundColor: "white",
-                  padding: "10px",
+                  padding: "25px",
                   marginTop: "50px",
                   borderRadius: "5px",
                   boxShadow: "2px 2px 6px #ccc",
@@ -700,7 +1191,7 @@ function DashBoardAdmin() {
                         width: "700px",
                         height: "700px",
                         margin: "0 auto",
-                        marginTop: "-50px",
+                        paddingTop: "-200px",
                       }}
                     >
                       <p
@@ -780,6 +1271,153 @@ function DashBoardAdmin() {
                 ) : (
                   ""
                 )}
+              </div>
+
+              {/* Xếp hạng doanh thu dịch vụ */}
+              <div
+                style={{
+                  backgroundColor: "white",
+                  marginTop: "20px",
+                  height: "fit-content",
+                  padding: "10px",
+                  padding: "25px",
+                  marginTop: "50px",
+                  borderRadius: "5px",
+                  boxShadow: "2px 2px 6px #ccc",
+                }}
+              >
+                <h5
+                  style={{
+                    display: "block",
+                    backgroundColor: "#f1a062",
+                    color: "white",
+                    padding: "10px",
+                    borderRadius: "20px",
+                    margin: "0 auto",
+                    width: "fit-content",
+                    marginBottom: "20px",
+                  }}
+                >
+                  BẢNG XẾP HẠNG DOANH THU DỊCH VỤ
+                </h5>
+
+                <div
+                  style={{
+                    border: "1px solid orange",
+                    paddingBottom: "8px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <Table
+                    style={{
+                      borderRadius: "10px",
+                      borderColor: "orange",
+                    }}
+                    dataSource={arrServiceRank}
+                    columns={columns_Service}
+                    pagination={{
+                      position: ["none", "none"],
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Xếp hạng tài xế*/}
+              <div
+                style={{
+                  backgroundColor: "white",
+                  marginTop: "20px",
+                  height: "fit-content",
+                  padding: "10px",
+                  padding: "25px",
+                  marginTop: "50px",
+                  borderRadius: "5px",
+                  boxShadow: "2px 2px 6px #ccc",
+                }}
+              >
+                <h5
+                  style={{
+                    display: "block",
+                    backgroundColor: "#f1a062",
+                    color: "white",
+                    padding: "10px",
+                    borderRadius: "20px",
+                    margin: "0 auto",
+                    width: "fit-content",
+                    marginBottom: "20px",
+                  }}
+                >
+                  BẢNG XẾP HẠNG ĐÁNH GIÁ TÀI XẾ
+                </h5>
+
+                <div
+                  style={{
+                    border: "1px solid orange",
+                    paddingBottom: "8px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <Table
+                    style={{
+                      borderRadius: "10px",
+                      borderColor: "orange",
+                    }}
+                    dataSource={arrDriverRank}
+                    columns={columns_Driver}
+                    pagination={{
+                      position: ["none", "none"],
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Xếp hạng khách hàng */}
+              <div
+                style={{
+                  backgroundColor: "white",
+                  marginTop: "20px",
+                  height: "fit-content",
+                  padding: "10px",
+                  padding: "25px",
+                  marginTop: "50px",
+                  borderRadius: "5px",
+                  boxShadow: "2px 2px 6px #ccc",
+                }}
+              >
+                <h5
+                  style={{
+                    display: "block",
+                    backgroundColor: "#f1a062",
+                    color: "white",
+                    padding: "10px",
+                    borderRadius: "20px",
+                    margin: "0 auto",
+                    width: "fit-content",
+                    marginBottom: "20px",
+                  }}
+                >
+                  BẢNG XẾP HẠNG KHÁCH HÀNG
+                </h5>
+
+                <div
+                  style={{
+                    border: "1px solid orange",
+                    paddingBottom: "8px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <Table
+                    style={{
+                      borderRadius: "10px",
+                      borderColor: "orange",
+                    }}
+                    dataSource={arrCustomerRank}
+                    columns={columns_Customer}
+                    pagination={{
+                      position: ["none", "none"],
+                    }}
+                  />
+                </div>
               </div>
             </LoadingOverlayComponent>
           </TopCssContent>

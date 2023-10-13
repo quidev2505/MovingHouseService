@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Badge, Space } from "antd";
-import { BellFilled } from "@ant-design/icons";
+import { BellFilled, CloseSquareOutlined } from "@ant-design/icons";
 import { Dropdown } from "antd";
 import { useDispatch } from "react-redux";
 import { logOutAdmin } from "../../../redux/apiRequest";
@@ -49,6 +49,10 @@ function HeaderAdmin() {
     // react-hooks/exhaustive-deps;
     setLoading(false);
   }, []);
+
+  //Xử lí nhấn vào nút chuông
+  const showNotify = () => {};
+
   return (
     <div className="HeaderAdmin">
       <img
@@ -60,7 +64,77 @@ function HeaderAdmin() {
 
       <Space style={{ cursor: "pointer" }}>
         <Badge count={2}>
-          <BellFilled style={{ fontSize: 20 }} />
+          <BellFilled
+            style={{ fontSize: 20, position: "relative" }}
+            onClick={() => showNotify()}
+          />
+          <div
+            className="notify"
+            style={{
+              position: "absolute",
+              width: "450px",
+              height: "400px",
+              border: "1px solid #ccc",
+              backgroundColor: "white",
+              left: "-440px",
+              zIndex: 9999,
+              top: "25px",
+              overflow: 'hidden',
+              borderRadius: "5px",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <h2
+                style={{
+                  width: "450px",
+                  backgroundColor: "#b7b7b7",
+                  color: "white",
+                  fontSize: "20px",
+                  padding: "10px",
+                  borderRadius: "5px",
+                }}
+              >
+                THÔNG BÁO
+                <CloseSquareOutlined style={{ float: "right" }} />
+              </h2>
+            </div>
+
+            <div
+              style={{
+                overflowY: "scroll",
+                minHeight: "400px",
+                backgroundColor: "white",
+                padding: "10px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  border: "1px solid #0dcaf0",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "10px",
+                  borderRadius: "10px",
+                }}
+              >
+                <p
+                  style={{
+                    width: "10px",
+                    height: "10px",
+                    borderRadius: "50%",
+                    backgroundColor: "green",
+                  }}
+                ></p>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <p style={{ color: "#3396c5", fontWeight: "bold" }}>
+                    Có đơn hàng mới vừa được cập nhật. Mã đơn hàng: XDSS
+                  </p>
+                  <p style={{ color: "#ccc" }}>Khoảng vài phút trước</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </Badge>
 
         <Dropdown
