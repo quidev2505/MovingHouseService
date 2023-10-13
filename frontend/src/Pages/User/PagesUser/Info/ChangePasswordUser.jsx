@@ -124,19 +124,20 @@ function ChangePasswordUser() {
               onClick={() => nav("/user/info_user")}
             />
           </div>
-          <div style={{ margin: "0 auto" }}>
-            <h2
-              style={{
-                fontSize: "50px",
-                backgroundColor: "#f16622",
-                color: "white",
-                padding: "10px",
-                borderRadius: "10px",
-              }}
-            >
-              ĐỔI MẬT KHẨU
-            </h2>
-          </div>
+        </div>
+
+        <div style={{ margin: "0 auto", width:"fit-content" }}>
+          <h2
+            style={{
+              fontSize: "40px",
+              backgroundColor: "#f16622",
+              color: "white",
+              padding: "10px",
+              borderRadius: "10px",
+            }}
+          >
+            ĐỔI MẬT KHẨU
+          </h2>
         </div>
 
         <div>
