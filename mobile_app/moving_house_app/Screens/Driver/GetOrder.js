@@ -387,15 +387,16 @@ function GetOrder({ navigation }) {
             <View style={{
                 position: "fixed",
                 bottom: 20,
-                left: 10,
+                left: 15,
                 backgroundColor: "orange",
-                width: 50, height: 50,
+                width: 50,
+                height: 50,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: 10
             }}>
-                <TouchableOpacity onPress={()=> navigation.navigate('BẢN ĐỒ')}>
+                <TouchableOpacity onPress={() => navigation.navigate('BẢN ĐỒ')}>
                     <Ionicons
                         name="locate-sharp"
                         size={25}

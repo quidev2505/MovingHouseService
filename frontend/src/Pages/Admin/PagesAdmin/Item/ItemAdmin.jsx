@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 import htmlReactParser from "html-react-parser";
 
-// import io from "socket.io-client";
+
 
 import {
   EditOutlined,
@@ -29,19 +29,10 @@ import {
 
 import axios from "axios";
 
-// const socket = io.connect("http://localhost:5000");
 
 function ItemAdmin() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
-
-  // const socket = io("http://localhost:3000");
-
-  // const handleMessage = (message) => {
-  //   alert("Thoog báo");
-  // };
-
-  // socket.on("message", handleMessage);
 
   const columns = [
     {

@@ -8,7 +8,7 @@ import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { Alert, Input, Button, Avatar } from "antd";
 import axios from "axios";
 
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 import htmlReactParser from "html-react-parser";
 
@@ -16,7 +16,16 @@ import { SendOutlined } from "@ant-design/icons";
 
 import { Toast_comment, Toast } from "../Components/ToastColor";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { Tag } from "antd";
+import { WechatOutlined, FieldTimeOutlined } from "@ant-design/icons";
+
+import * as moment from "moment";
+import "moment/locale/vi";
+
 function BlogDetail() {
+  const nav = useNavigate();
   const user = useSelector((state) => state.auth.login.currentUser);
   const [isActive, setIsActive] = useState(true);
   const [ava, setAva] = useState();
@@ -62,6 +71,140 @@ function BlogDetail() {
 
   const [commentList, setCommentList] = useState([]);
 
+  const [blogRelate, setBlogRelate] = useState([]);
+
+  const getBlogRelate = async () => {
+    try {
+      const ApidataBlog = await axios.get("/v1/blog/read_blog");
+      const arr_blog = ApidataBlog.data;
+
+      let data_blog_relate = arr_blog.map((item, index) => {
+        if (
+          item.status &&
+          item.category === searchParams.get("category") &&
+          item.title !== searchParams.get("name")
+        ) {
+          return (
+            <div
+              className="blog_item"
+              style={{
+                borderRadius: "10px",
+                marginRight: "20px",
+                border: "1px solid #ccc",
+                padding: "0px",
+                width: "400px",
+                boxShadow: "0.3px 0.3px #ccc",
+                marginBottom: "20px",
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src={item.thumbnail}
+                className="img-fluid col-lg"
+                style={{
+                  width: "400px",
+                  height: "248px",
+                  objectFit: "cover",
+                }}
+                alt=""
+              ></img>
+              <div
+                className="d-flex"
+                style={{
+                  width: "fit-content",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: "10px",
+                }}
+              >
+                <div className="date_img">
+                  <Tag color="#ff914d ">#{item.category}</Tag>
+                </div>
+                <FontAwesomeIcon
+                  icon={faCircle}
+                  style={{
+                    color: "#383839",
+                    fontSize: "5px",
+                    opacity: "0.6",
+                    margin: "0 10px",
+                  }}
+                />
+                <div className="date_img">
+                  <Tag
+                    color="green"
+                    className="d-flex"
+                    style={{ alignItems: "center" }}
+                  >
+                    <WechatOutlined style={{ marginRight: "5px" }} />{" "}
+                    {item.comment_blog_id.length} bình luận
+                  </Tag>
+                </div>
+                <FontAwesomeIcon
+                  icon={faCircle}
+                  style={{
+                    color: "#383839",
+                    fontSize: "5px",
+                    opacity: "0.6",
+                    margin: "0 10px",
+                  }}
+                />
+                <div className="date_img">
+                  <Tag
+                    color="#2db7f5"
+                    className="d-flex"
+                    style={{ alignItems: "center" }}
+                  >
+                    <FieldTimeOutlined style={{ marginRight: "5px" }} />
+                    {item.post_date}
+                  </Tag>
+                </div>
+              </div>
+
+              <div>
+                <h5
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "21px",
+                    margin: "10px 0",
+                    padding: "5px",
+                  }}
+                >
+                  {item.title}
+                </h5>
+
+                <button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#ff914d",
+                    color: "white",
+                    float: "right",
+                    width: "fit-content",
+                    height: "50px",
+                    padding: "5px",
+                    borderRadius: "5px",
+                    border: "none",
+                    margin: "5px",
+                  }}
+                  onClick={() => {
+                    nav(
+                      `/blog-detail/?name=${item.title}&category=${item.category}`
+                    );
+                    window.location.reload();
+                  }}
+                >
+                  Xem chi tiết
+                </button>
+              </div>
+            </div>
+          );
+        }
+      });
+      setBlogRelate(data_blog_relate);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const getDataComment = async () => {
     try {
       let id_blog = "";
@@ -79,7 +222,7 @@ function BlogDetail() {
         .get(`/v1/commentBlog/read_comment_blog/${id_blog}`)
         .then((data) => {
           let data_comment = data.data;
-
+          console.log(data_comment);
           let DOM_LIST_COMMENT = data_comment.map((item, index) => {
             if (item.status) {
               return (
@@ -125,7 +268,7 @@ function BlogDetail() {
                     </div>
 
                     <div className="time_comment" style={{ color: "#b9babb" }}>
-                      {item.comment_time}
+                      {moment(item.createdAt).fromNow()}
                     </div>
                   </div>
                 </div>
@@ -180,9 +323,12 @@ function BlogDetail() {
 
   useEffect(() => {
     setIsActive(false);
+    //  Lấy ra blog liên quan
+    getBlogRelate();
     get_blog();
     getInfoCustomer();
     getDataComment();
+
     // eslint-disable-next-line
   }, []);
 
@@ -272,6 +418,28 @@ function BlogDetail() {
                 type="warning"
               />
             )}
+          </div>
+        </div>
+
+        <div className="container" style={{ marginTop: "70px" }}>
+          <h2
+            className="text-center"
+            style={{
+              backgroundColor: "orange",
+              color: "white",
+              borderRadius: "10px",
+              padding: "7px",
+            }}
+          >
+            Bài viết liên quan
+          </h2>
+          <div
+            className="bottom_blog container"
+            style={{ marginBottom: "150px", overflowX: "scroll " }}
+          >
+            <div className="row" style={{ justifyContent: "space-between" }}>
+              {blogRelate.length > 0 ? blogRelate : ''}
+            </div>
           </div>
         </div>
       </LoadingOverlayComponent>

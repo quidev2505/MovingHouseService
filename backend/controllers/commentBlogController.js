@@ -84,7 +84,7 @@ const commentBlogController = {
         try {
             const id_blog = req.params.id;
 
-            const data_comment_blog = await CommentBlog.find({ blog_id: id_blog })
+            const data_comment_blog = await CommentBlog.find({ blog_id: id_blog }).sort({ createdAt: 1 })
 
 
             const arr_data_return = []
@@ -94,7 +94,8 @@ const commentBlogController = {
                     avatar: item.avatar,
                     comment_content: item.comment_content,
                     comment_time: item.comment_time,
-                    status: item.status
+                    status: item.status,
+                    createdAt: item.createdAt
                 }
 
                 arr_data_return.push(object_data_return)
@@ -136,7 +137,7 @@ const commentBlogController = {
 
             if (arr_data_return) {
                 res.status(201).json(arr_data_return)
-            }else{
+            } else {
                 res.status(501).json('Lỗi')
 
             }

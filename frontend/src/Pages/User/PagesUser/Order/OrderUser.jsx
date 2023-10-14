@@ -749,6 +749,7 @@ function OrderUser() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+
       filters: [
         {
           text: "Đang tìm tài xế",
@@ -772,6 +773,7 @@ function OrderUser() {
           value: "Đã hủy",
         },
       ],
+      defaultFilteredValue: ["Đang tìm tài xế"],
       onFilter: (value, record) => record.status.indexOf(value) === 0,
       render: (status, reason_cancel) => (
         <>

@@ -20,7 +20,8 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 
 function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   const [isActive, setIsActive] = useState(true);
-  const [locationFrom, setLocationFrom] = useState(" "); //Địa điểm nhập vào
+
+  const [locationFrom, setLocationFrom] = useState(""); //Địa điểm nhập vào
   const [dataList, setDataList] = useState([]); //Hiển thị ra list danh sách
   const [locationFromChoose, setLocationFromChoose] = useState(""); //Địa điểm đã chọn từ danh sách
   const [fromLocation, setFromLocation] = useState({}); //Chọn địa điểm đưa vào bản đồ
@@ -59,7 +60,6 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
           });
 
           setDataList(arr_result);
-          // console.log(arr_result);
         }
       })
       .catch((e) => {
@@ -104,7 +104,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   }
 
   useEffect(() => {
-    if (locationFrom && locationFrom.length >= 5) {
+    if (locationFrom && locationFrom.length >= 3) {
       get_location_list();
     }
   }, [locationFrom]);
@@ -170,7 +170,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   };
 
   useEffect(() => {
-    if (locationTo.length >= 5) {
+    if (locationTo && locationTo.length >= 3) {
       get_location_list_to();
     }
   }, [locationTo]);
@@ -542,23 +542,21 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
               >
                 1
               </div>
+
               <DatalistInput
-                placeholder="Nhập vào điểm lấy hàng"
                 type="text"
                 className="data_list"
+                placeholder="Nhập vào điểm lấy hàng"
                 style={{
                   width: "100%",
                   height: "60px",
-                  marginBottom: "14px",
+                  marginBottom: "16px",
                   borderRadius: "10px",
                   border: "1px solid #ccc",
                   outline: "none",
+                  padding: "7px",
                   paddingLeft: "50px",
                   backgroundColor: "#fbfafc",
-                  width: "100% !important",
-                  borderRadius: "10px !important",
-                  // padding: "3px !important",
-                  border: "1px solid #ccc",
                 }}
                 value={locationFrom}
                 onChange={(e) => setLocationFrom(e.target.value)}
@@ -667,7 +665,6 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
                 border: "1px solid #ccc",
                 outline: "none",
                 padding: "7px",
-
                 backgroundColor: "#fbfafc",
               }}
             />

@@ -17,6 +17,7 @@ const driverRoute = require('./routes/driver');
 const ratingDriverRoute = require('./routes/rating_driver');
 const ratingServiceRoute = require('./routes/rating_service');
 const driverAccountRoute = require('./routes/driver_account');
+const notificationRoute = require('./routes/notification');
 
 
 var cookieParser = require('cookie-parser')
@@ -74,17 +75,18 @@ const server = http.createServer(app);
 // });
 
 // io.on('connection', (socket) => {
+//     if (!socket.connected) {
+//         // Code chỉ chạy khi socket chưa được kết nối
+//     }
 //     console.log('New client connected');
 
 //     socket.on('disconnect', () => {
 //         console.log('Client disconnected');
 //     });
 
-//     // socket.emit("mess", 'gui tư server');
-
-//     socket.on('mess', (message) => {
-//         console.log('Received message:', message);
-//         socket.emit('message', message);
+//     // Khi có khách hàng tạo đơn hàng mới
+//     socket.on("new_order", (dataOrderSend) => {
+//         socket.emit("notify_new_order", dataOrderSend)
 //     });
 // });
 
@@ -135,6 +137,9 @@ app.use("/v1/driverAccount", driverAccountRoute)
 
 //Rating Service
 app.use("/v1/ratingService", ratingServiceRoute)
+
+//Quản lí thông báo khi có đơn hàng mới !
+app.use("/v1/notification", notificationRoute)
 
 //Thanh toán với VN PAY
 app.use("/v1/vnpay", vnpayRoute)

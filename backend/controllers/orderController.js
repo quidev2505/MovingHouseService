@@ -4,6 +4,7 @@ const Customer = require("../models/Customer");
 const RatingDriver = require("../models/RatingDriver")
 const RatingService = require("../models/RatingService")
 const Driver = require("../models/Driver")
+const Notification = require('../models/Notification');
 const fs = require('fs');
 
 
@@ -67,8 +68,16 @@ const orderController = {
                     order_detail_id: data_save_order_detail._id,
                 })
 
+                const data_notification = await new Notification({
+                    order_id: code_order_id
+                })
 
-                if (data_order) {
+                //Save Data Notificatiooon
+                const data_notification_save = await data_notification.save();
+
+
+
+                if (data_order && data_notification_save) {
                     //Save Order Detail
                     const data_save_order = await data_order.save();
                     if (data_save_order) {

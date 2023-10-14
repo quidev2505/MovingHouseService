@@ -120,7 +120,7 @@ function BookingUser() {
     if (object_data) {
       await axios
         .post("/v1/order/create_order", object_data)
-        .then((data) => {
+        .then(async (data) => {
           setCurrent(current + 1);
           console.log(data);
         })
@@ -177,7 +177,10 @@ function BookingUser() {
 
         <div
           className="form_step"
-          style={{ marginTop: "30px", margin: "30px 150px" }}
+          style={{
+            marginTop: "30px",
+            margin: "30px 150px",
+          }}
         >
           {current === 0 ? (
             <Step1 check_fill={check_fill} setCheckFill={setCheckFill} />
@@ -301,7 +304,9 @@ function BookingUser() {
             </div>
             <div
               className="btn_navigate_to col"
-              style={{ display: check_fill ? "flex" : "none" }}
+              style={{
+                display: check_fill ? "flex" : "none",
+              }}
               onClick={() => {
                 if (current === 3) {
                   Swal.fire({

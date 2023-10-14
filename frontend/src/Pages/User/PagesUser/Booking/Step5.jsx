@@ -584,14 +584,15 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
             }}
           >
             <p className="fw-bold">- Lưu ý:</p>
-            <p style={{ fontStyle: "italic" }}>
+            <p>
               + <span className="fw-bold">Tổng đơn hàng thanh toán</span> có thể
               sẽ thay đổi do trong quá trình vận chuyển sẽ có các khoảng chi phí
               phát sinh.
             </p>
-            <p style={{ fontStyle: "italic" }}>
-              + Các chi phí phát sinh có thể bao gồm: hỏng hóc, cháy nổ, chi phí
-              chờ đợi, chậm trễ trong vận chuyển...
+            <p>
+              + <span className="fw-bold"> Các chi phí phát sinh</span> có thể
+              bao gồm: hỏng hóc, cháy nổ, chi phí chờ đợi, chậm trễ trong vận
+              chuyển...
             </p>
           </div>
         </div>

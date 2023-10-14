@@ -182,7 +182,7 @@ function Blog() {
                         border: "none",
                         margin: "5px",
                       }}
-                      onClick={() => nav(`/blog-detail/?name=${item.title}`)}
+                      onClick={() => nav(`/blog-detail/?name=${item.title}&category=${item.category}`)}
                     >
                       Xem chi tiết
                     </button>
@@ -210,7 +210,7 @@ function Blog() {
       <Header />
       <LoadingOverlayComponent status={isActive}>
         <div className="topContact" style={{ marginBottom: "95px" }}>
-          <ChatBotIcon/>
+          <ChatBotIcon />
           <div
             className="imgService container d-flex"
             style={{ alignItems: "center", justifyContent: "center" }}
