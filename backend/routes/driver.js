@@ -13,6 +13,7 @@ router.get('/show_all_driver', driverController.getAllDriver)
 router.patch('/updateonefield_driver/:id', driverController.updateOneFieldDriver)
 
 
+
 //Update one field Driver With Full name(Status)
 router.patch('/updateonefield_driver_withname/:fullname', driverController.updateOneFieldDriverWithFullName)
 
@@ -36,7 +37,7 @@ router.get('/view_detail_driver/:id', driverController.getDriverWithID)
 //View Driver Detail with username
 router.get('/view_detail_driver_with_username/:username', driverController.getDriverWithUsername)
 
-//Lấy dữ liệu đánh giá tài xế
+//Lấy dữ liệu đánh giá tài xế -> Sẵn tiện lấy dữ liệu số điện thoại hiện lên chi tiết đơn hàng
 router.post('/get_arr_driver_info', driverController.getArrDriverInfo)
 
 // //Update Driver

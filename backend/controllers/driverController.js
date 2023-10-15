@@ -105,7 +105,7 @@ const driverController = {
 
             if (arr_name_driver.length === 0) {
                 return res.status(404).json({
-                    message: 'Không còi tại xe nào để tìm kiếm',
+                    message: 'Không có tài xế nào để tìm kiếm',
                 });
             }
 
@@ -114,6 +114,7 @@ const driverController = {
                 const ob = {
                     avatar: data_get.avatar,
                     fullname: data_get.fullname,
+                    phonenumber: data_get.phonenumber
                 };
                 return ob;
             }));

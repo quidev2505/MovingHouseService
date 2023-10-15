@@ -2,6 +2,9 @@ const router = require('express').Router()
 const orderController = require("../controllers/orderController");
 
 
+//Tìm thông tin đơn hàng với siêu filter
+router.post('/findOrder', orderController.findOrder);
+
 //create Order
 router.post('/create_order', orderController.createOrder)
 
@@ -12,6 +15,8 @@ router.get('/viewAllOrder', orderController.viewAllOrder)
 
 // View Order With Order Id
 router.get('/viewOrderWithOrderId/:order_id', orderController.ViewOrderWithOrderId)
+
+
 
 
 // View Order with customer_id

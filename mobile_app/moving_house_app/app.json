@@ -19,7 +19,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -33,10 +35,20 @@
           "apiKey": "AIzaSyA66KwUrjxcFG5u0exynlJ45CrbrNe3hEc"
         }
       },
-      "package": "com.quidev2505.moving_house_app"
+      "package": "com.quidev2505.moving_house_app",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "604406db-c8ad-484d-83f0-4af9d9279655"
+      }
     }
   }
 }

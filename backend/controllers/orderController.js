@@ -122,7 +122,35 @@ const orderController = {
             res.status(501).json(e)
         }
     },
+    //Tìm thông tin đơn hàng với siêu filter
+    findOrder: async (req, res) => {
+        try {
+            const dataGet = req.body;
+            console.log(dataGet)
+            //So sánh với các filter sau
+            //Dữ liệu ban đầu
+            const arr_result_filter = dataGet.dataOrder.map((item, index) => {
+                if (dataGet.startRange !== undefined && dataGet.endRange !== undefined && dataGet.endRangePrice !== 0 && dataGet.startRangePrice !== 0) {
+                    if (dataGet.startRange <= item.date_start &&
+                        item.date_start <= dataGet.endRange || dataGet.startRangePrice <= item.totalOrder &&
+                        item.totalOrder <= dataGet.endRangePrice) {
+                        return item
+                    } else {
+                        return item
+                    }
+                } else {
+                    return item
+                }
+            })
 
+            console.log(arr_result_filter.length)
+
+            res.status(201).json('ok')
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
     //View Order With Id_Customer
     viewOrderWithIdCustomer: async (req, res) => {
         try {

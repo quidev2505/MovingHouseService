@@ -950,7 +950,7 @@ function OrderAdmin() {
   ];
 
   const view_detail_order = async (id_order_detail, customer_name) => {
-    console.log(customer_name);
+    //Lấy tên khách hàng
     let user_customer = await axios.get(
       `/v1/customer/get_info_user_with_customer_name/${customer_name.customer_name}`
     );
@@ -960,6 +960,15 @@ function OrderAdmin() {
       email: user_customer.data.email,
       phonenumber: user_customer.data.phonenumber,
     };
+
+    //Lấy danh sách tên tài xế
+    if (customer_name.driver_name.length > 0) {
+      let arr_driver_name = customer_name.driver_name;
+      var arrDriverName = await axios.post(
+        `/v1/driver/get_arr_driver_info`,
+        arr_driver_name
+      );
+    }
 
     if (ob_customer_info) {
       await axios
@@ -1012,6 +1021,76 @@ function OrderAdmin() {
                       {ob_customer_info.phonenumber}
                     </span>
                   </span>
+                </p>
+              </div>
+
+              {/* Thông tin tài xế */}
+              <div>
+                <p
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "13px",
+                    color: "#c1b8b2",
+                  }}
+                >
+                  THÔNG TIN TÀI XẾ
+                  <br></br>
+                  {arrDriverName
+                    ? arrDriverName?.data.map((item, index) => {
+                        return (
+                          <div
+                            className="row"
+                            style={{
+                              border: "1px solid #ccc",
+                              borderRadius: "5px",
+                              padding: "10px",
+                              marginTop: "10px",
+                            }}
+                          >
+                            <div
+                              className="d-flex col-4"
+                              style={{
+                                alignItems: "center",
+                                justifyContent: "flex-start",
+                              }}
+                            >
+                              <p>Tài xế {index + 1}</p>
+                              &nbsp;
+                              <Avatar
+                                src={<img src={item.avatar} alt="avatar" />}
+                              />
+                            </div>
+
+                            <div className="col">
+                              <span
+                                style={{
+                                  color: "black",
+                                  fontWeight: "500",
+                                  fontSize: "13px",
+                                }}
+                              >
+                                Họ và tên: &nbsp;{" "}
+                                <span className="fw-bold">{item.fullname}</span>
+                              </span>
+                              <br></br>
+                              <span
+                                style={{
+                                  color: "black",
+                                  fontWeight: "500",
+                                  fontSize: "13px",
+                                }}
+                              >
+                                Số điện thoại liên hệ: &nbsp;{" "}
+                                <span className="fw-bold">
+                                  {item.phonenumber}
+                                </span>
+                              </span>
+                              <br></br>
+                            </div>
+                          </div>
+                        );
+                      })
+                    : <p style={{color:"red"}}>Chưa xác định</p>}
                 </p>
               </div>
 

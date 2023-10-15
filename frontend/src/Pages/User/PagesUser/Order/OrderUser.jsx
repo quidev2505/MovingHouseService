@@ -83,13 +83,26 @@ function OrderUser() {
     if (id_customer) {
       await axios
         .get(`/v1/order/viewOrderWithCustomerId/${id_customer.data._id}`)
-        .then((data) => {
+        .then(async (data) => {
           let dataOrder = data.data;
+
+          const ob_fiter = {
+            dataOrder: dataOrder,
+            startRange: startRange,
+            endRange: endRange,
+            startRangePrice: Number(startRangePrice * 1000000),
+            endRangePrice: Number(endRangePrice * 1000000),
+          };
+
+          await axios.post(`/v1/order/findOrder`, ob_fiter);
+
           const data_order = [];
           let ob_order = {};
 
           dataOrder &&
             dataOrder.forEach((item, index) => {
+              //Trường hợp lọc cả 2 filter
+
               //Trường hợp khi đã nhấn nút lọc theo khoảng thời gian
               if (startRange !== "" && endRange !== "") {
                 if (
@@ -203,13 +216,96 @@ function OrderUser() {
     }
   };
 
-  const view_detail_order = async (id_order_detail, date_created, date_end) => {
+  const view_detail_order = async (
+    id_order_detail,
+    date_created,
+    date_end,
+    driver_name
+  ) => {
+    if (driver_name.length != 0) {
+      //Lấy danh sách tên tài xế
+      let arr_driver_name = driver_name;
+      var arrDriverName = await axios.post(
+        `/v1/driver/get_arr_driver_info`,
+        arr_driver_name
+      );
+    }
+
     await axios
       .get(`/v1/order/viewOrderDetail/${id_order_detail}`)
       .then((data) => {
         let data_order_detail = data.data;
         let dom_result = data_order_detail.map((item, index) => (
           <>
+            {/* Thông tin tài xế */}
+            <div>
+              <p
+                style={{
+                  fontWeight: "700",
+                  fontSize: "13px",
+                  color: "#c1b8b2",
+                }}
+              >
+                THÔNG TIN TÀI XẾ
+                <br></br>
+                {arrDriverName ? (
+                  arrDriverName?.data.map((item, index) => {
+                    return (
+                      <div
+                        className="row"
+                        style={{
+                          border: "1px solid #ccc",
+                          borderRadius: "5px",
+                          padding: "10px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <div
+                          className="d-flex col-4"
+                          style={{
+                            alignItems: "center",
+                            justifyContent: "flex-start",
+                          }}
+                        >
+                          <p>Tài xế {index + 1}</p>
+                          &nbsp;
+                          <Avatar
+                            src={<img src={item.avatar} alt="avatar" />}
+                          />
+                        </div>
+
+                        <div className="col">
+                          <span
+                            style={{
+                              color: "black",
+                              fontWeight: "500",
+                              fontSize: "13px",
+                            }}
+                          >
+                            Họ và tên: &nbsp;{" "}
+                            <span className="fw-bold">{item.fullname}</span>
+                          </span>
+                          <br></br>
+                          <span
+                            style={{
+                              color: "black",
+                              fontWeight: "500",
+                              fontSize: "13px",
+                            }}
+                          >
+                            Số điện thoại liên hệ: &nbsp;{" "}
+                            <span className="fw-bold">{item.phonenumber}</span>
+                          </span>
+                          <br></br>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p style={{ color: "red" }}>Chưa xác định</p>
+                )}
+              </p>
+            </div>
             {/* Ngày tạo đơn */}
             <div>
               <p
@@ -951,7 +1047,8 @@ function OrderUser() {
             view_detail_order(
               id_order_detail,
               order_id.date_created,
-              order_id.date_end
+              order_id.date_end,
+              order_id.driver_name
             );
           }}
           style={{
@@ -1309,8 +1406,8 @@ function OrderUser() {
                 <div className="d-flex">
                   <RangePicker
                     defaultValue={[
-                      dayjs("09/10/2023", dateFormat),
-                      dayjs("10/10/2023", dateFormat),
+                      dayjs("09/09/2023", dateFormat),
+                      dayjs("09/11/2023", dateFormat),
                     ]}
                     format={dateFormat}
                     onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}

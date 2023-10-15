@@ -8,9 +8,12 @@ import InfoDriver from './InfoDriver';
 import MapLocation from './MapLocation';
 import { LogBox } from 'react-native';
 
+import registerNNPushToken from 'native-notify';
+
 const Tab = createBottomTabNavigator();
 
 function HomeScreenDriver() {
+  registerNNPushToken(13475, 'xmmYdFdEmeO1apoZvNDbgd');
   console.disableYellowBox = true;
   //Ignore all log notifications
   LogBox.ignoreAllLogs();
