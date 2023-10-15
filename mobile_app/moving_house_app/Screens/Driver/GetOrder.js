@@ -20,6 +20,8 @@ function GetOrder({ navigation }) {
 
     //Tên tài xế hiện tại
     const [driverName, setDriverName] = useState("")
+    //Phương tiện tài xế sử dụng hiện tại
+    const [vehicleType, setVehicleType] = useState("")
 
     const location_order = useRef("TPHCM và tỉnh lân cận")
 
@@ -42,9 +44,11 @@ function GetOrder({ navigation }) {
 
                         const status_driver = data_driver.status;
                         const location_delivery = data_driver.location_delivery;
+                        const vehicle_type = data_driver.vehicle_type;
                         const fullname_driver = data_driver.fullname
 
                         setDriverName(fullname_driver)
+                        setVehicleType(vehicle_type)
 
                         setStatusDriver(status_driver)
                         setLocationDelivery(location_delivery)
@@ -235,15 +239,20 @@ function GetOrder({ navigation }) {
 
                 {/* Hiển thị trạng thái tài xế */}
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", paddingLeft: 13 }}>
-                    <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: "fit-content", borderRadius: 10, textAlign: "center", height: "fit-content" }}>{statusDriver}</Text>
+                    <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: "fit-content", borderRadius: 10, display:"flex", alignItems:"center", lineHeight:40 }}>{statusDriver}</Text>
 
 
-                    <Text style={{ marginRight: 10, marginTop: 10, padding: 10, width: 225, color: "white", backgroundColor: location_delivery === "TPHCM và tỉnh lân cận" ? "red" : "purple", borderRadius: 50, textAlign: "center", marginLeft: 10 }}>
+                    <Text style={{ marginRight: 10, marginTop: 10, padding: 10, width: "70%", color: "white", backgroundColor: location_delivery === "TPHCM và tỉnh lân cận" ? "red" : "purple", borderRadius: 10, textAlign: "center", marginLeft: 10 }}>
                         <Ionicons
                             name="location-sharp"
                             size={20}
                             color="white"
-                        />{location_delivery}</Text>
+                        />&nbsp;{location_delivery}{"\n"}
+                        <Ionicons
+                            name="car"
+                            size={20}
+                        />&nbsp;{vehicleType}
+                        </Text>
                 </View>
 
                 {/* Lọc ra đơn hiện đang có và đơn đã nhận hàng. */}

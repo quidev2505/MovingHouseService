@@ -8,9 +8,6 @@ import axios from "axios";
 import { Avatar } from '@rneui/themed';
 
 import { Ionicons } from '@expo/vector-icons';
-import FlashMessage from "react-native-flash-message";
-
-import { showMessage, hideMessage } from "react-native-flash-message";
 function InfoCustomer({ navigation }) {
     const [dataCustomer, setDataCustomer] = useState({})
 
@@ -142,23 +139,7 @@ function InfoCustomer({ navigation }) {
             </TouchableOpacity>
 
 
-            <Text>
-                <FlashMessage position="top" /> {/* <--- here as the last component */}
-            </Text>
 
-            <View style={{ flex: 1 }}>
-                <Button
-                    onPress={() => {
-                        /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
-                        showMessage({
-                            message: "Simple message",
-                            type: "info",
-                        });
-                    }}
-                    title="Request Details"
-                    color="#841584"
-                />
-            </View>
         </View>
 
 
