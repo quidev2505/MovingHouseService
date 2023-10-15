@@ -6,7 +6,6 @@ import api_url from '../../../api_url';
 
 import { AirbnbRating, Input, Avatar } from '@rneui/themed';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 
 function RatingOrder({ route, navigation }) {
@@ -125,7 +124,7 @@ function RatingOrder({ route, navigation }) {
 
 
     //Lấy lịch sử đơn hàng
-    const [domHistory, setDomHistory] = useState();
+    const [domHistory, setDomHistory] = useState([]);
 
     const get_history_rating_order = async (data_input) => {
         const data_rating_order = await axios.get(
@@ -168,6 +167,7 @@ function RatingOrder({ route, navigation }) {
             );
         });
 
+        console.log(domHistory)
         setDomHistory(DOM_HISTORY);
     };
 
@@ -176,10 +176,10 @@ function RatingOrder({ route, navigation }) {
         const { status, data } = route.params;
         setDataOrder(data)
         setNavigateOri(status)
+        get_history_rating_order(data);
         setTimeout(() => {
 
             get_data_order(data)
-            get_history_rating_order(data);
         }, 1000)
     }, [])
 
@@ -345,7 +345,7 @@ function RatingOrder({ route, navigation }) {
                     >
                         Lịch sử đánh giá đơn hàng
                     </Text>
-                    {domHistory ? (
+                    {domHistory.length > 0 ? (
                         domHistory
                     ) : (
                         <View style={{ backgroundColor: "white" }}>
@@ -355,7 +355,7 @@ function RatingOrder({ route, navigation }) {
                                     color: "#ccc",
                                     fontWeight: 700,
                                     fontSize: 25,
-                                    textAlign:"center"
+                                    textAlign: "center"
                                 }}
                             >
                                 Hiện tại chưa có đánh giá nào !

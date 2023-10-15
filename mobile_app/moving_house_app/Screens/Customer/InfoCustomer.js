@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Button } from "react-native"
 import { Icon } from "@rneui/base";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 import api_url from "../../api_url";
@@ -8,7 +8,9 @@ import axios from "axios";
 import { Avatar } from '@rneui/themed';
 
 import { Ionicons } from '@expo/vector-icons';
+import FlashMessage from "react-native-flash-message";
 
+import { showMessage, hideMessage } from "react-native-flash-message";
 function InfoCustomer({ navigation }) {
     const [dataCustomer, setDataCustomer] = useState({})
 
@@ -80,7 +82,10 @@ function InfoCustomer({ navigation }) {
 
 
     return (
+
         <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-start", backgroundColor: "white" }}>
+
+
             <View style={{ marginTop: 20 }}>
                 <Avatar
                     size={100}
@@ -134,8 +139,26 @@ function InfoCustomer({ navigation }) {
                         style={{ marginLeft: 10 }}
                     />
                 </Text>
-
             </TouchableOpacity>
+
+
+            <Text>
+                <FlashMessage position="top" /> {/* <--- here as the last component */}
+            </Text>
+
+            <View style={{ flex: 1 }}>
+                <Button
+                    onPress={() => {
+                        /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
+                        showMessage({
+                            message: "Simple message",
+                            type: "info",
+                        });
+                    }}
+                    title="Request Details"
+                    color="#841584"
+                />
+            </View>
         </View>
 
 
