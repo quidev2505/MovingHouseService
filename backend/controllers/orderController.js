@@ -122,30 +122,117 @@ const orderController = {
             res.status(501).json(e)
         }
     },
+    isDateInRange: (date, startDate, endDate) => {
+        // Lấy ngày, tháng, năm của ngày cần kiểm tra
+        const [day, month, year] = date.split("/");
+
+        // Lấy ngày, tháng, năm của ngày bắt đầu và ngày kết thúc
+        const [startDay, startMonth, startYear] = startDate.split("/");
+        const [endDay, endMonth, endYear] = endDate.split("/");
+
+        // console.log(date)
+        // console.log(startDate)
+        // console.log(endDate)
+
+        // So sánh ngày, tháng, năm của ngày cần kiểm tra với ngày bắt đầu và ngày kết thúc
+        if (day >= startDay) {
+            // Nếu ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
+            if (month >= startMonth || (month === startMonth && day >= startDay)) {
+                // Nếu tháng cần kiểm tra lớn hơn hoặc bằng tháng bắt đầu, hoặc tháng bằng tháng bắt đầu và ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
+                if (month <= endMonth || (month === endMonth && day <= endDay)) {
+                    // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng kết thúc, hoặc tháng bằng tháng kết thúc và ngày cần kiểm tra nhỏ hơn hoặc bằng ngày kết thúc
+                    if (year <= endYear && year >= startYear) {
+                        // Nếu năm cần kiểm tra nằm trong khoảng năm của ngày bắt đầu và ngày kết thúc
+                        return true;
+                    }
+                }
+            } else {
+                // Nếu tháng cần kiểm tra nhỏ hơn tháng bắt đầu
+                return false;
+            }
+        } else {
+            // Nếu ngày cần kiểm tra nhỏ hơn ngày bắt đầu
+            if (month > startMonth) {
+                // Nếu tháng cần kiểm tra lớn hơn tháng bắt đầu
+                return true;
+            } else {
+                // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng bắt đầu
+                return false;
+            }
+        }
+
+        return false;
+    },
     //Tìm thông tin đơn hàng với siêu filter
     findOrder: async (req, res) => {
         try {
             const dataGet = req.body;
             console.log(dataGet)
+
             //So sánh với các filter sau
             //Dữ liệu ban đầu
-            const arr_result_filter = dataGet.dataOrder.map((item, index) => {
-                if (dataGet.startRange !== undefined && dataGet.endRange !== undefined && dataGet.endRangePrice !== 0 && dataGet.startRangePrice !== 0) {
-                    if (dataGet.startRange <= item.date_start &&
-                        item.date_start <= dataGet.endRange || dataGet.startRangePrice <= item.totalOrder &&
-                        item.totalOrder <= dataGet.endRangePrice) {
-                        return item
-                    } else {
-                        return item
-                    }
-                } else {
-                    return item
+            let arr_init = []
+            const data_need = dataGet.dataOrder
+            console.log('Bắt đầu nè')
+            for (let i = 0; i < data_need.length; i++) {
+                console.time('taskA');
+                let item = data_need[i];
+                //Lọc theo cả 2 loại
+                if (dataGet.startRange != '' && dataGet.endRange != '' && dataGet.endRangePrice != 0 && dataGet.startRangePrice != 0) {
+
+                    orderController.isDateInRange(item.date_start, dataGet.startRange, dataGet.endRange) && Number(dataGet.startRangePrice) <= item.totalOrder && item.totalOrder <= Number(dataGet.endRangePrice) ? arr_init.push(item)
+                        : ''
                 }
+                //Lọc theo thời gian
+                else if (dataGet.startRange != '' && dataGet.endRange != '') {
+                    orderController.isDateInRange(item.date_start, dataGet.startRange, dataGet.endRange) ?
+                        arr_init.push(item) : ''
+                }
+                //Lọc theo tổng đơn hàng
+                else if (dataGet.endRangePrice != 0 && dataGet.startRangePrice != 0) {
+                    Number(dataGet.startRangePrice) <= item.totalOrder && item.totalOrder <= Number(dataGet.endRangePrice) ? arr_init.push(item) : ''
+                }
+                console.timeEnd('taskA');
+            }
+
+            // console.log(arr_init)
+            console.log('Kết thúc nè')
+
+            console.log(arr_init)
+            res.status(201).json(arr_init)
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+    //Tìm thông tin đơn hàng với siêu filter (Phía Admin)
+    findOrderAdmin: async (req, res) => {
+        try {
+            const dataGet = req.body;
+            //So sánh với các filter sau
+            //Dữ liệu ban đầu
+            let arr_init = []
+            dataGet.dataOrder.forEach((item, index) => {
+                if (dataGet.status_input === item.status) {
+                    //Lọc theo cả 2 loại
+                    if (dataGet.startRange !== '' && dataGet.endRange !== '' && dataGet.endRangePrice !== 0 && dataGet.startRangePrice !== 0) {
+                        dataGet.startRange <= item.date_start && item.date_start <= dataGet.endRange && Number(dataGet.startRangePrice) <= item.totalOrder && item.totalOrder <= Number(dataGet.endRangePrice) ? arr_init.push(item)
+                            : ''
+                    }
+                    //Lọc theo thời gian
+                    else if (dataGet.startRange !== '' && dataGet.endRange !== '') {
+                        dataGet.startRange <= item.date_start && item.date_start <= dataGet.endRange ?
+                            arr_init.push(item) : ''
+                    }
+                    //Lọc theo tổng đơn hàng
+                    else if (dataGet.endRangePrice !== 0 && dataGet.startRangePrice !== 0) {
+                        Number(dataGet.startRangePrice) <= item.totalOrder && item.totalOrder <= Number(dataGet.endRangePrice) ? arr_init.push(item) : ''
+                    }
+                }
+
             })
 
-            console.log(arr_result_filter.length)
-
-            res.status(201).json('ok')
+            res.status(201).json(arr_init)
         } catch (e) {
             console.log(e)
             res.status(501).json(e)

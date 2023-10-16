@@ -45,6 +45,7 @@ import {
   ditOutlined,
   ReloadOutlined,
   FileExcelOutlined,
+  FilterOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -68,8 +69,8 @@ function OrderAdmin() {
   const [cancelReason, setCancelReason] = useState("");
 
   //Khoảng thời gian
-  const [startRange, setStartRange] = useState(""); //Thời gian bắt đầu
-  const [endRange, setEndRange] = useState(""); //Thời gian cuối
+  const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
 
   //Khoảng tổng giá đơn hàng
   const [startRangePrice, setStartRangePrice] = useState(1); //Giá bắt đầu
@@ -468,97 +469,50 @@ function OrderAdmin() {
 
       await axios
         .get(`/v1/order/viewAllOrder`)
-        .then((data) => {
+        .then(async (data) => {
           let dataOrder = data.data;
+
+          const data_filter_new = dataOrder.filter(
+            (item) => item.status !== undefined && item.status === status_input
+          );
+
+          console.log(data_filter_new);
+
+          const ob_fiter = {
+            dataOrder: data_filter_new,
+            startRange: startRange,
+            endRange: endRange,
+            startRangePrice: Number(startRangePrice * 1000000),
+            endRangePrice: Number(endRangePrice * 1000000),
+          };
+
+          let data_filter = await axios.post(`/v1/order/findOrder`, ob_fiter);
+
+          console.log(data_filter);
+
           const data_order = [];
-          dataOrder &&
-            dataOrder.forEach((item, index) => {
-              //Trường hợp khi đã nhấn nút lọc theo khoảng thời gian
-              if (
-                item.status === status_input &&
-                startRange !== "" &&
-                endRange !== ""
-              ) {
-                if (
-                  startRange <= item.date_start &&
-                  item.date_start <= endRange
-                ) {
-                  const ob_order = {
-                    id_order_detail: item.order_detail_id,
-                    STT: index + 1,
-                    order_id: item.order_id,
-                    service_name: item.service_name,
-                    reason_cancel: item.reason_cancel,
-                    status: item.status,
-                    date_end: item.date_end,
-                    date_created: item.date_created,
-                    time_get_item: `${item.time_start} - ${item.date_start}`,
-                    router: `${item.fromLocation} - ${item.toLocation}`,
-                    driver_name: item.driver_name,
-                    vehicle_name: item.vehicle_name,
-                    totalOrder: item.totalOrder,
-                    customer_name: arr_customer_name[index],
-                  };
-                  data_order.push(ob_order);
-                }
-              } else if (
-                startRangePrice !== "" &&
-                endRangePrice !== "" &&
-                item.status === status_input
-              ) {
-                //Trường hợp khi đã chọn vào giá đơn hàng
-                if (
-                  Number(startRangePrice * 1000000) <= item.totalOrder &&
-                  item.totalOrder <= Number(endRangePrice * 1000000)
-                ) {
-                  const ob_order = {
-                    id_order_detail: item.order_detail_id,
-                    STT: index + 1,
-                    order_id: item.order_id,
-                    service_name: item.service_name,
-                    reason_cancel: item.reason_cancel,
-                    status: item.status,
-                    date_end: item.date_end,
-                    date_created: item.date_created,
-                    time_get_item: `${item.time_start} - ${item.date_start}`,
-                    router: `${item.fromLocation} - ${item.toLocation}`,
-                    driver_name: item.driver_name,
-                    vehicle_name: item.vehicle_name,
-                    totalOrder: item.totalOrder,
-                    customer_name: arr_customer_name[index],
-                  };
-                  data_order.push(ob_order);
-                }
-              } else if (item.status === status_input) {
-                const ob_order = {
-                  id_order_detail: item.order_detail_id,
-                  STT: index + 1,
-                  order_id: item.order_id,
-                  service_name: item.service_name,
-                  reason_cancel: item.reason_cancel,
-                  status: item.status,
-                  date_end: item.date_end,
-                  date_created: item.date_created,
-                  time_get_item: `${item.time_start} - ${item.date_start}`,
-                  router: `${item.fromLocation} - ${item.toLocation}`,
-                  driver_name: item.driver_name,
-                  vehicle_name: item.vehicle_name,
-                  totalOrder: item.totalOrder,
-                  customer_name: arr_customer_name[index],
-                };
-                data_order.push(ob_order);
-              }
+          let ob_order = {};
+
+          data_filter &&
+            data_filter.data.forEach((item, index) => {
+              ob_order = {
+                id_order_detail: item.order_detail_id,
+                STT: index + 1,
+                order_id: item.order_id,
+                service_name: item.service_name,
+                reason_cancel: item.reason_cancel,
+                status: item.status,
+                date_end: item.date_end,
+                date_created: item.date_created,
+                time_get_item: `${item.time_start} - ${item.date_start}`,
+                router: `${item.fromLocation} - ${item.toLocation}`,
+                driver_name: item.driver_name,
+                vehicle_name: item.vehicle_name,
+                totalOrder: item.totalOrder,
+                customer_name: arr_customer_name[index],
+              };
+              data_order.push(ob_order);
             });
-
-          //Nếu đã chọn thời gian
-          if (startRange !== "" && endRange !== "") {
-            setDataOrder(data_order);
-          }
-
-          //Nếu đã chọn giá tiền
-          if (startRangePrice !== "" && endRangePrice !== "") {
-            setDataOrder(data_order);
-          }
 
           let new_arr = data_order.filter((item) => {
             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
@@ -1035,62 +989,64 @@ function OrderAdmin() {
                 >
                   THÔNG TIN TÀI XẾ
                   <br></br>
-                  {arrDriverName
-                    ? arrDriverName?.data.map((item, index) => {
-                        return (
+                  {arrDriverName ? (
+                    arrDriverName?.data.map((item, index) => {
+                      return (
+                        <div
+                          className="row"
+                          style={{
+                            border: "1px solid #ccc",
+                            borderRadius: "5px",
+                            padding: "10px",
+                            marginTop: "10px",
+                          }}
+                        >
                           <div
-                            className="row"
+                            className="d-flex col-4"
                             style={{
-                              border: "1px solid #ccc",
-                              borderRadius: "5px",
-                              padding: "10px",
-                              marginTop: "10px",
+                              alignItems: "center",
+                              justifyContent: "flex-start",
                             }}
                           >
-                            <div
-                              className="d-flex col-4"
+                            <p>Tài xế {index + 1}</p>
+                            &nbsp;
+                            <Avatar
+                              src={<img src={item.avatar} alt="avatar" />}
+                            />
+                          </div>
+
+                          <div className="col">
+                            <span
                               style={{
-                                alignItems: "center",
-                                justifyContent: "flex-start",
+                                color: "black",
+                                fontWeight: "500",
+                                fontSize: "13px",
                               }}
                             >
-                              <p>Tài xế {index + 1}</p>
-                              &nbsp;
-                              <Avatar
-                                src={<img src={item.avatar} alt="avatar" />}
-                              />
-                            </div>
-
-                            <div className="col">
-                              <span
-                                style={{
-                                  color: "black",
-                                  fontWeight: "500",
-                                  fontSize: "13px",
-                                }}
-                              >
-                                Họ và tên: &nbsp;{" "}
-                                <span className="fw-bold">{item.fullname}</span>
+                              Họ và tên: &nbsp;{" "}
+                              <span className="fw-bold">{item.fullname}</span>
+                            </span>
+                            <br></br>
+                            <span
+                              style={{
+                                color: "black",
+                                fontWeight: "500",
+                                fontSize: "13px",
+                              }}
+                            >
+                              Số điện thoại liên hệ: &nbsp;{" "}
+                              <span className="fw-bold">
+                                {item.phonenumber}
                               </span>
-                              <br></br>
-                              <span
-                                style={{
-                                  color: "black",
-                                  fontWeight: "500",
-                                  fontSize: "13px",
-                                }}
-                              >
-                                Số điện thoại liên hệ: &nbsp;{" "}
-                                <span className="fw-bold">
-                                  {item.phonenumber}
-                                </span>
-                              </span>
-                              <br></br>
-                            </div>
+                            </span>
+                            <br></br>
                           </div>
-                        );
-                      })
-                    : <p style={{color:"red"}}>Chưa xác định</p>}
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p style={{ color: "red" }}>Chưa xác định</p>
+                  )}
                 </p>
               </div>
 
@@ -1438,8 +1394,9 @@ function OrderAdmin() {
   const [search, setSearch] = useState("");
   useEffect(() => {
     list_driver();
+
     show_order_customer(check_active(activeKeyTab));
-  }, [search, startRange, endRange, startRangePrice, endRangePrice]);
+  }, [search]);
 
   function removeVietnameseTones(str) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -1668,9 +1625,32 @@ function OrderAdmin() {
                         color: "white",
                         borderRadius: "5px",
                         marginBottom: "10px",
+                        marginRight: "20px",
                       }}
                     >
                       <ReloadOutlined />
+                    </div>
+
+                    {/* Nút lọc dữ liệu*/}
+                    <div
+                      onClick={() =>
+                        show_order_customer(check_active(activeKeyTab))
+                      }
+                      style={{
+                        cursor: "pointer",
+                        width: "40px",
+                        height: "40px",
+                        backgroundColor: "red",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                        borderRadius: "5px",
+                        marginBottom: "10px",
+                        marginRight: "20px",
+                      }}
+                    >
+                      <FilterOutlined />
                     </div>
                   </div>
                 </div>
@@ -1693,8 +1673,8 @@ function OrderAdmin() {
                     <div className="d-flex">
                       <RangePicker
                         defaultValue={[
-                          dayjs("09/10/2023", dateFormat),
-                          dayjs("10/10/2023", dateFormat),
+                          dayjs("09/09/2023", dateFormat),
+                          dayjs("19/11/2023", dateFormat),
                         ]}
                         format={dateFormat}
                         onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}

@@ -54,8 +54,8 @@ function OrderUser() {
   const [DomOrderDetail, setDomOrderDetail] = useState();
 
   //Khoảng thời gian
-  const [startRange, setStartRange] = useState(""); //Thời gian bắt đầu
-  const [endRange, setEndRange] = useState(""); //Thời gian cuối
+  const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
 
   //Khoảng tổng giá đơn hàng
   const [startRangePrice, setStartRangePrice] = useState(1); //Giá bắt đầu
@@ -94,92 +94,31 @@ function OrderUser() {
             endRangePrice: Number(endRangePrice * 1000000),
           };
 
-          await axios.post(`/v1/order/findOrder`, ob_fiter);
+          let data_filter = await axios.post(`/v1/order/findOrder`, ob_fiter);
 
           const data_order = [];
           let ob_order = {};
 
-          dataOrder &&
-            dataOrder.forEach((item, index) => {
-              //Trường hợp lọc cả 2 filter
+          data_filter &&
+            data_filter.data.forEach((item, index) => {
+              ob_order = {
+                id_order_detail: item.order_detail_id,
+                STT: index + 1,
+                order_id: item.order_id,
+                service_name: item.service_name,
+                status: item.status,
+                time_get_item: `${item.time_start} - ${item.date_start}`,
+                router: `${item.fromLocation} -> ${item.toLocation}`,
+                date_end: item.date_end,
+                date_created: item.date_created,
+                driver_name: item.driver_name,
+                vehicle_name: item.vehicle_name,
+                totalOrder: item.totalOrder,
+                reason_cancel: item.reason_cancel,
+              };
 
-              //Trường hợp khi đã nhấn nút lọc theo khoảng thời gian
-              if (startRange !== "" && endRange !== "") {
-                if (
-                  startRange <= item.date_start &&
-                  item.date_start <= endRange
-                ) {
-                  ob_order = {
-                    id_order_detail: item.order_detail_id,
-                    STT: index + 1,
-                    order_id: item.order_id,
-                    service_name: item.service_name,
-                    status: item.status,
-                    time_get_item: `${item.time_start} - ${item.date_start}`,
-                    router: `${item.fromLocation} -> ${item.toLocation}`,
-                    date_end: item.date_end,
-                    date_created: item.date_created,
-                    driver_name: item.driver_name,
-                    vehicle_name: item.vehicle_name,
-                    totalOrder: item.totalOrder,
-                    reason_cancel: item.reason_cancel,
-                  };
-
-                  data_order.push(ob_order);
-                }
-              } else if (startRangePrice !== "" && endRangePrice !== "") {
-                //Trường hợp khi đã chọn vào giá đơn hàng
-                if (
-                  Number(startRangePrice * 1000000) <= item.totalOrder &&
-                  item.totalOrder <= Number(endRangePrice * 1000000)
-                ) {
-                  ob_order = {
-                    id_order_detail: item.order_detail_id,
-                    STT: index + 1,
-                    order_id: item.order_id,
-                    service_name: item.service_name,
-                    status: item.status,
-                    time_get_item: `${item.time_start} - ${item.date_start}`,
-                    router: `${item.fromLocation} -> ${item.toLocation}`,
-                    date_end: item.date_end,
-                    date_created: item.date_created,
-                    driver_name: item.driver_name,
-                    vehicle_name: item.vehicle_name,
-                    totalOrder: item.totalOrder,
-                    reason_cancel: item.reason_cancel,
-                  };
-
-                  data_order.push(ob_order);
-                }
-              } else {
-                ob_order = {
-                  id_order_detail: item.order_detail_id,
-                  STT: index + 1,
-                  order_id: item.order_id,
-                  service_name: item.service_name,
-                  status: item.status,
-                  date_end: item.date_end,
-                  date_created: item.date_created,
-                  time_get_item: `${item.time_start} - ${item.date_start}`,
-                  router: `${item.fromLocation} -> ${item.toLocation}`,
-                  driver_name: item.driver_name,
-                  vehicle_name: item.vehicle_name,
-                  totalOrder: item.totalOrder,
-                  reason_cancel: item.reason_cancel,
-                };
-                data_order.push(ob_order);
-              }
+              data_order.push(ob_order);
             });
-
-          //Nếu đã chọn thời gian
-          if (startRange !== "" && endRange !== "") {
-            setDataOrder(data_order);
-          }
-
-          //Nếu đã chọn giá tiền
-          if (startRangePrice !== "" && endRangePrice !== "") {
-            setDataOrder(data_order);
-          }
 
           let new_arr = data_order.filter((item) => {
             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
@@ -1407,7 +1346,7 @@ function OrderUser() {
                   <RangePicker
                     defaultValue={[
                       dayjs("09/09/2023", dateFormat),
-                      dayjs("09/11/2023", dateFormat),
+                      dayjs("19/11/2023", dateFormat),
                     ]}
                     format={dateFormat}
                     onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}

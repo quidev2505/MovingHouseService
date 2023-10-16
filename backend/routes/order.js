@@ -5,6 +5,9 @@ const orderController = require("../controllers/orderController");
 //Tìm thông tin đơn hàng với siêu filter
 router.post('/findOrder', orderController.findOrder);
 
+//Tìm thông tin đơn hàng với siêu filter (Phía Admin)
+router.post('/findOrderAdmin', orderController.findOrderAdmin);
+
 //create Order
 router.post('/create_order', orderController.createOrder)
 
