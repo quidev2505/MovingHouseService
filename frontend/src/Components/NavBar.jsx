@@ -8,10 +8,14 @@ import { useNavigate } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa6";
 import { Tooltip } from "antd";
 import { FiLogOut } from "react-icons/fi";
-
+import { Badge } from "antd";
+import { BellFilled, CloseSquareOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { Avatar } from "antd";
 import axios from "axios";
+
+import * as moment from "moment";
+import "moment/locale/vi";
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
@@ -26,6 +30,73 @@ const NavBar = () => {
   };
 
   const [ava, setAva] = useState();
+  const [idCustomer, setIdCustomer] = useState("");
+
+  const [domNotify, setDomNotify] = useState("");
+  //Xử lí nhấn vào nút chuông
+  const [numberNotify, setNumberNotify] = useState(1);
+
+  const call_notification = async () => {
+    const data_call_api = await axios.get(
+      `/v1/notification/showNotification/${idCustomer}`
+    );
+
+    console.log(data_call_api);
+    const data_notify = data_call_api.data;
+
+    setNumberNotify(data_notify.length);
+
+    const DOM_NOTIFY = data_notify.map((item, index) => {
+      return (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              border: "1px solid #0dcaf0",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "10px",
+              borderRadius: "10px",
+              marginBottom: "10px",
+            }}
+            onClick={() => navigate("/user/order")}
+          >
+            <p
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                backgroundColor: "green",
+              }}
+            ></p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <p
+                style={{
+                  color: "#3396c5",
+                  fontWeight: "bold",
+                }}
+              >
+                {item.content} Mã đơn hàng:{" "}
+                <span style={{ color: "red" }}>{item.order_id}</span>
+              </p>
+              <p style={{ color: "#ccc", textAlign:"left" }}>
+                {moment(item.createdAt).fromNow()}
+              </p>
+            </div>
+          </div>
+        </>
+      );
+    });
+
+    setDomNotify(DOM_NOTIFY);
+  };
+
   const getInfoCustomer = async () => {
     if (user) {
       let id = user._id;
@@ -34,6 +105,7 @@ const NavBar = () => {
         .get(`/v1/customer/get_customer_info/${id}`)
         .then((data) => {
           let data_customer = data.data;
+          setIdCustomer(data_customer._id);
           setAva(data_customer.avatar);
         })
         .catch((e) => console.log(e));
@@ -43,6 +115,8 @@ const NavBar = () => {
   useEffect(() => {
     getInfoCustomer();
     // eslint-disable-next-line
+    //Chạy liên tục gọi thông báo
+    call_notification();
   }, []);
 
   return (
@@ -90,32 +164,6 @@ const NavBar = () => {
                   Giá dịch vụ
                 </Link>
               </li>
-
-              {/* <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle dropdown_header giadichvu_dropdown"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Giá dịch vụ
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a className="dropdown-item giadichvu_item" href="#">
-                      Bảng giá chi tiết
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item giadichvu_item" href="#">
-                      Nhận báo giá
-                    </a>
-                  </li>
-                </ul>
-              </li> */}
-
               <li className="nav-item">
                 <Link to="/blog" className="nav-link">
                   Blog
@@ -154,18 +202,101 @@ const NavBar = () => {
                     <Link
                       to="/user/booking"
                       className="col btn_info_user"
-                      style={{ textDecoration: "none", color: "#ff8268", borderColor:"transparent" }}
+                      style={{
+                        textDecoration: "none",
+                        color: "#ff8268",
+                        borderColor: "transparent",
+                      }}
                     >
                       <Avatar src={ava} />
                     </Link>
                   </Tooltip>
 
                   <div style={{ border: "1px solid #ff8268" }}></div>
+                  {/* //Thông báo */}
+                  {numberNotify ? (
+                    <div className="col" style={{marginTop:"5px", marginLeft:"-5px"}}>
+                      <Badge count={numberNotify}>
+                        <BellFilled
+                          style={{
+                            fontSize: 20,
+                            position: "relative",
+                            border: "1px solid transparent",
+                            marginLeft:"10px"
+                          }}
+                          onClick={() => {
+                            document.querySelector(".notify").style.display =
+                              "block";
+                            call_notification();
+                          }}
+                        />
+                        <div
+                          className="notify"
+                          style={{
+                            position: "absolute",
+                            width: "450px",
+                            height: "400px",
+                            border: "1px solid #ccc",
+                            boxShadow: "1px 1px 2px #ccc",
+                            backgroundColor: "white",
+                            left: "-440px",
+                            zIndex: 9999,
+                            top: "40px",
+                            overflow: "hidden",
+                            borderRadius: "5px",
+                            display: "none",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <h2
+                              style={{
+                                width: "450px",
+                                backgroundColor: "#b7b7b7",
+                                color: "white",
+                                fontSize: "20px",
+                                padding: "10px",
+                                borderRadius: "5px",
+                              }}
+                            >
+                              THÔNG BÁO
+                              <CloseSquareOutlined
+                                style={{ float: "right" }}
+                                onClick={() => {
+                                  document.querySelector(
+                                    ".notify"
+                                  ).style.display = "none";
+                                }}
+                              />
+                            </h2>
+                          </div>
+                          <div
+                            style={{
+                              overflowY: "scroll",
+                              maxHeight: "350px",
+                              backgroundColor: "white",
+                              padding: "10px",
+                            }}
+                          >
+                            {domNotify ? domNotify : ""}
+                          </div>
+                        </div>
+                      </Badge>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
+                  <div style={{ border: "1px solid #ff8268" }}></div>
                   <Tooltip placement="bottom" title={"Đăng xuất"}>
                     {/* Đăng xuất */}
                     <div
                       className="col btn_logout"
-                      style={{ color: "red", fontSize:"20px" }}
+                      style={{ color: "red", fontSize: "20px" }}
                       onClick={() => handleLogout()}
                     >
                       <FiLogOut></FiLogOut>

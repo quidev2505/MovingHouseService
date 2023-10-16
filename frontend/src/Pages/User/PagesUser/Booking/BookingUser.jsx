@@ -125,8 +125,8 @@ function BookingUser() {
             .post(`https://app.nativenotify.com/api/notification`, {
               appId: 13475,
               appToken: "xmmYdFdEmeO1apoZvNDbgd",
-              title: "🚛 Đơn hàng mới vừa được tạo ! 🚛",
-              body: `📅 - ID đơn hàng: ${data.data.order_id} 📅`,
+              title: "[🚛] Đơn hàng mới vừa được tạo ! [🚛]",
+              body: `[📅] - ID đơn hàng: ${data.data.order_id} [📅]`,
               dateSent: Date.now(),
             })
             .then((data1) => {

@@ -108,7 +108,7 @@ function HeaderAdmin() {
                   fontWeight: "bold",
                 }}
               >
-                Có đơn hàng mới {item.content} Mã đơn hàng:{" "}
+                {item.content} Mã đơn hàng:{" "}
                 <span style={{ color: "red" }}>{item.order_id}</span>
               </p>
               <p style={{ color: "#ccc" }}>
@@ -202,7 +202,7 @@ function HeaderAdmin() {
             <div
               style={{
                 overflowY: "scroll",
-                minHeight: "400px",
+                maxHeight: "350px",
                 backgroundColor: "white",
                 padding: "10px",
               }}

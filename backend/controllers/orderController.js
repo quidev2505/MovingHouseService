@@ -69,13 +69,12 @@ const orderController = {
                 })
 
                 const data_notification = await new Notification({
-                    order_id: code_order_id
+                    order_id: code_order_id,
+                    id_customer: req.body.customer_id
                 })
 
                 //Save Data Notificatiooon
                 const data_notification_save = await data_notification.save();
-
-
 
                 if (data_order && data_notification_save) {
                     //Save Order Detail
@@ -135,7 +134,7 @@ const orderController = {
         // console.log(endDate)
 
         // So sánh ngày, tháng, năm của ngày cần kiểm tra với ngày bắt đầu và ngày kết thúc
-        if (day >= startDay) {
+        if (day >= startDay && day <= endDay) {
             // Nếu ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
             if (month >= startMonth || (month === startMonth && day >= startDay)) {
                 // Nếu tháng cần kiểm tra lớn hơn hoặc bằng tháng bắt đầu, hoặc tháng bằng tháng bắt đầu và ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
@@ -192,6 +191,11 @@ const orderController = {
                 else if (dataGet.endRangePrice != 0 && dataGet.startRangePrice != 0) {
                     Number(dataGet.startRangePrice) <= item.totalOrder && item.totalOrder <= Number(dataGet.endRangePrice) ? arr_init.push(item) : ''
                 }
+                //Khi mà không có lọc theo giá và không lọc theo khung thời gian 
+                else {
+                    arr_init.push(item)
+                }
+
                 console.timeEnd('taskA');
             }
 

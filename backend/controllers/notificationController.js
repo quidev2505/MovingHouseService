@@ -27,7 +27,21 @@ const notiticationController = {
     //Show notification
     showNotification: async (req, res) => {
         try {
-            const data_get = await Notification.find().sort({createdAt: -1}) 
+            const data_get = await Notification.find().sort({ createdAt: -1 })
+            if (data_get) {
+                res.status(201).json(data_get)
+            } else {
+                res.status(401).json('Fail')
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+    //Show thông báo với từng khách hàng
+    showNotificationWithIdCustomer: async (req, res) => {
+        try {
+            const data_get = await Notification.find({ id_customer: req.params.id_customer }).sort({ createdAt: -1 })
             if (data_get) {
                 res.status(201).json(data_get)
             } else {

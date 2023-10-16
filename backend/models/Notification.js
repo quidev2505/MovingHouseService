@@ -7,8 +7,12 @@ const notificationSchema = new mongoose.Schema({
     },
     content: {
         type: String,
-        default: "vừa được tạo !"
+        default: "Có đơn hàng mới vừa được tạo !"
     },
+    id_customer: {
+        type: String,
+        required: true
+    }
 }, { timestamps: true })
 
 module.exports = mongoose.model('Notification', notificationSchema);

@@ -808,6 +808,7 @@ function OrderAdmin() {
       title: "Khách hàng",
       dataIndex: "customer_name",
       key: "customer_name",
+      ...getColumnSearchProps("customer_name"),
     },
     {
       title: "Tài xế",
@@ -838,6 +839,7 @@ function OrderAdmin() {
       title: "Loại xe",
       dataIndex: "vehicle_name",
       key: "vehicle_name",
+      ...getColumnSearchProps("vehicle_name"),
     },
     {
       title: "Giá",
@@ -1279,7 +1281,7 @@ function OrderAdmin() {
                         style={{
                           width: "30px",
                           height: "30px",
-                          objectFit: "co ntain",
+                          objectFit: "contain",
                         }}
                       />
                       <span style={{ marginLeft: "5px", fontSize: "13px" }}>
