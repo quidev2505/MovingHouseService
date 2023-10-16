@@ -73,7 +73,7 @@ function InfoDriver({ navigation }) {
               email: data_driver.email,
               vehicle_type: data_driver.vehicle_type,
               location_delivery: data_driver.location_delivery,
-              start_average: data_driver.start_average == null ? 0 : data_driver.start_average,
+              star_average: data_driver.star_average == null ? 0 : data_driver.star_average,
               profile_code: data_driver.profile_code,
               username: data_driver.username,
               citizen_id: data_driver.citizen_id,
@@ -191,7 +191,7 @@ function InfoDriver({ navigation }) {
           />
         </View>
         <Text style={{ color: "orange", fontSize: 25, marginTop: 12, fontWeight: "bold" }}>{dataDriver.fullname}</Text>
-        <AirbnbRating style={{ marginTop: -10 }} isDisabled={true} count={5} defaultRating={dataDriver.start_average} size={30} reviews={[
+        <AirbnbRating style={{ marginTop: -10 }} isDisabled={true} count={5} defaultRating={dataDriver.star_average} size={30} reviews={[
           'Rất Tệ',
           'Tệ',
           'Bình thường',

@@ -53,6 +53,8 @@ function OrderUser() {
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
 
+  const [orderCount, setOrderCount] = useState(0);
+
   //Khoảng thời gian
   const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
   const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
@@ -142,8 +144,12 @@ function OrderUser() {
                 ? item
                 : word_Change_VN.toLowerCase().includes(word_search);
             });
+            setOrderCount(new_arr_service.length);
+
             setDataOrder(new_arr_service);
           } else {
+            setOrderCount(new_arr.length);
+
             setDataOrder(new_arr);
           }
 
@@ -1417,6 +1423,11 @@ function OrderUser() {
                 </div>
               </div>
             </div>
+
+            <div className="d-flex" style={{ alignItems: "center" }}>
+              <Tag color="#2db7f5">({orderCount} đơn hàng)</Tag>
+            </div>
+
             {/* Nút xuất ra file excel */}
             <div
               onClick={() => download_data_xslx()}

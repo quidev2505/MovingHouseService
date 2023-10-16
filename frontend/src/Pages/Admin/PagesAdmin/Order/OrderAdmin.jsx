@@ -64,6 +64,8 @@ function OrderAdmin() {
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
 
+  const [orderCount, setOrderCount] = useState(0);
+
   const [isActive, setIsActive] = useState(true);
   //Lí do hủy đơn hàng
   const [cancelReason, setCancelReason] = useState("");
@@ -536,8 +538,10 @@ function OrderAdmin() {
                 ? item
                 : word_Change_VN.toLowerCase().includes(word_search);
             });
+            setOrderCount(new_arr_service.length);
             setDataOrder(new_arr_service);
           } else {
+            setOrderCount(new_arr.length);
             setDataOrder(new_arr);
           }
 
@@ -1400,6 +1404,93 @@ function OrderAdmin() {
     show_order_customer(check_active(activeKeyTab));
   }, [search]);
 
+  const [searchAllOrder, setSearchAllOrder] = useState("");
+
+  //Tìm tất cả đơn hàng
+  const search_all_order = async () => {
+    setIsActive(true);
+    let arr_customer_id = await axios.get("/v1/order/viewAllOrder");
+    let arr_CI = [];
+    arr_customer_id.data.forEach((item, index) => {
+      arr_CI.push(item.customer_id);
+    });
+
+    if (arr_CI) {
+      let arr_customer_name = [];
+      for (let i = 0; i < arr_CI.length; i++) {
+        let fullname_data = await axios.get(
+          `/v1/customer/get_customer_with_id/${arr_CI[i]}`
+        );
+        arr_customer_name.push(fullname_data.data.fullname);
+      }
+
+      await axios
+        .get(`/v1/order/viewAllOrder`)
+        .then(async (data) => {
+          let dataOrder = data.data;
+
+          const data_order = [];
+          dataOrder &&
+            dataOrder.forEach((item, index) => {
+              const ob_order = {
+                id_order_detail: item.order_detail_id,
+                STT: index + 1,
+                order_id: item.order_id,
+                service_name: item.service_name,
+                reason_cancel: item.reason_cancel,
+                status: item.status,
+                date_end: item.date_end,
+                date_created: item.date_created,
+                time_get_item: `${item.time_start} - ${item.date_start}`,
+                router: `${item.fromLocation} - ${item.toLocation}`,
+                driver_name: item.driver_name,
+                vehicle_name: item.vehicle_name,
+                totalOrder: item.totalOrder,
+                customer_name: arr_customer_name[index],
+              };
+              data_order.push(ob_order);
+            });
+
+          let new_arr = data_order.filter((item) => {
+            // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+            let word_Change_VN = removeVietnameseTones(item.order_id); //Tìm theo mã đơn hàng
+            let word_search = removeVietnameseTones(searchAllOrder);
+
+            // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+            return searchAllOrder.toLowerCase() === ""
+              ? item
+              : word_Change_VN.toLowerCase().includes(word_search);
+          });
+
+          if (new_arr.length === 0) {
+            console.log('vo rôi')
+            let new_arr_service = data_order.filter((item) => {
+              // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+              let word_Change_VN = removeVietnameseTones(item.customer_name); //Tìm theo tên khách hàng
+              let word_search = removeVietnameseTones(searchAllOrder);
+
+              // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+              return searchAllOrder.toLowerCase() === ""
+                ? item
+                : word_Change_VN.toLowerCase().includes(word_search);
+            });
+
+            setOrderCount(new_arr_service.length);
+            setDataOrder(new_arr_service);
+          } else {
+            setOrderCount(new_arr.length);
+            setDataOrder(new_arr);
+          }
+
+          setIsActive(false);
+        })
+
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  };
+
   function removeVietnameseTones(str) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
     str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
@@ -1536,14 +1627,49 @@ function OrderAdmin() {
               theme={{
                 token: {
                   // Seed Token
-                  colorPrimary: "black",
-                  borderRadius: 2,
-
+                  colorPrimary: "white",
+                  borderRadius: 5,
+                  fontWeight: 700,
                   // Alias Token
-                  colorBgContainer: "black",
+                  colorBgContainer: "orange",
                 },
               }}
             >
+              <div
+                className="d-flex"
+                style={{ justifyContent: "flex-end", overflow: "hidden" }}
+              >
+                <div
+                  className="d-flex"
+                  style={{
+                    width: "570px",
+                    height: "70px",
+                    alignItems: "center",
+                    textAlign: "right",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <input
+                    type="text"
+                    id="find_service"
+                    className="form-control form-control-lg"
+                    placeholder="Tìm tất cả đơn hàng (Lọc theo Mã đơn hàng hoặc Tên khách hàng)"
+                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    value={searchAllOrder}
+                    onChange={(e) => setSearchAllOrder(e.target.value)}
+                  />
+                  <SearchOutlined
+                    style={{
+                      backgroundColor: "#559aff",
+                      padding: "13px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => search_all_order()}
+                  />
+                </div>
+              </div>
+
               <Tabs
                 activeKey={activeKeyTab}
                 items={items}
@@ -1653,6 +1779,10 @@ function OrderAdmin() {
                       }}
                     >
                       <FilterOutlined />
+                    </div>
+
+                    <div className="d-flex" style={{ alignItems: "center" }}>
+                      <Tag color="#2db7f5">({orderCount} đơn hàng)</Tag>
                     </div>
                   </div>
                 </div>

@@ -524,7 +524,7 @@ function BlogAdmin() {
                 />
                 <SearchOutlined
                   style={{
-                    backgroundColor: "#7bd6e5",
+                    backgroundColor: "#ed883b",
                     padding: "13px",
                     color: "white",
                     cursor: "pointer",

@@ -30,20 +30,22 @@ const NavBar = () => {
   };
 
   const [ava, setAva] = useState();
-  const [idCustomer, setIdCustomer] = useState("");
 
   const [domNotify, setDomNotify] = useState("");
   //Xử lí nhấn vào nút chuông
-  const [numberNotify, setNumberNotify] = useState(1);
+  const [numberNotify, setNumberNotify] = useState("");
 
-  const call_notification = async () => {
+  const [dataCustomer, setDataCustomer] = useState("")
+
+  const call_notification = async (idCustomer) => {
     const data_call_api = await axios.get(
-      `/v1/notification/showNotification/${idCustomer}`
+      `/v1/notification/showNotificationWithID/${idCustomer}`
     );
 
     console.log(data_call_api);
     const data_notify = data_call_api.data;
 
+    console.log(data_notify);
     setNumberNotify(data_notify.length);
 
     const DOM_NOTIFY = data_notify.map((item, index) => {
@@ -85,7 +87,7 @@ const NavBar = () => {
                 {item.content} Mã đơn hàng:{" "}
                 <span style={{ color: "red" }}>{item.order_id}</span>
               </p>
-              <p style={{ color: "#ccc", textAlign:"left" }}>
+              <p style={{ color: "#ccc", textAlign: "left" }}>
                 {moment(item.createdAt).fromNow()}
               </p>
             </div>
@@ -105,7 +107,9 @@ const NavBar = () => {
         .get(`/v1/customer/get_customer_info/${id}`)
         .then((data) => {
           let data_customer = data.data;
-          setIdCustomer(data_customer._id);
+          setDataCustomer(data_customer._id)
+          //Chạy liên tục gọi thông báo
+          call_notification(data_customer._id);
           setAva(data_customer.avatar);
         })
         .catch((e) => console.log(e));
@@ -115,8 +119,6 @@ const NavBar = () => {
   useEffect(() => {
     getInfoCustomer();
     // eslint-disable-next-line
-    //Chạy liên tục gọi thông báo
-    call_notification();
   }, []);
 
   return (
@@ -215,19 +217,22 @@ const NavBar = () => {
                   <div style={{ border: "1px solid #ff8268" }}></div>
                   {/* //Thông báo */}
                   {numberNotify ? (
-                    <div className="col" style={{marginTop:"5px", marginLeft:"-5px"}}>
+                    <div
+                      className="col"
+                      style={{ marginTop: "5px", marginLeft: "-5px" }}
+                    >
                       <Badge count={numberNotify}>
                         <BellFilled
                           style={{
                             fontSize: 20,
                             position: "relative",
                             border: "1px solid transparent",
-                            marginLeft:"10px"
+                            marginLeft: "10px",
                           }}
                           onClick={() => {
                             document.querySelector(".notify").style.display =
                               "block";
-                            call_notification();
+                            call_notification(dataCustomer)
                           }}
                         />
                         <div

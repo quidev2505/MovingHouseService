@@ -487,6 +487,16 @@ function StepByStep({ route, navigation }) {
                     //Lấy ra mảng các ID đơn hàng tài xế đã giao
                     let arr_driver = data_order.driver_name;
 
+                    const ob = {
+                        appId: 13517,
+                        appToken: "dgTdxEATT0B2p3KZWHDHVd",
+                        title: "[📑] Đơn hàng của bạn đã giao thành công ! [📑]",
+                        body: `[⭐] Hãy vào mục "Đơn hàng hoàn tất" và đánh giá dịch vụ của chúng tôi nhé. Xin cảm ơn ![⭐]`,
+                        dateSent: Date.now(),
+                    }
+                    axios.post('https://app.nativenotify.com/api/notification', ob).then((data) => {
+                        console.log(data)
+                    }).catch((e) => console.log(e))
 
                     arr_driver.forEach(async (item, index) => {
                         let arr_driver = await axios.get(`${api_url}/v1/driver/getdriver_with_fullname/${item}`)
@@ -494,6 +504,9 @@ function StepByStep({ route, navigation }) {
                         let arr_delivery_id_driver = arr_driver.data.id_delivery;
 
                         arr_delivery_id_driver.push(data_order.order_id);
+
+
+
 
                         if (arr_delivery_id_driver) {
                             //Cập nhật lịch sử đơn hàng cho tài xế

@@ -933,7 +933,7 @@ function Administrator() {
                   />
                   <SearchOutlined
                     style={{
-                      backgroundColor: "#7bd6e5",
+                      backgroundColor: "#ed883b",
                       padding: "13px",
                       color: "white",
                       cursor: "pointer",
@@ -999,12 +999,14 @@ function Administrator() {
                 }}
               >
                 Trạng thái tài khoản: &nbsp;
-                <span
-                  style={{
-                    color: statusProfile === "Đang hoạt động" ? "green" : "red",
-                  }}
-                >
-                  {statusProfile}
+                <span>
+                  <Tag
+                    color={
+                      statusProfile === "Đang hoạt động" ? "#87d068" : "#f50"
+                    }
+                  >
+                    {statusProfile}
+                  </Tag>
                 </span>
               </p>
 
@@ -1047,7 +1049,7 @@ function Administrator() {
                   />
                   <SearchOutlined
                     style={{
-                      backgroundColor: "#7bd6e5",
+                      backgroundColor: "#ed883b",
                       padding: "13px",
                       color: "white",
                       cursor: "pointer",
@@ -1113,13 +1115,14 @@ function Administrator() {
                 }}
               >
                 Trạng thái tài khoản: &nbsp;
-                <span
-                  style={{
-                    color:
-                      statusProfile2 === "Đang hoạt động" ? "green" : "red",
-                  }}
-                >
-                  {statusProfile2}
+                <span>
+                  <Tag
+                    color={
+                      statusProfile2 === "Đang hoạt động" ? "#87d068" : "#f50"
+                    }
+                  >
+                    {statusProfile2}
+                  </Tag>
                 </span>
               </p>
             </TopCssContent>

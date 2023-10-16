@@ -8,6 +8,6 @@ router.post('/createNotification', notificationController.createNotification);
 router.get('/showNotification', notificationController.showNotification);
 
 //Hiển thị ra List thông báo với id_customer từng loại kahsch hàng
-router.get('/showNotification/:id_customer', notificationController.showNotificationWithIdCustomer);
+router.get('/showNotificationWithID/:id_customer', notificationController.showNotificationWithIdCustomer);
 
 module.exports = router;

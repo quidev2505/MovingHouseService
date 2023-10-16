@@ -668,7 +668,9 @@ function DriverAdmin() {
                             </span>
                             )
                           </div>
-                          <div style={{color:"#ccc"}}>{item.rating_date}</div>
+                          <div style={{ color: "#ccc" }}>
+                            {item.rating_date}
+                          </div>
                         </div>
                       </>
                     ))}
@@ -717,7 +719,7 @@ function DriverAdmin() {
                   />
                   <SearchOutlined
                     style={{
-                      backgroundColor: "#7bd6e5",
+                      backgroundColor: "#ed883b",
                       padding: "13px",
                       color: "white",
                       cursor: "pointer",
@@ -783,12 +785,14 @@ function DriverAdmin() {
                 }}
               >
                 Trạng thái hồ sơ: &nbsp;
-                <span
-                  style={{
-                    color: statusProfile === "Đang hoạt động" ? "green" : "red",
-                  }}
-                >
-                  {statusProfile}
+                <span>
+                  <Tag
+                    color={
+                      statusProfile === "Đang hoạt động" ? "#87d068" : "#f50"
+                    }
+                  >
+                    {statusProfile}
+                  </Tag>
                 </span>
               </p>
 

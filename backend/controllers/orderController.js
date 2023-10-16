@@ -133,6 +133,10 @@ const orderController = {
         // console.log(startDate)
         // console.log(endDate)
 
+        //Trường hợp chỉ đưa về 1 giá trị đúng và các trường hợp còn lại sai hết
+
+
+
         // So sánh ngày, tháng, năm của ngày cần kiểm tra với ngày bắt đầu và ngày kết thúc
         if (day >= startDay && day <= endDay) {
             // Nếu ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
@@ -150,14 +154,25 @@ const orderController = {
                 return false;
             }
         } else {
-            // Nếu ngày cần kiểm tra nhỏ hơn ngày bắt đầu
-            if (month > startMonth) {
-                // Nếu tháng cần kiểm tra lớn hơn tháng bắt đầu
-                return true;
-            } else {
-                // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng bắt đầu
-                return false;
+            //Nếu ngày bắt đầu và ngày kết thúc đều nhỏ hơn ngày hiện tại và tháng bắng nhau
+            if (day > startDay && day > endDay && month == startMonth && month == endMonth) {
+                return false
             }
+
+            //Nếu tháng bằng nhau
+            if (day < startDay && month == startMonth) {
+                return false
+            } else {
+                // Nếu ngày cần kiểm tra nhỏ hơn ngày bắt đầu
+                if (month >= startMonth && month <= endMonth) {
+                    // Nếu tháng cần kiểm tra lớn hơn tháng bắt đầu
+                    return true;
+                } else {
+                    // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng bắt đầu
+                    return false;
+                }
+            }
+
         }
 
         return false;
@@ -166,19 +181,16 @@ const orderController = {
     findOrder: async (req, res) => {
         try {
             const dataGet = req.body;
-            console.log(dataGet)
 
             //So sánh với các filter sau
             //Dữ liệu ban đầu
             let arr_init = []
             const data_need = dataGet.dataOrder
-            console.log('Bắt đầu nè')
+
             for (let i = 0; i < data_need.length; i++) {
-                console.time('taskA');
                 let item = data_need[i];
                 //Lọc theo cả 2 loại
                 if (dataGet.startRange != '' && dataGet.endRange != '' && dataGet.endRangePrice != 0 && dataGet.startRangePrice != 0) {
-
                     orderController.isDateInRange(item.date_start, dataGet.startRange, dataGet.endRange) && Number(dataGet.startRangePrice) <= item.totalOrder && item.totalOrder <= Number(dataGet.endRangePrice) ? arr_init.push(item)
                         : ''
                 }
@@ -196,13 +208,12 @@ const orderController = {
                     arr_init.push(item)
                 }
 
-                console.timeEnd('taskA');
             }
 
             // console.log(arr_init)
-            console.log('Kết thúc nè')
+            // console.log('Kết thúc nè')
 
-            console.log(arr_init)
+            // console.log(arr_init)
             res.status(201).json(arr_init)
         } catch (e) {
             console.log(e)
