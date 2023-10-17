@@ -90,6 +90,7 @@ import ChangePasswordAdmin from './Pages/Admin/PagesAdmin/Admin/ChangePasswordAd
 
 //Phần làm việc với Map trên mobile
 import ShowMap from './Pages/Map_App_ Native/ShowMap';
+import MapNavigation from './Pages/Map_App_ Native/MapNavigation';
 
 
 
@@ -208,6 +209,8 @@ function App() {
         {/* Phần làm việc với app */}
         {/* Show Map trên mobile */}
         <Route path="/showmap/:location" element={<ShowMap />} />
+        {/* Hiển thị chỉ đường động */}
+        <Route path="/map_navigation" element={<MapNavigation />} />
 
         {/* Trang không tìm thấy */}
         <Route path="*" element={<PageNotFound />} />

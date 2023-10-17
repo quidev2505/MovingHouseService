@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
+import database from "../firebase";
+
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
@@ -23,6 +25,16 @@ const contentStyle = {
 };
 
 const Home = () => {
+  // Push Function
+  const Push = () => {
+    database
+      .ref("navigation")
+      .set({
+        location:'ok nha cac bạn'
+      })
+      .catch(alert);
+  };
+
   const [dataSource, setDataSource] = useState([]);
   const [isActive, setIsActive] = useState(true);
 
@@ -95,7 +107,10 @@ const Home = () => {
                       <button
                         type="button"
                         class="btn"
-                        style={{ backgroundColor: "#e16d2a", color: "white" }}
+                        style={{
+                          backgroundColor: "#e16d2a",
+                          color: "white",
+                        }}
                         onClick={() => {
                           localStorage.setItem(
                             "you_choose_service",
@@ -213,7 +228,7 @@ const Home = () => {
                       height: "60px",
                       border: "2px solid white",
                       marginBottom: "50px",
-                      objectFit:"cover"
+                      objectFit: "cover",
                     }}
                   />
                 </p>
@@ -222,11 +237,23 @@ const Home = () => {
                 <p>
                   Đánh giá: <Rate disabled defaultValue={item.star} />
                 </p>
-                
-                <p style={{ width: "60%", margin: "0 auto", fontSize: "20px" }}>
-                  {"\""+item.comment+"\""}
+
+                <p
+                  style={{
+                    width: "60%",
+                    margin: "0 auto",
+                    fontSize: "20px",
+                  }}
+                >
+                  {'"' + item.comment + '"'}
                 </p>
-                <p style={{ marginTop: "30px", fontWeight: "bold",color:"orange" }}>
+                <p
+                  style={{
+                    marginTop: "30px",
+                    fontWeight: "bold",
+                    color: "orange",
+                  }}
+                >
                   {item.customer_name}
                 </p>
               </div>
@@ -256,7 +283,10 @@ const Home = () => {
     <>
       <Header />
       <div
-        style={{ height: "fit-content", overflowX: "hidden" }}
+        style={{
+          height: "fit-content",
+          overflowX: "hidden",
+        }}
         className="HomePage"
       >
         <LoadingOverlayComponent status={isActive}>
@@ -266,9 +296,19 @@ const Home = () => {
           <div className="provide_service row" style={{ position: "relative" }}>
             <div
               className="left-container col-lg-4"
-              style={{ position: "absolute", left: "59px", top: "42px" }}
+              style={{
+                position: "absolute",
+                left: "59px",
+                top: "42px",
+              }}
             >
-              <h1 style={{ fontSize: "25px", fontWeight: "600" }}>
+              <button onClick={Push}>Thử</button>
+              <h1
+                style={{
+                  fontSize: "25px",
+                  fontWeight: "600",
+                }}
+              >
                 Đặt lịch dọn nhà nhanh chóng và tiện lợi.
               </h1>
               <h1
@@ -352,7 +392,12 @@ const Home = () => {
             </div>
             <div className="item_content col">
               <h4>01. Khảo sát ban đầu</h4>
-              <p style={{ marginTop: "-8px", color: "#b7b7b7" }}>
+              <p
+                style={{
+                  marginTop: "-8px",
+                  color: "#b7b7b7",
+                }}
+              >
                 Tìm loại phương tiện phù hợp với bạn, thiết lập điểm xuất phát
                 và điểm kết thúc mới.
               </p>
@@ -388,7 +433,12 @@ const Home = () => {
             </div>
             <div className="item_content col">
               <h4>02. Xác nhận đặt dịch vụ</h4>
-              <p style={{ marginTop: "-8px", color: "#b7b7b7" }}>
+              <p
+                style={{
+                  marginTop: "-8px",
+                  color: "#b7b7b7",
+                }}
+              >
                 Bằng cách xác nhận đặt lịch trực tuyến, bạn sẽ thấy được đơn
                 hàng trong khung điều khiển.
               </p>
@@ -423,7 +473,12 @@ const Home = () => {
             </div>
             <div className="item_content col">
               <h4>03. Thực hiện vận chuyển</h4>
-              <p style={{ marginTop: "-8px", color: "#b7b7b7" }}>
+              <p
+                style={{
+                  marginTop: "-8px",
+                  color: "#b7b7b7",
+                }}
+              >
                 Với đội ngũ dọn nhà có nhiều năm kinh nghiệm, việc vận chuyển sẽ
                 diễn ra nhanh chóng
               </p>
@@ -458,7 +513,12 @@ const Home = () => {
             </div>
             <div className="item_content col">
               <h4>04. Thanh toán và nghiệm thu</h4>
-              <p style={{ marginTop: "-8px", color: "#b7b7b7" }}>
+              <p
+                style={{
+                  marginTop: "-8px",
+                  color: "#b7b7b7",
+                }}
+              >
                 Thực hiện thanh toán toàn bộ phí dịch vụ và đền bù thiệt hại nếu
                 có.
               </p>
@@ -471,7 +531,10 @@ const Home = () => {
         {/* Start Third Service */}
         <div
           className="why_choose_us flex"
-          style={{ backgroundColor: "#eeeeee", height: "650px" }}
+          style={{
+            backgroundColor: "#eeeeee",
+            height: "650px",
+          }}
         >
           <div
             className="container d-flex"
@@ -515,7 +578,12 @@ const Home = () => {
                   }}
                 ></img>
 
-                <h5 style={{ marginTop: "15px", marginBottom: "25px" }}>
+                <h5
+                  style={{
+                    marginTop: "15px",
+                    marginBottom: "25px",
+                  }}
+                >
                   Báo giá tức thì
                 </h5>
 
@@ -552,7 +620,12 @@ const Home = () => {
                   }}
                 ></img>
 
-                <h5 style={{ marginTop: "15px", marginBottom: "25px" }}>
+                <h5
+                  style={{
+                    marginTop: "15px",
+                    marginBottom: "25px",
+                  }}
+                >
                   Đội ngũ giàu kinh nghiệm
                 </h5>
 
@@ -587,7 +660,12 @@ const Home = () => {
                   }}
                 ></img>
 
-                <h5 style={{ marginTop: "15px", marginBottom: "25px" }}>
+                <h5
+                  style={{
+                    marginTop: "15px",
+                    marginBottom: "25px",
+                  }}
+                >
                   Dịch vụ chuyên nghiệp
                 </h5>
 
@@ -606,9 +684,18 @@ const Home = () => {
         {/* Start four Service */}
         <div
           className="reply_customer container"
-          style={{ height: "570px", padding: "100px", textAlign: "center" }}
+          style={{
+            height: "570px",
+            padding: "100px",
+            textAlign: "center",
+          }}
         >
-          <h1 style={{ marginBottom: "60px", color: "#e16d2a " }}>
+          <h1
+            style={{
+              marginBottom: "60px",
+              color: "#e16d2a ",
+            }}
+          >
             Phản hồi từ phía khách hàng
           </h1>
           <Carousel autoplay>{responseCustomer}</Carousel>
