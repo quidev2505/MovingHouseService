@@ -187,11 +187,11 @@ function GetOrder({ navigation }) {
 
     useEffect(() => {
 
-        setInterval(() => {
+        // setInterval(() => {
 
 
             get_info_all_order();
-        },5000)
+        // },5000)
 
     }, [])
 

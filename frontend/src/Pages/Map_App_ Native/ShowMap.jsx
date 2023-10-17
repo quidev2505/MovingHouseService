@@ -19,6 +19,8 @@ function ShowMap() {
     var lon = location.split("-")[1];
     var display_name = location.split("-")[2];
 
+    console.log(lat)
+
 
     if (lat !== "" && lon !== "") {
       goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";

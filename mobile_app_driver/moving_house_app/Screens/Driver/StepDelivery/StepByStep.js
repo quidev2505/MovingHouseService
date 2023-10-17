@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Image, Alert, ScrollView } from "react-native";
 import Stepper from 'react-native-stepper-ui';
 import axios from "axios"
+import { WebView } from 'react-native-webview';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import api_url from '../../../api_url';
 import { Input } from '@rneui/themed';
 import RNTextArea from "@freakycoder/react-native-text-area";
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from "react-native";
+
 
 
 function StepByStep({ route, navigation }) {
@@ -29,7 +32,7 @@ function StepByStep({ route, navigation }) {
             name: fromLocationDetail
         }
 
-
+        console.log(ob_from_location)
         setFromLocation(ob_from_location)
 
 
@@ -50,7 +53,7 @@ function StepByStep({ route, navigation }) {
             name: toLocationDetail
         }
 
-
+        console.log(ob_to_location)
         setToLocation(ob_to_location)
 
 
@@ -123,6 +126,39 @@ function StepByStep({ route, navigation }) {
                         </View>
                     </View>
 
+                </View>
+            );
+        } catch (e) {
+            console.log(e)
+        }
+    };
+
+    //Component vận chuyển hàng hóa
+    const MovingOrder = (props) => {
+        try {
+            useEffect(() => {
+                setTitleHome(props.title)
+            }, [])
+            return (
+                <View>
+                    <Text style={{ backgroundColor: "green", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Trạng thái: Đang vận chuyển hàng hóa</Text>
+
+                    <SafeAreaView style={{ flex: 1, marginTop: 50 }}>
+                        <WebView
+                            style={{ width: 500, height: 500 }}
+                            source={{ uri: `http://10.0.2.2:3000/map_navigation/${fromLocation.lat}-${fromLocation.lon}-${toLocation.lat}-${toLocation.lon}` }}
+                        />
+                    </SafeAreaView>
+
+                    <View>
+                        <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
+                            <TouchableOpacity style={styles.button} onPress={() => {
+                                setActive((active) => active + 1)
+                            }}>
+                                <Text style={styles.buttonText}>Bước kế tiếp</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
             );
         } catch (e) {
@@ -324,8 +360,8 @@ function StepByStep({ route, navigation }) {
                     <View style={{ marginTop: 10 }}>
                         <Text style={{ fontSize: 20, color: "red" }}>Thông tin khách hàng:</Text>
                         <View style={{ borderWidth: 1, padding: 5, borderColor: "#ccc", borderRadius: 5 }}>
-                            <Text>Tên khách hàng: {data_user.fullname}</Text>
-                            <Text>Email: {data_user.email}</Text>
+                            <Text>- Tên khách hàng: {data_user.fullname}</Text>
+                            <Text>- Email: {data_user.email}</Text>
                             <Text>Số điện thoại: {data_user.phonenumber}</Text>
                         </View>
                     </View>
@@ -571,6 +607,7 @@ function StepByStep({ route, navigation }) {
     const content = [
         <ComeToGetOrder title="Đến điểm lấy hàng" />,
         <BocHangHoa title="Hoàn thành bốc hàng hóa" />,
+        <MovingOrder title="Vận chuyển hàng hóa" />,
         <ComeToReceiveOrder title="Đến điểm nhận hàng" />,
         <VerifyStatusDelivery title="Xác nhận trạng thái giao hàng" />,
         <PaymentOrder title="Thanh toán hóa đơn" />,
@@ -581,7 +618,6 @@ function StepByStep({ route, navigation }) {
 
     useEffect(() => {
         const { data_user, data_order } = route.params;
-
         get_location(data_order.from_location, data_order.to_location, data_order.fromLocation_detail, data_order.toLocation_detail)
         setDataOrder(data_order)
         setDataUser(data_user)
@@ -592,18 +628,18 @@ function StepByStep({ route, navigation }) {
             <View>
                 <View>
                     <View style={{ display: "flex", flexDirection: "row", height: 90, backgroundColor: "white", justifyContent: "space-between", padding: 10, paddingTop: 50 }}>
-                        {/* <Ionicons
-                        onPress={() => back()}
-                        name="arrow-back-sharp"
-                        size={25}
-                        color="orange"
-                    /> */}
                         <Text style={{ fontSize: 20 }}>{titleHome}</Text>
-
                     </View>
                 </View>
 
                 <View style={{ marginVertical: 80, marginHorizontal: 20, marginTop: 20, backgroundColor: "white", padding: 10, borderRadius: 5 }}>
+                    <View style={{ width: "100%", height: 50, position: "absolute", zIndex: 999, marginLeft: 10 }}>
+                        <Image
+                            source={{ uri: `https://ampron.eu/wp-content/uploads/2019/01/trucks-gif.gif` }}
+                            style={{ width: "100%", height: 50, objectFit: "cover" }}
+                            resizeMode="cover"
+                        />
+                    </View>
                     <Stepper
                         TextStyle={'red'}
                         active={active}
@@ -612,7 +648,8 @@ function StepByStep({ route, navigation }) {
                         onFinish={() => alert('Hoàn tất giao hàng')}
                         onNext={() => setActive((p) => p + 1)}
                         showButton={false}
-                        stepTextStyle={{ color: "black" }}
+                        buttonStyle={{ backgroundColor: "orange" }}
+                        stepTextStyle={{ color: "orange" }}
                     />
                 </View>
             </View>

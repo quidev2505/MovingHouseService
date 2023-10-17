@@ -12,22 +12,43 @@ import goongjs from "@goongmaps/goong-js";
 import { useNavigate, useParams } from "react-router-dom";
 
 function MapNavigation() {
-  // const params = useParams();
-  const [stepDraw, setStepDraw] = useState([]);
+  const params = useParams();
 
   const draw_two_location = () => {
+    //Lấy dữ liệu từ firebase
+    //Lưu vô CSDL
+    database
+      .ref("navigation")
+      .on('value', (data)=>{
+        const data_firebase = data.val()
+        console.log(data_firebase)
+      })
+      .catch(alert);
+
+    var location = params.location;
+    var latStart = location.split("-")[0];
+    var lonStart = location.split("-")[1];
+    var latEnd = location.split("-")[2];
+    var lonEnd = location.split("-")[3];
+
     goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";
     var map = new goongjs.Map({
       container: "map",
       style: "https://tiles.goong.io/assets/goong_map_web.json",
-      center: [105.80278, 20.99245],
+      center: [lonStart, latStart],
       zoom: 12,
     });
 
     var size = 200;
 
-    var marker = new goongjs.Marker()
-      .setLngLat([105.783206, 21.031011])
+    //Thiết lập điểm kết thúc -> Điểm nhận hàng
+    var marker = new goongjs.Marker().setLngLat([lonEnd, latEnd]).addTo(map);
+
+    //Thiết lập điểm bắt đầu -> Điểm lấy hàng
+    var marker = new goongjs.Marker({
+      color: "orange",
+    })
+      .setLngLat([lonStart, latStart])
       .addTo(map);
 
     map.on("load", function() {
@@ -50,8 +71,8 @@ function MapNavigation() {
       // Get Directions
       directionService
         .getDirections({
-          origin: "20.981971,105.864323",
-          destination: "21.031011,105.783206",
+          origin: `${latStart},${lonStart}`,
+          destination: `${latEnd}, ${lonEnd}`,
           vehicle: "car",
         })
         .send()
@@ -96,7 +117,9 @@ function MapNavigation() {
               alert("Đã đến điểm dừng");
               clearInterval(navigation);
             } else {
-              var marker = new goongjs.Marker({ color: "red" })
+              var marker = new goongjs.Marker({
+                color: "red",
+              })
                 .setLngLat([step_arr[count][0], step_arr[count][1]])
                 .addTo(map);
 

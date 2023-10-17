@@ -210,7 +210,7 @@ function App() {
         {/* Show Map trên mobile */}
         <Route path="/showmap/:location" element={<ShowMap />} />
         {/* Hiển thị chỉ đường động */}
-        <Route path="/map_navigation" element={<MapNavigation />} />
+        <Route path="/map_navigation/:location" element={<MapNavigation />} />
 
         {/* Trang không tìm thấy */}
         <Route path="*" element={<PageNotFound />} />
