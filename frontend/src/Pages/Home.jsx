@@ -25,16 +25,6 @@ const contentStyle = {
 };
 
 const Home = () => {
-  // Push Function
-  const Push = () => {
-    database
-      .ref("navigation")
-      .set({
-        location:'ok nha cac bạn'
-      })
-      .catch(alert);
-  };
-
   const [dataSource, setDataSource] = useState([]);
   const [isActive, setIsActive] = useState(true);
 
@@ -302,7 +292,6 @@ const Home = () => {
                 top: "42px",
               }}
             >
-              <button onClick={Push}>Thử</button>
               <h1
                 style={{
                   fontSize: "25px",

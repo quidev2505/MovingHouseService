@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, Image, TouchableOpacity, RefreshControl } from "react-native";
+import { Text, View, ScrollView, Image, TouchableOpacity, RefreshControl, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 import axios from 'axios';
 import api_url from '../../../api_url';
@@ -200,6 +200,13 @@ function LoadingOrder({ navigation }) {
                                             </Text>
                                         </View>
                                     </View>
+
+                                    {item.status === "Đang thực hiện" ? (
+                                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrderTracking', { status: "Đang tải", order_id: item.order_id })}>
+                                            <Text style={styles.buttonText}>Theo dõi đơn hàng 🗺️</Text>
+                                        </TouchableOpacity>
+                                    ) : ''}
+
                                 </Card>
                             </TouchableOpacity>
 
@@ -211,3 +218,22 @@ function LoadingOrder({ navigation }) {
 }
 
 export default LoadingOrder
+
+
+const styles = StyleSheet.create({
+
+    button: {
+        backgroundColor: '#ff5643',
+        borderRadius: 5,
+        padding: 10,
+        width: 350,
+        marginTop: 20
+    },
+
+    buttonText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: "center"
+    }
+})

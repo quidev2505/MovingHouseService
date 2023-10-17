@@ -10,6 +10,7 @@ import HomeScreenDriver from './Screens/Driver/HomeScreenDriver';
 import CustomerLogin from './Screens/Customer/CustomerLogin'
 import HomeScreenCustomer from './Screens/Customer/HomeScreenCustomer';
 import OrderDetailCustomer from './Screens/Customer/OrderDetail/OrderDetailCustomer';
+import OrderTracking from './Screens/Customer/OrderTracking'
 const Stack = createNativeStackNavigator();
 
 import {
@@ -60,6 +61,8 @@ function App() {
           {/* Customer */}
           <Stack.Screen name="CustomerLogin" component={CustomerLogin} />
           <Stack.Screen name="HomeScreenCustomer" component={HomeScreenCustomer} />
+          {/* Theo dõi đơn hàng */}
+          <Stack.Screen name="OrderTracking" component={OrderTracking} />
 
           {/* Chi tiết đơn hàng khách hàng */}
           <Stack.Screen name="OrderDetailCustomer" component={OrderDetailCustomer} />

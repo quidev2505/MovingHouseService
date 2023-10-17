@@ -146,7 +146,7 @@ function StepByStep({ route, navigation }) {
                     <SafeAreaView style={{ flex: 1, marginTop: 50 }}>
                         <WebView
                             style={{ width: 500, height: 500 }}
-                            source={{ uri: `http://10.0.2.2:3000/map_navigation/${fromLocation.lat}-${fromLocation.lon}-${toLocation.lat}-${toLocation.lon}` }}
+                            source={{ uri: `http://10.0.2.2:3000/map_navigation/${fromLocation.lat}-${fromLocation.lon}-${toLocation.lat}-${toLocation.lon}-${data_order.order_id}` }}
                         />
                     </SafeAreaView>
 

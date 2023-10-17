@@ -337,7 +337,20 @@ function BookingUser() {
                     }
                   });
                 } else if (current === 4) {
-                  create_order();
+                  Swal.fire({
+                    title: "Hoàn tất đơn hàng ?",
+                    text:
+                      "Nếu đã hoàn thành thông tin đặt hàng, hãy chọn Xác nhận !",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Xác nhận",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      create_order();
+                    }
+                  });
                 } else {
                   setCurrent(current + 1);
                 }
