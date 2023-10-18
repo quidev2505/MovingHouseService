@@ -227,6 +227,7 @@ function Administrator() {
       title: "Tài khoản",
       dataIndex: "username",
       key: "username",
+      ...getColumnSearchProps("username"),
     },
     {
       title: "Quản trị viên",
@@ -417,6 +418,7 @@ function Administrator() {
       title: "Số điện thoại",
       dataIndex: "phonenumber",
       key: "phonenumber",
+      ...getColumnSearchProps("phonenumber"),
     },
     {
       title: "Thao tác",

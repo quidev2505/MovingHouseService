@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 import { StarFilled } from "@ant-design/icons";
 
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
 import axios from "axios";
 import { Image, Table, Avatar } from "antd";
 import {
@@ -30,6 +32,9 @@ import {
 import { Bar } from "react-chartjs-2";
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
+//Khu vực import thống kê chi tiết
+import ReportRevenueMonth from "./ReportRevenueMonth";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -45,10 +50,24 @@ export const options = {
   plugins: {
     legend: {
       position: "top",
+      display: true,
     },
     title: {
       display: true,
       text: "",
+    },
+    datalabels: {
+      display: true,
+      color: "white",
+      formatter: function(value, context) {
+        return value.toLocaleString();
+      },
+      offset: -5,
+      font: {
+        weight: "bold",
+        size: 10,
+      },
+      align: "end",
     },
   },
 };
@@ -62,6 +81,21 @@ export const options_pie = {
     title: {
       display: true,
       text: "",
+    },
+    datalabels: {
+      anchor: "center",
+      backgroundColor: function(context) {
+        return context.dataset.backgroundColor;
+      },
+      borderColor: "white",
+      borderRadius: 25,
+      borderWidth: 2,
+      color: "white",
+      font: {
+        weight: "bold",
+      },
+      formatter: Math.round,
+      padding: 6,
     },
   },
 };
@@ -137,7 +171,7 @@ function DashBoardAdmin() {
       {
         label: "Tổng doanh thu tháng",
         data: arrTotalOrder,
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        backgroundColor: "#4bc0c0",
       },
     ],
   };
@@ -155,7 +189,7 @@ function DashBoardAdmin() {
       {
         label: "Tổng doanh thu năm",
         data: arrTotalOrderYear,
-        backgroundColor: "rgba(227,186,133,0.5)",
+        backgroundColor: "#ff671d",
       },
     ],
   };
@@ -175,11 +209,11 @@ function DashBoardAdmin() {
         label: "Thống kê số đơn hàng theo trạng thái",
         data: arrayOrderType,
         backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
+          "#ff6384",
+          "#36a2eb",
+          "#ffce56",
+          "#4bc0c0",
+          "#9966ff",
         ],
         borderColor: [
           "rgba(255, 99, 132, 1)",
@@ -209,12 +243,12 @@ function DashBoardAdmin() {
       {
         label: "Tổng số đơn hàng đã giao",
         data: sumTotalDelivery,
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        backgroundColor: "#66b2f9",
       },
       {
         label: "Tổng số lượt đánh giá",
         data: sumTotalRating,
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        backgroundColor: "#f3793e",
       },
     ],
   };
@@ -235,15 +269,16 @@ function DashBoardAdmin() {
       {
         label: "Số đơn giao thành công",
         data: sumOrderComplete,
-        backgroundColor: "green",
+        backgroundColor: "#00bab3",
       },
       {
         label: "Số đơn đã hủy",
         data: sumOrderCancel,
-        backgroundColor: "red",
+        backgroundColor: "#8abaf2",
       },
     ],
   };
+
 
   //Gọi hàm gọi API khởi tạo dữ liệu
   const get_dashboard_data = async () => {
@@ -833,7 +868,7 @@ function DashBoardAdmin() {
       title: "Tên khách hàng",
       dataIndex: "fullname",
       key: "fullname",
-      render: (fullname) => <td style={{ color: "#559aff" }}>{fullname}</td>
+      render: (fullname) => <td style={{ color: "#559aff" }}>{fullname}</td>,
     },
     {
       title: "Ảnh",
@@ -855,7 +890,10 @@ function DashBoardAdmin() {
       dataIndex: "totalOrder",
       key: "totalOrder",
       render: (totalOrder) => (
-        <td className="d-flex" style={{ alignItems: "center", color:"orange" }}>
+        <td
+          className="d-flex"
+          style={{ alignItems: "center", color: "orange" }}
+        >
           {totalOrder.toLocaleString()} đ
         </td>
       ),
@@ -864,6 +902,7 @@ function DashBoardAdmin() {
 
   //Khởi tạo khi chạy lại Web
   useEffect(() => {
+    //Bảng dữ liệu thống kê
     get_dashboard_data();
     //Bảng xếp hạng doanh thu dịch vụ
     service_total_rank();
@@ -1152,7 +1191,14 @@ function DashBoardAdmin() {
                     >
                       ( Đơn vị: VNĐ)
                     </p>
-                    <Bar options={options} data={dataChart} />
+                    <Bar
+                      options={options}
+                      data={dataChart}
+                      plugins={[ChartDataLabels]}
+                    />
+
+                    {/* Khu vực bảng thống kê */}
+                    <ReportRevenueMonth />
                   </>
                 ) : filterDashBoard === "THỐNG KÊ DOANH THU THEO NĂM" ? (
                   <>
@@ -1165,7 +1211,11 @@ function DashBoardAdmin() {
                     >
                       ( Đơn vị: VNĐ)
                     </p>
-                    <Bar options={options} data={dataChartYear} />
+                    <Bar
+                      options={options}
+                      data={dataChartYear}
+                      plugins={[ChartDataLabels]}
+                    />
                   </>
                 ) : filterDashBoard === "THỐNG KÊ ĐƠN HÀNG" ? (
                   <>
@@ -1204,7 +1254,11 @@ function DashBoardAdmin() {
                         ( Đơn vị: đơn)
                       </p>
 
-                      <Pie data={dataPieOrder} options={options_pie} />
+                      <Pie
+                        data={dataPieOrder}
+                        options={options_pie}
+                        plugins={[ChartDataLabels]}
+                      />
                     </div>
                   </>
                 ) : filterDashBoard === "THỐNG KÊ TÀI XẾ" ? (
@@ -1235,7 +1289,11 @@ function DashBoardAdmin() {
                     >
                       ( Đơn vị: đơn)
                     </p>
-                    <Bar options={options} data={dataDriver} />
+                    <Bar
+                      options={options}
+                      data={dataDriver}
+                      plugins={[ChartDataLabels]}
+                    />
                   </>
                 ) : filterDashBoard === "THỐNG KÊ KHÁCH HÀNG" ? (
                   <>
@@ -1266,13 +1324,18 @@ function DashBoardAdmin() {
                       ( Đơn vị: đơn)
                     </p>
 
-                    <Bar options={options} data={dataCustomer} />
+                    <Bar
+                      options={options}
+                      data={dataCustomer}
+                      plugins={[ChartDataLabels]}
+                    />
                   </>
                 ) : (
                   ""
                 )}
               </div>
 
+              {/* KHU VỰC BẢNG XẾP HẠNG */}
               {/* Xếp hạng doanh thu dịch vụ */}
               <div
                 style={{
@@ -1321,7 +1384,6 @@ function DashBoardAdmin() {
                   />
                 </div>
               </div>
-
               {/* Xếp hạng tài xế*/}
               <div
                 style={{
@@ -1370,7 +1432,6 @@ function DashBoardAdmin() {
                   />
                 </div>
               </div>
-
               {/* Xếp hạng khách hàng */}
               <div
                 style={{

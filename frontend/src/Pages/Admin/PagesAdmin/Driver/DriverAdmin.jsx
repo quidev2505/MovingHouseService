@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 
-import { Breadcrumb, Button } from "antd";
+import { Breadcrumb, Button, Input } from "antd";
 import TopCssContent from "../TopCssContent";
 import BottomCssContent from "../BottomCssContent";
 
@@ -16,6 +16,7 @@ import { StarFilled } from "@ant-design/icons";
 import "sweetalert2/src/sweetalert2.scss";
 
 import { useNavigate } from "react-router-dom";
+import Highlighter from "react-highlight-words";
 
 import {
   EditOutlined,
@@ -45,6 +46,127 @@ function DriverAdmin() {
   const [statusProfile, setStatusProfile] = useState("Đang hoạt động");
 
   const [checkLockAccount, setCheckLockAccount] = useState(false);
+
+  //Tính năng lọc theo Search
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
 
   const columns = [
     {
@@ -84,16 +206,21 @@ function DriverAdmin() {
       title: "Số điện thoại",
       dataIndex: "phonenumber",
       key: "phonenumber",
+      ...getColumnSearchProps("phonenumber"),
     },
     {
       title: "Lượt giao hàng",
       dataIndex: "id_delivery",
       key: "id_delivery",
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => a.id_delivery - b.id_delivery,
     },
     {
       title: "Lượt đánh giá",
       dataIndex: "id_rating",
       key: "id_rating",
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => a.id_rating - b.id_rating,
     },
     {
       title: "Sao trung bình",
@@ -138,7 +265,12 @@ function DriverAdmin() {
               cursor: "pointer",
             }}
           >
-            <SwapOutlined style={{ color: "white", fontWeight: "bold" }} />
+            <SwapOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
           </div>
         </div>
       ),
@@ -161,7 +293,12 @@ function DriverAdmin() {
               cursor: "pointer",
             }}
           >
-            <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
+            <EditOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
           </div>
 
           <div
@@ -175,7 +312,10 @@ function DriverAdmin() {
             }}
           >
             <FolderViewOutlined
-              style={{ color: "white", fontWeight: "bold" }}
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
             />
           </div>
           <Link
@@ -187,7 +327,12 @@ function DriverAdmin() {
               display: "flex",
             }}
           >
-            <LockOutlined style={{ color: "white", fontWeight: "bold" }} />
+            <LockOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
           </Link>
         </Space>
       ),
@@ -508,13 +653,15 @@ function DriverAdmin() {
                     </div>
                     <div className="col">
                       <CalendarOutlined />
-                      &nbsp;&nbsp;{data_result.date_of_birth}
+                      &nbsp;&nbsp;
+                      {data_result.date_of_birth}
                     </div>
                   </div>
                   <div className="row">
                     <div className="col">
                       <PhoneOutlined />
-                      &nbsp;&nbsp;{data_result.phonenumber}
+                      &nbsp;&nbsp;
+                      {data_result.phonenumber}
                     </div>
                     <div className="col">
                       <MailOutlined />
@@ -528,7 +675,10 @@ function DriverAdmin() {
                   <div className="row">
                     <div
                       className="col"
-                      style={{ color: "#ea9868", fontWeight: "bold" }}
+                      style={{
+                        color: "#ea9868",
+                        fontWeight: "bold",
+                      }}
                     >
                       <AimOutlined /> {data_result.location_delivery}
                     </div>
@@ -550,7 +700,12 @@ function DriverAdmin() {
                   marginTop: "10px",
                 }}
               >
-                <h5 style={{ color: "#ea9868", marginBottom: "10px" }}>
+                <h5
+                  style={{
+                    color: "#ea9868",
+                    marginBottom: "10px",
+                  }}
+                >
                   <TrophyOutlined />
                   &nbsp;&nbsp; Thành tích
                 </h5>
@@ -591,7 +746,12 @@ function DriverAdmin() {
                   marginTop: "10px",
                 }}
               >
-                <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
+                <h4
+                  style={{
+                    color: "#ea9868",
+                    fontWeight: "600",
+                  }}
+                >
                   LỊCH SỬ VẬN CHUYỂN
                 </h4>
                 <div>
@@ -615,8 +775,16 @@ function DriverAdmin() {
                             <span style={{ color: "red" }}>
                               1. {item?.fromLocation}
                             </span>
-                            <ArrowRightOutlined style={{ color: "orange" }} />
-                            <span style={{ color: "#7bd6e5" }}>
+                            <ArrowRightOutlined
+                              style={{
+                                color: "orange",
+                              }}
+                            />
+                            <span
+                              style={{
+                                color: "#7bd6e5",
+                              }}
+                            >
                               2. {item?.toLocation}
                             </span>
                           </div>
@@ -641,7 +809,12 @@ function DriverAdmin() {
                   marginTop: "10px",
                 }}
               >
-                <h4 style={{ color: "#ea9868", fontWeight: "600" }}>
+                <h4
+                  style={{
+                    color: "#ea9868",
+                    fontWeight: "600",
+                  }}
+                >
                   LỊCH SỬ ĐÁNH GIÁ
                 </h4>
                 <div>
@@ -707,14 +880,20 @@ function DriverAdmin() {
               <div className="d-flex">
                 <div
                   className="d-flex"
-                  style={{ width: "300px", borderRadius: "5px" }}
+                  style={{
+                    width: "300px",
+                    borderRadius: "5px",
+                  }}
                 >
                   <input
                     type="text"
                     id="find_blog"
                     className="form-control form-control-lg"
                     placeholder="Nhập vào tên tài xế..."
-                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    style={{
+                      fontSize: "17px",
+                      borderRadius: "3px",
+                    }}
                     onChange={(e) => setSearch(e.target.value)}
                   />
                   <SearchOutlined
