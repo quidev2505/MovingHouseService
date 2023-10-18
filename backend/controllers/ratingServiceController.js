@@ -80,7 +80,7 @@ const ratingServiceController = {
     //Read Rating Service
     getRatingSerice: async (req, res) => {
         try {
-            const data_rating_service = await RatingService.find().sort({ star: -1 }).limit(6);
+            const data_rating_service = await RatingService.find().sort({ createdAt: -1 }).limit(6);
 
 
             //Lấy array avatar

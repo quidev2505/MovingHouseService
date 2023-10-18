@@ -76,6 +76,17 @@ function ServiceAdmin() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+      filters: [
+        {
+          text: "Hoạt động",
+          value: true,
+        },
+        {
+          text: "Tạm ngưng",
+          value: false,
+        },
+      ],
+      onFilter: (value, record) => String(record.status).indexOf(value) == 0,
       render: (status, id) => (
         <div className="d-flex">
           <Tag color={status ? "green" : "volcano"} key={status}>

@@ -167,12 +167,12 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                 Thông tin vận chuyển
               </h6>
               <div className="row">
-                <div className="col">
+                <div className="col-lg-8">
                   <div className="d-flex">
                     <span
                       style={{
-                        width: "25px",
-                        height: "25px",
+                        width: "40px",
+                        height: "26px",
                         backgroundColor: "red",
                         display: "flex",
                         alignItems: "center",
@@ -213,6 +213,8 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                     <p style={{ color: "#a6acb7" }}>
                       {dataStep5.from_location_detail}
                     </p>
+                    <br></br>
+                    <br></br>
                     <br></br>
                   </div>
                   <div>

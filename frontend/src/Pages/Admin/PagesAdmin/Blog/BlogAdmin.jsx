@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 
 import { Breadcrumb, Button } from "antd";
@@ -6,8 +6,9 @@ import TopCssContent from "../TopCssContent";
 import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
+import Highlighter from "react-highlight-words";
 
-import { Space, Table, Tag, Image, Modal, Avatar } from "antd";
+import { Space, Table, Tag, Image, Modal, Avatar, Input } from "antd";
 
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
@@ -30,6 +31,127 @@ import axios from "axios";
 function BlogAdmin() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
+
+  //Tính năng lọc theo Search
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
 
   const columns = [
     {
@@ -56,6 +178,7 @@ function BlogAdmin() {
       title: "Danh mục",
       dataIndex: "category",
       key: "brand",
+      ...getColumnSearchProps("category"),
     },
     {
       title: "Ngày đăng",
@@ -66,6 +189,17 @@ function BlogAdmin() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+      filters: [
+        {
+          text: "Hoạt động",
+          value: true,
+        },
+        {
+          text: "Tạm ngưng",
+          value: false,
+        },
+      ],
+      onFilter: (value, record) => String(record.status).indexOf(value) == 0,
       render: (status, id) => (
         <div className="d-flex">
           <Tag color={status ? "green" : "volcano"} key={status}>
@@ -81,7 +215,12 @@ function BlogAdmin() {
               cursor: "pointer",
             }}
           >
-            <SwapOutlined style={{ color: "white", fontWeight: "bold" }} />
+            <SwapOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
           </div>
         </div>
       ),
@@ -101,7 +240,12 @@ function BlogAdmin() {
               cursor: "pointer",
             }}
           >
-            <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
+            <EditOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
           </div>
           <div
             onClick={() => view_detail_blog(id)}
@@ -114,7 +258,10 @@ function BlogAdmin() {
             }}
           >
             <FolderViewOutlined
-              style={{ color: "white", fontWeight: "bold" }}
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
             />
           </div>
           <Link
@@ -126,7 +273,12 @@ function BlogAdmin() {
               display: "flex",
             }}
           >
-            <DeleteOutlined style={{ color: "white", fontWeight: "bold" }} />
+            <DeleteOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
           </Link>
         </Space>
       ),
@@ -443,7 +595,10 @@ function BlogAdmin() {
                           }}
                         >
                           <SwapOutlined
-                            style={{ color: "white", fontWeight: "bold" }}
+                            style={{
+                              color: "white",
+                              fontWeight: "bold",
+                            }}
                           />
                         </div>
                       </div>
@@ -512,14 +667,20 @@ function BlogAdmin() {
               <p>Blog</p>
               <div
                 className="d-flex"
-                style={{ width: "300px", borderRadius: "5px" }}
+                style={{
+                  width: "300px",
+                  borderRadius: "5px",
+                }}
               >
                 <input
                   type="text"
                   id="find_blog"
                   className="form-control form-control-lg"
                   placeholder="Nhập vào tiêu đề blog..."
-                  style={{ fontSize: "17px", borderRadius: "3px" }}
+                  style={{
+                    fontSize: "17px",
+                    borderRadius: "3px",
+                  }}
                   onChange={(e) => setSearch(e.target.value)}
                 />
                 <SearchOutlined
