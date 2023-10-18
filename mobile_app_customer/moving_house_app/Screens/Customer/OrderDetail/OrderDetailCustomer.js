@@ -5,13 +5,21 @@ import api_url from '../../../api_url';
 import axios from 'axios';
 
 import { Card } from '@rneui/themed';
+import { Avatar } from '@rneui/themed';
 
 function OrderDetail({ route, navigation }) {
   const [navigate_ori, setNavigateOri] = useState("");
 
   const [dataOrderDetail, setDataOrderDetail] = useState({});
+  const [infoDriver, setInfoDriver] = useState([])
+  const get_detail_order = async (id_input, driver_name) => {
 
-  const get_detail_order = async (id_input) => {
+    await axios.post(`${api_url}/v1/driver/get_arr_driver_info`, driver_name).then((data) => {
+      setInfoDriver(data.data)
+    }).catch((e) => {
+      console.log(e)
+    })
+
     await axios.get(`${api_url}/v1/order/viewOrderDetail/${id_input}`).then((data) => {
       const data_customer = data.data[0];
       const ob_detail_order = {
@@ -31,8 +39,10 @@ function OrderDetail({ route, navigation }) {
         totalOrderNew: data_customer.totalOrderNew,
         vehicle_price: data_customer.vehicle_price,//
         more_fee_name: data_customer.more_fee_name,
-        more_fee_price: data_customer.more_fee_price
+        more_fee_price: data_customer.more_fee_price,
+        driver_name: data_customer.driver_name
       }
+
 
       setDataOrderDetail(ob_detail_order)
     }).catch((e) => {
@@ -45,10 +55,10 @@ function OrderDetail({ route, navigation }) {
 
   useEffect(() => {
     /* 2. Get the param */
-    const { status, data } = route.params;
-    get_detail_order(data)
+    const { status, data, driver_name } = route.params;
+    get_detail_order(data, driver_name)
     setNavigateOri(status)
-  })
+  }, [])
 
   const back = () => {
     navigation.navigate(navigate_ori)
@@ -106,6 +116,35 @@ function OrderDetail({ route, navigation }) {
                   {dataOrderDetail.fromLocation_detail}
                 </Text>
               </View>
+            </View>
+
+            <View style={{ borderTopColor: "#ccc", borderTopWidth: 1, paddingTop: 10 }}>
+              <Text style={{color:"white", backgroundColor:"orange", textAlign:"center", padding:5}}>Thông tin tài xế</Text>
+              {infoDriver && infoDriver.map((item, index) => {
+                return (
+                  <>
+                    <View style={{ display: "flex", flexDirection: "row", marginTop: 5, justifyContent: "space-between", borderTopColor:"#ccc", borderTopWidth:1, paddingTop:10 }}>
+                      <Text style={{fontWeight:"bold"}}>Tài xế {index + 1}</Text>
+                      <Avatar
+                        size={50}
+                        rounded
+                        source={{ uri: item.avatar.length > 30 ? item.avatar : `${api_url}/${item.avatar}` }}
+                      />
+                    </View>
+                    <View style={{ display: "flex", flexDirection: "row", marginTop: 5, justifyContent: "space-between" }}>
+                      <Text style={{fontWeight:"bold"}}>Họ và tên: </Text>
+                      <Text>{item.fullname}</Text>
+                    </View>
+                    <View style={{ display: "flex", flexDirection: "row", marginTop: 10, marginBottom: 10, justifyContent: "space-between" }}>
+                      <Text style={{fontWeight:"bold"}}>Số điện thoại: </Text>
+                      <Text>{item.phonenumber}</Text>
+                    </View>
+                  </>
+                )
+              })}
+
+
+
             </View>
           </Card>
         </View>
@@ -227,7 +266,7 @@ function OrderDetail({ route, navigation }) {
                       </View>
                     </>
                   ) : ''}
-                 
+
 
                   <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
                     <Text>Tổng đơn hàng mới: </Text>

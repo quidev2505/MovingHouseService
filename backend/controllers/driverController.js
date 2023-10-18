@@ -102,6 +102,7 @@ const driverController = {
     getArrDriverInfo: async (req, res) => {
         try {
             const arr_name_driver = req.body;
+            console.log(arr_name_driver)
 
             if (arr_name_driver.length === 0) {
                 return res.status(404).json({
@@ -119,9 +120,9 @@ const driverController = {
                 return ob;
             }));
 
-
             res.status(201).json(arr_data_driver);
         } catch (e) {
+            console.log(e)
             res.status(500).json(e);
         }
     },

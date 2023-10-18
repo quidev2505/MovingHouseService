@@ -14,8 +14,8 @@ function CompletedOrder({ navigation }) {
     //Load page khi kéo xuống
     const [refreshing, setRefreshing] = React.useState(false);
 
-    const navigation_to_detailOrder = (order_detail_id) => {
-        navigation.navigate('OrderDetailCustomer', { status: "Đã hoàn thành", data: order_detail_id })
+    const navigation_to_detailOrder = (order_detail_id,driver_name_input) => {
+        navigation.navigate('OrderDetailCustomer', { status: "Đã hoàn thành", data: order_detail_id,driver_name: driver_name_input })
     }
 
 
@@ -108,7 +108,7 @@ function CompletedOrder({ navigation }) {
                 dataOrder && dataOrder.map((item, index) => {
                     return (
                         <>
-                            <TouchableOpacity onPress={() => navigation_to_detailOrder(item.order_detail_id)} key={index}>
+                            <TouchableOpacity onPress={() => navigation_to_detailOrder(item.order_detail_id, item.driver_name)} key={index}>
                                 <Card key={index}>
                                     <View>
                                         <Card.Title style={{ textAlign: "left" }}>

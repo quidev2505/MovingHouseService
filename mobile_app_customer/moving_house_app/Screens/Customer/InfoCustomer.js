@@ -23,7 +23,7 @@ function InfoCustomer({ navigation }) {
                     await axios.get(`${api_url}/v1/customer/get_customer_info/${id}`).then((data) => {
                         const data_customer = data.data;
                         const ob = {
-                            avatar: `${api_url}/${data_customer.avatar}`,
+                            avatar: data_customer.length > 20 ? data_customer : `${api_url}/${data_customer.avatar}`,
                             fullname: data_customer.fullname,
                             address: data_customer.address,
                             gender: data_customer.gender,

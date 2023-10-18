@@ -18,11 +18,13 @@ function OrderDetailDriver({ route, navigation }) {
     //ID khách hàng
     const [customerID, setCustomerID] = useState("")
 
+    //Dữ liệu khách hàng
+    const [dataUser, setDataUser] = useState({})
 
     const get_detail_order = async (id_input, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start) => {
 
 
-        await axios.get(`${api_url}/v1/order/viewOrderDetail/${id_input}`).then((data) => {
+        await axios.get(`${api_url}/v1/order/viewOrderDetail/${id_input}`).then(async(data) => {
             const data_customer = data.data[0];
             const ob_detail_order = {
                 order_detail_id: id_input,
@@ -74,6 +76,21 @@ function OrderDetailDriver({ route, navigation }) {
 
             }
 
+
+            //Lấy thông tin khách hàng ra
+            let data_customer_new = await axios.get(`${api_url}/v1/customer/get_customer_with_id/${customer_id}`)
+
+            //Lấy thông tin số điện thoại, email khách hàng, tên ra
+            let data_user_new = await axios.get(`${api_url}/v1/customer/get_info_user_with_customer_name/${data_customer_new.data.fullname}`)
+
+            const data_user_object = {
+                fullname: data_user_new.data.fullname,
+                phonenumber: data_user_new.data.phonenumber,
+                email: data_user_new.data.email
+            }
+
+            //Lấy thông tin khách hàng show ra bên dưới
+            setDataUser(data_user_object)
 
 
 
@@ -170,11 +187,6 @@ function OrderDetailDriver({ route, navigation }) {
         //Lấy thông tin số điện thoại, email khách hàng, tên ra
         let data_user = await axios.get(`${api_url}/v1/customer/get_info_user_with_customer_name/${data_customer.data.fullname}`)
 
-        const data_user_object = {
-            fullname: data_user.data.fullname,
-            phonenumber: data_user.data.phonenumber,
-            email: data_user.data.email
-        }
 
         const ob = {
             appId: 13517,
@@ -250,6 +262,21 @@ function OrderDetailDriver({ route, navigation }) {
                                 <Text>
                                     {dataOrderDetail.toLocation_detail}
                                 </Text>
+                            </View>
+                            <View style={{ borderTopColor: "#ccc", borderTopWidth: 1, paddingTop: 10 }}>
+                                <Text style={{ fontWeight: "bold", textAlign: "center", color: "white", backgroundColor: "red", padding: 5, borderRadius: 5 }}>Thông tin khách hàng</Text>
+                                <View style={{ display: "flex", flexDirection: "row", marginTop: 5, justifyContent: "space-between" }}>
+                                    <Text style={{ fontWeight: "bold" }}>Tên đầy đủ: </Text>
+                                    <Text>{dataUser.fullname}</Text>
+                                </View>
+                                <View style={{ display: "flex", flexDirection: "row", marginTop: 10, marginBottom: 5, justifyContent: "space-between" }}>
+                                    <Text style={{ fontWeight: "bold" }}>Số điện thoại: </Text>
+                                    <Text>{dataUser.phonenumber}</Text>
+                                </View>
+                                <View style={{ display: "flex", flexDirection: "row", marginTop: 5, marginBottom: 10, justifyContent: "space-between" }}>
+                                    <Text style={{ fontWeight: "bold" }}>Email: </Text>
+                                    <Text>{dataUser.email}</Text>
+                                </View>
                             </View>
                         </View>
                     </Card>

@@ -28,7 +28,7 @@ function LoadingOrder({ navigation }) {
                 if (id_customer) {
                     await axios
                         .get(`${api_url}/v1/order/viewOrderWithCustomerId/${id_customer.data._id}`)
-                        .then((data) => {
+                        .then(async (data) => {
                             let dataOrder = data.data;
                             // Chỉ gồm 4 trạng thái:  
                             // 1.Đang tìm tài xế
@@ -62,6 +62,7 @@ function LoadingOrder({ navigation }) {
                                 });
 
 
+
                             setDataOrder(data_order)
                         })
                 }
@@ -76,8 +77,8 @@ function LoadingOrder({ navigation }) {
     }, [])
 
 
-    const navigation_to_detailOrder = (order_detail_id) => {
-        navigation.navigate('OrderDetailCustomer', { status: "Đang tải", data: order_detail_id })
+    const navigation_to_detailOrder = (order_detail_id, driver_name_input) => {
+        navigation.navigate('OrderDetailCustomer', { status: "Đang tải", data: order_detail_id, driver_name: driver_name_input })
     }
 
     const onRefresh = React.useCallback(() => {
@@ -107,7 +108,7 @@ function LoadingOrder({ navigation }) {
                 dataOrder && dataOrder.map((item, index) => {
                     return (
                         <>
-                            <TouchableOpacity onPress={() => navigation_to_detailOrder(item.order_detail_id)} key={index}>
+                            <TouchableOpacity onPress={() => navigation_to_detailOrder(item.order_detail_id, item.driver_name)} key={index}>
                                 <Card key={index}>
                                     <View key={index}>
                                         <Card.Title style={{ textAlign: "left" }}>
