@@ -19,12 +19,18 @@ import htmlReactParser from "html-react-parser";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
+// app.js
+import "@goongmaps/goong-js/dist/goong-js.css";
+
+import goongjs from "@goongmaps/goong-js";
+
 import {
   EditOutlined,
   FolderViewOutlined,
   DeleteOutlined,
   SwapOutlined,
   SearchOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 
 import { Collapse } from "antd";
@@ -35,6 +41,9 @@ function CalendarAdmin() {
   const [isActive, setIsActive] = useState(true);
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
+
+  //Lưu dữ liệu bản đồ
+  const [dataMap, setDataMap] = useState([]);
 
   //Search Realtime
   const [search, setSearch] = useState("");
@@ -224,8 +233,156 @@ function CalendarAdmin() {
       });
   };
 
+  const get_info_all_driver = async () => {
+    const dataDriver = await axios.get(`/v1/driver/show_all_driver`);
+    let arrDriver = [];
+    let arrPosition = [];
+    //Lọc lấy tài xế ở trạng thái sẵn sàng
+    dataDriver.data.forEach((item, index) => {
+      if (item.status === "Sẵn sàng") {
+        const ob = {
+          current_position: item.current_position,
+          fullname: item.fullname,
+          avatar: item.avatar,
+          vehicle_type: item.vehicle_type,
+          star_average: item.star_average,
+        };
+        arrPosition.push(item.current_position);
+        arrDriver.push(ob);
+      }
+    });
+
+    //Cho chạy vòng lặp lấy lat và lon và kèm hình ảnh và tên tài xế
+    const arr_position_for_map = await Promise.all(
+      arrPosition.map(async (item, index) => {
+        let data_arr = await axios.get(
+          `https://geocode.maps.co/search?q=${item}&format=json`
+        );
+        const data_map_arr = data_arr.data[0];
+        const ob = {
+          display_name: data_map_arr.display_name,
+          lat: data_map_arr.lat,
+          lon: data_map_arr.lon,
+        };
+
+        return ob;
+      })
+    );
+
+    //Kết hợp 2 mảng lại với nhau
+    const arrResult = [];
+    arrDriver.forEach((item, index) => {
+      const ob = {
+        item,
+        position: arr_position_for_map[index],
+      };
+
+      arrResult.push(ob);
+    });
+
+    //Lấy thông tin bản đồ
+    showMapDriver(arrResult);
+  };
+
+  const [domListDriver, setDomListDriver] = useState();
+
+  const flyToMap = (map, lat, lon) => {
+    map.flyTo({
+      center: [lon, lat],
+      zoom: 16,
+      essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+    });
+  };
+
+  const showMapDriver = (arrResult) => {
+    //Lấy dữ liệu tài xế đầu tiên
+    const firstData = arrResult[0];
+
+    const positionFirstData = firstData.position;
+
+    goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";
+    var map = new goongjs.Map({
+      container: "map",
+      style: "https://tiles.goong.io/assets/goong_map_web.json",
+      center: [positionFirstData.lon, positionFirstData.lat],
+      zoom: 8,
+    });
+
+    //Hiển thị ra danh sách tài xế
+    const listDriverArr = arrResult.map((item, index) => {
+      return (
+        <>
+          <div
+            style={{
+              border: "1px solid #ccc",
+              padding: "5px",
+              borderRadius: "5px",
+              marginBottom: "5px",
+            }}
+          >
+            <p style={{fontWeight:"bold"}}>
+              {index + 1}. {item.item.fullname} . ({item.item.star_average}⭐)
+            </p>
+            <p>🚚&nbsp;{item.item.vehicle_type}</p>
+            <p>🗺️&nbsp;{item.position.display_name}</p>
+            <EyeOutlined
+              onClick={() =>
+                flyToMap(map, item.position.lat, item.position.lon)
+              }
+              style={{
+                borderRadius: "50%",
+                backgroundColor: "orange",
+                color: "white",
+                cursor: "pointer",
+                padding: "10px",
+              }}
+            />
+          </div>
+        </>
+      );
+    });
+
+    setDomListDriver(listDriverArr);
+
+    //Hiển thị vị trí hiện tại
+    // Add geolocate control to the map.
+    map.addControl(
+      new goongjs.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+      })
+    );
+
+    //Chạy vòng lặp -> Show vị trí tài xế
+    arrResult.forEach((item, index) => {
+      var marker = new goongjs.Marker()
+        .setLngLat([item.position.lon, item.position.lat])
+        .addTo(map);
+
+      var popup = new goongjs.Popup({
+        closeOnClick: false,
+      })
+        .setLngLat([item.position.lon, item.position.lat])
+        .setHTML(
+          `
+          <div style="display:flex, flex-direction:column, align-items:center, text-align:center, width:fit-content">
+            <img src="${item.item.avatar}" width="50px" height="50px" style="border-radius:50%, object-fit:contain"/>
+          </div>
+        `
+        )
+        .addTo(map);
+    });
+
+    // Add zoom and rotation controls to the map.
+    map.addControl(new goongjs.NavigationControl());
+  };
+
   useEffect(() => {
     get_item();
+    //Lấy thông tin tất cả tài xế hiện lên bản đồ
+    get_info_all_driver();
   }, []);
 
   return (
@@ -423,6 +580,69 @@ function CalendarAdmin() {
               </div>
             </LoadingOverlayComponent>
           </BottomCssContent>
+
+          <div
+            style={{
+              backgroundColor: "white",
+              marginTop: "30px",
+              borderRadius: "7px",
+              padding: "15px",
+              paddingLeft: "15px",
+              boxShadow: "1px 2px 2px 1px #ccc",
+              position: "relative",
+              height: "500px",
+              width: "900px",
+              border: "1px solid white",
+            }}
+          >
+            <p style={{ fontWeight: "bold" }}>Bản đồ vị trí</p>
+            <div
+              style={{
+                border: "1px solid #ccc",
+                padding: "10px",
+                borderRadius: "5px",
+              }}
+            >
+              <div
+                className="container showMap"
+                style={{
+                  overFlow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  id="map"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    bottom: 0,
+                    width: "100%",
+                  }}
+                ></div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                position: "absolute",
+                right: -320,
+                height: "500px",
+                backgroundColor: "white",
+                top: -3,
+                borderRadius: "10px",
+                padding: "10px",
+                width: "300px",
+                textAlign: "center",
+              }}
+            >
+              <p style={{fontWeight:"bold", fontSize:"25",color:"white", backgroundColor:"orange",borderRadius:"3px", padding:"5px"}}>Danh sách tài xế</p>
+              <div style={{ overflowY: "scroll", maxHeight: "400px" }}>
+                {domListDriver}
+              </div>
+            </div>
+          </div>
         </div>
       </LayoutAdmin>
     </>
