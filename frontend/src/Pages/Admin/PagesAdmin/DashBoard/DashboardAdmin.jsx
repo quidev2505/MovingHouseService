@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 import TopCssContent from "../TopCssContent";
 import { Pie } from "react-chartjs-2";
@@ -29,7 +29,7 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Bar, getElementsAtEvent } from "react-chartjs-2";
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
 //Khu vực import thống kê chi tiết
@@ -278,7 +278,6 @@ function DashBoardAdmin() {
       },
     ],
   };
-
 
   //Gọi hàm gọi API khởi tạo dữ liệu
   const get_dashboard_data = async () => {
@@ -821,7 +820,6 @@ function DashBoardAdmin() {
       item.stt = index + 1;
       return item;
     });
-
     setArrCustomerRank(arr_final);
   };
 
@@ -917,6 +915,19 @@ function DashBoardAdmin() {
     customerNameFilter,
     serviceNameFilter,
   ]);
+
+  //Xử lý khi click vào tháng bất kì của tháng thống kê
+  const chartRef = useRef();
+  const [monthPass, setMonthPass] = useState("10");
+
+  const onClickFilterYear = (event) => {
+    // printDatasetAtEvent(getDatasetAtEvent(chart, event));
+    console.log(getElementsAtEvent(chartRef.current, event));
+    setMonthPass(
+      Number(getElementsAtEvent(chartRef.current, event)[0].index + 1)
+    );
+
+  };
 
   return (
     <>
@@ -1192,13 +1203,18 @@ function DashBoardAdmin() {
                       ( Đơn vị: VNĐ)
                     </p>
                     <Bar
+                      ref={chartRef}
                       options={options}
                       data={dataChart}
                       plugins={[ChartDataLabels]}
+                      onClick={onClickFilterYear}
                     />
 
                     {/* Khu vực bảng thống kê */}
-                    <ReportRevenueMonth />
+                    <ReportRevenueMonth
+                      yearFilter={yearFilter}
+                      monthPass={monthPass}
+                    />
                   </>
                 ) : filterDashBoard === "THỐNG KÊ DOANH THU THEO NĂM" ? (
                   <>
@@ -1372,6 +1388,7 @@ function DashBoardAdmin() {
                   }}
                 >
                   <Table
+                    className="xh_1"
                     style={{
                       borderRadius: "10px",
                       borderColor: "orange",
@@ -1420,6 +1437,7 @@ function DashBoardAdmin() {
                   }}
                 >
                   <Table
+                    className="xh_2"
                     style={{
                       borderRadius: "10px",
                       borderColor: "orange",
@@ -1468,6 +1486,7 @@ function DashBoardAdmin() {
                   }}
                 >
                   <Table
+                    className="xh_3"
                     style={{
                       borderRadius: "10px",
                       borderColor: "orange",

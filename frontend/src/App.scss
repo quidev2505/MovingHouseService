@@ -942,7 +942,7 @@ th.ant-table-cell {
 
 
 .dash_board_admin {
-    .ant-table-content {
+    .xh_1 .ant-table-content, .xh_2 .ant-table-content, .xh_3 .ant-table-content{
         overflow: hidden !important;
         height:fit-content;
     }

@@ -474,11 +474,15 @@ function OrderAdmin() {
         .then(async (data) => {
           let dataOrder = data.data;
 
-          const data_filter_new = dataOrder.filter(
-            (item) => item.status !== undefined && item.status === status_input
-          );
+          let arr_index = [];
+          const data_filter_new = dataOrder.filter((item, index) => {
+            if (item.status !== undefined && item.status === status_input) {
+              arr_index.push(index);
+              return item;
+            }
+          });
 
-          console.log(data_filter_new);
+          console.log(arr_index);
 
           const ob_fiter = {
             dataOrder: data_filter_new,
@@ -489,8 +493,6 @@ function OrderAdmin() {
           };
 
           let data_filter = await axios.post(`/v1/order/findOrder`, ob_fiter);
-
-          console.log(data_filter);
 
           const data_order = [];
           let ob_order = {};
@@ -511,7 +513,7 @@ function OrderAdmin() {
                 driver_name: item.driver_name,
                 vehicle_name: item.vehicle_name,
                 totalOrder: item.totalOrder,
-                customer_name: arr_customer_name[index],
+                customer_name: arr_customer_name[arr_index[index]],
               };
               data_order.push(ob_order);
             });
@@ -1463,7 +1465,7 @@ function OrderAdmin() {
           });
 
           if (new_arr.length === 0) {
-            console.log('vo rôi')
+            console.log("vo rôi");
             let new_arr_service = data_order.filter((item) => {
               // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
               let word_Change_VN = removeVietnameseTones(item.customer_name); //Tìm theo tên khách hàng
