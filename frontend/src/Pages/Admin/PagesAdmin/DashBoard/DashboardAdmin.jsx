@@ -6,7 +6,7 @@ import { Pie } from "react-chartjs-2";
 import { EyeFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-import { StarFilled } from "@ant-design/icons";
+import { StarFilled, FilterOutlined } from "@ant-design/icons";
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
@@ -34,6 +34,7 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 
 //Khu vực import thống kê chi tiết
 import ReportRevenueMonth from "./ReportRevenueMonth";
+import ReportRevenueYear from "./ReportRevenueYear";
 
 ChartJS.register(
   CategoryScale,
@@ -622,7 +623,14 @@ function DashBoardAdmin() {
       key: "name",
       render: (name) => (
         <td>
-          <p style={{ color: "#1e95ff", fontWeight: "bold" }}>{name}</p>
+          <p
+            style={{
+              color: "#1e95ff",
+              fontWeight: "bold",
+            }}
+          >
+            {name}
+          </p>
         </td>
       ),
     },
@@ -731,7 +739,14 @@ function DashBoardAdmin() {
       render: (fullname, avatar) => (
         <td className="d-flex">
           <Avatar src={<img src={avatar.avatar} alt="avatar" />} />
-          <p style={{ color: "#559aff", marginLeft: "10px" }}>{fullname}</p>
+          <p
+            style={{
+              color: "#559aff",
+              marginLeft: "10px",
+            }}
+          >
+            {fullname}
+          </p>
         </td>
       ),
     },
@@ -890,7 +905,10 @@ function DashBoardAdmin() {
       render: (totalOrder) => (
         <td
           className="d-flex"
-          style={{ alignItems: "center", color: "orange" }}
+          style={{
+            alignItems: "center",
+            color: "orange",
+          }}
         >
           {totalOrder.toLocaleString()} đ
         </td>
@@ -920,13 +938,28 @@ function DashBoardAdmin() {
   const chartRef = useRef();
   const [monthPass, setMonthPass] = useState("10");
 
-  const onClickFilterYear = (event) => {
-    // printDatasetAtEvent(getDatasetAtEvent(chart, event));
-    console.log(getElementsAtEvent(chartRef.current, event));
-    setMonthPass(
-      Number(getElementsAtEvent(chartRef.current, event)[0].index + 1)
-    );
+  const onClickFilterMonth = (event) => {
+    try {
+      setMonthPass(
+        Number(getElementsAtEvent(chartRef.current, event)[0].index + 1)
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
+  //Xử lý khi click vào tháng bất kì của tháng thống kê
+  const chartRefYear = useRef();
+  const [yearPass, setYearPass] = useState("2023");
+
+  const onClickFilterYear = (event) => {
+    try {
+      setYearPass(
+        Number(getElementsAtEvent(chartRefYear.current, event)[0].index + 1)
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -948,7 +981,9 @@ function DashBoardAdmin() {
               >
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
                   <div className="icon_top_dashboard">
                     <FaMoneyCheckDollar></FaMoneyCheckDollar>
@@ -997,7 +1032,9 @@ function DashBoardAdmin() {
               >
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
                   <div className="icon_top_dashboard">
                     <FaTruckFront></FaTruckFront>
@@ -1043,7 +1080,9 @@ function DashBoardAdmin() {
               >
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
                   <div className="icon_top_dashboard">
                     <FaUserTie></FaUserTie>
@@ -1089,7 +1128,9 @@ function DashBoardAdmin() {
               >
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
                   <div className="icon_top_dashboard">
                     <FaBuildingUser></FaBuildingUser>
@@ -1207,8 +1248,36 @@ function DashBoardAdmin() {
                       options={options}
                       data={dataChart}
                       plugins={[ChartDataLabels]}
-                      onClick={onClickFilterYear}
+                      onClick={onClickFilterMonth}
                     />
+
+                    {/* Hiển thị tất cả đơn của 12 tháng */}
+                    <div
+                      style={{
+                        backgroundColor: "#f1a062",
+                        color: "white",
+                        display: "inline-block",
+                        borderRadius: "5px",
+                        padding: "5px",
+                        float: "right",
+                        marginTop: "5px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: "5px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          width: "70px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => setMonthPass("0")}
+                      >
+                        <FilterOutlined />
+                        Tất cả
+                      </span>
+                    </div>
 
                     {/* Khu vực bảng thống kê */}
                     <ReportRevenueMonth
@@ -1228,10 +1297,43 @@ function DashBoardAdmin() {
                       ( Đơn vị: VNĐ)
                     </p>
                     <Bar
+                      ref={chartRefYear}
                       options={options}
                       data={dataChartYear}
                       plugins={[ChartDataLabels]}
+                      onClick={onClickFilterYear}
                     />
+
+                    {/* Hiển thị tất cả đơn của 12 tháng */}
+                    <div
+                      style={{
+                        backgroundColor: "#f1a062",
+                        color: "white",
+                        display: "inline-block",
+                        borderRadius: "5px",
+                        padding: "5px",
+                        float: "right",
+                        marginTop: "5px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: "5px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          width: "70px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => setYearPass("4")}
+                      >
+                        <FilterOutlined />
+                        Tất cả
+                      </span>
+                    </div>
+
+                    {/* Khu vực bảng thống kê theo năm */}
+                    <ReportRevenueYear yearPass={yearPass} />
                   </>
                 ) : filterDashBoard === "THỐNG KÊ ĐƠN HÀNG" ? (
                   <>

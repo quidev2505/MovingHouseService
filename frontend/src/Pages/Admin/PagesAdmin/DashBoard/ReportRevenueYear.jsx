@@ -17,58 +17,60 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
-function ReportVenueMonth({ yearFilter, monthPass }) {
-  const [reportVenueMonthData, setReportVenueMonthData] = useState([]);
+function ReportVenueYear({ yearPass }) {
+  const [reportVenueYearData, setReportVenueYearData] = useState([]);
 
-  const monthPassFilter = monthPass < 10 ? "0" + monthPass : monthPass;
+  const yearPassFilter = yearPass === "2023" ? yearPass : "202" + yearPass;
 
-  const getDataVenueMonth = async () => {
-    var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
-    var arr_order = call_api_order.data;
+  const getDataVenueYear = async () => {
+    try {
+      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
+      var arr_order = call_api_order.data;
 
-    //Xử lý những đơn đã hoàn thành và date_end != null
-    //Tính doanh thu theo từng tháng
-    let arr_solve = [];
-    let count = 0;
-    arr_order.forEach((item, index) => {
-      if (
-        item.status === "Đã hoàn thành" &&
-        item.date_end !== null &&
-        item.date_start.split("/")[1] == monthPassFilter &&
-        item.date_start.split("/")[2] == yearFilter
-      ) {
-        count++;
-        const ob = {
-          stt: count,
-          order_id: item.order_id,
-          date_start: item.date_start,
-          date_end: item.date_end,
-          month_show: item.date_start.split("/")[1],
-          totalOrder: item.totalOrder,
-        };
+      //Xử lý những đơn đã hoàn thành và date_end != null
+      //Tính doanh thu theo từng tháng
+      let arr_solve = [];
+      let count = 0;
+      arr_order.forEach((item, index) => {
+        if (
+          item.status === "Đã hoàn thành" &&
+          item.date_end !== null &&
+          item.date_start.split("/")[2] == yearPassFilter
+        ) {
+          count++;
+          const ob = {
+            stt: count,
+            order_id: item.order_id,
+            date_start: item.date_start,
+            date_end: item.date_end,
+            year_show: item.date_start.split("/")[2],
+            totalOrder: item.totalOrder,
+          };
 
-        arr_solve.push(ob);
-      } else if (
-        monthPassFilter == "00" &&
-        item.status === "Đã hoàn thành" &&
-        item.date_end !== null &&
-        item.date_start.split("/")[2] == yearFilter
-      ) {
-        count++;
-        const ob = {
-          stt: count,
-          order_id: item.order_id,
-          date_start: item.date_start,
-          date_end: item.date_end,
-          month_show: item.date_start.split("/")[1],
-          totalOrder: item.totalOrder,
-        };
+          arr_solve.push(ob);
+        } else if (
+          yearPassFilter == "2024" &&
+          item.status === "Đã hoàn thành" &&
+          item.date_end !== null
+        ) {
+          count++;
+          const ob = {
+            stt: count,
+            order_id: item.order_id,
+            date_start: item.date_start,
+            date_end: item.date_end,
+            year_show: item.date_start.split("/")[2],
+            totalOrder: item.totalOrder,
+          };
 
-        arr_solve.push(ob);
-      }
-    });
+          arr_solve.push(ob);
+        }
+      });
 
-    setReportVenueMonthData(arr_solve);
+      setReportVenueYearData(arr_solve);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //Tính năng lọc theo Search
@@ -193,7 +195,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   });
 
   //Bảng xếp hạng đánh giá tài xế
-  const columnVenueMonthData = [
+  const columnVenueYearData = [
     {
       title: "STT",
       dataIndex: "stt",
@@ -266,62 +268,25 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
       },
     },
     {
-      title: "Tháng thống kê",
-      dataIndex: "month_show",
-      key: "month_show",
+      title: "Năm thống kê",
+      dataIndex: "year_show",
+      key: "year_show",
       filters: [
         {
-          text: "01",
-          value: "01",
+          text: "2021",
+          value: "2021",
         },
         {
-          text: "02",
-          value: "02",
+          text: "2022",
+          value: "2022",
         },
         {
-          text: "03",
-          value: "03",
-        },
-        {
-          text: "04",
-          value: "04",
-        },
-        {
-          text: "05",
-          value: "05",
-        },
-        {
-          text: "06",
-          value: "06",
-        },
-        {
-          text: "07",
-          value: "07",
-        },
-        {
-          text: "08",
-          value: "08",
-        },
-        {
-          text: "09",
-          value: "09",
-        },
-        {
-          text: "10",
-          value: "10",
-        },
-        {
-          text: "11",
-          value: "11",
-        },
-        {
-          text: "12",
-          value: "12",
+          text: "2023",
+          value: "2023",
         },
       ],
-      onFilter: (value, record) =>
-        String(record.month_show).indexOf(value) == 0,
-      render: (month_show) => {
+      onFilter: (value, record) => String(record.year_show).indexOf(value) == 0,
+      render: (year_show) => {
         return (
           <td
             style={{
@@ -331,7 +296,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
               justifyContent: "center",
             }}
           >
-            {month_show}
+            {year_show}
           </td>
         );
       },
@@ -358,8 +323,8 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
 
   useEffect(() => {
     //Gọi API
-    getDataVenueMonth();
-  }, [monthPass, yearFilter]);
+    getDataVenueYear();
+  }, [yearPass]);
 
   return (
     <>
@@ -378,19 +343,16 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
         >
           <Tag
             icon={<SyncOutlined spin />}
-            color="#4bc0c0"
+            color="#ff671d"
             style={{ display: "flex", alignItems: "center" }}
           >
-            {reportVenueMonthData.length} đơn hàng
+            {reportVenueYearData.length} đơn hàng
           </Tag>
         </div>
-        <Table
-          columns={columnVenueMonthData}
-          dataSource={reportVenueMonthData}
-        />
+        <Table columns={columnVenueYearData} dataSource={reportVenueYearData} />
       </div>
     </>
   );
 }
 
-export default ReportVenueMonth;
+export default ReportVenueYear;
