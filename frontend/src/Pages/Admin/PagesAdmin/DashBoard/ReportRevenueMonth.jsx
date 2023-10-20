@@ -30,6 +30,9 @@ import {
 function ReportVenueMonth({ yearFilter, monthPass }) {
   const [reportVenueMonthData, setReportVenueMonthData] = useState([]);
 
+  //Thống kê doanh thu ngày
+  const [dayFilter, setDayFilter] = useState("");
+
   //Tổng đơn theo thống kê
   const [totalReport, setTotalReport] = useState(0);
   const monthPassFilter = monthPass < 10 ? "0" + monthPass : monthPass;
@@ -358,7 +361,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
       title: "Tổng đơn hàng",
       dataIndex: "totalOrder",
       key: "totalOrder",
-      defaultSortOrder: "ascend",
+      // defaultSortOrder: "ascend",
       sorter: (a, b) => a.totalOrder - b.totalOrder,
       render: (totalOrder) => (
         <td
@@ -380,7 +383,48 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
 
   //Thống kê doanh thu theo ngày
   const onChange = (date, dateString) => {
-    console.log(date, dateString);
+    setDayFilter(dateString);
+  };
+
+  //Khi nhấn nút search thống kê ngày
+  const filterDate = async () => {
+    if (dayFilter == "") {
+      //Gọi API
+      getDataVenueMonth();
+    } else {
+      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
+      var arr_order = call_api_order.data;
+
+      //Xử lý những đơn đã hoàn thành và date_end != null
+      //Tính doanh thu theo từng tháng
+      let arr_solve = [];
+      let count = 0;
+      var totalReportCal = 0;
+      arr_order.forEach((item, index) => {
+        if (
+          item.status === "Đã hoàn thành" &&
+          item.date_end !== null &&
+          item.date_end.split(",")[0] === dayFilter
+        ) {
+          count++;
+          const ob = {
+            stt: count,
+            order_id: item.order_id,
+            date_start: item.date_start,
+            date_end: item.date_end,
+            month_show: item.date_start.split("/")[1],
+            totalOrder: item.totalOrder,
+          };
+
+          totalReportCal += item.totalOrder;
+          arr_solve.push(ob);
+        }
+      });
+
+      setTotalReport(totalReportCal);
+
+      setReportVenueMonthData(arr_solve);
+    }
   };
 
   return (
@@ -394,7 +438,11 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           marginTop: "50px",
         }}
       >
-        <div style={{ float: "right" }}>
+        <div
+          style={{
+            float: "right",
+          }}
+        >
           <div
             style={{
               border: "1px solid orange",
@@ -408,13 +456,21 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
                 fontSize: "15px",
                 display: "flex",
                 justifyContent: "center",
+                alignItems: "center",
               }}
             >
               {" "}
               <FilterOutlined />
               &nbsp; Ngày thống kê
             </p>
-            <DatePicker onChange={onChange} />
+            <DatePicker
+              onChange={onChange}
+              format="DD/MM/YYYY"
+              placeholder="Chọn ngày thống kê"
+              style={{
+                width: "170px",
+              }}
+            />
             <SearchOutlined
               style={{
                 borderRadius: "50%",
@@ -423,24 +479,37 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
                 padding: "10px",
                 marginLeft: "10px",
               }}
+              onClick={() => filterDate()}
             />
           </div>
         </div>
         <div
           className="d-flex"
-          style={{ alignItems: "center", padding: "10px" }}
+          style={{
+            alignItems: "center",
+            padding: "10px",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
         >
           <Tag
             icon={<SyncOutlined spin />}
             color="#4bc0c0"
-            style={{ display: "flex", alignItems: "center" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "5px",
+            }}
           >
-            {reportVenueMonthData.length} đơn hàng
+            Số lượng đơn hàng: {reportVenueMonthData.length}
           </Tag>
           <Tag
             icon={<SyncOutlined spin />}
             color="#4bc0c0"
-            style={{ display: "flex", alignItems: "center" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
           >
             Tổng doanh thu:&nbsp;
             {totalReport.toLocaleString()} đ

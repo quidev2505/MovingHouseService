@@ -35,6 +35,7 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 //Khu vực import thống kê chi tiết
 import ReportRevenueMonth from "./ReportRevenueMonth";
 import ReportRevenueYear from "./ReportRevenueYear";
+import ReportOrder from "./ReportOrder";
 
 ChartJS.register(
   CategoryScale,
@@ -962,6 +963,23 @@ function DashBoardAdmin() {
     }
   };
 
+  //Xử lý khi click vào trạng thái đơn hàng bất kì
+  const chartRefOrder = useRef();
+  const [orderPass, setOrderPass] = useState(5);
+
+  const onClickFilterOrder = (event) => {
+    try {
+      console.log(
+        getElementsAtEvent(chartRefOrder.current, event)[0].index + 1
+      );
+      setOrderPass(
+        Number(getElementsAtEvent(chartRefOrder.current, event)[0].index + 1)
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <LayoutAdmin>
@@ -1337,7 +1355,7 @@ function DashBoardAdmin() {
                   </>
                 ) : filterDashBoard === "THỐNG KÊ ĐƠN HÀNG" ? (
                   <>
-                    <select
+                    {/* <select
                       style={{
                         borderRadius: "5px",
                         padding: "10px",
@@ -1353,7 +1371,7 @@ function DashBoardAdmin() {
                         serviceNameDropDown.map((item, index) => {
                           return <option value={item}>{item}</option>;
                         })}
-                    </select>
+                    </select> */}
                     <div
                       style={{
                         width: "700px",
@@ -1364,7 +1382,7 @@ function DashBoardAdmin() {
                     >
                       <p
                         style={{
-                          float: "right",
+                          float: "left",
                           fontWeight: "bold",
                           color: "orange",
                         }}
@@ -1373,11 +1391,44 @@ function DashBoardAdmin() {
                       </p>
 
                       <Pie
+                        ref={chartRefOrder}
                         data={dataPieOrder}
                         options={options_pie}
                         plugins={[ChartDataLabels]}
+                        onClick={onClickFilterOrder}
                       />
                     </div>
+
+                    {/* Hiển thị tất cả đơn của toàn bộ*/}
+                    <div
+                      style={{
+                        backgroundColor: "#f1a062",
+                        color: "white",
+                        display: "inline-block",
+                        borderRadius: "5px",
+                        padding: "5px",
+                        float: "right",
+                        marginTop: "5px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: "5px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          width: "70px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => setOrderPass(6)}
+                      >
+                        <FilterOutlined />
+                        Tất cả
+                      </span>
+                    </div>
+
+                    {/* Khu vực bảng thống kê đơn hàng */}
+                    <ReportOrder orderPass={orderPass} />
                   </>
                 ) : filterDashBoard === "THỐNG KÊ TÀI XẾ" ? (
                   <>
