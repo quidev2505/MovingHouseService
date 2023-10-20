@@ -143,7 +143,24 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   //   }
   // }, []);
 
+  const get_price_init = async () => {
+    let data_local_name = JSON.parse(localStorage.getItem("order_moving")).step1
+      .select_service;
+    await axios
+      .get(`/v1/service/list_service_name/${data_local_name}`)
+      .then((data) => {
+        const dataName = data.data;
+        const soluong = dataName.needPeople;
+        setQuantity(soluong);
+        setTotalPriceMan(soluong * 370000);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   useEffect(() => {
+    get_price_init();
     get_moving_fee();
     get_service_fee();
     get_item();

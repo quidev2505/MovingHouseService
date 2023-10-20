@@ -4,7 +4,7 @@ import Footer from "../Components/partials/Footer";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHeadset,
+  faBoxesPacking,
   faRobot,
   faMapLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
@@ -17,7 +17,7 @@ function Contact() {
     <>
       <Header />
       <div className="topContact" style={{ marginBottom: "95px" }}>
-        <ChatBotIcon/>
+        <ChatBotIcon />
         <div
           className="imgService container d-flex"
           style={{ alignItems: "center", justifyContent: "center" }}
@@ -41,7 +41,7 @@ function Contact() {
         <div className="container d-flex">
           <div className="col text-center" style={{ marginRight: "20px" }}>
             <FontAwesomeIcon
-              icon={faHeadset}
+              icon={faBoxesPacking}
               style={{ color: "#ff671d", fontSize: "90px" }}
             />
             <h4
@@ -51,13 +51,12 @@ function Contact() {
                 margin: "10px 0px",
               }}
             >
-              Hỗ trợ dịch vụ
+              Theo dõi đơn hàng
             </h4>
             <p style={{ fontSize: "15px" }}>
-              Bạn đang có thắc mắc về giá cả và quy trình dọn nhà ? <br />
-              Hãy liên hệ với Dịch vụ chăm sóc khách hàng của chúng tôi tại{" "}
-              <span className="fw-bold">mục Chat</span> nằm trong đơn hàng của
-              bạn.
+              Bạn không biết rõ đơn hàng của mình đã đến đâu ?<br />
+              Hãy tải xuống ứng dụng giao hàng{" "}
+              <span className="fw-bold">FastMove</span> về máy của bạn !{" "}
             </p>
           </div>
           <div className="col text-center" style={{ marginRight: "20px" }}>
@@ -78,8 +77,8 @@ function Contact() {
               Chatbot ...Calling...Calling !
               <p>
                 Cùng trò chuyện để đưa ra gợi ý chọn dịch vụ dọn nhà tiết kiệm
-                nhất cho bạn ! Hãy nhấn vào biểu tượng Chat nằm bên dưới góc
-                phải.
+                nhất cho bạn ! Hãy nhấn vào biểu tượng <span className="fw-bold">Chat</span> nằm ở
+                gốc phải bên dưới !
               </p>
             </p>
           </div>
@@ -97,9 +96,9 @@ function Contact() {
             >
               Văn phòng chúng tôi
             </h4>
-            <p style={{ textAlign: "center",fontSize: "15px" }}>
-              <span className="fw-bold">Tại Cần Thơ</span> <br/>Khu II, Đ. 3 Tháng
-              2, Xuân Khánh, Ninh Kiều, Cần Thơ.
+            <p style={{ textAlign: "center", fontSize: "15px" }}>
+              <span className="fw-bold">Tại Cần Thơ</span> <br />
+              Khu II, Đ. 3 Tháng 2, Xuân Khánh, Ninh Kiều, Cần Thơ.
             </p>
           </div>
         </div>

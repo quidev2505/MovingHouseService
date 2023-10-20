@@ -104,7 +104,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   }
 
   useEffect(() => {
-    if (locationFrom && locationFrom.length >= 3) {
+    if (locationFrom && locationFrom.length >= 5) {
       get_location_list();
     }
   }, [locationFrom]);
@@ -170,7 +170,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   };
 
   useEffect(() => {
-    if (locationTo && locationTo.length >= 3) {
+    if (locationTo && locationTo.length >= 5) {
       get_location_list_to();
     }
   }, [locationTo]);

@@ -15,6 +15,9 @@ router.get('/list_service', serviceController.readService);
 //Read Service Detail
 router.get('/list_service/:id', serviceController.readServiceDetail);
 
+//Read Service Detail with name
+router.get('/list_service_name/:name', serviceController.readServiceDetailWithName);
+
 //Update
 router.put('/update_service/:id', upload.single("file") ,serviceController.updateService);
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 import axios from "axios";
+import { Toast } from "../../../../Components/ToastColor";
 
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 
@@ -78,44 +79,120 @@ function Step3({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   };
 
   const chooseVehicle = (objectVehicle) => {
-    setSelectVehicle(objectVehicle);
-    let DOM_VEHICLE_RIGHT = (
-      <div
-        className="d-flex"
-        style={{ flexDirection: "column", alignItems: "center" }}
-      >
-        <img
-          alt="hinhanh"
-          src={objectVehicle.image}
-          style={{ width: "343px", height: "243px", objectFit: "contain" }}
-        />
-        <h6 style={{ fontSize: "16px", fontWeight: "700" }}>
-          {objectVehicle.vehicle_name}
-        </h6>
-        <p>Thương hiệu: {objectVehicle.brand}</p>
-        <div style={{ fontSize: "12px", fontWeight: "400" }}>
-          <p>
-            <span>Kích cỡ hàng hóa tối đa: {objectVehicle.cago_size}</span>|{" "}
-            <span>Trọng lượng tối đa: {objectVehicle.capacity}</span>
-          </p>
-          <p className="fw-bold">Phù hợp cho: {objectVehicle.suitable_for}</p>
-          <p>
-            Thời gian cấm tải:{" "}
-            <span className="fw-bold" style={{ color: "#ed883b " }}>
-              {objectVehicle.moving_ban_time}
-            </span>
-          </p>
+    //Xem xét khung giờ cấm tải
+    let data_localStorage_Init = JSON.parse(
+      localStorage.getItem("order_moving")
+    ); //Lấy dữ liệu ra
+    //Lấy thời gian ra
+    let time_moving_choose = data_localStorage_Init.step1.moving_time;
+    //Cho chạy switch case để so sánh giờ
+    let time_ban = "";
+    switch (objectVehicle.moving_ban_time) {
+      case "Hoạt động tất cả khung giờ":
+        time_ban = false;
+        break;
+      case "Giờ cấm tải 6H-9H & 16H-20H":
+        time_ban = true;
+      default:
+        break;
+    }
+
+    //Nếu thời gian bị cấm thì tiến hành so sánh (tức là time_ban=true)
+    if (time_ban) {
+      //Kiểm tra giờ
+      if (
+        (time_moving_choose >= "06:00" && time_moving_choose <= "09:00") ||
+        (time_moving_choose >= "16:00" && time_moving_choose <= "20:00")
+      ) {
+        Toast.fire({
+          icon: "warning",
+          title:
+            "Phương tiện bạn chọn nằm trong khung giờ cấm tải, vui lòng chọn phương tiện khác !",
+        });
+      } else {
+        setSelectVehicle(objectVehicle);
+        let DOM_VEHICLE_RIGHT = (
+          <div
+            className="d-flex"
+            style={{ flexDirection: "column", alignItems: "center" }}
+          >
+            <img
+              alt="hinhanh"
+              src={objectVehicle.image}
+              style={{ width: "343px", height: "243px", objectFit: "contain" }}
+            />
+            <h6 style={{ fontSize: "16px", fontWeight: "700" }}>
+              {objectVehicle.vehicle_name}
+            </h6>
+            <p>Thương hiệu: {objectVehicle.brand}</p>
+            <div style={{ fontSize: "12px", fontWeight: "400" }}>
+              <p>
+                <span>Kích cỡ hàng hóa tối đa: {objectVehicle.cago_size}</span>|{" "}
+                <span>Trọng lượng tối đa: {objectVehicle.capacity}</span>
+              </p>
+              <p className="fw-bold">
+                Phù hợp cho: {objectVehicle.suitable_for}
+              </p>
+              <p>
+                Thời gian cấm tải:{" "}
+                <span className="fw-bold" style={{ color: "#ed883b " }}>
+                  {objectVehicle.moving_ban_time}
+                </span>
+              </p>
+            </div>
+          </div>
+        );
+
+        setDomVehicleRight(DOM_VEHICLE_RIGHT);
+
+        //Tính giá tiền khi đã chọn loại xe
+        //Lấy khoảng cách từ LocalStorage
+        let data_localStorage = JSON.parse(
+          localStorage.getItem("order_moving")
+        );
+        let distance = data_localStorage.step2.distance.split(" ")[0];
+        calculatePrice(distance, objectVehicle.vehicle_name);
+      }
+    } else {
+      setSelectVehicle(objectVehicle);
+      let DOM_VEHICLE_RIGHT = (
+        <div
+          className="d-flex"
+          style={{ flexDirection: "column", alignItems: "center" }}
+        >
+          <img
+            alt="hinhanh"
+            src={objectVehicle.image}
+            style={{ width: "343px", height: "243px", objectFit: "contain" }}
+          />
+          <h6 style={{ fontSize: "16px", fontWeight: "700" }}>
+            {objectVehicle.vehicle_name}
+          </h6>
+          <p>Thương hiệu: {objectVehicle.brand}</p>
+          <div style={{ fontSize: "12px", fontWeight: "400" }}>
+            <p>
+              <span>Kích cỡ hàng hóa tối đa: {objectVehicle.cago_size}</span>|{" "}
+              <span>Trọng lượng tối đa: {objectVehicle.capacity}</span>
+            </p>
+            <p className="fw-bold">Phù hợp cho: {objectVehicle.suitable_for}</p>
+            <p>
+              Thời gian cấm tải:{" "}
+              <span className="fw-bold" style={{ color: "#ed883b " }}>
+                {objectVehicle.moving_ban_time}
+              </span>
+            </p>
+          </div>
         </div>
-      </div>
-    );
+      );
 
-    setDomVehicleRight(DOM_VEHICLE_RIGHT);
+      setDomVehicleRight(DOM_VEHICLE_RIGHT);
 
-    //Tính giá tiền khi đã chọn loại xe
-    //Lấy khoảng cách từ LocalStorage
-    let data_localStorage = JSON.parse(localStorage.getItem("order_moving"));
-    let distance = data_localStorage.step2.distance.split(" ")[0];
-    calculatePrice(distance, objectVehicle.vehicle_name);
+      //Tính giá tiền khi đã chọn loại xe
+      //Lấy khoảng cách từ LocalStorage
+      let data_localStorage = JSON.parse(localStorage.getItem("order_moving"));
+      let distance = data_localStorage.step2.distance.split(" ")[0];
+      calculatePrice(distance, objectVehicle.vehicle_name);
+    }
   };
 
   const calculatePrice = async (distance, selectVehicle) => {

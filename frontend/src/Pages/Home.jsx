@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../Components/partials/Header";
 import Footer from "../Components/partials/Footer";
 
@@ -28,6 +28,8 @@ const Home = () => {
   const [dataSource, setDataSource] = useState([]);
   const [isActive, setIsActive] = useState(true);
 
+  //Hiển thị xem thêm
+  const show = useRef(false);
   const nav = useNavigate();
 
   const get_service = async () => {
@@ -68,7 +70,9 @@ const Home = () => {
                     </h6>
                     <ul style={{ marginTop: "20px" }}>
                       <li style={{ fontSize: "16px" }}>
-                        <span className="fw-bold">Giá gói dịch vụ: </span>
+                        <span className="fw-bold">
+                          Giá gói dịch vụ (Giá niêm yết):{" "}
+                        </span>
                         {item.price === 0
                           ? "Tùy thuộc vào số lượng đồ đạc và quãng đường di chuyển"
                           : item.price.toLocaleString() + "đ"}
@@ -93,7 +97,66 @@ const Home = () => {
                       </li>
                     </ul>
 
+                    {show.current ? (
+                      <>
+                        <div>
+                          <h6
+                            style={{
+                              fontSize: "18px",
+                              fontWeight: "800",
+                              color: "#e16d2a",
+                            }}
+                          >
+                            Thông tin thêm
+                          </h6>
+                          <div>
+                            <p className="fw-bold">
+                              Gói dịch vụ bao gồm các công việc sau:{" "}
+                            </p>
+                            <ol>
+                              {item.process.map((item, index) => {
+                                return <li>{item}</li>;
+                              })}
+                            </ol>
+                            <p className="fw-bold">Các dịch vụ bổ sung: </p>
+                            <ol>
+                              {item.bonus.map((item, index) => {
+                                return <li>{item}</li>;
+                              })}
+                            </ol>
+                            <p className="fw-bold">Chính sách bảo hành: </p>
+                            <p>{item.warranty_policy}</p>
+                            <p className="fw-bold">Gói này phù hợp với: </p>
+                            <p>{item.suitable_for}</p>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      ""
+                    )}
+
                     <div style={{ textAlign: "right" }}>
+                      <button
+                        type="button"
+                        class="btn"
+                        style={{
+                          backgroundColor: "#b7b7b7",
+                          color: "white",
+                          marginRight: "10px",
+                        }}
+                        onClick={() => {
+                          if (show.current) {
+                            show.current = false;
+                            get_service();
+                          } else {
+                            show.current = true;
+                            get_service();
+                          }
+                          console.log(show.current);
+                        }}
+                      >
+                        {show.current ? "Thu gọn" : "Xem thêm"}
+                      </button>
                       <button
                         type="button"
                         class="btn"
@@ -303,12 +366,12 @@ const Home = () => {
               <h1
                 style={{
                   color: "#e16d2a",
-                  fontSize: "70px",
+                  fontSize: "38px",
                   marginBottom: "14px",
                   fontWeight: "500",
                 }}
               >
-                Chỉ với 1 Click
+                Tiết kiệm chi phí và thời gian
               </h1>
 
               {/* Bảng nav lựa chọn dịch vụ */}

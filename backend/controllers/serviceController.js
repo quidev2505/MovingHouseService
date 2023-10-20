@@ -12,9 +12,9 @@ const serviceController = {
             const file = req.file;
 
             let IMG = ""
-            if(file){
+            if (file) {
                 IMG = file.path;
-            }else{
+            } else {
                 IMG = req.body.imgURL
             }
 
@@ -78,6 +78,23 @@ const serviceController = {
             res.status(501).json('Fail to load data !');
         }
     },
+    //Detail Service With Name
+    readServiceDetailWithName: async (req, res) => {
+        try {
+            const name = req.params.name;
+
+            const data_service = await Service.findOne({ name: name });
+
+            if (data_service) {
+                res.status(200).json(data_service);
+            } else {
+                res.status(501).json('Fail to load data !');
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(501).json('Fail to load data !');
+        }
+    },
 
     //Update All
     updateService: async (req, res) => {
@@ -95,7 +112,7 @@ const serviceController = {
                 if (fs.existsSync(imagePath)) {
                     fs.unlinkSync(imagePath);
                 }
-            }else{
+            } else {
                 req.body.image = req.body.imgURL || req.body.image
             }
 

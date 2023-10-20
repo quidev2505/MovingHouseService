@@ -1,7 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Image, Table, Avatar, Input, Space, Button, Tag } from "antd";
+import {
+  Image,
+  Table,
+  Avatar,
+  Input,
+  Space,
+  Button,
+  Tag,
+  DatePicker,
+} from "antd";
 import Highlighter from "react-highlight-words";
+
 import {
   EditOutlined,
   FolderViewOutlined,
@@ -20,6 +30,8 @@ import {
 function ReportVenueMonth({ yearFilter, monthPass }) {
   const [reportVenueMonthData, setReportVenueMonthData] = useState([]);
 
+  //Tổng đơn theo thống kê
+  const [totalReport, setTotalReport] = useState(0);
   const monthPassFilter = monthPass < 10 ? "0" + monthPass : monthPass;
 
   const getDataVenueMonth = async () => {
@@ -30,6 +42,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
     //Tính doanh thu theo từng tháng
     let arr_solve = [];
     let count = 0;
+    var totalReportCal = 0;
     arr_order.forEach((item, index) => {
       if (
         item.status === "Đã hoàn thành" &&
@@ -47,6 +60,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           totalOrder: item.totalOrder,
         };
 
+        totalReportCal += item.totalOrder;
         arr_solve.push(ob);
       } else if (
         monthPassFilter == "00" &&
@@ -64,9 +78,12 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           totalOrder: item.totalOrder,
         };
 
+        totalReportCal += item.totalOrder;
         arr_solve.push(ob);
       }
     });
+
+    setTotalReport(totalReportCal);
 
     setReportVenueMonthData(arr_solve);
   };
@@ -361,6 +378,11 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
     getDataVenueMonth();
   }, [monthPass, yearFilter]);
 
+  //Thống kê doanh thu theo ngày
+  const onChange = (date, dateString) => {
+    console.log(date, dateString);
+  };
+
   return (
     <>
       {/* KHU VỰC DỮ LIỆU THỐNG KÊ DẠNG BẢNG */}
@@ -372,6 +394,38 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           marginTop: "50px",
         }}
       >
+        <div style={{ float: "right" }}>
+          <div
+            style={{
+              border: "1px solid orange",
+              borderRadius: "10px",
+              margin: "10px",
+              padding: "10px",
+            }}
+          >
+            <p
+              style={{
+                fontSize: "15px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              {" "}
+              <FilterOutlined />
+              &nbsp; Ngày thống kê
+            </p>
+            <DatePicker onChange={onChange} />
+            <SearchOutlined
+              style={{
+                borderRadius: "50%",
+                backgroundColor: "orange",
+                color: "white",
+                padding: "10px",
+                marginLeft: "10px",
+              }}
+            />
+          </div>
+        </div>
         <div
           className="d-flex"
           style={{ alignItems: "center", padding: "10px" }}
@@ -382,6 +436,14 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
             style={{ display: "flex", alignItems: "center" }}
           >
             {reportVenueMonthData.length} đơn hàng
+          </Tag>
+          <Tag
+            icon={<SyncOutlined spin />}
+            color="#4bc0c0"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            Tổng doanh thu:&nbsp;
+            {totalReport.toLocaleString()} đ
           </Tag>
         </div>
         <Table
