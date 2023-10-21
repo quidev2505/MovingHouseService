@@ -10,6 +10,9 @@ import { StarFilled, FilterOutlined } from "@ant-design/icons";
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
+import DatalistInput from "react-datalist-input";
+import "react-datalist-input/dist/styles.css";
+
 import axios from "axios";
 import { Image, Table, Avatar } from "antd";
 import {
@@ -427,9 +430,19 @@ function DashBoardAdmin() {
 
         //Tên tài xếp dropdown
         const drivernameDropdown = [];
-        arr_driver.forEach((item, index) => {
-          drivernameDropdown.push(item.fullname);
+        drivernameDropdown.push({
+          id: "Tất cả",
+          value: "Tất cả",
         });
+
+        arr_driver.forEach((item, index) => {
+          const ob = {
+            id: item.fullname,
+            value: item.fullname,
+          };
+          drivernameDropdown.push(ob);
+        });
+        console.log(drivernameDropdown);
 
         setDriverNameDropDown(drivernameDropdown);
 
@@ -983,6 +996,9 @@ function DashBoardAdmin() {
     }
   };
 
+  //Xử lý khi lọc
+  const [driverPass, setDriverPass] = useState("Tất cả");
+
   return (
     <>
       <LayoutAdmin>
@@ -1437,7 +1453,7 @@ function DashBoardAdmin() {
                   </>
                 ) : filterDashBoard === "THỐNG KÊ TÀI XẾ" ? (
                   <>
-                    <select
+                    {/* <select
                       style={{
                         borderRadius: "5px",
                         padding: "10px",
@@ -1453,7 +1469,14 @@ function DashBoardAdmin() {
                         driverNameDropDown.map((item, index) => {
                           return <option value={item}>{item}</option>;
                         })}
-                    </select>
+                    </select> */}
+                    <DatalistInput
+                      style={{ width: "fit-content", float: "right" }}
+                      placeholder="Nhập vào tên tài xế"
+                      // label="Select ice cream flavor"
+                      onSelect={(item) => setDriverNameFilter(item.value)}
+                      items={driverNameDropDown}
+                    />
                     <p
                       style={{
                         float: "left",
@@ -1470,7 +1493,7 @@ function DashBoardAdmin() {
                     />
 
                     {/* Khu vực bảng thống kê đơn hàng */}
-                    <ReportDriver />
+                    <ReportDriver driverPass={driverNameFilter} />
                   </>
                 ) : filterDashBoard === "THỐNG KÊ KHÁCH HÀNG" ? (
                   <>

@@ -17,37 +17,18 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
-
 import { StarFilled } from "@ant-design/icons";
 
-function ReportDriver() {
+function ReportDriver({ driverPass }) {
   const [reportDriver, setReportDriver] = useState([]);
-
-  //   var orderFilterNew = "";
-  //   switch (orderPass) {
-  //     case 1:
-  //       orderFilterNew = "Đã hủy";
-  //       break;
-  //     case 2:
-  //       orderFilterNew = "Đang tìm tài xế";
-  //       break;
-  //     case 3:
-  //       orderFilterNew = "Đang thực hiện";
-  //       break;
-  //     case 4:
-  //       orderFilterNew = "Thanh toán hóa đơn";
-  //       break;
-  //     case 5:
-  //       orderFilterNew = "Đã hoàn thành";
-  //       break;
-  //     case 6:
-  //       orderFilterNew = "Tất cả";
-  //       break;
-  //     default:
-  //       break;
-  //   }
-
+  var filterNew = "";
+  if (driverPass == "Tất cả") {
+    filterNew = "Tất cả";
+  } else {
+    filterNew = driverPass;
+  }
   const getDataDriver = async () => {
+    console.log(driverPass);
     // console.log(orderPass);
     // console.log(orderFilterNew);
     try {
@@ -59,22 +40,41 @@ function ReportDriver() {
       let arr_solve = [];
       let count = 0;
       arr_driver.forEach((item, index) => {
-        count++;
-        const ob = {
-          stt: count,
-          profile_code: item.profile_code,
-          fullname: item.fullname,
-          email: item.email,
-          address: item.address,
-          avatar: item.avatar,
-          star_average: item.star_average,
-          status: item.status,
-          current_position: item.current_position,
-          id_rating: item.id_rating, //Số lượng đánh giá
-          id_delivery: item.id_delivery, //Số lượt vận chuyển
-        };
+        if (filterNew == item.fullname) {
+          count++;
+          const ob = {
+            stt: count,
+            profile_code: item.profile_code,
+            fullname: item.fullname,
+            email: item.email,
+            address: item.address,
+            avatar: item.avatar,
+            star_average: item.star_average,
+            status: item.status,
+            current_position: item.current_position,
+            id_rating: item.id_rating, //Số lượng đánh giá
+            id_delivery: item.id_delivery, //Số lượt vận chuyển
+          };
 
-        arr_solve.push(ob);
+          arr_solve.push(ob);
+        } else if (filterNew == "Tất cả") {
+          count++;
+          const ob = {
+            stt: count,
+            profile_code: item.profile_code,
+            fullname: item.fullname,
+            email: item.email,
+            address: item.address,
+            avatar: item.avatar,
+            star_average: item.star_average,
+            status: item.status,
+            current_position: item.current_position,
+            id_rating: item.id_rating, //Số lượng đánh giá
+            id_delivery: item.id_delivery, //Số lượt vận chuyển
+          };
+
+          arr_solve.push(ob);
+        }
       });
 
       setReportDriver(arr_solve);
@@ -260,7 +260,7 @@ function ReportDriver() {
       },
     },
     {
-      title: "Địa chỉ",
+      title: "Địa chỉ thường trú",
       dataIndex: "address",
       key: "address",
       ...getColumnSearchProps("address"),
@@ -277,24 +277,7 @@ function ReportDriver() {
         );
       },
     },
-    {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-      ...getColumnSearchProps("address"),
-      render: (address) => {
-        return (
-          <td
-            style={{
-              fontWeight: "500",
-              color: "black",
-            }}
-          >
-            {address}
-          </td>
-        );
-      },
-    },
+
     {
       title: "Ảnh đại diện",
       dataIndex: "avatar",
@@ -316,6 +299,7 @@ function ReportDriver() {
       title: "Sao trung bình",
       dataIndex: "star_average",
       key: "star_average",
+      sorter: (a, b) => a.star_average - b.star_average,
       render: (star_average) => (
         <td className="d-flex" style={{ alignItems: "center" }}>
           {star_average}&nbsp;
@@ -323,28 +307,7 @@ function ReportDriver() {
         </td>
       ),
     },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => {
-        return (
-          <td
-            style={{
-              fontWeight: "500",
-              color: "black",
-            }}
-          >
-            <Tag
-              color={status === "Sẵn sàng" ? "green" : "volcano"}
-              key={status}
-            >
-              {status === "Sẵn sàng" ? "Sẵn sàng" : "Đang bận"}
-            </Tag>
-          </td>
-        );
-      },
-    },
+
     {
       title: "Vị trí hiện tại",
       dataIndex: "current_position",
@@ -367,7 +330,7 @@ function ReportDriver() {
       title: "Lượt vận chuyển",
       dataIndex: "id_delivery",
       key: "id_delivery",
-      ...getColumnSearchProps("id_delivery"),
+      sorter: (a, b) => a.id_delivery.length - b.id_delivery.length,
       render: (id_delivery) => {
         return (
           <td
@@ -385,7 +348,7 @@ function ReportDriver() {
       title: "Lượt đánh giá",
       dataIndex: "id_rating",
       key: "id_rating",
-      ...getColumnSearchProps("id_rating"),
+      sorter: (a, b) => a.id_rating.length - b.id_rating.length,
       render: (id_rating) => {
         return (
           <td
@@ -399,21 +362,54 @@ function ReportDriver() {
         );
       },
     },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      filters: [
+        {
+          text: "Sẵn sàng",
+          value: "Sẵn sàng",
+        },
+        {
+          text: "Đang bận",
+          value: "Đang bận",
+        },
+      ],
+      onFilter: (value, record) => record.status.indexOf(value) == 0,
+      render: (status) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            <Tag
+              color={status === "Sẵn sàng" ? "green" : "volcano"}
+              key={status}
+            >
+              {status === "Sẵn sàng" ? "Sẵn sàng" : "Đang bận"}
+            </Tag>
+          </td>
+        );
+      },
+    },
   ];
 
   useEffect(() => {
     //Gọi API
     getDataDriver();
-  }, []);
+  }, [driverPass]);
 
-  // const onChange = (pagination, filters, sorter, extra) => {
-  //   if (filters.status == null && filters.service_name == null) {
-  //     //Gọi API
-  //     getDataOrder();
-  //   } else {
-  //     setReportOrder(extra.currentDataSource);
-  //   }
-  // };
+  const onChange = (pagination, filters, sorter, extra) => {
+    if (filters.status == null && filters.service_name == null) {
+      //Gọi API
+      getDataDriver();
+    } else {
+      setReportDriver(extra.currentDataSource);
+    }
+  };
 
   return (
     <>
@@ -435,13 +431,13 @@ function ReportDriver() {
             color="#ff671d"
             style={{ display: "flex", alignItems: "center" }}
           >
-            Số lượng đơn hàng: {reportDriver.length}
+            Số lượng tài xế: {reportDriver.length}
           </Tag>
         </div>
         <Table
           columns={columnDriver}
           dataSource={reportDriver}
-          // onChange={onChange}
+          onChange={onChange}
         />
       </div>
     </>
