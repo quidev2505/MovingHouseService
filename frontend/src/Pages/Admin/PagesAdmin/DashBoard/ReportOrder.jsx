@@ -45,6 +45,8 @@ function ReportOrder({ orderPass }) {
   }
 
   const getDataOrder = async () => {
+    console.log(orderPass);
+    console.log(orderFilterNew);
     try {
       var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
       var arr_order = call_api_order.data;
@@ -143,7 +145,7 @@ function ReportOrder({ orderPass }) {
               width: 90,
             }}
           >
-            Search
+            Tìm kiếm
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
@@ -152,7 +154,7 @@ function ReportOrder({ orderPass }) {
               width: 90,
             }}
           >
-            Reset
+            Làm mới
           </Button>
           <Button
             type="link"
@@ -165,7 +167,7 @@ function ReportOrder({ orderPass }) {
               setSearchedColumn(dataIndex);
             }}
           >
-            Filter
+            Lọc
           </Button>
           <Button
             type="link"
@@ -174,7 +176,7 @@ function ReportOrder({ orderPass }) {
               close();
             }}
           >
-            close
+            Đóng
           </Button>
         </Space>
       </div>
@@ -397,6 +399,15 @@ function ReportOrder({ orderPass }) {
     getDataOrder();
   }, [orderPass]);
 
+  const onChange = (pagination, filters, sorter, extra) => {
+    if (filters.status == null && filters.service_name == null) {
+      //Gọi API
+      getDataOrder();
+    } else {
+      setReportOrder(extra.currentDataSource);
+    }
+  };
+
   return (
     <>
       {/* KHU VỰC DỮ LIỆU THỐNG KÊ DẠNG BẢNG */}
@@ -420,7 +431,11 @@ function ReportOrder({ orderPass }) {
             Số lượng đơn hàng: {reportOrder.length}
           </Tag>
         </div>
-        <Table columns={columnOrder} dataSource={reportOrder} />
+        <Table
+          columns={columnOrder}
+          dataSource={reportOrder}
+          onChange={onChange}
+        />
       </div>
     </>
   );

@@ -940,10 +940,15 @@ function DashBoardAdmin() {
   const [monthPass, setMonthPass] = useState("10");
 
   const onClickFilterMonth = (event) => {
+    console.log(event)
     try {
-      setMonthPass(
-        Number(getElementsAtEvent(chartRef.current, event)[0].index + 1)
-      );
+      if (event == "0") {
+        setMonthPass("0");
+      } else {
+        setMonthPass(
+          Number(getElementsAtEvent(chartRef.current, event)[0].index + 1)
+        );
+      }
     } catch (e) {
       console.log(e);
     }
@@ -969,9 +974,6 @@ function DashBoardAdmin() {
 
   const onClickFilterOrder = (event) => {
     try {
-      console.log(
-        getElementsAtEvent(chartRefOrder.current, event)[0].index + 1
-      );
       setOrderPass(
         Number(getElementsAtEvent(chartRefOrder.current, event)[0].index + 1)
       );
@@ -1034,7 +1036,9 @@ function DashBoardAdmin() {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => nav("/admin/order")}
+                  onClick={() =>
+                    setFilterDashBoard("THỐNG KÊ DOANH THU THEO THÁNG")
+                  }
                 >
                   <span>Xem chi tiết</span>
                   <EyeFilled />
@@ -1082,7 +1086,7 @@ function DashBoardAdmin() {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => nav("/admin/order")}
+                  onClick={() => setFilterDashBoard("THỐNG KÊ ĐƠN HÀNG")}
                 >
                   <span>Xem chi tiết</span>
                   <EyeFilled />
@@ -1130,7 +1134,7 @@ function DashBoardAdmin() {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => nav("/admin/driver")}
+                  onClick={() => setFilterDashBoard("THỐNG KÊ TÀI XẾ")}
                 >
                   <span>Xem chi tiết</span>
                   <EyeFilled />
@@ -1178,7 +1182,7 @@ function DashBoardAdmin() {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => nav("/admin/administrator")}
+                  onClick={() => setFilterDashBoard("THỐNG KÊ KHÁCH HÀNG")}
                 >
                   <span>Xem chi tiết</span>
                   <EyeFilled />
@@ -1290,7 +1294,7 @@ function DashBoardAdmin() {
                           width: "70px",
                           cursor: "pointer",
                         }}
-                        onClick={() => setMonthPass("0")}
+                        onClick={() => onClickFilterMonth("0")}
                       >
                         <FilterOutlined />
                         Tất cả

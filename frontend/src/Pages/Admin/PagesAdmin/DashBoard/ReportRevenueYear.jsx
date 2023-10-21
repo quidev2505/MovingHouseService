@@ -328,6 +328,16 @@ function ReportVenueYear({ yearPass }) {
     getDataVenueYear();
   }, [yearPass]);
 
+  const onChangeTable = (pagination, filters, sorter, extra) => {
+    let sumTotal = 0;
+    extra.currentDataSource.forEach((item, index) => {
+      sumTotal += item.totalOrder;
+    });
+
+    setTotalReport(sumTotal);
+    setReportVenueYearData(extra.currentDataSource);
+  };
+
   return (
     <>
       {/* KHU VỰC DỮ LIỆU THỐNG KÊ DẠNG BẢNG */}
@@ -368,7 +378,11 @@ function ReportVenueYear({ yearPass }) {
             {totalReport.toLocaleString()} đ
           </Tag>
         </div>
-        <Table columns={columnVenueYearData} dataSource={reportVenueYearData} />
+        <Table
+          columns={columnVenueYearData}
+          dataSource={reportVenueYearData}
+          onChange={onChangeTable}
+        />
       </div>
     </>
   );

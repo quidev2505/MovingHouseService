@@ -1607,6 +1607,11 @@ function OrderAdmin() {
       });
   };
 
+  const onChangeTable = (pagination, filters, sorter, extra) => {
+    setOrderCount(extra.currentDataSource.length);
+    setDataOrder(extra.currentDataSource);
+  };
+
   return (
     <>
       <LayoutAdmin>
@@ -1882,7 +1887,11 @@ function OrderAdmin() {
             </TopCssContent>
             <div>
               <LoadingOverlayComponent status={isActive}>
-                <Table columns={columns} dataSource={dataOrder} />
+                <Table
+                  columns={columns}
+                  dataSource={dataOrder}
+                  onChange={onChangeTable}
+                />
               </LoadingOverlayComponent>
               <Drawer
                 title="# Chi tiết đơn hàng"

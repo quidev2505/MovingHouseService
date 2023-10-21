@@ -103,6 +103,8 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   };
   const handleReset = (clearFilters) => {
     clearFilters();
+    //Gọi API
+    getDataVenueMonth();
     setSearchText("");
   };
 
@@ -427,6 +429,22 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
     }
   };
 
+  const onChangeTable = (pagination, filters, sorter, extra) => {
+    console.log(pagination)
+    console.log(filters);
+    console.log(sorter);
+    console.log(extra);
+
+
+    let sumTotal = 0;
+    extra.currentDataSource.forEach((item, index) => {
+      sumTotal += item.totalOrder;
+    });
+
+    setTotalReport(sumTotal);
+    setReportVenueMonthData(extra.currentDataSource);
+  };
+
   return (
     <>
       {/* KHU VỰC DỮ LIỆU THỐNG KÊ DẠNG BẢNG */}
@@ -518,6 +536,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
         <Table
           columns={columnVenueMonthData}
           dataSource={reportVenueMonthData}
+          onChange={onChangeTable}
         />
       </div>
     </>
