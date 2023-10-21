@@ -36,6 +36,7 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 import ReportRevenueMonth from "./ReportRevenueMonth";
 import ReportRevenueYear from "./ReportRevenueYear";
 import ReportOrder from "./ReportOrder";
+import ReportDriver from "./ReportDriver";
 
 ChartJS.register(
   CategoryScale,
@@ -940,7 +941,7 @@ function DashBoardAdmin() {
   const [monthPass, setMonthPass] = useState("10");
 
   const onClickFilterMonth = (event) => {
-    console.log(event)
+    console.log(event);
     try {
       if (event == "0") {
         setMonthPass("0");
@@ -1467,6 +1468,9 @@ function DashBoardAdmin() {
                       data={dataDriver}
                       plugins={[ChartDataLabels]}
                     />
+
+                    {/* Khu vực bảng thống kê đơn hàng */}
+                    <ReportDriver />
                   </>
                 ) : filterDashBoard === "THỐNG KÊ KHÁCH HÀNG" ? (
                   <>

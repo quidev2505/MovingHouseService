@@ -145,7 +145,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
               width: 90,
             }}
           >
-            Search
+            Tìm kiếm
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
@@ -154,7 +154,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
               width: 90,
             }}
           >
-            Reset
+            Làm mới
           </Button>
           <Button
             type="link"
@@ -167,7 +167,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
               setSearchedColumn(dataIndex);
             }}
           >
-            Filter
+            Lọc
           </Button>
           <Button
             type="link"
@@ -176,7 +176,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
               close();
             }}
           >
-            close
+            Đóng
           </Button>
         </Space>
       </div>
@@ -430,19 +430,18 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   };
 
   const onChangeTable = (pagination, filters, sorter, extra) => {
-    console.log(pagination)
-    console.log(filters);
-    console.log(sorter);
-    console.log(extra);
+    if (filters.month_show == null) {
+      //Gọi API
+      getDataVenueMonth();
+    } else {
+      let sumTotal = 0;
+      extra.currentDataSource.forEach((item, index) => {
+        sumTotal += item.totalOrder;
+      });
 
-
-    let sumTotal = 0;
-    extra.currentDataSource.forEach((item, index) => {
-      sumTotal += item.totalOrder;
-    });
-
-    setTotalReport(sumTotal);
-    setReportVenueMonthData(extra.currentDataSource);
+      setTotalReport(sumTotal);
+      setReportVenueMonthData(extra.currentDataSource);
+    }
   };
 
   return (

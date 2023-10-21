@@ -17,59 +17,67 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
-function ReportVenueYear({ yearPass }) {
-  const [reportVenueYearData, setReportVenueYearData] = useState([]);
-  //Tổng đơn theo thống kê
-  const [totalReport, setTotalReport] = useState(0);
-  const yearPassFilter = yearPass === "2023" ? yearPass : "202" + yearPass;
-  var totalReportCal = 0;
 
-  const getDataVenueYear = async () => {
+import { StarFilled } from "@ant-design/icons";
+
+function ReportDriver() {
+  const [reportDriver, setReportDriver] = useState([]);
+
+  //   var orderFilterNew = "";
+  //   switch (orderPass) {
+  //     case 1:
+  //       orderFilterNew = "Đã hủy";
+  //       break;
+  //     case 2:
+  //       orderFilterNew = "Đang tìm tài xế";
+  //       break;
+  //     case 3:
+  //       orderFilterNew = "Đang thực hiện";
+  //       break;
+  //     case 4:
+  //       orderFilterNew = "Thanh toán hóa đơn";
+  //       break;
+  //     case 5:
+  //       orderFilterNew = "Đã hoàn thành";
+  //       break;
+  //     case 6:
+  //       orderFilterNew = "Tất cả";
+  //       break;
+  //     default:
+  //       break;
+  //   }
+
+  const getDataDriver = async () => {
+    // console.log(orderPass);
+    // console.log(orderFilterNew);
     try {
-      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
-      var arr_order = call_api_order.data;
+      var call_api_driver = await axios.get(`/v1/driver/show_all_driver`);
+      var arr_driver = call_api_driver.data;
 
       //Xử lý những đơn đã hoàn thành và date_end != null
       //Tính doanh thu theo từng tháng
       let arr_solve = [];
       let count = 0;
-      arr_order.forEach((item, index) => {
-        if (
-          item.status === "Đã hoàn thành" &&
-          item.date_end !== null &&
-          item.date_start.split("/")[2] == yearPassFilter
-        ) {
-          count++;
-          const ob = {
-            stt: count,
-            order_id: item.order_id,
-            date_start: item.date_start,
-            date_end: item.date_end,
-            year_show: item.date_start.split("/")[2],
-            totalOrder: item.totalOrder,
-          };
-          totalReportCal += item.totalOrder;
-          arr_solve.push(ob);
-        } else if (
-          yearPassFilter == "2024" &&
-          item.status === "Đã hoàn thành" &&
-          item.date_end !== null
-        ) {
-          count++;
-          const ob = {
-            stt: count,
-            order_id: item.order_id,
-            date_start: item.date_start,
-            date_end: item.date_end,
-            year_show: item.date_start.split("/")[2],
-            totalOrder: item.totalOrder,
-          };
-          totalReportCal += item.totalOrder;
-          arr_solve.push(ob);
-        }
+      arr_driver.forEach((item, index) => {
+        count++;
+        const ob = {
+          stt: count,
+          profile_code: item.profile_code,
+          fullname: item.fullname,
+          email: item.email,
+          address: item.address,
+          avatar: item.avatar,
+          star_average: item.star_average,
+          status: item.status,
+          current_position: item.current_position,
+          id_rating: item.id_rating, //Số lượng đánh giá
+          id_delivery: item.id_delivery, //Số lượt vận chuyển
+        };
+
+        arr_solve.push(ob);
       });
-      setTotalReport(totalReportCal);
-      setReportVenueYearData(arr_solve);
+
+      setReportDriver(arr_solve);
     } catch (e) {
       console.log(e);
     }
@@ -197,7 +205,7 @@ function ReportVenueYear({ yearPass }) {
   });
 
   //Bảng xếp hạng đánh giá tài xế
-  const columnVenueYearData = [
+  const columnDriver = [
     {
       title: "STT",
       dataIndex: "stt",
@@ -216,11 +224,11 @@ function ReportVenueYear({ yearPass }) {
       },
     },
     {
-      title: "Mã đơn hàng",
-      dataIndex: "order_id",
-      key: "order_id",
-      ...getColumnSearchProps("order_id"),
-      render: (order_id) => {
+      title: "Mã hồ sơ",
+      dataIndex: "profile_code",
+      key: "profile_code",
+      ...getColumnSearchProps("profile_code"),
+      render: (profile_code) => {
         return (
           <td
             style={{
@@ -228,17 +236,17 @@ function ReportVenueYear({ yearPass }) {
               color: "black",
             }}
           >
-            {order_id}
+            {profile_code}
           </td>
         );
       },
     },
     {
-      title: "Ngày bắt đầu",
-      dataIndex: "date_start",
-      key: "date_start",
-      ...getColumnSearchProps("date_start"),
-      render: (date_start) => {
+      title: "Tên tài xế",
+      dataIndex: "fullname",
+      key: "fullname",
+      ...getColumnSearchProps("fullname"),
+      render: (fullname) => {
         return (
           <td
             style={{
@@ -246,17 +254,17 @@ function ReportVenueYear({ yearPass }) {
               color: "black",
             }}
           >
-            {date_start}
+            {fullname}
           </td>
         );
       },
     },
     {
-      title: "Ngày kết thúc",
-      dataIndex: "date_end",
-      key: "date_end",
-      ...getColumnSearchProps("date_end"),
-      render: (date_end) => {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+      ...getColumnSearchProps("address"),
+      render: (address) => {
         return (
           <td
             style={{
@@ -264,84 +272,148 @@ function ReportVenueYear({ yearPass }) {
               color: "black",
             }}
           >
-            {date_end}
+            {address}
           </td>
         );
       },
     },
     {
-      title: "Năm thống kê",
-      dataIndex: "year_show",
-      key: "year_show",
-      filters: [
-        {
-          text: "2021",
-          value: "2021",
-        },
-        {
-          text: "2022",
-          value: "2022",
-        },
-        {
-          text: "2023",
-          value: "2023",
-        },
-      ],
-      onFilter: (value, record) => String(record.year_show).indexOf(value) == 0,
-      render: (year_show) => {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+      ...getColumnSearchProps("address"),
+      render: (address) => {
         return (
           <td
             style={{
               fontWeight: "500",
               color: "black",
-              display: "flex",
-              justifyContent: "center",
             }}
           >
-            {year_show}
+            {address}
           </td>
         );
       },
-      align: "center",
     },
     {
-      title: "Tổng đơn hàng",
-      dataIndex: "totalOrder",
-      key: "totalOrder",
-      // defaultSortOrder: "ascend",
-      sorter: (a, b) => a.totalOrder - b.totalOrder,
-      render: (totalOrder) => (
-        <td
-          style={{
-            fontWeight: "600",
-            color: "#f2c92d",
-          }}
-        >
-          {totalOrder.toLocaleString()} đ
+      title: "Ảnh đại diện",
+      dataIndex: "avatar",
+      key: "avatar",
+      render: (avatar) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            <Avatar src={<img src={avatar} alt="avatar" />} />
+          </td>
+        );
+      },
+    },
+    {
+      title: "Sao trung bình",
+      dataIndex: "star_average",
+      key: "star_average",
+      render: (star_average) => (
+        <td className="d-flex" style={{ alignItems: "center" }}>
+          {star_average}&nbsp;
+          <StarFilled style={{ color: "#f1a062" }} />
         </td>
       ),
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            <Tag
+              color={status === "Sẵn sàng" ? "green" : "volcano"}
+              key={status}
+            >
+              {status === "Sẵn sàng" ? "Sẵn sàng" : "Đang bận"}
+            </Tag>
+          </td>
+        );
+      },
+    },
+    {
+      title: "Vị trí hiện tại",
+      dataIndex: "current_position",
+      key: "current_position",
+      ...getColumnSearchProps("current_position"),
+      render: (current_position) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {current_position}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Lượt vận chuyển",
+      dataIndex: "id_delivery",
+      key: "id_delivery",
+      ...getColumnSearchProps("id_delivery"),
+      render: (id_delivery) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {id_delivery.length}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Lượt đánh giá",
+      dataIndex: "id_rating",
+      key: "id_rating",
+      ...getColumnSearchProps("id_rating"),
+      render: (id_rating) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {id_rating.length}
+          </td>
+        );
+      },
     },
   ];
 
   useEffect(() => {
     //Gọi API
-    getDataVenueYear();
-  }, [yearPass]);
+    getDataDriver();
+  }, []);
 
-  const onChangeTable = (pagination, filters, sorter, extra) => {
-    if (filters.year_show == null) {
-      //Gọi API
-      getDataVenueYear();
-    } else {
-      let sumTotal = 0;
-      extra.currentDataSource.forEach((item, index) => {
-        sumTotal += item.totalOrder;
-      });
-
-      setTotalReport(sumTotal);
-      setReportVenueYearData(extra.currentDataSource);
-    }
-  };
+  // const onChange = (pagination, filters, sorter, extra) => {
+  //   if (filters.status == null && filters.service_name == null) {
+  //     //Gọi API
+  //     getDataOrder();
+  //   } else {
+  //     setReportOrder(extra.currentDataSource);
+  //   }
+  // };
 
   return (
     <>
@@ -356,41 +428,24 @@ function ReportVenueYear({ yearPass }) {
       >
         <div
           className="d-flex"
-          style={{
-            alignItems: "center",
-            padding: "10px",
-          }}
+          style={{ alignItems: "center", padding: "10px" }}
         >
           <Tag
             icon={<SyncOutlined spin />}
             color="#ff671d"
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
+            style={{ display: "flex", alignItems: "center" }}
           >
-            Số lượng đơn hàng: {reportVenueYearData.length}
-          </Tag>
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#ff671d"
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            Tổng doanh thu:&nbsp;
-            {totalReport.toLocaleString()} đ
+            Số lượng đơn hàng: {reportDriver.length}
           </Tag>
         </div>
         <Table
-          columns={columnVenueYearData}
-          dataSource={reportVenueYearData}
-          onChange={onChangeTable}
+          columns={columnDriver}
+          dataSource={reportDriver}
+          // onChange={onChange}
         />
       </div>
     </>
   );
 }
 
-export default ReportVenueYear;
+export default ReportDriver;

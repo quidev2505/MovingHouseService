@@ -851,7 +851,7 @@ function OrderAdmin() {
       title: "Giá",
       dataIndex: "totalOrder",
       key: "totalOrder",
-      defaultSortOrder: "ascend",
+      // defaultSortOrder: "ascend",
       sorter: (a, b) => a.totalOrder - b.totalOrder,
       render: (totalOrder) => (
         <div className="fw-bold" style={{ color: "red" }}>
