@@ -40,6 +40,7 @@ import ReportRevenueMonth from "./ReportRevenueMonth";
 import ReportRevenueYear from "./ReportRevenueYear";
 import ReportOrder from "./ReportOrder";
 import ReportDriver from "./ReportDriver";
+import ReportCustomer from "./ReportCustomer";
 
 ChartJS.register(
   CategoryScale,
@@ -442,19 +443,19 @@ function DashBoardAdmin() {
           };
           drivernameDropdown.push(ob);
         });
-        console.log(drivernameDropdown);
+        // console.log(drivernameDropdown);
 
         setDriverNameDropDown(drivernameDropdown);
 
         arr_driver.forEach((item, index) => {
           if (driverNameFilter === "Tất cả") {
             driverName.push(item.fullname);
-            sumTotalDelivery.push(item.id_rating.length);
-            sumTotalRating.push(item.id_delivery.length);
+            sumTotalDelivery.push(item.id_delivery.length);
+            sumTotalRating.push(item.id_rating.length);
           } else if (driverNameFilter === item.fullname) {
             driverName.push(item.fullname);
-            sumTotalDelivery.push(item.id_rating.length);
-            sumTotalRating.push(item.id_delivery.length);
+            sumTotalDelivery.push(item.id_delivery.length);
+            sumTotalRating.push(item.id_rating.length);
           }
         });
 
@@ -472,13 +473,23 @@ function DashBoardAdmin() {
         //Tên khách hàng
         const customerName = [];
 
-        //Tên khách hàng dropdown
-        const customerNameDropDown = [];
-        arr_customer.forEach((item, index) => {
-          customerNameDropDown.push(item.fullname);
+        //Tên tài xếp dropdown
+        const customernameDropdown = [];
+        customernameDropdown.push({
+          id: "Tất cả",
+          value: "Tất cả",
         });
 
-        setCustomerNameDropDown(customerNameDropDown);
+        arr_customer.forEach((item, index) => {
+          const ob = {
+            id: item.fullname,
+            value: item.fullname,
+          };
+          customernameDropdown.push(ob);
+        });
+        // console.log(drivernameDropdown);
+
+        setCustomerNameDropDown(customernameDropdown);
 
         const arr_id_customer = [];
         //Liệt kê tên khách hàng
@@ -1497,7 +1508,7 @@ function DashBoardAdmin() {
                   </>
                 ) : filterDashBoard === "THỐNG KÊ KHÁCH HÀNG" ? (
                   <>
-                    <select
+                    {/* <select
                       style={{
                         borderRadius: "5px",
                         padding: "10px",
@@ -1513,7 +1524,14 @@ function DashBoardAdmin() {
                         customerNameDropDown.map((item, index) => {
                           return <option value={item}>{item}</option>;
                         })}
-                    </select>
+                    </select> */}
+                    <DatalistInput
+                      style={{ width: "fit-content", float: "right" }}
+                      placeholder="Nhập vào tên khách hàng"
+                      // label="Select ice cream flavor"
+                      onSelect={(item) => setCustomerNameFilter(item.value)}
+                      items={customerNameDropDown}
+                    />
                     <p
                       style={{
                         float: "left",
@@ -1529,6 +1547,9 @@ function DashBoardAdmin() {
                       data={dataCustomer}
                       plugins={[ChartDataLabels]}
                     />
+
+                    {/* Khu vực bảng thống kê khách hàng */}
+                    <ReportCustomer customerPass={customerNameFilter} />
                   </>
                 ) : (
                   ""

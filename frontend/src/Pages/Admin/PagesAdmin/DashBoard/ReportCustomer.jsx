@@ -17,44 +17,81 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
-import { StarFilled } from "@ant-design/icons";
+// import { StarFilled } from "@ant-design/icons";
 
-function ReportDriver({ driverPass }) {
-  const [reportDriver, setReportDriver] = useState([]);
+function ReportCustomer({ customerPass }) {
+  const [reportCustomer, setReportCustomer] = useState([]);
   var filterNew = "";
-  if (driverPass == "Tất cả") {
+  if (customerPass == "Tất cả") {
     filterNew = "Tất cả";
   } else {
-    filterNew = driverPass;
+    filterNew = customerPass;
   }
-  const getDataDriver = async () => {
-    console.log(driverPass);
+  const getDataCustomer = async () => {
+    console.log(customerPass);
     // console.log(orderPass);
     // console.log(orderFilterNew);
     try {
-      var call_api_driver = await axios.get(`/v1/driver/show_all_driver`);
-      var arr_driver = call_api_driver.data;
+      //Tổng số đơn hàng đã giao thành công
+      const sumOrderComplete = [];
+      //Tổng số đơn hàng đã hủy
+      const sumOrderCancel = [];
+      //Tổng thanh toán
+      const sumPayment = [];
+      //Gọi dữ liệu khách hàng
+      var call_api_customer = await axios.get(`/v1/customer/get_all_customer`);
+      var arr_customer = call_api_customer.data;
+
+      //Xử lý lấy mảng id_customer
+      const arr_id_customer = arr_customer.map((item, index) => {
+        return item._id;
+      });
+
+      //Gọi dữ liệu đơn hàng
+      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
+      var arr_order = call_api_order.data;
+
+      //Xử lí tính tổng số đơn theo từng khách hàng
+      arr_id_customer.forEach((item, index) => {
+        let id_customer = item;
+        var sum_order_complete = 0;
+        var sum_order_cancel = 0;
+        var sum_init_payment = 0;
+        arr_order.forEach((item1, index) => {
+          //Tính tổng đơn giao hoàn thành
+          if (item1.status === "Đã hoàn thành") {
+            if (item1.customer_id === id_customer) {
+              sum_order_complete++;
+              sum_init_payment += item1.totalOrder;
+            }
+          } else if (item1.status === "Đã hủy") {
+            //Tổng số đơn đã hủy
+            if (item1.customer_id === id_customer) {
+              sum_order_cancel++;
+            }
+          }
+        });
+        sumOrderComplete.push(sum_order_complete);
+        sumOrderCancel.push(sum_order_cancel);
+        sumPayment.push(sum_init_payment);
+      });
 
       //Xử lý những đơn đã hoàn thành và date_end != null
       //Tính doanh thu theo từng tháng
       let arr_solve = [];
       let count = 0;
-      arr_driver.forEach((item, index) => {
+      arr_customer.forEach((item, index) => {
         if (filterNew == item.fullname) {
           count++;
           const ob = {
             stt: count,
-            profile_code: item.profile_code,
             fullname: item.fullname,
-            email: item.email,
             address: item.address,
             avatar: item.avatar,
             gender: item.gender,
-            star_average: item.star_average,
-            status: item.status,
-            current_position: item.current_position,
-            id_rating: item.id_rating, //Số lượng đánh giá
-            id_delivery: item.id_delivery, //Số lượt vận chuyển
+            totalOrderComplete: sumOrderComplete[index],
+            totalOrderCancel: sumOrderCancel[index],
+            totalPayment: sumPayment[index],
           };
 
           arr_solve.push(ob);
@@ -62,24 +99,21 @@ function ReportDriver({ driverPass }) {
           count++;
           const ob = {
             stt: count,
-            profile_code: item.profile_code,
             fullname: item.fullname,
-            email: item.email,
             address: item.address,
-            gender: item.gender,
             avatar: item.avatar,
-            star_average: item.star_average,
-            status: item.status,
-            current_position: item.current_position,
-            id_rating: item.id_rating, //Số lượng đánh giá
-            id_delivery: item.id_delivery, //Số lượt vận chuyển
+            gender: item.gender,
+            totalOrderComplete: sumOrderComplete[index],
+            totalOrderCancel: sumOrderCancel[index],
+            totalPayment: sumPayment[index],
           };
 
           arr_solve.push(ob);
         }
       });
 
-      setReportDriver(arr_solve);
+      console.log(arr_solve);
+      setReportCustomer(arr_solve);
     } catch (e) {
       console.log(e);
     }
@@ -207,7 +241,7 @@ function ReportDriver({ driverPass }) {
   });
 
   //Bảng xếp hạng đánh giá tài xế
-  const columnDriver = [
+  const columnCustomer = [
     {
       title: "STT",
       dataIndex: "stt",
@@ -226,25 +260,7 @@ function ReportDriver({ driverPass }) {
       },
     },
     {
-      title: "Mã hồ sơ",
-      dataIndex: "profile_code",
-      key: "profile_code",
-      ...getColumnSearchProps("profile_code"),
-      render: (profile_code) => {
-        return (
-          <td
-            style={{
-              fontWeight: "500",
-              color: "black",
-            }}
-          >
-            {profile_code}
-          </td>
-        );
-      },
-    },
-    {
-      title: "Tên tài xế",
+      title: "Tên khách hàng",
       dataIndex: "fullname",
       key: "fullname",
       ...getColumnSearchProps("fullname"),
@@ -262,7 +278,7 @@ function ReportDriver({ driverPass }) {
       },
     },
     {
-      title: "Địa chỉ thường trú",
+      title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
       ...getColumnSearchProps("address"),
@@ -279,7 +295,6 @@ function ReportDriver({ driverPass }) {
         );
       },
     },
-
     {
       title: "Ảnh đại diện",
       dataIndex: "avatar",
@@ -310,6 +325,10 @@ function ReportDriver({ driverPass }) {
           text: "Nữ",
           value: "Nữ",
         },
+        {
+          text: "Chưa cập nhật",
+          value: "null",
+        },
       ],
       onFilter: (value, record) => String(record.gender).indexOf(value) == 0,
       render: (gender) => {
@@ -320,32 +339,23 @@ function ReportDriver({ driverPass }) {
               color: "black",
             }}
           >
-            <Tag color={gender === "Nam" ? "green" : "volcano"} key={gender}>
-              {gender === "Nam" ? "Nam" : "Nữ"}
+            <Tag color={gender === "Nam" ? "green" : gender === "Nữ" ? "volcano" : "grey"} key={gender}>
+              {gender === "Nam"
+                ? "Nam"
+                : gender === "Nữ"
+                ? "Nữ"
+                : "Chưa cập nhật"}
             </Tag>
           </td>
         );
       },
     },
     {
-      title: "Sao trung bình",
-      dataIndex: "star_average",
-      key: "star_average",
-      sorter: (a, b) => a.star_average - b.star_average,
-      render: (star_average) => (
-        <td className="d-flex" style={{ alignItems: "center" }}>
-          {star_average}&nbsp;
-          <StarFilled style={{ color: "#f1a062" }} />
-        </td>
-      ),
-    },
-
-    {
-      title: "Vị trí hiện tại",
-      dataIndex: "current_position",
-      key: "current_position",
-      ...getColumnSearchProps("current_position"),
-      render: (current_position) => {
+      title: "Đơn giao thành công",
+      dataIndex: "totalOrderComplete",
+      key: "totalOrderComplete",
+      sorter: (a, b) => a.totalOrderComplete - b.totalOrderComplete,
+      render: (totalOrderComplete) => {
         return (
           <td
             style={{
@@ -353,17 +363,17 @@ function ReportDriver({ driverPass }) {
               color: "black",
             }}
           >
-            {current_position}
+            {totalOrderComplete}
           </td>
         );
       },
     },
     {
-      title: "Lượt vận chuyển",
-      dataIndex: "id_delivery",
-      key: "id_delivery",
-      sorter: (a, b) => a.id_delivery.length - b.id_delivery.length,
-      render: (id_delivery) => {
+      title: "Đơn đã hủy",
+      dataIndex: "totalOrderCancel",
+      key: "totalOrderCancel",
+      sorter: (a, b) => a.totalOrderCancel - b.totalOrderCancel,
+      render: (totalOrderCancel) => {
         return (
           <td
             style={{
@@ -371,58 +381,25 @@ function ReportDriver({ driverPass }) {
               color: "black",
             }}
           >
-            {id_delivery.length}
+            {totalOrderCancel}
           </td>
         );
       },
     },
     {
-      title: "Lượt đánh giá",
-      dataIndex: "id_rating",
-      key: "id_rating",
-      sorter: (a, b) => a.id_rating.length - b.id_rating.length,
-      render: (id_rating) => {
+      title: "Tổng thanh toán",
+      dataIndex: "totalPayment",
+      key: "totalPayment",
+      sorter: (a, b) => a.totalPayment - b.totalPayment,
+      render: (totalPayment) => {
         return (
           <td
             style={{
               fontWeight: "500",
-              color: "black",
+              color: "orange",
             }}
           >
-            {id_rating.length}
-          </td>
-        );
-      },
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      filters: [
-        {
-          text: "Sẵn sàng",
-          value: "Sẵn sàng",
-        },
-        {
-          text: "Đang bận",
-          value: "Đang bận",
-        },
-      ],
-      onFilter: (value, record) => record.status.indexOf(value) == 0,
-      render: (status) => {
-        return (
-          <td
-            style={{
-              fontWeight: "500",
-              color: "black",
-            }}
-          >
-            <Tag
-              color={status === "Sẵn sàng" ? "green" : "volcano"}
-              key={status}
-            >
-              {status === "Sẵn sàng" ? "Sẵn sàng" : "Đang bận"}
-            </Tag>
+            {totalPayment.toLocaleString()} đ
           </td>
         );
       },
@@ -431,15 +408,15 @@ function ReportDriver({ driverPass }) {
 
   useEffect(() => {
     //Gọi API
-    getDataDriver();
-  }, [driverPass]);
+    getDataCustomer();
+  }, [customerPass]);
 
   const onChange = (pagination, filters, sorter, extra) => {
     if (filters.status == null && filters.service_name == null) {
       //Gọi API
-      getDataDriver();
+      getDataCustomer();
     } else {
-      setReportDriver(extra.currentDataSource);
+      setReportCustomer(extra.currentDataSource);
     }
   };
 
@@ -463,12 +440,12 @@ function ReportDriver({ driverPass }) {
             color="#ff671d"
             style={{ display: "flex", alignItems: "center" }}
           >
-            Số lượng tài xế: {reportDriver.length}
+            Số lượng khách hàng: {reportCustomer.length}
           </Tag>
         </div>
         <Table
-          columns={columnDriver}
-          dataSource={reportDriver}
+          columns={columnCustomer}
+          dataSource={reportCustomer}
           onChange={onChange}
         />
       </div>
@@ -476,4 +453,4 @@ function ReportDriver({ driverPass }) {
   );
 }
 
-export default ReportDriver;
+export default ReportCustomer;
