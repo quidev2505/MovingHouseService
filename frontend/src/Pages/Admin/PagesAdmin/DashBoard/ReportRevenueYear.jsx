@@ -17,6 +17,10 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
+import * as XLSX from "xlsx"; //Xử lý file Excel
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+import "sweetalert2/src/sweetalert2.scss";
 function ReportVenueYear({ yearPass }) {
   const [reportVenueYearData, setReportVenueYearData] = useState([]);
   //Tổng đơn theo thống kê
@@ -329,7 +333,7 @@ function ReportVenueYear({ yearPass }) {
   }, [yearPass]);
 
   const onChangeTable = (pagination, filters, sorter, extra) => {
-    if (filters.year_show == null) {
+    if (filters.year_show == null && filters.order_id == null && filters.date_start == null && filters.date_end == null) {
       //Gọi API
       getDataVenueYear();
     } else {
@@ -341,6 +345,74 @@ function ReportVenueYear({ yearPass }) {
       setTotalReport(sumTotal);
       setReportVenueYearData(extra.currentDataSource);
     }
+  };
+
+  //Xử lý xuất ra file Excel
+  //Download Excel
+  const download_data_xslx = () => {
+    Swal.fire({
+      title: "Bạn muốn tải báo cáo thống kê doanh thu năm ?",
+      text: "Hãy nhấn vào xác nhận để tải xuống !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          //Create file xsls Excel
+          // flatten object like this {id: 1, title:'', category: ''};
+          const rows =
+            reportVenueYearData &&
+            reportVenueYearData.map((item, index) => ({
+              STT: index + 1,
+              order_id: item.order_id,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              year_show: item.year_show,
+              totalOrder: item.totalOrder,
+            }));
+
+          // create workbook and worksheet
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(rows);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+          // customize header names
+          XLSX.utils.sheet_add_aoa(worksheet, [
+            [
+              "Số thứ tự",
+              "Mã đơn hàng",
+              "Ngày bắt đầu",
+              "Ngày kết thúc",
+              "Năm thống kê",
+              "Tổng đơn hàng",
+            ],
+          ]);
+
+          XLSX.writeFile(workbook, "ThongKeDoanhThuNam.xlsx", {
+            compression: true,
+          });
+          Swal.fire({
+            title: "Tải xuống thành công !",
+            text: "Hoàn thành !",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Tải xuống thất bại!",
+          text: "Đơn hàng !",
+          icon: "fail",
+          confirmButtonText: "Xác nhận",
+        });
+        console.log(e);
+      });
   };
 
   return (
@@ -359,29 +431,54 @@ function ReportVenueYear({ yearPass }) {
           style={{
             alignItems: "center",
             padding: "10px",
+            justifyContent:"space-between"
           }}
         >
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#ff671d"
+          <div>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#ff671d"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              Số lượng đơn hàng: {reportVenueYearData.length}
+            </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#ff671d"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop:"5px"
+              }}
+            >
+              Tổng doanh thu:&nbsp;
+              {totalReport.toLocaleString()} đ
+            </Tag>
+          </div>
+
+          {/* Nút xuất ra file excel */}
+          <div
+            onClick={() => download_data_xslx()}
             style={{
+              cursor: "pointer",
+              width: "40px",
+              height: "40px",
+              backgroundColor: "green",
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              borderRadius: "5px",
+              marginBottom: "10px",
+              marginRight: "20px",
+              marginTop: "10px",
             }}
           >
-            Số lượng đơn hàng: {reportVenueYearData.length}
-          </Tag>
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#ff671d"
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            Tổng doanh thu:&nbsp;
-            {totalReport.toLocaleString()} đ
-          </Tag>
+            <FileExcelOutlined />
+          </div>
         </div>
         <Table
           columns={columnVenueYearData}

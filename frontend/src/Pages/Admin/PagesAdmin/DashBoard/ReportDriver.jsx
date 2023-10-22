@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Image, Table, Avatar, Input, Space, Button, Tag } from "antd";
 import Highlighter from "react-highlight-words";
+
+import * as XLSX from "xlsx"; //Xử lý file Excel
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 import {
   EditOutlined,
   FolderViewOutlined,
@@ -435,12 +439,100 @@ function ReportDriver({ driverPass }) {
   }, [driverPass]);
 
   const onChange = (pagination, filters, sorter, extra) => {
-    if (filters.status == null && filters.service_name == null) {
+    if (
+      filters.profile_code == null &&
+      filters.fullname == null &&
+      filters.address == null &&
+      filters.avatar == null &&
+      filters.gender == null &&
+      filters.star_average == null &&
+      filters.current_position == null
+    ) {
       //Gọi API
       getDataDriver();
     } else {
       setReportDriver(extra.currentDataSource);
     }
+  };
+
+  //Xử lý xuất ra file Excel
+  //Download Excel
+  const download_data_xslx = () => {
+    Swal.fire({
+      title: "Bạn muốn tải báo cáo thống kê đơn hàng ?",
+      text: "Hãy nhấn vào xác nhận để tải xuống !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          //Create file xsls Excel
+          // flatten object like this {id: 1, title:'', category: ''};
+          const rows =
+            reportDriver &&
+            reportDriver.map((item, index) => ({
+              STT: index + 1,
+              profile_code: item.profile_code,
+              fullname: item.fullname,
+              email: item.email,
+              address: item.address,
+              avatar: item.avatar,
+              gender: item.gender,
+              star_average: item.star_average,
+              status: item.status,
+              current_position: item.current_position,
+              id_rating: item.id_rating.length, //Số lượng đánh giá
+              id_delivery: item.id_delivery.length, //Số lượt vận chuyển
+            }));
+
+          // create workbook and worksheet
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(rows);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+          // customize header names
+          XLSX.utils.sheet_add_aoa(worksheet, [
+            [
+              "Số thứ tự",
+              "Mã hồ sơ",
+              "Tên tài xế",
+              "Email",
+              "Địa chỉ thường trú",
+              "Ảnh đại diện",
+              "Giới tính",
+              "Sao trung bình",
+              "Trạng thái",
+              "Vị trí hiện tại",
+              "Số lượt đánh giá",
+              "Số lượt vận chuyển",
+            ],
+          ]);
+
+          XLSX.writeFile(workbook, "ThongKeTaiXe.xlsx", {
+            compression: true,
+          });
+          Swal.fire({
+            title: "Tải xuống thành công !",
+            text: "Hoàn thành !",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Tải xuống thất bại!",
+          text: "Đơn hàng !",
+          icon: "fail",
+          confirmButtonText: "Xác nhận",
+        });
+        console.log(e);
+      });
   };
 
   return (
@@ -456,15 +548,42 @@ function ReportDriver({ driverPass }) {
       >
         <div
           className="d-flex"
-          style={{ alignItems: "center", padding: "10px" }}
+          style={{
+            alignItems: "center",
+            padding: "10px",
+            justifyContent: "space-between",
+          }}
         >
           <Tag
             icon={<SyncOutlined spin />}
             color="#ff671d"
-            style={{ display: "flex", alignItems: "center" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
           >
             Số lượng tài xế: {reportDriver.length}
           </Tag>
+          {/* Nút xuất ra file excel */}
+          <div
+            onClick={() => download_data_xslx()}
+            style={{
+              cursor: "pointer",
+              width: "40px",
+              height: "40px",
+              backgroundColor: "green",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              borderRadius: "5px",
+              marginBottom: "10px",
+              marginRight: "20px",
+              marginTop: "10px",
+            }}
+          >
+            <FileExcelOutlined />
+          </div>
         </div>
         <Table
           columns={columnDriver}

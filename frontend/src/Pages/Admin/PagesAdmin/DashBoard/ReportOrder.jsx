@@ -17,6 +17,9 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
+import * as XLSX from "xlsx"; //Xử lý file Excel
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 function ReportOrder({ orderPass }) {
   const [reportOrder, setReportOrder] = useState([]);
 
@@ -400,12 +403,90 @@ function ReportOrder({ orderPass }) {
   }, [orderPass]);
 
   const onChange = (pagination, filters, sorter, extra) => {
-    if (filters.status == null && filters.service_name == null) {
+    if (
+      filters.status == null &&
+      filters.service_name == null &&
+      filters.date_created == null &&
+      filters.date_start == null &&
+      filters.date_end == null
+    ) {
       //Gọi API
       getDataOrder();
     } else {
       setReportOrder(extra.currentDataSource);
     }
+  };
+
+  //Xử lý xuất ra file Excel
+  //Download Excel
+  const download_data_xslx = () => {
+    Swal.fire({
+      title: "Bạn muốn tải báo cáo thống kê đơn hàng ?",
+      text: "Hãy nhấn vào xác nhận để tải xuống !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          //Create file xsls Excel
+          // flatten object like this {id: 1, title:'', category: ''};
+          const rows =
+            reportOrder &&
+            reportOrder.map((item, index) => ({
+              STT: index + 1,
+              order_id: item.order_id,
+              date_created: item.date_created,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              service_name: item.service_name,
+              status: item.status,
+              totalOrder: item.totalOrder,
+            }));
+
+          // create workbook and worksheet
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(rows);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+          // customize header names
+          XLSX.utils.sheet_add_aoa(worksheet, [
+            [
+              "Số thứ tự",
+              "Mã đơn hàng",
+              "Ngày tạo đơn",
+              "Ngày bắt đầu",
+              "Ngày kết thúc",
+              "Tên dịch vụ",
+              "Trạng thái đơn hàng",
+              "Tổng đơn hàng",
+            ],
+          ]);
+
+          XLSX.writeFile(workbook, "ThongKeDonHang.xlsx", {
+            compression: true,
+          });
+          Swal.fire({
+            title: "Tải xuống thành công !",
+            text: "Hoàn thành !",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Tải xuống thất bại!",
+          text: "Đơn hàng !",
+          icon: "fail",
+          confirmButtonText: "Xác nhận",
+        });
+        console.log(e);
+      });
   };
 
   return (
@@ -421,15 +502,42 @@ function ReportOrder({ orderPass }) {
       >
         <div
           className="d-flex"
-          style={{ alignItems: "center", padding: "10px" }}
+          style={{
+            alignItems: "center",
+            padding: "10px",
+            justifyContent: "space-between",
+          }}
         >
           <Tag
             icon={<SyncOutlined spin />}
             color="#ff671d"
-            style={{ display: "flex", alignItems: "center" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
           >
             Số lượng đơn hàng: {reportOrder.length}
           </Tag>
+          {/* Nút xuất ra file excel */}
+          <div
+            onClick={() => download_data_xslx()}
+            style={{
+              cursor: "pointer",
+              width: "40px",
+              height: "40px",
+              backgroundColor: "green",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              borderRadius: "5px",
+              marginBottom: "10px",
+              marginRight: "20px",
+              marginTop: "10px",
+            }}
+          >
+            <FileExcelOutlined />
+          </div>
         </div>
         <Table
           columns={columnOrder}

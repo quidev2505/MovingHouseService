@@ -12,6 +12,9 @@ import {
 } from "antd";
 import Highlighter from "react-highlight-words";
 
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+import "sweetalert2/src/sweetalert2.scss";
 import {
   EditOutlined,
   FolderViewOutlined,
@@ -26,6 +29,8 @@ import {
   FilterOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
+
+import * as XLSX from "xlsx"; //Xử lý file Excel
 
 function ReportVenueMonth({ yearFilter, monthPass }) {
   const [reportVenueMonthData, setReportVenueMonthData] = useState([]);
@@ -430,7 +435,12 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   };
 
   const onChangeTable = (pagination, filters, sorter, extra) => {
-    if (filters.month_show == null) {
+    if (
+      filters.month_show == null &&
+      filters.order_id &&
+      filters.date_start == null &&
+      filters.date_end == null
+    ) {
       //Gọi API
       getDataVenueMonth();
     } else {
@@ -442,6 +452,74 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
       setTotalReport(sumTotal);
       setReportVenueMonthData(extra.currentDataSource);
     }
+  };
+
+  //Xử lý xuất ra file Excel
+  //Download Excel
+  const download_data_xslx = () => {
+    Swal.fire({
+      title: "Bạn muốn tải báo cáo thống kê doanh thu tháng ?",
+      text: "Hãy nhấn vào xác nhận để tải xuống !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          //Create file xsls Excel
+          // flatten object like this {id: 1, title:'', category: ''};
+          const rows =
+            reportVenueMonthData &&
+            reportVenueMonthData.map((item, index) => ({
+              STT: index + 1,
+              order_id: item.order_id,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              month_show: item.month_show,
+              totalOrder: item.totalOrder,
+            }));
+
+          // create workbook and worksheet
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(rows);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+          // customize header names
+          XLSX.utils.sheet_add_aoa(worksheet, [
+            [
+              "Số thứ tự",
+              "Mã đơn hàng",
+              "Ngày bắt đầu",
+              "Ngày kết thúc",
+              "Tháng thống kê",
+              "Tổng đơn hàng",
+            ],
+          ]);
+
+          XLSX.writeFile(workbook, "ThongKeDoanhThuThang.xlsx", {
+            compression: true,
+          });
+          Swal.fire({
+            title: "Tải xuống thành công !",
+            text: "Hoàn thành !",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Tải xuống thất bại!",
+          text: "Đơn hàng !",
+          icon: "fail",
+          confirmButtonText: "Xác nhận",
+        });
+        console.log(e);
+      });
   };
 
   return (
@@ -531,6 +609,26 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
             Tổng doanh thu:&nbsp;
             {totalReport.toLocaleString()} đ
           </Tag>
+          {/* Nút xuất ra file excel */}
+          <div
+            onClick={() => download_data_xslx()}
+            style={{
+              cursor: "pointer",
+              width: "40px",
+              height: "40px",
+              backgroundColor: "green",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              borderRadius: "5px",
+              marginBottom: "10px",
+              marginRight: "20px",
+              marginTop: "10px",
+            }}
+          >
+            <FileExcelOutlined />
+          </div>
         </div>
         <Table
           columns={columnVenueMonthData}

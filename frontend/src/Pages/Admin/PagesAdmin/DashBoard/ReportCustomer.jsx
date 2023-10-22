@@ -17,6 +17,10 @@ import {
   SyncOutlined,
 } from "@ant-design/icons";
 
+import * as XLSX from "xlsx"; //Xử lý file Excel
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
+
 // import { StarFilled } from "@ant-design/icons";
 
 function ReportCustomer({ customerPass }) {
@@ -287,10 +291,10 @@ function ReportCustomer({ customerPass }) {
           <td
             style={{
               fontWeight: "500",
-              color: "black",
+              color: address == null ? "grey" : "black",
             }}
           >
-            {address}
+            {address == null ? "Chưa cập nhật" : address}
           </td>
         );
       },
@@ -339,7 +343,16 @@ function ReportCustomer({ customerPass }) {
               color: "black",
             }}
           >
-            <Tag color={gender === "Nam" ? "green" : gender === "Nữ" ? "volcano" : "grey"} key={gender}>
+            <Tag
+              color={
+                gender === "Nam"
+                  ? "green"
+                  : gender === "Nữ"
+                  ? "volcano"
+                  : "grey"
+              }
+              key={gender}
+            >
               {gender === "Nam"
                 ? "Nam"
                 : gender === "Nữ"
@@ -412,12 +425,89 @@ function ReportCustomer({ customerPass }) {
   }, [customerPass]);
 
   const onChange = (pagination, filters, sorter, extra) => {
-    if (filters.status == null && filters.service_name == null) {
+    if (
+      filters.fullname == null &&
+      filters.address == null &&
+      filters.avatar == null &&
+      filters.gender == null
+    ) {
       //Gọi API
       getDataCustomer();
     } else {
       setReportCustomer(extra.currentDataSource);
     }
+  };
+
+  //Xử lý xuất ra file Excel
+  //Download Excel
+  const download_data_xslx = () => {
+    Swal.fire({
+      title: "Bạn muốn tải báo cáo thống kê khách hàng ?",
+      text: "Hãy nhấn vào xác nhận để tải xuống !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          //Create file xsls Excel
+          // flatten object like this {id: 1, title:'', category: ''};
+          const rows =
+            reportCustomer &&
+            reportCustomer.map((item, index) => ({
+              STT: index + 1,
+              fullname: item.fullname,
+              address: item.address,
+              avatar: item.avatar,
+              gender: item.gender,
+              totalOrderComplete: item.totalOrderComplete,
+              totalOrderCancel: item.totalOrderCancel,
+              totalPayment: item.totalPayment,
+            }));
+
+          // create workbook and worksheet
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(rows);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+          // customize header names
+          XLSX.utils.sheet_add_aoa(worksheet, [
+            [
+              "Số thứ tự",
+              "Tên khách hàng",
+              "Địa chỉ",
+              "Ảnh đại diện",
+              "Giới tính",
+              "Tổng đơn hàng giao thành công",
+              "Tổng đơn hàng đã hủy",
+              "Tổng thanh toán",
+            ],
+          ]);
+
+          XLSX.writeFile(workbook, "ThongKeKhachHang.xlsx", {
+            compression: true,
+          });
+          Swal.fire({
+            title: "Tải xuống thành công !",
+            text: "Hoàn thành !",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Tải xuống thất bại!",
+          text: "Đơn hàng !",
+          icon: "fail",
+          confirmButtonText: "Xác nhận",
+        });
+        console.log(e);
+      });
   };
 
   return (
@@ -433,15 +523,41 @@ function ReportCustomer({ customerPass }) {
       >
         <div
           className="d-flex"
-          style={{ alignItems: "center", padding: "10px" }}
+          style={{
+            alignItems: "center",
+            padding: "10px",
+          }}
         >
           <Tag
             icon={<SyncOutlined spin />}
             color="#ff671d"
-            style={{ display: "flex", alignItems: "center" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
           >
             Số lượng khách hàng: {reportCustomer.length}
           </Tag>
+          {/* Nút xuất ra file excel */}
+          <div
+            onClick={() => download_data_xslx()}
+            style={{
+              cursor: "pointer",
+              width: "40px",
+              height: "40px",
+              backgroundColor: "green",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              borderRadius: "5px",
+              marginBottom: "10px",
+              marginRight: "20px",
+              marginTop: "10px",
+            }}
+          >
+            <FileExcelOutlined />
+          </div>
         </div>
         <Table
           columns={columnCustomer}
