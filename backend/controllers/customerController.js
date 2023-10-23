@@ -5,14 +5,14 @@ const fs = require('fs');
 const customerController = {
     //Get All Customer
     getAllCustomer: async (req, res) => {
-        try{
+        try {
             let customer = await Customer.find();
-            if(customer){
+            if (customer) {
                 res.status(200).json(customer)
-            }else{
+            } else {
                 res.status(404).json('Error')
             }
-        }catch(e){
+        } catch (e) {
             console.log(e)
         }
     },
@@ -37,7 +37,7 @@ const customerController = {
         try {
             let fullname_customer = req.params.fullname;
 
-            const data_customer = await Customer.findOne({fullname: fullname_customer})
+            const data_customer = await Customer.findOne({ fullname: fullname_customer })
 
             if (data_customer) {
                 res.status(200).json(data_customer)
@@ -64,11 +64,30 @@ const customerController = {
             console.log(e)
         }
     },
+    //Get arr_customer_name
+    getArrFullName: async (req, res) => {
+        try {
+            const arr_id_customer = req.body;
+            const arr_customer_name = await Promise.all(arr_id_customer.map(async (item, index) => {
+                const data_result = await Customer.findOne({ _id: item })
+                return data_result.fullname
+            }))
+
+            if (arr_customer_name) {
+                res.status(201).json(arr_customer_name)
+            } else {
+                res.status(501).json('Error')
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
     //Get Info Customer
     getCustomer: async (req, res) => {
         try {
             const data_user = await User.findOne({ _id: req.params.id })
-        
+
             const data_customer = await Customer.findOne({ fullname: data_user.fullname });
 
             if (data_customer) {

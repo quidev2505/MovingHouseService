@@ -457,6 +457,7 @@ function OrderAdmin() {
     //Lấy thông tin tài xế
     list_driver();
     //Lấy thông tin đơn hàng
+
     let arr_customer_id = await axios.get("/v1/order/viewAllOrder");
     let arr_CI = [];
     arr_customer_id.data.forEach((item, index) => {
@@ -464,14 +465,12 @@ function OrderAdmin() {
     });
 
     if (arr_CI) {
-      let arr_customer_name = await Promise.all(
-        arr_CI.map(async (id) => {
-          const fullname_data = await axios.get(
-            `/v1/customer/get_customer_with_id/${id}`
-          );
-          return fullname_data.data.fullname;
-        })
+      let arr_data_get = await axios.post(
+        `/v1/customer/getArrFullName`,
+        arr_CI
       );
+
+      const arr_customer_name = arr_data_get.data;
 
       await axios
         .get(`/v1/order/viewAllOrder`)
@@ -1420,13 +1419,12 @@ function OrderAdmin() {
     });
 
     if (arr_CI) {
-      let arr_customer_name = [];
-      for (let i = 0; i < arr_CI.length; i++) {
-        let fullname_data = await axios.get(
-          `/v1/customer/get_customer_with_id/${arr_CI[i]}`
-        );
-        arr_customer_name.push(fullname_data.data.fullname);
-      }
+      let arr_data_get = await axios.post(
+        `/v1/customer/getArrFullName`,
+        arr_CI
+      );
+
+      const arr_customer_name = arr_data_get.data;
 
       await axios
         .get(`/v1/order/viewAllOrder`)
@@ -1467,7 +1465,6 @@ function OrderAdmin() {
           });
 
           if (new_arr.length === 0) {
-            console.log("vo rôi");
             let new_arr_service = data_order.filter((item) => {
               // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
               let word_Change_VN = removeVietnameseTones(item.customer_name); //Tìm theo tên khách hàng

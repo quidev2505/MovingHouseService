@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import LayoutAdmin from "../../ComponentAdmin/LayoutAdmin";
 
-import { Breadcrumb, Button,Input  } from "antd";
+import { Breadcrumb, Button, Input } from "antd";
 import TopCssContent from "../TopCssContent";
 import BottomCssContent from "../BottomCssContent";
 
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-
 
 import {
   Space,
@@ -402,6 +401,29 @@ function Administrator() {
       title: "STT",
       dataIndex: "STT",
       key: "STT",
+    },
+    {
+      title: "Ảnh đại diện",
+      dataIndex: "avatar",
+      key: "avatar",
+      render: (avatar) => (
+        <td>
+          <Badge
+            dot
+            style={{
+              backgroundColor: "green",
+              width: "8px",
+              height: "8px",
+              position: "absolute",
+              border: "1px solid white",
+              top: "5px",
+              right: "4px",
+            }}
+          >
+            <Avatar src={<img src={avatar} alt="avatar" />} style={{border:"1px solid #ccc"}} />
+          </Badge>
+        </td>
+      ),
     },
     {
       title: "Tên khách hàng",
@@ -856,6 +878,11 @@ function Administrator() {
         status_account = true;
       }
 
+      var dataCustomerApi = await axios.get("v1/customer/get_all_customer");
+      var arrAvatar = dataCustomerApi.data.map((item, index) => {
+        return item.avatar;
+      });
+
       if (arr_data_account_status) {
         await axios
           .get(`/v1/user/get_all_user`)
@@ -873,6 +900,7 @@ function Administrator() {
                     phonenumber: item.phonenumber,
                     status: item.status,
                     status_account: arr_data_account_status[index],
+                    avatar: arrAvatar[index],
                   };
                   data_item.push(ob_service);
                 }

@@ -383,51 +383,61 @@ const ChatBotIcon = () => {
                       <tr style={{ borderBottom: "1px solid #ccc" }}>
                         <td>Tên khách hàng</td>
                         <td>
-                          {
-                            JSON.parse(
-                              localStorage.getItem("total_price_chatbot")
-                            )?.customer_name
-                          }
+                          {JSON.parse(
+                            localStorage.getItem("total_price_chatbot")
+                          )
+                            ? JSON.parse(
+                                localStorage.getItem("total_price_chatbot")
+                              ).customer_name
+                            : "Không xác định"}
                         </td>
                       </tr>
                       <tr style={{ borderBottom: "1px solid #ccc" }}>
                         <td>Từ địa điểm</td>
                         <td>
-                          {
-                            JSON.parse(
-                              localStorage.getItem("total_price_chatbot")
-                            )?.fromLocation
-                          }
+                          {JSON.parse(
+                            localStorage.getItem("total_price_chatbot")
+                          )
+                            ? JSON.parse(
+                                localStorage.getItem("total_price_chatbot")
+                              ).fromLocation
+                            : "Không xác định"}
                         </td>
                       </tr>
                       <tr style={{ borderBottom: "1px solid #ccc" }}>
                         <td>Đến địa điểm</td>
                         <td>
-                          {
-                            JSON.parse(
-                              localStorage.getItem("total_price_chatbot")
-                            )?.toLocation
-                          }
+                          {JSON.parse(
+                            localStorage.getItem("total_price_chatbot")
+                          )
+                            ? JSON.parse(
+                                localStorage.getItem("total_price_chatbot")
+                              ).toLocation
+                            : "Không xác định"}
                         </td>
                       </tr>
                       <tr style={{ borderBottom: "1px solid #ccc" }}>
                         <td>Loại xe vận chuyển</td>
                         <td>
-                          {
-                            JSON.parse(
-                              localStorage.getItem("total_price_chatbot")
-                            )?.name_vehicle
-                          }
+                          {JSON.parse(
+                            localStorage.getItem("total_price_chatbot")
+                          )
+                            ? JSON.parse(
+                                localStorage.getItem("total_price_chatbot")
+                              ).name_vehicle
+                            : "Không xác định"}
                         </td>
                       </tr>
                       <tr style={{ borderBottom: "1px solid #ccc" }}>
                         <td>Khoảng cách</td>
                         <td>
-                          {
-                            JSON.parse(
-                              localStorage.getItem("total_price_chatbot")
-                            )?.distance
-                          }
+                          {JSON.parse(
+                            localStorage.getItem("total_price_chatbot")
+                          )
+                            ? JSON.parse(
+                                localStorage.getItem("total_price_chatbot")
+                              ).distance
+                            : "Không xác định"}
                         </td>
                       </tr>
                       <tr>
@@ -435,7 +445,11 @@ const ChatBotIcon = () => {
                         <td>
                           {JSON.parse(
                             localStorage.getItem("total_price_chatbot")
-                          )?.total_price.toLocaleString() + "đ"}
+                          )
+                            ? JSON.parse(
+                                localStorage.getItem("total_price_chatbot")
+                              ).total_price.toLocaleString() + "đ"
+                            : "Không xác định"}
                         </td>
                       </tr>
                     </tbody>
@@ -674,7 +688,7 @@ const ChatBotIcon = () => {
 
           localStorage.removeItem("total_price_chatbot");
           setStepInput(steps);
-        },4000);
+        }, 4000);
       } catch (e) {
         console.log(e);
       }

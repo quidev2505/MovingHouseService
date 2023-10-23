@@ -54,6 +54,22 @@ const notiticationController = {
             res.status(501).json(e)
         }
     },
+
+    //Xóa thông báo
+    deleteNotify: async (req, res) => {
+        try {
+            const id_notify = req.params.id;
+            const check = await Notification.findByIdAndDelete({ _id: id_notify })
+            if (check) {
+                res.status(201).json('Delete Success')
+            } else {
+                res.status(501).json('Delete Fail')
+            }
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e);
+        }
+    },
     //update Item 
     updateItem: async (req, res) => {
         try {

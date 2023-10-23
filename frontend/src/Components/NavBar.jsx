@@ -9,13 +9,19 @@ import { FaRegUser } from "react-icons/fa6";
 import { Tooltip } from "antd";
 import { FiLogOut } from "react-icons/fi";
 import { Badge } from "antd";
-import { BellFilled, CloseSquareOutlined } from "@ant-design/icons";
+import {
+  BellFilled,
+  CloseSquareOutlined,
+  CloseCircleFilled,
+} from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { Avatar } from "antd";
 import axios from "axios";
 
 import * as moment from "moment";
 import "moment/locale/vi";
+
+import { Toast } from "./ToastColor";
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
@@ -35,14 +41,33 @@ const NavBar = () => {
   //Xử lí nhấn vào nút chuông
   const [numberNotify, setNumberNotify] = useState("");
 
-  const [dataCustomer, setDataCustomer] = useState("")
+  const [dataCustomer, setDataCustomer] = useState("");
+
+  //Xóa thông báo
+  const deleteNotify = async (id_input) => {
+    await axios
+      .delete(`/v1/notification/deleteNotify/${id_input}`)
+      .then((data) => {
+        Toast.fire({
+          icon: "success",
+          title: "Xóa thông báo thành công !",
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        Toast.fire({
+          icon: "warning",
+          title: "Xóa thông báo thất bại!",
+        });
+      });
+  };
 
   const call_notification = async (idCustomer) => {
     const data_call_api = await axios.get(
       `/v1/notification/showNotificationWithID/${idCustomer}`
     );
 
-    console.log(data_call_api);
+    // console.log(data_call_api);
     const data_notify = data_call_api.data;
 
     console.log(data_notify);
@@ -62,7 +87,6 @@ const NavBar = () => {
               borderRadius: "10px",
               marginBottom: "10px",
             }}
-            onClick={() => navigate("/user/order")}
           >
             <p
               style={{
@@ -83,13 +107,29 @@ const NavBar = () => {
                   color: "#3396c5",
                   fontWeight: "bold",
                 }}
+                onClick={() => {
+                  navigate("/user/order");
+                  localStorage.setItem("menu", "/user/order");
+                }}
               >
                 {item.content} Mã đơn hàng:{" "}
                 <span style={{ color: "red" }}>{item.order_id}</span>
               </p>
-              <p style={{ color: "#ccc", textAlign: "left" }}>
-                {moment(item.createdAt).fromNow()}
-              </p>
+              <div
+                className="d-flex"
+                style={{ justifyContent: "space-between" }}
+              >
+                <p style={{ color: "#ccc", textAlign: "left" }}>
+                  {moment(item.createdAt).fromNow()}
+                </p>
+                <CloseCircleFilled
+                  style={{ fontSize: "17px", zIndex: "99999" }}
+                  onClick={() => {
+                    document.querySelector(".notify").style.display = "none";
+                    deleteNotify(item._id);
+                  }}
+                />
+              </div>
             </div>
           </div>
         </>
@@ -107,7 +147,7 @@ const NavBar = () => {
         .get(`/v1/customer/get_customer_info/${id}`)
         .then((data) => {
           let data_customer = data.data;
-          setDataCustomer(data_customer._id)
+          setDataCustomer(data_customer._id);
           //Chạy liên tục gọi thông báo
           call_notification(data_customer._id);
           setAva(data_customer.avatar);
@@ -232,7 +272,7 @@ const NavBar = () => {
                           onClick={() => {
                             document.querySelector(".notify").style.display =
                               "block";
-                            call_notification(dataCustomer)
+                            call_notification(dataCustomer);
                           }}
                         />
                         <div

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Badge, Space } from "antd";
-import { BellFilled, CloseSquareOutlined } from "@ant-design/icons";
+import {
+  BellFilled,
+  CloseSquareOutlined,
+  CloseCircleFilled,
+} from "@ant-design/icons";
 import { Dropdown } from "antd";
 import { useDispatch } from "react-redux";
 import { logOutAdmin } from "../../../redux/apiRequest";
@@ -15,6 +19,8 @@ import axios from "axios";
 
 import * as moment from "moment";
 import "moment/locale/vi";
+
+import { Toast } from "../../../Components/ToastColor";
 
 function HeaderAdmin() {
   // const showNotify = (dataOrderSend) => {
@@ -65,6 +71,25 @@ function HeaderAdmin() {
   //Xử lí nhấn vào nút chuông
   const [numberNotify, setNumberNotify] = useState(0);
 
+  //Xóa thông báo
+  const deleteNotify = async (id_input) => {
+    await axios
+      .delete(`/v1/notification/deleteNotify/${id_input}`)
+      .then((data) => {
+        Toast.fire({
+          icon: "success",
+          title: "Xóa thông báo thành công !",
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        Toast.fire({
+          icon: "warning",
+          title: "Xóa thông báo thất bại!",
+        });
+      });
+  };
+
   const call_notification = async () => {
     const data_call_api = await axios.get(`/v1/notification/showNotification`);
 
@@ -86,7 +111,6 @@ function HeaderAdmin() {
               borderRadius: "10px",
               marginBottom: "10px",
             }}
-            onClick={() => navigate("/admin/order")}
           >
             <p
               style={{
@@ -107,13 +131,34 @@ function HeaderAdmin() {
                   color: "#3396c5",
                   fontWeight: "bold",
                 }}
+                onClick={() => {
+                  navigate("/admin/order");
+                  localStorage.setItem("menu", "/admin/order");
+                }}
               >
                 {item.content} Mã đơn hàng:{" "}
                 <span style={{ color: "red" }}>{item.order_id}</span>
               </p>
-              <p style={{ color: "#ccc" }}>
-                {moment(item.createdAt).fromNow()}
-              </p>
+              <div
+                className="d-flex"
+                style={{
+                  justifyContent: "space-between",
+                }}
+              >
+                <p style={{ color: "#ccc" }}>
+                  {moment(item.createdAt).fromNow()}
+                </p>
+                <CloseCircleFilled
+                  style={{
+                    fontSize: "17px",
+                    zIndex: "99999",
+                  }}
+                  onClick={() => {
+                    document.querySelector(".notify").style.display = "none";
+                    deleteNotify(item._id);
+                  }}
+                />
+              </div>
             </div>
           </div>
         </>
@@ -129,7 +174,6 @@ function HeaderAdmin() {
     //Chạy liên tục gọi thông báo
     call_notification();
   }, []);
-
 
   return (
     <div className="HeaderAdmin">

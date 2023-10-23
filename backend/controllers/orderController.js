@@ -531,7 +531,7 @@ const orderController = {
 
                     avg_star = Math.floor(sum / arr_star.length);
 
-                    await Driver.updateOne({ fullname: driver_name[0] }, { id_rating: arr_rating_id_driver, start_average: avg_star }, { new: true })
+                    await Driver.updateOne({ fullname: driver_name[0] }, { id_rating: arr_rating_id_driver, star_average: avg_star }, { new: true })
                 }
 
 

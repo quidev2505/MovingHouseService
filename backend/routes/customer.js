@@ -17,6 +17,9 @@ router.get('/get_customer_with_fullname/:fullname', customerController.getCustom
 //Get Customer With ID Customer
 router.get('/get_customer_with_id/:id', customerController.getCustomerWithIDCustomer)
 
+//Lấy arr fullname từ arr_id_customer
+router.post('/getArrFullName', customerController.getArrFullName)
+
 //Get Customer With ID User
 router.get('/get_customer_info/:id', customerController.getCustomer);
 

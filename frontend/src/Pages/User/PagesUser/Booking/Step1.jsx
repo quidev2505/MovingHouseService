@@ -241,9 +241,9 @@ function Step1({ check_fill, setCheckFill }) {
             onChange={handleChange_Time}
           />
         </div>
-        <div className="image_ava col">
+        <div className="image_ava col" style={{marginLeft:"20px"}}>
           <img
-            src="./img/step1.avif"
+            src="https://png.pngtree.com/png-vector/20220723/ourmid/pngtree-people-moving-houses-move-house-png-image_6045429.png"
             style={{ width: "550px", height: "300px", objectFit: "contain" }}
             alt="anh"
           />
