@@ -251,7 +251,7 @@ function OrderAdmin() {
           }, 1500);
           Modal.destroyAll();
         } else {
-          change_status_driver(statusDriver.current, "Đang bận");
+          change_status_driver(statusDriver.current, "Sẵn sàng");
 
           setTimeout(() => {
             setActiveKeyTab("3");
@@ -454,6 +454,9 @@ function OrderAdmin() {
 
   const show_order_customer = async (status_input) => {
     setIsActive(true);
+    //Lấy thông tin tài xế
+    list_driver();
+    //Lấy thông tin đơn hàng
     let arr_customer_id = await axios.get("/v1/order/viewAllOrder");
     let arr_CI = [];
     arr_customer_id.data.forEach((item, index) => {
@@ -461,13 +464,14 @@ function OrderAdmin() {
     });
 
     if (arr_CI) {
-      let arr_customer_name = [];
-      for (let i = 0; i < arr_CI.length; i++) {
-        let fullname_data = await axios.get(
-          `/v1/customer/get_customer_with_id/${arr_CI[i]}`
-        );
-        arr_customer_name.push(fullname_data.data.fullname);
-      }
+      let arr_customer_name = await Promise.all(
+        arr_CI.map(async (id) => {
+          const fullname_data = await axios.get(
+            `/v1/customer/get_customer_with_id/${id}`
+          );
+          return fullname_data.data.fullname;
+        })
+      );
 
       await axios
         .get(`/v1/order/viewAllOrder`)
@@ -1401,8 +1405,6 @@ function OrderAdmin() {
   // //Search Realtime
   const [search, setSearch] = useState("");
   useEffect(() => {
-    list_driver();
-
     show_order_customer(check_active(activeKeyTab));
   }, [search]);
 

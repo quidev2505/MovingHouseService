@@ -295,6 +295,7 @@ function CalendarAdmin() {
   };
 
   const showMapDriver = (arrResult) => {
+    console.log(arrResult);
     //Lấy dữ liệu tài xế đầu tiên
     const firstData = arrResult[0];
 
@@ -320,7 +321,7 @@ function CalendarAdmin() {
               marginBottom: "5px",
             }}
           >
-            <p style={{fontWeight:"bold"}}>
+            <p style={{ fontWeight: "bold" }}>
               {index + 1}. {item.item.fullname} . ({item.item.star_average}⭐)
             </p>
             <p>🚚&nbsp;{item.item.vehicle_type}</p>
@@ -637,7 +638,18 @@ function CalendarAdmin() {
                 textAlign: "center",
               }}
             >
-              <p style={{fontWeight:"bold", fontSize:"25",color:"white", backgroundColor:"orange",borderRadius:"3px", padding:"5px"}}>Danh sách tài xế</p>
+              <p
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "25",
+                  color: "white",
+                  backgroundColor: "orange",
+                  borderRadius: "3px",
+                  padding: "5px",
+                }}
+              >
+                Danh sách tài xế
+              </p>
               <div style={{ overflowY: "scroll", maxHeight: "400px" }}>
                 {domListDriver}
               </div>

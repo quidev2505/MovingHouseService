@@ -74,11 +74,10 @@ function Contact() {
               Chatbot
             </h4>
             <p style={{ fontSize: "15px" }}>
-              Chatbot ...Calling...Calling !
               <p>
                 Cùng trò chuyện để đưa ra gợi ý chọn dịch vụ dọn nhà tiết kiệm
-                nhất cho bạn ! Hãy nhấn vào biểu tượng <span className="fw-bold">Chat</span> nằm ở
-                gốc phải bên dưới !
+                nhất cho bạn ! Hãy nhấn vào biểu tượng{" "}
+                <span className="fw-bold">Chat</span> nằm ở gốc phải bên dưới !
               </p>
             </p>
           </div>

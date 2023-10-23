@@ -363,14 +363,14 @@ function ReportOrder({ orderPass }) {
               fontWeight: "bold",
               color:
                 status === "Đang tìm tài xế"
-                  ? "blue"
+                  ? "#36A2EB"
                   : status === "Đã hủy"
-                  ? "red"
+                  ? "#FF4069"
                   : status === "Đang thực hiện"
-                  ? "yellow"
+                  ? "#FFCE56"
                   : status === "Thanh toán hóa đơn"
-                  ? "purple"
-                  : "#87d068",
+                  ? "#4BC0C0"
+                  : "#8142FF",
             }}
           >
             {status}
