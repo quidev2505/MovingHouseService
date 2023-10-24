@@ -192,7 +192,7 @@ function OrderDetailDriver({ route, navigation }) {
             appId: 13517,
             appToken: "dgTdxEATT0B2p3KZWHDHVd",
             title: "[🚚] Đã có tài xế nhận đơn hàng của bạn ! [🚚]",
-            body: `[📦] Khách hàng: ${data_user_object.fullname} [📦]`,
+            body: `[📦] Khách hàng: ${data_user.data.fullname} [📦]`,
             dateSent: Date.now(),
         }
         axios.post('https://app.nativenotify.com/api/notification', ob).then((data) => {
@@ -203,7 +203,7 @@ function OrderDetailDriver({ route, navigation }) {
         await axios.patch(`${api_url}/v1/order/updateonefield_order/${dataOrderDetail.order_id}`, {
             status: "Đang thực hiện"
         }).then((data) => {
-            navigation.navigate('ContactCustomer', { data_user: data_user_object, data_order: dataOrderDetail })
+            navigation.navigate('ContactCustomer', { data_user: data_user.data, data_order: dataOrderDetail })
         }).catch((e) => {
             console.log(e)
         })

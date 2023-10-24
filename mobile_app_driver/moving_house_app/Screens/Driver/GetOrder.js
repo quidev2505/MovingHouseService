@@ -64,6 +64,7 @@ function GetOrder({ navigation }) {
                                     if (inputStatus.current === "Đã nhận") {
                                         if (status_driver === "Sẵn sàng" && item.status !== "Đã hủy" && item.status !== "Đã hoàn thành" && item.driver_name.includes(fullname_driver) === true) {
                                             check_location_order(item.fromLocation)
+                                            console.log(item.vehicle_name)
                                             const quantity_driver = item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]
 
 
@@ -94,7 +95,10 @@ function GetOrder({ navigation }) {
                                     } else {
                                         if (status_driver === "Sẵn sàng" && item.status !== "Đã hủy" && item.status !== "Đã hoàn thành" && item.driver_name.includes(fullname_driver) === false) {
                                             check_location_order(item.fromLocation)
+
                                             const quantity_driver = item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]
+
+
 
 
 
@@ -120,6 +124,7 @@ function GetOrder({ navigation }) {
                                             };
 
                                             data_order.push(ob_order);
+
                                         }
                                     }
 
@@ -190,7 +195,7 @@ function GetOrder({ navigation }) {
         // setInterval(() => {
 
 
-            get_info_all_order();
+        get_info_all_order();
         // },5000)
 
     }, [])
@@ -238,7 +243,7 @@ function GetOrder({ navigation }) {
 
                 {/* Hiển thị trạng thái tài xế */}
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", paddingLeft: 13 }}>
-                    <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: "fit-content", borderRadius: 10, display:"flex", alignItems:"center", lineHeight:40 }}>{statusDriver}</Text>
+                    <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: "fit-content", borderRadius: 10, display: "flex", alignItems: "center", lineHeight: 40 }}>{statusDriver}</Text>
 
 
                     <Text style={{ marginRight: 10, marginTop: 10, padding: 10, width: "70%", color: "white", backgroundColor: location_delivery === "TPHCM và tỉnh lân cận" ? "red" : "purple", borderRadius: 10, textAlign: "center", marginLeft: 10 }}>
@@ -251,7 +256,7 @@ function GetOrder({ navigation }) {
                             name="car"
                             size={20}
                         />&nbsp;{vehicleType}
-                        </Text>
+                    </Text>
                 </View>
 
                 {/* Lọc ra đơn hiện đang có và đơn đã nhận hàng. */}
@@ -349,7 +354,9 @@ function GetOrder({ navigation }) {
                                                 {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định) </Text> : item.driver_name.map((item1, index) => {
                                                     return <Text key={item1.fullname_driver} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '400', color: item1 === item.fullname_driver ? 'purple' : 'black' }}> {index + 1}. {item1} |</Text>
                                                 })}
-                                                <Text style={{ fontWeight: "bold" }}>- Cần ({item.driver_name.length}/{item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]}) tài xế</Text>
+                                                <Text style={{ fontWeight: "bold" }}>- Cần ({item.driver_name.length}/ {item.quantity_driver}) tài xế
+                                                    {/* {item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]}) tài xế */}
+                                                </Text>
                                             </Text>
                                         </View>
                                         <View style={{ display: "flex", flexDirection: "row", marginTop: 10, marginBottom: 10 }}>
