@@ -1677,7 +1677,7 @@ function OrderAdmin() {
                     type="text"
                     id="find_service"
                     className="form-control form-control-lg"
-                    placeholder="(Lọc theo Mã đơn hàng, Ttên khách hàng, Tên tài xế)"
+                    placeholder="(Lọc theo Mã đơn hàng, Tên khách hàng, Tên tài xế)"
                     style={{ fontSize: "17px", borderRadius: "3px" }}
                     value={searchAllOrder}
                     onChange={(e) => setSearchAllOrder(e.target.value)}

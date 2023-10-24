@@ -42,6 +42,8 @@ function CalendarAdmin() {
   const nav = useNavigate();
   const [dataSource, setDataSource] = useState([]);
 
+  const [showDriverName, setShowDriverName] = useState("");
+
   //Lưu dữ liệu bản đồ
   const [dataMap, setDataMap] = useState([]);
 
@@ -309,6 +311,10 @@ function CalendarAdmin() {
       zoom: 8,
     });
 
+    setShowDriverName(
+      `${arrResult[0].item.fullname}-(${arrResult[0].item.star_average}⭐)`
+    );
+
     //Hiển thị ra danh sách tài xế
     const listDriverArr = arrResult.map((item, index) => {
       return (
@@ -327,9 +333,12 @@ function CalendarAdmin() {
             <p>🚚&nbsp;{item.item.vehicle_type}</p>
             <p>🗺️&nbsp;{item.position.display_name}</p>
             <EyeOutlined
-              onClick={() =>
-                flyToMap(map, item.position.lat, item.position.lon)
-              }
+              onClick={() => {
+                setShowDriverName(
+                  `${item.item.fullname}-(${item.item.star_average}⭐)`
+                );
+                flyToMap(map, item.position.lat, item.position.lon);
+              }}
               style={{
                 borderRadius: "50%",
                 backgroundColor: "orange",
@@ -622,6 +631,23 @@ function CalendarAdmin() {
                     width: "100%",
                   }}
                 ></div>
+                <div
+                  className="showNameDriver"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "fit-content",
+                    backgroundColor: "white",
+                    padding: "10px",
+                    margin: "5px",
+                    fontSize: "15px",
+                    borderRadius: "5px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {showDriverName ? showDriverName : ""}
+                </div>
               </div>
             </div>
 
