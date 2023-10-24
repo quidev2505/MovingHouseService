@@ -1476,8 +1476,26 @@ function OrderAdmin() {
                 : word_Change_VN.toLowerCase().includes(word_search);
             });
 
-            setOrderCount(new_arr_service.length);
-            setDataOrder(new_arr_service);
+            if (new_arr_service.length === 0) {
+              let new_arr_service_driver = data_order.filter((item) => {
+                //Tìm theo tên của tài xế
+                let driverNameInDB = item.driver_name;
+                //Tên tài xế nhập vào
+                let driverNameInput = searchAllOrder;
+                console.log(driverNameInDB.includes(driverNameInput));
+                if (driverNameInDB.includes(driverNameInput)) {
+                  return item;
+                }
+              });
+
+              console.log(new_arr_service_driver);
+
+              setOrderCount(new_arr_service_driver.length);
+              setDataOrder(new_arr_service_driver);
+            } else {
+              setOrderCount(new_arr_service.length);
+              setDataOrder(new_arr_service);
+            }
           } else {
             setOrderCount(new_arr.length);
             setDataOrder(new_arr);
@@ -1659,7 +1677,7 @@ function OrderAdmin() {
                     type="text"
                     id="find_service"
                     className="form-control form-control-lg"
-                    placeholder="Tìm tất cả đơn hàng (Lọc theo Mã đơn hàng hoặc Tên khách hàng)"
+                    placeholder="(Lọc theo Mã đơn hàng, Ttên khách hàng, Tên tài xế)"
                     style={{ fontSize: "17px", borderRadius: "3px" }}
                     value={searchAllOrder}
                     onChange={(e) => setSearchAllOrder(e.target.value)}
