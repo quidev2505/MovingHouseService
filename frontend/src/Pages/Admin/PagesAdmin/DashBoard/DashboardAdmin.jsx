@@ -14,7 +14,7 @@ import DatalistInput from "react-datalist-input";
 import "react-datalist-input/dist/styles.css";
 
 import axios from "axios";
-import { Image, Table, Avatar } from "antd";
+import { Image, Table, Avatar, Select } from "antd";
 import {
   FaMoneyCheckDollar,
   FaTruckFront,
@@ -113,6 +113,9 @@ function DashBoardAdmin() {
   const [totalCountOrder, setTotalCountOrder] = useState(0);
   const [totalCountDriver, setTotalCountDriver] = useState(0);
   const [totalCountCustomer, setTotalCountCustomer] = useState(0);
+
+  //Chuyển giữa 2 Tab
+  const [chooseTabOne, setChooseTabOne] = useState(true);
 
   const nav = useNavigate();
 
@@ -1010,6 +1013,11 @@ function DashBoardAdmin() {
   //Xử lý khi lọc
   const [driverPass, setDriverPass] = useState("Tất cả");
 
+  //Lọc tổng hợp
+  const handleChangeDropDown = (value) => {
+    setUnit(value);
+  };
+
   return (
     <>
       <LayoutAdmin>
@@ -1064,9 +1072,10 @@ function DashBoardAdmin() {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() =>
-                    setFilterDashBoard("THỐNG KÊ DOANH THU THEO THÁNG")
-                  }
+                  onClick={() => {
+                    setChooseTabOne(true);
+                    setFilterDashBoard("THỐNG KÊ DOANH THU THEO THÁNG");
+                  }}
                 >
                   <span>Xem chi tiết</span>
                   <EyeFilled />
@@ -1114,7 +1123,10 @@ function DashBoardAdmin() {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => setFilterDashBoard("THỐNG KÊ ĐƠN HÀNG")}
+                  onClick={() => {
+                    setChooseTabOne(true);
+                    setFilterDashBoard("THỐNG KÊ ĐƠN HÀNG");
+                  }}
                 >
                   <span>Xem chi tiết</span>
                   <EyeFilled />
@@ -1162,7 +1174,10 @@ function DashBoardAdmin() {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => setFilterDashBoard("THỐNG KÊ TÀI XẾ")}
+                  onClick={() => {
+                    setChooseTabOne(true);
+                    setFilterDashBoard("THỐNG KÊ TÀI XẾ");
+                  }}
                 >
                   <span>Xem chi tiết</span>
                   <EyeFilled />
@@ -1210,7 +1225,10 @@ function DashBoardAdmin() {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => setFilterDashBoard("THỐNG KÊ KHÁCH HÀNG")}
+                  onClick={() => {
+                    setChooseTabOne(true);
+                    setFilterDashBoard("THỐNG KÊ KHÁCH HÀNG");
+                  }}
                 >
                   <span>Xem chi tiết</span>
                   <EyeFilled />
@@ -1229,165 +1247,202 @@ function DashBoardAdmin() {
                   boxShadow: "2px 2px 6px #ccc",
                 }}
               >
-                <h2
-                  style={{
-                    fontSize: 20,
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    color: "#f16622",
-                    marginTop: "10px",
-                  }}
-                >
-                  {filterDashBoard}
-                </h2>
-
+                {/* Khu vực nút chuyển đổi */}
                 <div>
-                  <select
+                  <button
                     style={{
+                      padding: "5px",
+                      backgroundColor: chooseTabOne ? "orange" : "#ccc",
+                      color: "white",
                       borderRadius: "5px",
-                      padding: "10px",
-                      border: "1px solid #ccc",
-                      color: "black",
+                      fontWeight: "bold",
+                      marginRight: "5px",
+                      borderColor: chooseTabOne ? "orange" : "#ccc",
                     }}
-                    value={filterDashBoard}
-                    onChange={(e) => setFilterDashBoard(e.target.value)}
+                    onClick={() => setChooseTabOne((prev) => !prev)}
                   >
-                    <option value="THỐNG KÊ DOANH THU THEO THÁNG">
-                      THỐNG KÊ DOANH THU THEO THÁNG
-                    </option>
-                    <option value="THỐNG KÊ DOANH THU THEO NĂM">
-                      THỐNG KÊ DOANH THU THEO NĂM
-                    </option>
-                    <option value="THỐNG KÊ ĐƠN HÀNG">THỐNG KÊ ĐƠN HÀNG</option>
-                    <option value="THỐNG KÊ TÀI XẾ">THỐNG KÊ TÀI XẾ</option>
-                    <option value="THỐNG KÊ KHÁCH HÀNG">
-                      THỐNG KÊ KHÁCH HÀNG
-                    </option>
-                  </select>
+                    THỐNG KÊ
+                  </button>
+                  <button
+                    style={{
+                      padding: "5px",
+                      backgroundColor: chooseTabOne ? "#ccc" : "orange",
+                      color: "white",
+                      borderRadius: "5px",
+                      fontWeight: "bold",
+                      marginRight: "5px",
+                      borderColor: chooseTabOne ? "#ccc" : "orange",
+                    }}
+                    onClick={() => setChooseTabOne((prev) => !prev)}
+                  >
+                    TÌM KIẾM
+                  </button>
                 </div>
 
-                {/* Phân loại thống kế */}
-                {filterDashBoard === "THỐNG KÊ DOANH THU THEO THÁNG" ? (
+                {/* Khu vực thống kê */}
+                {chooseTabOne ? (
                   <>
-                    <select
+                    <h2
                       style={{
-                        borderRadius: "5px",
-                        padding: "10px",
-                        border: "1px solid #ccc",
-                        color: "black",
-                        float: "right",
-                      }}
-                      value={yearFilter}
-                      onChange={(e) => setYearFilter(e.target.value)}
-                    >
-                      <option value="2021">Năm 2021</option>
-                      <option value="2022">Năm 2022</option>
-                      <option value="2023">Năm 2023</option>
-                    </select>
-                    <p
-                      style={{
-                        float: "left",
+                        fontSize: 20,
+                        textAlign: "center",
                         fontWeight: "bold",
-                        color: "orange",
+                        color: "#f16622",
+                        marginTop: "10px",
                       }}
                     >
-                      ( Đơn vị: VNĐ)
-                    </p>
-                    <Bar
-                      ref={chartRef}
-                      options={options}
-                      data={dataChart}
-                      plugins={[ChartDataLabels]}
-                      onClick={onClickFilterMonth}
-                    />
+                      {filterDashBoard}
+                    </h2>
 
-                    {/* Hiển thị tất cả đơn của 12 tháng */}
-                    <div
-                      style={{
-                        backgroundColor: "#f1a062",
-                        color: "white",
-                        display: "inline-block",
-                        borderRadius: "5px",
-                        padding: "5px",
-                        float: "right",
-                        marginTop: "5px",
-                      }}
-                    >
-                      <span
+                    <div>
+                      <select
                         style={{
-                          marginLeft: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "70px",
-                          cursor: "pointer",
+                          borderRadius: "5px",
+                          padding: "10px",
+                          border: "1px solid #ccc",
+                          color: "black",
                         }}
-                        onClick={() => onClickFilterMonth("0")}
+                        value={filterDashBoard}
+                        onChange={(e) => setFilterDashBoard(e.target.value)}
                       >
-                        <FilterOutlined />
-                        Tất cả
-                      </span>
+                        <option value="THỐNG KÊ DOANH THU THEO THÁNG">
+                          THỐNG KÊ DOANH THU THEO THÁNG
+                        </option>
+                        <option value="THỐNG KÊ DOANH THU THEO NĂM">
+                          THỐNG KÊ DOANH THU THEO NĂM
+                        </option>
+                        <option value="THỐNG KÊ ĐƠN HÀNG">
+                          THỐNG KÊ ĐƠN HÀNG
+                        </option>
+                        <option value="THỐNG KÊ TÀI XẾ">THỐNG KÊ TÀI XẾ</option>
+                        <option value="THỐNG KÊ KHÁCH HÀNG">
+                          THỐNG KÊ KHÁCH HÀNG
+                        </option>
+                      </select>
                     </div>
 
-                    {/* Khu vực bảng thống kê */}
-                    <ReportRevenueMonth
-                      yearFilter={yearFilter}
-                      monthPass={monthPass}
-                    />
-                  </>
-                ) : filterDashBoard === "THỐNG KÊ DOANH THU THEO NĂM" ? (
-                  <>
-                    <p
-                      style={{
-                        float: "right",
-                        fontWeight: "bold",
-                        color: "orange",
-                      }}
-                    >
-                      ( Đơn vị: VNĐ)
-                    </p>
-                    <Bar
-                      ref={chartRefYear}
-                      options={options}
-                      data={dataChartYear}
-                      plugins={[ChartDataLabels]}
-                      onClick={onClickFilterYear}
-                    />
+                    {/* Phân loại thống kế */}
+                    {filterDashBoard === "THỐNG KÊ DOANH THU THEO THÁNG" ? (
+                      <>
+                        <select
+                          style={{
+                            borderRadius: "5px",
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            color: "black",
+                            float: "right",
+                          }}
+                          value={yearFilter}
+                          onChange={(e) => setYearFilter(e.target.value)}
+                        >
+                          <option value="2021">Năm 2021</option>
+                          <option value="2022">Năm 2022</option>
+                          <option value="2023">Năm 2023</option>
+                        </select>
+                        <p
+                          style={{
+                            float: "left",
+                            fontWeight: "bold",
+                            color: "orange",
+                          }}
+                        >
+                          ( Đơn vị: VNĐ)
+                        </p>
+                        <Bar
+                          ref={chartRef}
+                          options={options}
+                          data={dataChart}
+                          plugins={[ChartDataLabels]}
+                          onClick={onClickFilterMonth}
+                        />
 
-                    {/* Hiển thị tất cả đơn của 12 tháng */}
-                    <div
-                      style={{
-                        backgroundColor: "#f1a062",
-                        color: "white",
-                        display: "inline-block",
-                        borderRadius: "5px",
-                        padding: "5px",
-                        float: "right",
-                        marginTop: "5px",
-                      }}
-                    >
-                      <span
-                        style={{
-                          marginLeft: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "70px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => setYearPass("4")}
-                      >
-                        <FilterOutlined />
-                        Tất cả
-                      </span>
-                    </div>
+                        {/* Hiển thị tất cả đơn của 12 tháng */}
+                        <div
+                          style={{
+                            backgroundColor: "#f1a062",
+                            color: "white",
+                            display: "inline-block",
+                            borderRadius: "5px",
+                            padding: "5px",
+                            float: "right",
+                            marginTop: "5px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              marginLeft: "5px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              width: "70px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => onClickFilterMonth("0")}
+                          >
+                            <FilterOutlined />
+                            Tất cả
+                          </span>
+                        </div>
 
-                    {/* Khu vực bảng thống kê theo năm */}
-                    <ReportRevenueYear yearPass={yearPass} />
-                  </>
-                ) : filterDashBoard === "THỐNG KÊ ĐƠN HÀNG" ? (
-                  <>
-                    {/* <select
+                        {/* Khu vực bảng thống kê */}
+                        <ReportRevenueMonth
+                          yearFilter={yearFilter}
+                          monthPass={monthPass}
+                        />
+                      </>
+                    ) : filterDashBoard === "THỐNG KÊ DOANH THU THEO NĂM" ? (
+                      <>
+                        <p
+                          style={{
+                            float: "right",
+                            fontWeight: "bold",
+                            color: "orange",
+                          }}
+                        >
+                          ( Đơn vị: VNĐ)
+                        </p>
+                        <Bar
+                          ref={chartRefYear}
+                          options={options}
+                          data={dataChartYear}
+                          plugins={[ChartDataLabels]}
+                          onClick={onClickFilterYear}
+                        />
+
+                        {/* Hiển thị tất cả đơn của 12 tháng */}
+                        <div
+                          style={{
+                            backgroundColor: "#f1a062",
+                            color: "white",
+                            display: "inline-block",
+                            borderRadius: "5px",
+                            padding: "5px",
+                            float: "right",
+                            marginTop: "5px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              marginLeft: "5px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              width: "70px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setYearPass("4")}
+                          >
+                            <FilterOutlined />
+                            Tất cả
+                          </span>
+                        </div>
+
+                        {/* Khu vực bảng thống kê theo năm */}
+                        <ReportRevenueYear yearPass={yearPass} />
+                      </>
+                    ) : filterDashBoard === "THỐNG KÊ ĐƠN HÀNG" ? (
+                      <>
+                        {/* <select
                       style={{
                         borderRadius: "5px",
                         padding: "10px",
@@ -1404,67 +1459,67 @@ function DashBoardAdmin() {
                           return <option value={item}>{item}</option>;
                         })}
                     </select> */}
-                    <div
-                      style={{
-                        width: "700px",
-                        height: "700px",
-                        margin: "0 auto",
-                        paddingTop: "-200px",
-                      }}
-                    >
-                      <p
-                        style={{
-                          float: "left",
-                          fontWeight: "bold",
-                          color: "orange",
-                        }}
-                      >
-                        ( Đơn vị: đơn)
-                      </p>
+                        <div
+                          style={{
+                            width: "700px",
+                            height: "700px",
+                            margin: "0 auto",
+                            paddingTop: "-200px",
+                          }}
+                        >
+                          <p
+                            style={{
+                              float: "left",
+                              fontWeight: "bold",
+                              color: "orange",
+                            }}
+                          >
+                            ( Đơn vị: đơn)
+                          </p>
 
-                      <Pie
-                        ref={chartRefOrder}
-                        data={dataPieOrder}
-                        options={options_pie}
-                        plugins={[ChartDataLabels]}
-                        onClick={onClickFilterOrder}
-                      />
-                    </div>
+                          <Pie
+                            ref={chartRefOrder}
+                            data={dataPieOrder}
+                            options={options_pie}
+                            plugins={[ChartDataLabels]}
+                            onClick={onClickFilterOrder}
+                          />
+                        </div>
 
-                    {/* Hiển thị tất cả đơn của toàn bộ*/}
-                    <div
-                      style={{
-                        backgroundColor: "#f1a062",
-                        color: "white",
-                        display: "inline-block",
-                        borderRadius: "5px",
-                        padding: "5px",
-                        float: "right",
-                        marginTop: "5px",
-                      }}
-                    >
-                      <span
-                        style={{
-                          marginLeft: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "70px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => setOrderPass(6)}
-                      >
-                        <FilterOutlined />
-                        Tất cả
-                      </span>
-                    </div>
+                        {/* Hiển thị tất cả đơn của toàn bộ*/}
+                        <div
+                          style={{
+                            backgroundColor: "#f1a062",
+                            color: "white",
+                            display: "inline-block",
+                            borderRadius: "5px",
+                            padding: "5px",
+                            float: "right",
+                            marginTop: "5px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              marginLeft: "5px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              width: "70px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setOrderPass(6)}
+                          >
+                            <FilterOutlined />
+                            Tất cả
+                          </span>
+                        </div>
 
-                    {/* Khu vực bảng thống kê đơn hàng */}
-                    <ReportOrder orderPass={orderPass} />
-                  </>
-                ) : filterDashBoard === "THỐNG KÊ TÀI XẾ" ? (
-                  <>
-                    {/* <select
+                        {/* Khu vực bảng thống kê đơn hàng */}
+                        <ReportOrder orderPass={orderPass} />
+                      </>
+                    ) : filterDashBoard === "THỐNG KÊ TÀI XẾ" ? (
+                      <>
+                        {/* <select
                       style={{
                         borderRadius: "5px",
                         padding: "10px",
@@ -1481,34 +1536,34 @@ function DashBoardAdmin() {
                           return <option value={item}>{item}</option>;
                         })}
                     </select> */}
-                    <DatalistInput
-                      style={{ width: "fit-content", float: "right" }}
-                      placeholder="Nhập vào tên tài xế"
-                      // label="Select ice cream flavor"
-                      onSelect={(item) => setDriverNameFilter(item.value)}
-                      items={driverNameDropDown}
-                    />
-                    <p
-                      style={{
-                        float: "left",
-                        fontWeight: "bold",
-                        color: "orange",
-                      }}
-                    >
-                      ( Đơn vị: đơn)
-                    </p>
-                    <Bar
-                      options={options}
-                      data={dataDriver}
-                      plugins={[ChartDataLabels]}
-                    />
+                        <DatalistInput
+                          style={{ width: "fit-content", float: "right" }}
+                          placeholder="Nhập vào tên tài xế"
+                          // label="Select ice cream flavor"
+                          onSelect={(item) => setDriverNameFilter(item.value)}
+                          items={driverNameDropDown}
+                        />
+                        <p
+                          style={{
+                            float: "left",
+                            fontWeight: "bold",
+                            color: "orange",
+                          }}
+                        >
+                          ( Đơn vị: đơn)
+                        </p>
+                        <Bar
+                          options={options}
+                          data={dataDriver}
+                          plugins={[ChartDataLabels]}
+                        />
 
-                    {/* Khu vực bảng thống kê đơn hàng */}
-                    <ReportDriver driverPass={driverNameFilter} />
-                  </>
-                ) : filterDashBoard === "THỐNG KÊ KHÁCH HÀNG" ? (
-                  <>
-                    {/* <select
+                        {/* Khu vực bảng thống kê đơn hàng */}
+                        <ReportDriver driverPass={driverNameFilter} />
+                      </>
+                    ) : filterDashBoard === "THỐNG KÊ KHÁCH HÀNG" ? (
+                      <>
+                        {/* <select
                       style={{
                         borderRadius: "5px",
                         padding: "10px",
@@ -1525,34 +1580,78 @@ function DashBoardAdmin() {
                           return <option value={item}>{item}</option>;
                         })}
                     </select> */}
-                    <DatalistInput
-                      style={{ width: "fit-content", float: "right" }}
-                      placeholder="Nhập vào tên khách hàng"
-                      // label="Select ice cream flavor"
-                      onSelect={(item) => setCustomerNameFilter(item.value)}
-                      items={customerNameDropDown}
-                    />
-                    <p
-                      style={{
-                        float: "left",
-                        fontWeight: "bold",
-                        color: "orange",
-                      }}
-                    >
-                      ( Đơn vị: đơn)
-                    </p>
+                        <DatalistInput
+                          style={{ width: "fit-content", float: "right" }}
+                          placeholder="Nhập vào tên khách hàng"
+                          // label="Select ice cream flavor"
+                          onSelect={(item) => setCustomerNameFilter(item.value)}
+                          items={customerNameDropDown}
+                        />
+                        <p
+                          style={{
+                            float: "left",
+                            fontWeight: "bold",
+                            color: "orange",
+                          }}
+                        >
+                          ( Đơn vị: đơn)
+                        </p>
 
-                    <Bar
-                      options={options}
-                      data={dataCustomer}
-                      plugins={[ChartDataLabels]}
-                    />
+                        <Bar
+                          options={options}
+                          data={dataCustomer}
+                          plugins={[ChartDataLabels]}
+                        />
 
-                    {/* Khu vực bảng thống kê khách hàng */}
-                    <ReportCustomer customerPass={customerNameFilter} />
+                        {/* Khu vực bảng thống kê khách hàng */}
+                        <ReportCustomer customerPass={customerNameFilter} />
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </>
                 ) : (
-                  ""
+                  <>
+                    <div className="form-outline mb-3 form_input_handle">
+                      <Select
+                        defaultValue="Không có"
+                        style={{
+                          width: 200,
+                        }}
+                        onChange={handleChangeDropDown}
+                        options={[
+                          {
+                            value: "Dịch vụ",
+                            label: "Dich vụ",
+                          },
+                          {
+                            value: "Phương tiện",
+                            label: "Phương tiện",
+                          },
+                          {
+                            value: "Dịch vụ",
+                            label: "Dich vụ",
+                          },
+                          {
+                            value: "Dịch vụ",
+                            label: "Dich vụ",
+                          },
+                          {
+                            value: "Dịch vụ",
+                            label: "Dich vụ",
+                          },
+                          {
+                            value: "Dịch vụ",
+                            label: "Dich vụ",
+                          },
+                          {
+                            value: "Dịch vụ",
+                            label: "Dich vụ",
+                          },
+                        ]}
+                      />
+                    </div>
+                  </>
                 )}
               </div>
 

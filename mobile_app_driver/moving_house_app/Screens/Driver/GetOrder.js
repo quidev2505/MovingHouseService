@@ -9,6 +9,8 @@ import { Tab, TabView } from '@rneui/themed';
 import { FAB } from 'react-native-elements';
 
 
+import { Input, Icon } from '@rneui/themed';
+
 import { Card, Divider } from '@rneui/themed';
 
 function GetOrder({ navigation }) {
@@ -26,6 +28,10 @@ function GetOrder({ navigation }) {
     const location_order = useRef("TPHCM và tỉnh lân cận")
 
     const inputStatus = useRef("Hiện có")
+
+
+    //Tìm kiếm theo mã đơn hàng
+    const [inputSearch, setInputSearch] = useState("")
 
     //Lấy thông tin tất cả đơn hàng
     const get_info_all_order = async () => {
@@ -64,7 +70,7 @@ function GetOrder({ navigation }) {
                                     if (inputStatus.current === "Đã nhận") {
                                         if (status_driver === "Sẵn sàng" && item.status !== "Đã hủy" && item.status !== "Đã hoàn thành" && item.driver_name.includes(fullname_driver) === true) {
                                             check_location_order(item.fromLocation)
-                                            console.log(item.vehicle_name)
+
                                             const quantity_driver = item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]
 
 
@@ -235,6 +241,18 @@ function GetOrder({ navigation }) {
     }
 
 
+    const searchFilter = () => {
+
+        if (inputSearch !== '') {
+            const data_new_search = dataOrder.filter((item, index) => {
+                return item.order_id.includes(inputSearch)
+            })
+            setDataOrder(data_new_search)
+        } else {
+            get_info_all_order();
+        }
+    }
+
     return (
         <>
             <ScrollView refreshControl={
@@ -258,6 +276,27 @@ function GetOrder({ navigation }) {
                         />&nbsp;{vehicleType}
                     </Text>
                 </View>
+
+                {/* Ô nhập tìm kiếm theo mã đơn hàng */}
+                <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 320, height: 40, margin: 20, marginLeft: 25, marginTop: 30 }}>
+                    <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                        <Input
+                            value={inputSearch}
+                            onChangeText={(e) => setInputSearch(e)}
+                            placeholder='Nhập vào mã đơn hàng...'
+                        />
+                        <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -10 }} onPress={() => searchFilter(inputSearch)}>
+                            <Ionicons
+                                style={{ color: "black" }}
+                                name="search-circle"
+                                size={30}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+
+
 
                 {/* Lọc ra đơn hiện đang có và đơn đã nhận hàng. */}
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", marginTop: 10, height: 40 }}>
@@ -354,7 +393,7 @@ function GetOrder({ navigation }) {
                                                 {item.driver_name.length === 0 ? <Text style={{ fontWeight: "bold" }}>&nbsp;(Chưa xác định) </Text> : item.driver_name.map((item1, index) => {
                                                     return <Text key={item1.fullname_driver} style={{ fontWeight: item1 === item.fullname_driver ? 'bold' : '400', color: item1 === item.fullname_driver ? 'purple' : 'black' }}> {index + 1}. {item1} |</Text>
                                                 })}
-                                                <Text style={{ fontWeight: "bold" }}>- Cần ({item.driver_name.length}/ {item.quantity_driver}) tài xế
+                                                <Text style={{ fontWeight: "bold" }}>- Cần ({item.driver_name.length}/{item.quantity_driver}) tài xế
                                                     {/* {item.vehicle_name.split(" ")[item.vehicle_name.split(" ").length - 1].split("x")[1].split(")")[0]}) tài xế */}
                                                 </Text>
                                             </Text>

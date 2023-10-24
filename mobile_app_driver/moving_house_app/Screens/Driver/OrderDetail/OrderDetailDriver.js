@@ -14,6 +14,7 @@ function OrderDetailDriver({ route, navigation }) {
 
     const [cancelOrder, setCancelOrder] = useState(false)
     const [fullDriver, setFullDriver] = useState(false)//Kiểm tra đủ tài xế
+    const [alreadyJoin, setAlreadyJoin] = useState(false)//Kiểm tra tham gia chưa
 
     //ID khách hàng
     const [customerID, setCustomerID] = useState("")
@@ -24,7 +25,7 @@ function OrderDetailDriver({ route, navigation }) {
     const get_detail_order = async (id_input, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start) => {
 
 
-        await axios.get(`${api_url}/v1/order/viewOrderDetail/${id_input}`).then(async(data) => {
+        await axios.get(`${api_url}/v1/order/viewOrderDetail/${id_input}`).then(async (data) => {
             const data_customer = data.data[0];
             const ob_detail_order = {
                 order_detail_id: id_input,
@@ -57,16 +58,18 @@ function OrderDetailDriver({ route, navigation }) {
             //Kiểm tra xem đã có tài xế này tham gia chưa
             if (ob_detail_order.driver_name.includes(fullname_driver)) {
                 setCancelOrder(true)
-                setFullDriver(true)
+                setAlreadyJoin(true)
+
                 //Kiểm tra xem đủ tài xế chưa //Nếu đã đủ sẽ hiện nút "Tiếp theo"
                 if (quantity_driver == ob_detail_order.driver_name.length) {
+                    setFullDriver(true)
                     setNextStep(true)
 
                 }
             } else {
                 //Nếu không có tên tài xế trong đơn hàng
-                //Kiểm tra xem đủ tài xế chưa //Nếu đã đủ sẽ hiện nút "Tiếp theo"
-                if (quantity_driver == ob_detail_order.driver_name.length) {
+                //Kiểm tra xem đủ tài xế chưa //Nếu đã đủ sẽ không hiện nút "Tiếp theo"
+                if (quantity_driver == ob_detail_order.driver_name.length) { //
                     setCancelOrder(true)
                     setFullDriver(true)
                 } else {
@@ -401,20 +404,24 @@ function OrderDetailDriver({ route, navigation }) {
                                     {cancelOrder === true && fullDriver === true ? <TouchableOpacity style={styles.button_full}>
                                         <Text style={styles.buttonText}>Đã đủ số lượng tài xế
                                         </Text>
-                                    </TouchableOpacity> :
-                                        cancelOrder === true ? (
-                                            <TouchableOpacity style={styles.button1} onPress={() => cancel_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
-                                                <Text style={styles.buttonText}>Hủy đơn
-                                                </Text>
+                                    </TouchableOpacity> : <TouchableOpacity style={styles.button_full}>
+                                        <Text style={styles.buttonText}>Chưa đủ số lượng tài xế
+                                        </Text>
+                                    </TouchableOpacity>}
 
-                                            </TouchableOpacity>
-                                        ) : (
-                                            <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
-                                                <Text style={styles.buttonText}>Nhấn để nhận đơn
-                                                </Text>
+                                    {alreadyJoin === true && cancelOrder === true ? (
+                                        <TouchableOpacity style={styles.button1} onPress={() => cancel_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
+                                            <Text style={styles.buttonText}>Hủy đơn
+                                            </Text>
 
-                                            </TouchableOpacity>
-                                        )}
+                                        </TouchableOpacity>
+                                    ) : fullDriver !== true ? (
+                                        <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
+                                            <Text style={styles.buttonText}>Nhấn để nhận đơn
+                                            </Text>
+
+                                        </TouchableOpacity>
+                                    ) : ''}
                                 </View>
                             </View>
                         </View>

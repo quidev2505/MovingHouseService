@@ -8,6 +8,7 @@ import axios from 'axios';
 import { Card } from '@rneui/themed';
 
 function OrderDetail({ route, navigation }) {
+    //Đơn hàng trong Tab Navigation
 
     const [nextStep, setNextStep] = useState(false)
     const [dataOrderDetail, setDataOrderDetail] = useState({});
