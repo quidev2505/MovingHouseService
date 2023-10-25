@@ -178,12 +178,12 @@ function DriverAdmin() {
       title: "Ảnh đại diện",
       dataIndex: "avatar",
       key: "avatar",
-      render: (avatar) => (
+      render: (avatar, status) => (
         <td>
           <Badge
             dot
             style={{
-              backgroundColor: "green",
+              backgroundColor: status.status == "Sẵn sàng" ? "green" : "red",
               width: "8px",
               height: "8px",
               position: "absolute",
@@ -212,21 +212,21 @@ function DriverAdmin() {
       title: "Lượt giao hàng",
       dataIndex: "id_delivery",
       key: "id_delivery",
-      defaultSortOrder: "ascend",
+      // defaultSortOrder: "ascend",
       sorter: (a, b) => a.id_delivery - b.id_delivery,
     },
     {
       title: "Lượt đánh giá",
       dataIndex: "id_rating",
       key: "id_rating",
-      defaultSortOrder: "ascend",
+      // defaultSortOrder: "ascend",
       sorter: (a, b) => a.id_rating - b.id_rating,
     },
     {
       title: "Sao trung bình",
       dataIndex: "star_average",
       key: "star_average",
-      defaultSortOrder: "ascend",
+      // defaultSortOrder: "ascend",
       sorter: (a, b) => a.star_average - b.star_average,
       render: (star_average) => (
         <td>

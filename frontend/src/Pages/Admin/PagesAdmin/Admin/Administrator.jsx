@@ -51,6 +51,7 @@ import {
 import axios from "axios";
 
 import { useSelector } from "react-redux";
+import { genStatusStyle } from "antd/es/input/style";
 
 function Administrator() {
   const nav = useNavigate();
@@ -203,12 +204,12 @@ function Administrator() {
       title: "Ảnh đại diện",
       dataIndex: "avatar",
       key: "avatar",
-      render: (avatar) => (
+      render: (avatar, status) => (
         <td>
           <Badge
             dot
             style={{
-              backgroundColor: "green",
+              backgroundColor: status.status == "Sẵn sàng" ? "green" : "red",
               width: "8px",
               height: "8px",
               position: "absolute",
@@ -420,7 +421,10 @@ function Administrator() {
               right: "4px",
             }}
           >
-            <Avatar src={<img src={avatar} alt="avatar" />} style={{border:"1px solid #ccc"}} />
+            <Avatar
+              src={<img src={avatar} alt="avatar" />}
+              style={{ border: "1px solid #ccc" }}
+            />
           </Badge>
         </td>
       ),

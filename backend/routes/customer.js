@@ -26,4 +26,8 @@ router.get('/get_customer_info/:id', customerController.getCustomer);
 //Update Customer
 router.post('/update_customer', upload.single("file"), customerController.updateCustomer);
 
+
+//Find Customer Advanced
+router.post('/findCustomerAdvanced', customerController.findCustomerAdvaned)
+
 module.exports = router;

@@ -41,6 +41,7 @@ import ReportRevenueYear from "./ReportRevenueYear";
 import ReportOrder from "./ReportOrder";
 import ReportDriver from "./ReportDriver";
 import ReportCustomer from "./ReportCustomer";
+import SearchAdvanced from "./SearchAdvanced/SearchAdvanced";
 
 ChartJS.register(
   CategoryScale,
@@ -1013,10 +1014,8 @@ function DashBoardAdmin() {
   //Xử lý khi lọc
   const [driverPass, setDriverPass] = useState("Tất cả");
 
-  //Lọc tổng hợp
-  const handleChangeDropDown = (value) => {
-    setUnit(value);
-  };
+
+
 
   return (
     <>
@@ -1612,45 +1611,7 @@ function DashBoardAdmin() {
                   </>
                 ) : (
                   <>
-                    <div className="form-outline mb-3 form_input_handle">
-                      <Select
-                        defaultValue="Không có"
-                        style={{
-                          width: 200,
-                        }}
-                        onChange={handleChangeDropDown}
-                        options={[
-                          {
-                            value: "Dịch vụ",
-                            label: "Dich vụ",
-                          },
-                          {
-                            value: "Phương tiện",
-                            label: "Phương tiện",
-                          },
-                          {
-                            value: "Dịch vụ",
-                            label: "Dich vụ",
-                          },
-                          {
-                            value: "Dịch vụ",
-                            label: "Dich vụ",
-                          },
-                          {
-                            value: "Dịch vụ",
-                            label: "Dich vụ",
-                          },
-                          {
-                            value: "Dịch vụ",
-                            label: "Dich vụ",
-                          },
-                          {
-                            value: "Dịch vụ",
-                            label: "Dich vụ",
-                          },
-                        ]}
-                      />
-                    </div>
+                    <SearchAdvanced/>
                   </>
                 )}
               </div>
