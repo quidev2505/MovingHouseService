@@ -1,6 +1,7 @@
 const Customer = require('../models/Customer');
 const User = require('../models/User')
 const Order = require('../models/Order')
+const CommentBlog = require('../models/CommentBlog')
 
 const fs = require('fs');
 
@@ -191,7 +192,7 @@ const customerController = {
     //Tìm kiếm khách hàng
     findCustomerAdvaned: async (req, res) => {
         try {
-            const { phonenumber, fullname } = req.body;
+            const { phonenumber, fullname, address } = req.body;
 
             //Gọi dữ liệu User
             const call_api_user = await User.find();
@@ -201,51 +202,75 @@ const customerController = {
             const call_api_customer = await Customer.find();
             const data_customer = call_api_customer;
 
-            const arr_customer_id = []
+
             const data_all = data_user.map((item, index) => {
                 return {
                     fullname: item.fullname,
                     email: item.email,
                     phonenumber: item.phonenumber,
-                    fullname: item.fullname,
                     address: data_customer[index].address,
                     avatar: data_customer[index].avatar,
                     gender: data_customer[index].gender,
-                    customer_id: data_customer[index]._id
+                    customer_id: data_customer[index]._id,
                 }
             })
 
 
             //Khu vực xử lý dữ liệu nhập vào
             let new_arr = data_all.filter((item) => {
-                // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-                let word_Change_VN = customerController.removeVietnameseTones(fullname != '' ? item.fullname : phonenumber != '' ? item.phonenumber : '');
-                let word_search = customerController.removeVietnameseTones(fullname || phonenumber);
-                // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-                let search = fullname || phonenumber
+    
+                    // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+                    let word_Change_VN = customerController.removeVietnameseTones(fullname != '' ? item.fullname : phonenumber != '' ? item.phonenumber : address != '' ? item?.address : '');
+                    let word_search = customerController.removeVietnameseTones(fullname || phonenumber || address);
+                    // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+                    let search = fullname || phonenumber || address
 
-                return search.toLowerCase() === ""
-                    ? item
-                    : word_Change_VN.toLowerCase().includes(word_search);
+                    return search.toLowerCase() === ""
+                        ? item
+                        : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
+                
+
             });
 
             //Dùng vòng lặp lướt qua các đơn hàng đã thanh toán
-            var arr_final = []
+            var arr_final = [] //Kết quả hiển thị
             new_arr.forEach(async (item, index) => {
+                //Khu vực cho thanh toán
                 const dataOrder = await Order.find({ customer_id: item.customer_id })
 
-                let sumPayment = 0;
+                let sumPayment = 0;//Tổng thanh toán
+                let sumOrderComplete = 0;//Số đơn giao thành công
+                let sumOrderCancel = 0;//Số đơn đã hủy
+
                 dataOrder.forEach((item1, indx) => {
-                    sumPayment += item1.totalOrder
+                    //Tổng thanh toán
+                    if (item1.status === "Đã hoàn thành") {
+                        sumOrderComplete++;
+                        sumPayment += item1.totalOrder
+                    } else if (item1.status === "Đã hủy") {
+                        sumOrderCancel++;
+                    }
                 })
 
                 item.totalPayment = sumPayment
+                item.totalOrderComplete = sumOrderComplete;
+                item.totalOrderCancel = sumOrderCancel;
+
+                //Khu vực cho bình luận
+                const dataCommentBlog = await CommentBlog.find({ fullname: item.fullname })
+                let sumCommentBlog = 0;//Tổng số lượt bình luận
+
+                dataCommentBlog.forEach((item, index) => {
+                    sumCommentBlog++;
+                })
+
+                item.totalCommentBlog = sumCommentBlog
+
+
                 arr_final.push(item)
             })
 
             setTimeout(() => {
-
-
                 if (arr_final) {
                     res.status(201).json(arr_final);
                 } else {

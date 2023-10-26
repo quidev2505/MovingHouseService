@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import { Image, Table, Avatar, Select } from "antd";
 import CustomerSearch from "./CustomerSearch";
+import DriverSearch from "./DriverSearch";
 
 function SearchAdvanced() {
   const [categoryChoose, setCategoryChoose] = useState("");
@@ -79,7 +80,7 @@ function SearchAdvanced() {
           </div>
         </div>
         {/* Khu vực Import các Search thành phần */}
-        {categoryChoose == "Khách hàng" ? <CustomerSearch /> : ""}
+        {categoryChoose == "Khách hàng" ? <CustomerSearch /> : categoryChoose == "Tài xế" ? <DriverSearch/> : ''}
       </div>
     </>
   );

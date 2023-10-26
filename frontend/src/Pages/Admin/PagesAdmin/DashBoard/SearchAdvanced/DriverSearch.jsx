@@ -8,12 +8,13 @@ import { SearchOutlined } from "@ant-design/icons";
 
 import LoadingOverlayComponent from "../../../../../Components/LoadingOverlayComponent";
 
-function CustomerSearch() {
+function DriverSearch() {
   const [fullname, setFullName] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [profileCode, setProfileCode] = useState("");
 
-  const [dataCustomer, setDataCustomer] = useState([]);
+  const [dataDriver, setDataDriver] = useState([]);
 
   // const [showTable, setShowTable] = useState(false);
 
@@ -23,16 +24,17 @@ function CustomerSearch() {
     setIsActive(true);
 
     // setShowTable(false);
-    const api_call = await axios.post("/v1/customer/findCustomerAdvanced", {
+    const api_call = await axios.post("/v1/driver/findDriverAdvanced", {
       phonenumber,
       fullname,
       address,
+      profileCode,
     });
 
     const data_get = api_call.data;
     // console.log(data_get);
     setIsActive(false);
-    setDataCustomer(data_get);
+    setDataDriver(data_get);
     // setShowTable(true);
   };
 
@@ -157,29 +159,12 @@ function CustomerSearch() {
       ),
   });
 
-  const columnCustomer = [
-    // {
-    //   title: "STT",
-    //   dataIndex: "STT",
-    //   key: "STT",
-    //   render: (STT) => {
-    //     return (
-    //       <td
-    //         style={{
-    //           fontWeight: "500",
-    //           color: "black",
-    //         }}
-    //       >
-    //         {STT}
-    //       </td>
-    //     );
-    //   },
-    // },
+  const columnDriver = [
     {
-      title: "Tên khách hàng",
-      dataIndex: "fullname",
-      key: "fullname",
-      render: (fullname) => {
+      title: "Mã hồ sơ",
+      dataIndex: "profile_code",
+      key: "profile_code",
+      render: (profile_code) => {
         return (
           <td
             style={{
@@ -187,7 +172,7 @@ function CustomerSearch() {
               color: "black",
             }}
           >
-            {fullname}
+            {profile_code}
           </td>
         );
       },
@@ -292,11 +277,11 @@ function CustomerSearch() {
       },
     },
     {
-      title: "Lượt bình luận",
-      dataIndex: "totalCommentBlog",
-      key: "totalCommentBlog",
-      sorter: (a, b) => a.totalCommentBlog - b.totalCommentBlog,
-      render: (totalCommentBlog) => {
+      title: "Lượt vận chuyển",
+      dataIndex: "id_delivery",
+      key: "id_delivery",
+      sorter: (a, b) => a.id_delivery - b.id_delivery,
+      render: (id_delivery) => {
         return (
           <td
             style={{
@@ -304,17 +289,17 @@ function CustomerSearch() {
               color: "orange",
             }}
           >
-            {totalCommentBlog}
+            {id_delivery}
           </td>
         );
       },
     },
     {
-      title: "Đơn giao thành công",
-      dataIndex: "totalOrderComplete",
-      key: "totalOrderComplete",
-      sorter: (a, b) => a.totalOrderComplete - b.totalOrderComplete,
-      render: (totalOrderComplete) => {
+      title: "Lượt đánh giá",
+      dataIndex: "id_rating",
+      key: "id_rating",
+      sorter: (a, b) => a.id_rating - b.id_rating,
+      render: (id_rating) => {
         return (
           <td
             style={{
@@ -322,7 +307,7 @@ function CustomerSearch() {
               color: "orange",
             }}
           >
-            {totalOrderComplete}
+            {id_rating}
           </td>
         );
       },
@@ -395,7 +380,7 @@ function CustomerSearch() {
           borderRadius: "7px",
         }}
       >
-        KHÁCH HÀNG
+        TÀI XẾ
       </p>
       {/* Các hạng mục tìm kiếm */}
       <div
@@ -405,6 +390,27 @@ function CustomerSearch() {
           marginBottom: "18px",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginRight: "20px",
+          }}
+        >
+          <label>Mã hồ sơ</label>
+          <input
+            placeholder="Nhập vào mã hồ sơ"
+            style={{
+              width: "fit-content",
+              borderRadius: "7px",
+              padding: "5px",
+              marginTop: "3px",
+              border: "1px solid #ccc",
+            }}
+            value={profileCode}
+            onChange={(e) => setProfileCode(e.target.value)}
+          />
+        </div>
         <div
           style={{
             display: "flex",
@@ -497,8 +503,8 @@ function CustomerSearch() {
       {/* Bảng dữ liệu */}
       <LoadingOverlayComponent status={isActive}>
         <Table
-          columns={columnCustomer}
-          dataSource={dataCustomer}
+          columns={columnDriver}
+          dataSource={dataDriver}
           onChange={onChange}
         />
       </LoadingOverlayComponent>
@@ -506,4 +512,4 @@ function CustomerSearch() {
   );
 }
 
-export default CustomerSearch;
+export default DriverSearch;

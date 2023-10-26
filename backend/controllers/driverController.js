@@ -334,6 +334,137 @@ const driverController = {
             res.status(501).json(e);
         }
     },
+    //Loại bỏ kí tự có dấu
+    removeVietnameseTones: (str) => {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        // Some system encode vietnamese combining accent as individual utf-8 characters
+        // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+        str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+        str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+        // Remove extra spaces
+        // Bỏ các khoảng trắng liền nhau
+        str = str.replace(/ + /g, " ");
+        str = str.trim();
+        // Remove punctuations
+        // Bỏ dấu câu, kí tự đặc biệt
+        str = str.replace(
+            /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,
+            " "
+        );
+        return str;
+    },
+    //Tìm kiếm tài xế
+    findDriverAdvaned: async (req, res) => {
+        try {
+            const { profile_code, phonenumber, fullname, address } = req.body;
+
+            //Gọi dữ liệu Driver
+            const call_api_driver = await Driver.find();
+            const data_driver = call_api_driver;
+
+
+            const data_all = data_driver.map((item, index) => {
+                return {
+                    profile_code: item.profile_code,
+                    gender: item.gender,
+                    fullname: item.fullname,
+                    email: item.email,
+                    phonenumber: item.phonenumber,
+                    date_of_birth: item.date_of_birth,
+                    address: item.address,
+                    vehicle_type: item.vehicle_type,
+                    location_delivery: item.location_delivery,
+                    avatar: item.avatar,
+                    id_rating: item.id_rating,
+                    id_delivery: item.id_delivery,
+                    citizen_id: item.citizen_id,
+                    star_average: item.star_average,
+                    status: item.status,
+                    current_position: item.current_position
+                }
+            })
+
+
+            //Khu vực xử lý dữ liệu nhập vào
+            let new_arr = data_all.filter((item) => {
+                // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+                let word_Change_VN = customerController.removeVietnameseTones(fullname != '' ? item.fullname : phonenumber != '' ? item.phonenumber : address != '' ? item?.address : profile_code != '' ? item.profile_code : '');
+                let word_search = customerController.removeVietnameseTones(fullname || phonenumber || address || profile_code);
+                // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+                let search = fullname || phonenumber || address || profile_code
+
+                return search.toLowerCase() === ""
+                    ? item
+                    : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
+
+
+            });
+
+            // //Dùng vòng lặp lướt qua các đơn hàng đã thanh toán
+            // var arr_final = [] //Kết quả hiển thị
+            // new_arr.forEach(async (item, index) => {
+            //     //Khu vực cho thanh toán
+            //     const dataOrder = await Order.find({ customer_id: item.customer_id })
+
+            //     let sumPayment = 0;//Tổng thanh toán
+            //     let sumOrderComplete = 0;//Số đơn giao thành công
+            //     let sumOrderCancel = 0;//Số đơn đã hủy
+
+            //     dataOrder.forEach((item1, indx) => {
+            //         //Tổng thanh toán
+            //         if (item1.status === "Đã hoàn thành") {
+            //             sumOrderComplete++;
+            //             sumPayment += item1.totalOrder
+            //         } else if (item1.status === "Đã hủy") {
+            //             sumOrderCancel++;
+            //         }
+            //     })
+
+            //     item.totalPayment = sumPayment
+            //     item.totalOrderComplete = sumOrderComplete;
+            //     item.totalOrderCancel = sumOrderCancel;
+
+            //     //Khu vực cho bình luận
+            //     const dataCommentBlog = await CommentBlog.find({ fullname: item.fullname })
+            //     let sumCommentBlog = 0;//Tổng số lượt bình luận
+
+            //     dataCommentBlog.forEach((item, index) => {
+            //         sumCommentBlog++;
+            //     })
+
+            //     item.totalCommentBlog = sumCommentBlog
+
+
+            //     arr_final.push(item)
+            // })
+
+            setTimeout(() => {
+                if (new_arr) {
+                    res.status(201).json(new_arr);
+                } else {
+                    res.status(501).json('Error');
+                }
+            }, 2000);
+
+
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    }
 
 
 }
