@@ -378,22 +378,22 @@ const driverController = {
 
             const data_all = data_driver.map((item, index) => {
                 return {
-                    profile_code: item.profile_code,
-                    gender: item.gender,
-                    fullname: item.fullname,
-                    email: item.email,
-                    phonenumber: item.phonenumber,
-                    date_of_birth: item.date_of_birth,
-                    address: item.address,
-                    vehicle_type: item.vehicle_type,
-                    location_delivery: item.location_delivery,
-                    avatar: item.avatar,
-                    id_rating: item.id_rating,
-                    id_delivery: item.id_delivery,
-                    citizen_id: item.citizen_id,
-                    star_average: item.star_average,
-                    status: item.status,
-                    current_position: item.current_position
+                    profile_code: item.profile_code,//
+                    gender: item.gender,//
+                    fullname: item.fullname,//
+                    email: item.email,//
+                    phonenumber: item.phonenumber,//
+                    date_of_birth: item.date_of_birth,//
+                    address: item.address,//
+                    vehicle_type: item.vehicle_type,//
+                    location_delivery: item.location_delivery,//
+                    avatar: item.avatar,//
+                    id_rating: item.id_rating,//
+                    id_delivery: item.id_delivery,//
+                    citizen_id: item.citizen_id,//
+                    star_average: item.star_average,//
+                    status: item.status,//
+                    current_position: item.current_position//
                 }
             })
 
@@ -401,8 +401,8 @@ const driverController = {
             //Khu vực xử lý dữ liệu nhập vào
             let new_arr = data_all.filter((item) => {
                 // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-                let word_Change_VN = customerController.removeVietnameseTones(fullname != '' ? item.fullname : phonenumber != '' ? item.phonenumber : address != '' ? item?.address : profile_code != '' ? item.profile_code : '');
-                let word_search = customerController.removeVietnameseTones(fullname || phonenumber || address || profile_code);
+                let word_Change_VN = driverController.removeVietnameseTones(fullname != '' ? item.fullname : phonenumber != '' ? item.phonenumber : address != '' ? item?.address : profile_code != '' ? item.profile_code : '');
+                let word_search = driverController.removeVietnameseTones(fullname || phonenumber || address || profile_code);
                 // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
                 let search = fullname || phonenumber || address || profile_code
 

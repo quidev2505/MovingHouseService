@@ -12,7 +12,7 @@ function DriverSearch() {
   const [fullname, setFullName] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [profileCode, setProfileCode] = useState("");
+  const [profile_code, setProfileCode] = useState("");
 
   const [dataDriver, setDataDriver] = useState([]);
 
@@ -25,10 +25,10 @@ function DriverSearch() {
 
     // setShowTable(false);
     const api_call = await axios.post("/v1/driver/findDriverAdvanced", {
+      profile_code,
       phonenumber,
       fullname,
       address,
-      profileCode,
     });
 
     const data_get = api_call.data;
@@ -178,6 +178,23 @@ function DriverSearch() {
       },
     },
     {
+      title: "Họ và tên",
+      dataIndex: "fullname",
+      key: "fullname",
+      render: (fullname) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {fullname}
+          </td>
+        );
+      },
+    },
+    {
       title: "Số điện thoại",
       dataIndex: "phonenumber",
       key: "phonenumber",
@@ -190,6 +207,41 @@ function DriverSearch() {
             }}
           >
             {phonenumber}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Ngày sinh",
+      dataIndex: "date_of_birth",
+      key: "date_of_birth",
+      render: (date_of_birth) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {date_of_birth}
+          </td>
+        );
+      },
+    },
+
+    {
+      title: "CCCD",
+      dataIndex: "citizen_id",
+      key: "citizen_id",
+      render: (citizen_id) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {citizen_id}
           </td>
         );
       },
@@ -277,11 +329,28 @@ function DriverSearch() {
       },
     },
     {
-      title: "Lượt vận chuyển",
-      dataIndex: "id_delivery",
-      key: "id_delivery",
-      sorter: (a, b) => a.id_delivery - b.id_delivery,
-      render: (id_delivery) => {
+      title: "Sao trung bình",
+      dataIndex: "star_average",
+      key: "star_average",
+      render: (star_average) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {star_average} ⭐
+          </td>
+        );
+      },
+    },
+    {
+      title: "Loại phương tiện",
+      dataIndex: "vehicle_type",
+      key: "vehicle_type",
+      sorter: (a, b) => a.vehicle_type - b.vehicle_type,
+      render: (vehicle_type) => {
         return (
           <td
             style={{
@@ -289,7 +358,41 @@ function DriverSearch() {
               color: "orange",
             }}
           >
-            {id_delivery}
+            {vehicle_type}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Địa điểm vận chuyển",
+      dataIndex: "location_delivery",
+      key: "location_delivery",
+      sorter: (a, b) => a.location_delivery - b.location_delivery,
+      render: (location_delivery) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+            }}
+          >
+            {location_delivery}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Lượt vận chuyển",
+      dataIndex: "id_delivery",
+      key: "id_delivery",
+      sorter: (a, b) => a.id_delivery.length - b.id_delivery.length,
+      render: (id_delivery) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+            }}
+          >
+            {id_delivery.length}
           </td>
         );
       },
@@ -298,55 +401,57 @@ function DriverSearch() {
       title: "Lượt đánh giá",
       dataIndex: "id_rating",
       key: "id_rating",
-      sorter: (a, b) => a.id_rating - b.id_rating,
+      sorter: (a, b) => a.id_rating.length - b.id_rating.length,
       render: (id_rating) => {
         return (
           <td
             style={{
               fontWeight: "500",
-              color: "orange",
             }}
           >
-            {id_rating}
+            {id_rating.length}
           </td>
         );
       },
     },
     {
-      title: "Đơn đã hủy",
-      dataIndex: "totalOrderCancel",
-      key: "totalOrderCancel",
-      sorter: (a, b) => a.totalOrderCancel - b.totalOrderCancel,
-      render: (totalOrderCancel) => {
+      title: "Vị trí hiện tại",
+      dataIndex: "current_position",
+      key: "current_position",
+      render: (current_position) => {
         return (
           <td
             style={{
               fontWeight: "500",
-              color: "orange",
             }}
           >
-            {totalOrderCancel}
+            {current_position}
           </td>
         );
       },
     },
     {
-      title: "Tổng thanh toán",
-      dataIndex: "totalPayment",
-      key: "totalPayment",
-      sorter: (a, b) => a.totalOrder - b.totalOrder,
-      render: (totalPayment) => {
-        return (
-          <td
-            style={{
-              fontWeight: "500",
-              color: "orange",
-            }}
-          >
-            {totalPayment.toLocaleString()} đ
-          </td>
-        );
-      },
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      filters: [
+        {
+          text: "Sẵn sàng",
+          value: "Sẵn sàng",
+        },
+        {
+          text: "Đang bận",
+          value: "Đang bận",
+        },
+      ],
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
+      render: (status, id) => (
+        <div className="d-flex">
+          <Tag color={status === "Sẵn sàng" ? "green" : "volcano"} key={status}>
+            {status === "Sẵn sàng" ? "Sẵn sàng" : "Đang bận"}
+          </Tag>
+        </div>
+      ),
     },
   ];
 
@@ -360,7 +465,7 @@ function DriverSearch() {
       //Gọi API
       findData();
     } else {
-      setDataCustomer(extra.currentDataSource);
+      setDataDriver(extra.currentDataSource);
     }
   };
 
@@ -407,7 +512,7 @@ function DriverSearch() {
               marginTop: "3px",
               border: "1px solid #ccc",
             }}
-            value={profileCode}
+            value={profile_code}
             onChange={(e) => setProfileCode(e.target.value)}
           />
         </div>
