@@ -276,7 +276,7 @@ const customerController = {
                 } else {
                     res.status(501).json('Error');
                 }
-            }, 2000);
+            }, 500);
 
 
         } catch (e) {

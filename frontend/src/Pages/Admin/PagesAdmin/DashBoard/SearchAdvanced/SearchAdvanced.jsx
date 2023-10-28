@@ -1,7 +1,8 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Image, Table, Avatar, Select } from "antd";
 import CustomerSearch from "./CustomerSearch";
 import DriverSearch from "./DriverSearch";
+import OrderSearch from "./OrderSearch";
 
 function SearchAdvanced() {
   const [categoryChoose, setCategoryChoose] = useState("");
@@ -13,17 +14,23 @@ function SearchAdvanced() {
 
   return (
     <>
-      <h5
+      <p
         style={{
-          color: "#F16622",
+          backgroundColor: "#FFA500",
+          color: "white",
+          width: "fit-content",
           fontWeight: "bold",
           display: "block",
           textAlign: "center",
+          padding: "5px",
+          margin: "0 auto",
+          border: "1px solid #FFA500",
+          borderRadius: "7px",
         }}
       >
         TÌM KIẾM TỔNG HỢP
-      </h5>
-      <div className="d-flex" style={{flexDirection:"column"}}>
+      </p>
+      <div className="d-flex" style={{ flexDirection: "column" }}>
         {/* Danh mục cần tìm */}
         <div className="d-fle mt-3" style={{ flexDirection: "column" }}>
           <h6 className="fw-bold">Danh mục</h6>
@@ -48,39 +55,23 @@ function SearchAdvanced() {
                   label: "Tài xế",
                 },
                 {
-                  value: "Quản trị viên",
-                  label: "Quản trị viên",
-                },
-                {
-                  value: "Dịch vụ",
-                  label: "Dịch vụ",
-                },
-                {
-                  value: "Phương tiện",
-                  label: "Phương tiện",
-                },
-                {
-                  value: "Blog",
-                  label: "Blog",
-                },
-                {
-                  value: "Vật dụng",
-                  label: "Vật dụng",
-                },
-                {
                   value: "Đơn hàng",
                   label: "Đơn hàng",
-                },
-                {
-                  value: "Lịch vận chuyển",
-                  label: "Lịch vận chuyển",
                 },
               ]}
             />
           </div>
         </div>
         {/* Khu vực Import các Search thành phần */}
-        {categoryChoose == "Khách hàng" ? <CustomerSearch /> : categoryChoose == "Tài xế" ? <DriverSearch/> : ''}
+        {categoryChoose == "Khách hàng" ? (
+          <CustomerSearch />
+        ) : categoryChoose == "Tài xế" ? (
+          <DriverSearch />
+        ) : categoryChoose == "Đơn hàng" ? (
+          <OrderSearch />
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

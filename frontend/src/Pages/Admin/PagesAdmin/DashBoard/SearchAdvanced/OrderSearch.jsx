@@ -4,7 +4,7 @@ import {
   SyncOutlined,
   FileExcelOutlined,
 } from "@ant-design/icons";
-import { Image, Table, Avatar, Tag, Input, Space, Button } from "antd";
+import { Image, Table, Avatar, Tag, Input, Space, Button, Select } from "antd";
 import axios from "axios";
 import Highlighter from "react-highlight-words";
 
@@ -17,12 +17,10 @@ import * as XLSX from "xlsx"; //Xử lý file Excel
 import LoadingOverlayComponent from "../../../../../Components/LoadingOverlayComponent";
 import { Toast } from "../../../../../Components/ToastColor";
 
-function CustomerSearch() {
-  const [fullname, setFullName] = useState("");
-  const [phonenumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
+function OrderSearch() {
+  const [order_id, setOrderId] = useState("");
 
-  const [dataCustomer, setDataCustomer] = useState([]);
+  const [dataOrder, setDataOrder] = useState([]);
 
   const [showTable, setShowTable] = useState(false);
 
@@ -30,35 +28,39 @@ function CustomerSearch() {
 
   const findData = async () => {
     //Kiểm tra xem đã nhập 1 trong 3 ô chưa
-    if (phonenumber == "" && fullname == "" && address == "") {
+    if (order_id == "") {
       await Toast.fire({
         icon: "warning",
-        title: "Vui lòng nhập ít nhất 1 ô dữ liệu tìm kiếm !",
+        title: "Vui lòng nhập vào ô dữ liệu tìm kiếm !",
       });
     } else {
       setIsActive(true);
       setShowTable(true);
+      const typeFilter = "Theo id đơn hàng";
 
-      const api_call = await axios.post("/v1/customer/findCustomerAdvanced", {
-        phonenumber,
-        fullname,
-        address,
+      const api_call = await axios.post("/v1/order/findDataOrder", {
+        order_id,
+        typeFilter,
       });
 
       const data_get = api_call.data;
-
       const data_get_new = data_get.map((item, index) => {
         const ob = {
           key: index,
-          fullname: item.fullname,
-          phonenumber: item.phonenumber,
-          address: item.address,
-          avatar: item.avatar,
-          gender: item.gender,
-          totalCommentBlog: item.totalCommentBlog,
-          totalOrderComplete: item.totalOrderComplete,
-          totalOrderCancel: item.totalOrderCancel,
-          totalPayment: item.totalPayment,
+          order_id: item.order_id,
+          date_created: item.date_created,
+          service_name: item.service_name,
+          date_start: item.date_start,
+          date_end: item.date_end,
+          fromLocation: item.fromLocation,
+          toLocation: item.toLocation,
+          vehicle_name: item.vehicle_name,
+          driver_name: item.driver_name,
+          totalOrder: item.totalOrder,
+          status: item.status,
+          distance: item.distance,
+          duration: item.duration,
+          payment_status: item.payment_status,
         };
 
         return ob;
@@ -66,7 +68,7 @@ function CustomerSearch() {
 
       // console.log(data_get);
       setIsActive(false);
-      setDataCustomer(data_get_new);
+      setDataOrder(data_get_new);
       // setShowTable(true);
     }
   };
@@ -76,11 +78,11 @@ function CustomerSearch() {
     setIsActive(true);
     setShowTable(true);
 
-    // setShowTable(false);
-    const api_call = await axios.post("/v1/customer/findCustomerAdvanced", {
-      phonenumber,
-      fullname,
-      address,
+    const typeFilter = "Tất cả";
+
+    const api_call = await axios.post("/v1/order/findDataOrder", {
+      order_id,
+      typeFilter,
     });
 
     const data_get = api_call.data;
@@ -88,15 +90,20 @@ function CustomerSearch() {
     const data_get_new = data_get.map((item, index) => {
       const ob = {
         key: index,
-        fullname: item.fullname,
-        phonenumber: item.phonenumber,
-        address: item.address,
-        avatar: item.avatar,
-        gender: item.gender,
-        totalCommentBlog: item.totalCommentBlog,
-        totalOrderComplete: item.totalOrderComplete,
-        totalOrderCancel: item.totalOrderCancel,
-        totalPayment: item.totalPayment,
+        order_id: item.order_id,
+        date_created: item.date_created,
+        service_name: item.service_name,
+        date_start: item.date_start,
+        date_end: item.date_end,
+        fromLocation: item.fromLocation,
+        toLocation: item.toLocation,
+        vehicle_name: item.vehicle_name,
+        driver_name: item.driver_name,
+        totalOrder: item.totalOrder,
+        status: item.status,
+        distance: item.distance,
+        duration: item.duration,
+        payment_status: item.payment_status,
       };
 
       return ob;
@@ -104,7 +111,7 @@ function CustomerSearch() {
 
     // console.log(data_get);
     setIsActive(false);
-    setDataCustomer(data_get_new);
+    setDataOrder(data_get_new);
     // setShowTable(true);
   };
 
@@ -229,13 +236,13 @@ function CustomerSearch() {
       ),
   });
 
-  const columnCustomer = [
+  const columnOrder = [
     {
-      title: "Tên khách hàng",
-      dataIndex: "fullname",
-      key: "fullname",
-      ...getColumnSearchProps("fullname"),
-      render: (fullname) => {
+      title: "Mã đơn hàng",
+      dataIndex: "order_id",
+      key: "order_id",
+      ...getColumnSearchProps("order_id"),
+      render: (order_id) => {
         return (
           <td
             style={{
@@ -243,17 +250,17 @@ function CustomerSearch() {
               color: "black",
             }}
           >
-            {fullname}
+            {order_id}
           </td>
         );
       },
     },
     {
-      title: "Số điện thoại",
-      dataIndex: "phonenumber",
-      key: "phonenumber",
-      ...getColumnSearchProps("phonenumber"),
-      render: (phonenumber) => {
+      title: "Ngày tạo đơn",
+      dataIndex: "date_created",
+      key: "date_created",
+      ...getColumnSearchProps("date_created"),
+      render: (date_created) => {
         return (
           <td
             style={{
@@ -261,34 +268,17 @@ function CustomerSearch() {
               color: "black",
             }}
           >
-            {phonenumber}
+            {date_created}
           </td>
         );
       },
     },
     {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-      ...getColumnSearchProps("address"),
-      render: (address) => {
-        return (
-          <td
-            style={{
-              fontWeight: "500",
-              color: address == null ? "grey" : "black",
-            }}
-          >
-            {address == null ? "Chưa cập nhật" : address}
-          </td>
-        );
-      },
-    },
-    {
-      title: "Ảnh đại diện",
-      dataIndex: "avatar",
-      key: "avatar",
-      render: (avatar) => {
+      title: "Tên dịch vụ",
+      dataIndex: "service_name",
+      key: "service_name",
+      ...getColumnSearchProps("service_name"),
+      render: (service_name) => {
         return (
           <td
             style={{
@@ -296,31 +286,18 @@ function CustomerSearch() {
               color: "black",
             }}
           >
-            <Avatar src={<img src={avatar} alt="avatar" />} />
+            {service_name}
           </td>
         );
       },
     },
     {
-      title: "Giới tính",
-      dataIndex: "gender",
-      key: "gender",
-      filters: [
-        {
-          text: "Nam",
-          value: "Nam",
-        },
-        {
-          text: "Nữ",
-          value: "Nữ",
-        },
-        {
-          text: "Chưa cập nhật",
-          value: "null",
-        },
-      ],
-      onFilter: (value, record) => String(record.gender).indexOf(value) == 0,
-      render: (gender) => {
+      title: "Ngày bắt đầu",
+      dataIndex: "date_start",
+      key: "date_start",
+      ...getColumnSearchProps("date_start"),
+
+      render: (date_start) => {
         return (
           <td
             style={{
@@ -328,94 +305,225 @@ function CustomerSearch() {
               color: "black",
             }}
           >
+            {date_start}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Ngày kết thúc",
+      dataIndex: "date_end",
+      key: "date_end",
+      ...getColumnSearchProps("date_end"),
+
+      render: (date_end) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {date_end}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Điểm bắt đầu",
+      dataIndex: "fromLocation",
+      key: "fromLocation",
+      ...getColumnSearchProps("fromLocation"),
+
+      render: (fromLocation) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {fromLocation}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Điểm kết thúc",
+      dataIndex: "toLocation",
+      key: "toLocation",
+      ...getColumnSearchProps("toLocation"),
+
+      render: (toLocation) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {toLocation}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Tên phương tiện",
+      dataIndex: "vehicle_name",
+      key: "vehicle_name",
+      ...getColumnSearchProps("vehicle_name"),
+
+      render: (vehicle_name) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {vehicle_name}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Tên tài xế",
+      dataIndex: "driver_name",
+      key: "driver_name",
+      ...getColumnSearchProps("driver_name"),
+
+      render: (driver_name) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {driver_name.map((item, index) => {
+              return (
+                <p>
+                  {index + 1}. {item}
+                </p>
+              );
+            })}
+          </td>
+        );
+        // driver_name.map((item, index) => {
+        //   return (
+        //     <td>
+        //       {index + 1}. {item} <br />
+        //     </td>
+        //   );
+        // });
+      },
+    },
+    {
+      title: "Tổng đơn hàng",
+      dataIndex: "totalOrder",
+      key: "totalOrder",
+      sorter: (a, b) => a.totalOrder - b.totalOrder,
+      render: (totalOrder) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {totalOrder.toLocaleString()} đ
+          </td>
+        );
+      },
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (status, reason_cancel) => (
+        <>
+          <div className="d-flex">
             <Tag
               color={
-                gender === "Nam"
-                  ? "green"
-                  : gender === "Nữ"
+                status === "Đang tìm tài xế"
+                  ? "blue"
+                  : status === "Đã hủy"
                   ? "volcano"
-                  : "grey"
+                  : status === "Đang thực hiện"
+                  ? "gold"
+                  : status === "Thanh toán hóa đơn"
+                  ? "magenta"
+                  : "#87d068"
               }
-              key={gender}
+              key={status}
             >
-              {gender === "Nam"
-                ? "Nam"
-                : gender === "Nữ"
-                ? "Nữ"
-                : "Chưa cập nhật"}
+              {status === "Đang tìm tài xế"
+                ? "Đang tìm tài xế"
+                : status === "Đã hủy"
+                ? "Đã hủy"
+                : status === "Đang thực hiện"
+                ? "Đang thực hiện"
+                : status === "Thanh toán hóa đơn"
+                ? "Thanh toán hóa đơn"
+                : "Đã hoàn thành"}
             </Tag>
+          </div>
+        </>
+      ),
+    },
+    {
+      title: "Khoảng cách vận chuyển",
+      dataIndex: "distance",
+      key: "distance",
+      ...getColumnSearchProps("distance"),
+
+      render: (distance) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {distance}
           </td>
         );
       },
     },
     {
-      title: "Lượt bình luận",
-      dataIndex: "totalCommentBlog",
-      key: "totalCommentBlog",
-      sorter: (a, b) => a.totalCommentBlog - b.totalCommentBlog,
-      render: (totalCommentBlog) => {
+      title: "Thời lượng",
+      dataIndex: "duration",
+      key: "duration",
+      ...getColumnSearchProps("duration"),
+
+      render: (duration) => {
         return (
           <td
             style={{
               fontWeight: "500",
-              color: "orange",
+              color: "black",
             }}
           >
-            {totalCommentBlog}
+            {duration}
           </td>
         );
       },
     },
     {
-      title: "Đơn giao thành công",
-      dataIndex: "totalOrderComplete",
-      key: "totalOrderComplete",
-      sorter: (a, b) => a.totalOrderComplete - b.totalOrderComplete,
-      render: (totalOrderComplete) => {
+      title: "Trạng thái thanh toán",
+      dataIndex: "payment_status",
+      key: "payment_status",
+      ...getColumnSearchProps("payment_status"),
+
+      render: (payment_status) => {
         return (
           <td
             style={{
               fontWeight: "500",
-              color: "orange",
+              color: payment_status == "Chưa thanh toán" ? "red" : "green",
             }}
           >
-            {totalOrderComplete}
-          </td>
-        );
-      },
-    },
-    {
-      title: "Đơn đã hủy",
-      dataIndex: "totalOrderCancel",
-      key: "totalOrderCancel",
-      sorter: (a, b) => a.totalOrderCancel - b.totalOrderCancel,
-      render: (totalOrderCancel) => {
-        return (
-          <td
-            style={{
-              fontWeight: "500",
-              color: "orange",
-            }}
-          >
-            {totalOrderCancel}
-          </td>
-        );
-      },
-    },
-    {
-      title: "Tổng thanh toán",
-      dataIndex: "totalPayment",
-      key: "totalPayment",
-      sorter: (a, b) => a.totalOrder - b.totalOrder,
-      render: (totalPayment) => {
-        return (
-          <td
-            style={{
-              fontWeight: "500",
-              color: "orange",
-            }}
-          >
-            {totalPayment.toLocaleString()} đ
+            {payment_status}
           </td>
         );
       },
@@ -452,7 +560,7 @@ function CustomerSearch() {
       //Gọi API
       findDataAll();
     } else {
-      setDataCustomer(extra.currentDataSource);
+      setDataOrder(extra.currentDataSource);
     }
   };
 
@@ -475,7 +583,7 @@ function CustomerSearch() {
           // flatten object like this {id: 1, title:'', category: ''};
           //Lấy từ mảng đã chọn ra
           const arrSolve = selectedRowKeys.map((item, index) => {
-            return dataCustomer[item];
+            return dataOrder[item];
           });
 
           let count = 0;
@@ -485,15 +593,20 @@ function CustomerSearch() {
               count++;
               return {
                 STT: count,
-                fullname: item.fullname,
-                phonenumber: item.phonenumber,
-                address: item.address,
-                avatar: item.avatar,
-                gender: item.gender,
-                totalCommentBlog: item.totalCommentBlog,
-                totalOrderComplete: item.totalOrderComplete,
-                totalOrderCancel: item.totalOrderCancel,
-                totalPayment: item.totalPayment.toLocaleString() + 'đ',
+                order_id: item.order_id,
+                date_created: item.date_created,
+                service_name: item.service_name,
+                date_start: item.date_start,
+                date_end: item.date_end,
+                fromLocation: item.fromLocation,
+                toLocation: item.toLocation,
+                vehicle_name: item.vehicle_name,
+                driver_name: item.driver_name,
+                totalOrder: item.totalOrder,
+                status: item.status,
+                distance: item.distance,
+                duration: item.duration,
+                payment_status: item.payment_status,
               };
             });
 
@@ -507,19 +620,23 @@ function CustomerSearch() {
           XLSX.utils.sheet_add_aoa(worksheet, [
             [
               "Số thứ tự",
-              "Tên khách hàng",
-              "Số điện thoại",
-              "Địa chỉ",
-              "Ảnh đại diện",
-              "Giới tính",
-              "Lượt bình luận",
-              "Tổng đơn hàng giao thành công",
-              "Tổng đơn hàng đã hủy",
-              "Tổng thanh toán",
+              "Mã đơn hàng",
+              "Tên dịch vụ",
+              "Ngày vận chuyển",
+              "Ngày kết thúc",
+              "Điểm bắt đầu",
+              "Điểm kết thúc",
+              "Loại phương tiện",
+              "Tên tài xế",
+              "Tổng đơn hàng",
+              "Trạng thái",
+              "Khoảng cách",
+              "Thời lượng",
+              "Trạng thái thanh toán",
             ],
           ]);
 
-          XLSX.writeFile(workbook, "TimKiemKhachHang.xlsx", {
+          XLSX.writeFile(workbook, "TimKiemDonHang.xlsx", {
             compression: true,
           });
           Swal.fire({
@@ -557,7 +674,7 @@ function CustomerSearch() {
           borderRadius: "7px",
         }}
       >
-        KHÁCH HÀNG
+        ĐƠN HÀNG
       </p>
       {/* Các hạng mục tìm kiếm */}
       <div
@@ -577,30 +694,9 @@ function CustomerSearch() {
             marginRight: "20px",
           }}
         >
-          <label>Họ và tên</label>
+          <label>Mã đơn hàng</label>
           <input
-            placeholder="Nhập vào tên khách hàng"
-            style={{
-              width: "200px",
-              borderRadius: "7px",
-              padding: "5px",
-              marginTop: "3px",
-              border: "1px solid #ccc",
-            }}
-            value={fullname}
-            onChange={(e) => setFullName(e.target.value)}
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginRight: "20px",
-          }}
-        >
-          <label>Số điện thoại</label>
-          <input
-            placeholder="Nhập vào số điện thoại"
+            placeholder="Nhập vào mã đơn hàng"
             style={{
               width: "fit-content",
               borderRadius: "7px",
@@ -608,30 +704,8 @@ function CustomerSearch() {
               marginTop: "3px",
               border: "1px solid #ccc",
             }}
-            value={phonenumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginRight: "20px",
-          }}
-        >
-          <label>Địa chỉ</label>
-          <input
-            placeholder="Nhập vào địa chỉ"
-            style={{
-              width: "fit-content",
-              borderRadius: "7px",
-              padding: "5px",
-              marginTop: "3px",
-              border: "1px solid #ccc",
-            }}
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            value={order_id}
+            onChange={(e) => setOrderId(e.target.value)}
           />
         </div>
 
@@ -724,7 +798,7 @@ function CustomerSearch() {
                   marginBottom: 7,
                 }}
               >
-                Kết quả : {dataCustomer.length} hàng dữ liệu
+                Kết quả : {dataOrder.length} hàng dữ liệu
               </Tag>
               {/* Nút xuất ra file excel */}
               <div
@@ -749,8 +823,8 @@ function CustomerSearch() {
             </div>
             <Table
               rowSelection={rowSelection}
-              columns={columnCustomer}
-              dataSource={dataCustomer}
+              columns={columnOrder}
+              dataSource={dataOrder}
               onChange={onChange}
             />
           </div>
@@ -762,4 +836,4 @@ function CustomerSearch() {
   );
 }
 
-export default CustomerSearch;
+export default OrderSearch;

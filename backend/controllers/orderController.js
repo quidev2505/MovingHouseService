@@ -553,6 +553,88 @@ const orderController = {
         } else {
             res.status(501).json('Error')
         }
+    },
+
+    //Lấy thông tin đơn hàng
+    findDataOrder: async (req, res) => {
+        try {
+            const { order_id, typeFilter } = req.body;
+
+            if (typeFilter == "Tất cả") {
+                const api_call_order = await Order.find()
+
+                //Lấy order detail id
+                const arr_order_detail_id = await Promise.all(api_call_order.map(async (item, index) => {
+                    const order_detail_id = item.order_detail_id;
+                    const dataOrderDetail = await OrderDetail.findOne({ _id: order_detail_id });
+                    return dataOrderDetail
+                }))
+
+                const arr_result = api_call_order.map((item, index) => {
+                    const ob = {
+                        order_id: item.order_id,
+                        date_created: item.date_created,
+                        service_name: item.service_name,
+                        date_start: item.date_start,
+                        date_end: item.date_end,
+                        fromLocation: item.fromLocation,
+                        toLocation: item.toLocation,
+                        vehicle_name: item.vehicle_name,
+                        driver_name: item.driver_name,
+                        totalOrder: item.totalOrder,
+                        status: item.status,
+                        distance: arr_order_detail_id[index].distance,
+                        duration: arr_order_detail_id[index].duration,
+                        payment_status: arr_order_detail_id[index].payment_status
+                    }
+                    return ob;
+                })
+
+                if (arr_result) {
+                    res.status(201).json(arr_result)
+                } else {
+                    res.status(501).json('Error');
+                }
+            } else {
+                const api_call_order = await Order.findOne({
+                    order_id: order_id
+                })
+
+                //Lấy order detail id
+                const order_detailId = api_call_order.order_detail_id;
+
+                const arr_orderDetail = await OrderDetail.findOne({ _id: order_detailId })
+
+                const arr_new = []
+                const ob = {
+                    order_id: api_call_order.order_id,
+                    date_created: api_call_order.date_created,
+                    service_name: api_call_order.service_name,
+                    date_start: api_call_order.date_start,
+                    date_end: api_call_order.date_end,
+                    fromLocation: api_call_order.fromLocation,
+                    toLocation: api_call_order.toLocation,
+                    vehicle_name: api_call_order.vehicle_name,
+                    driver_name: api_call_order.driver_name,
+                    totalOrder: api_call_order.totalOrder,
+                    status: api_call_order.status,
+                    distance: arr_orderDetail.distance,
+                    duration: arr_orderDetail.duration,
+                    payment_status: arr_orderDetail.payment_status
+                }
+
+                arr_new.push(ob);
+
+                if (arr_new) {
+                    res.status(201).json(arr_new)
+                } else {
+                    res.status(501).json('Error');
+                }
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
     }
 
 

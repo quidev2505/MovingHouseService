@@ -34,14 +34,14 @@ const orderDetailSchema = new mongoose.Schema({
     item_detail: {
         type: Array, of: String, default: []
     },
-    weight: {
-        type: Number,
-        default: 0,
-    },//Trọng lượng đơn hàng
-    volume: {
-        type: Number,
-        default: 0,
-    },//Khối lượng đồ đạc
+    // weight: {
+    //     type: Number,
+    //     default: 0,
+    // },//Trọng lượng đơn hàng
+    // volume: {
+    //     type: Number,
+    //     default: 0,
+    // },//Khối lượng đồ đạc
     payment_method: {
         type: String,
         required: true

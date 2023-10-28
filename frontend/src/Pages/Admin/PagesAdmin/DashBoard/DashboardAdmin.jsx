@@ -706,8 +706,11 @@ function DashBoardAdmin() {
       return ob;
     });
 
-    // Sắp xếp mảng theo giá giảm dần
+    // Sắp xếp mảng theo giá giảm dần theo sao
     arr_total_order_service.sort((a, b) => b.star_average - a.star_average);
+
+    // Sắp xếp mảng theo giá giảm dần theo lượt đánh giá
+    arr_total_order_service.sort((a, b) => b.rating- a.rating);
 
     const arr_final = arr_total_order_service.map((item, index) => {
       item.stt = index + 1;
@@ -1013,9 +1016,6 @@ function DashBoardAdmin() {
 
   //Xử lý khi lọc
   const [driverPass, setDriverPass] = useState("Tất cả");
-
-
-
 
   return (
     <>
@@ -1611,7 +1611,7 @@ function DashBoardAdmin() {
                   </>
                 ) : (
                   <>
-                    <SearchAdvanced/>
+                    <SearchAdvanced />
                   </>
                 )}
               </div>

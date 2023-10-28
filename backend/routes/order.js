@@ -20,8 +20,6 @@ router.get('/viewAllOrder', orderController.viewAllOrder)
 router.get('/viewOrderWithOrderId/:order_id', orderController.ViewOrderWithOrderId)
 
 
-
-
 // View Order with customer_id
 router.get('/viewOrderWithCustomerId/:id_customer', orderController.viewOrderWithIdCustomer)
 
@@ -42,6 +40,9 @@ router.post(`/rating_order/:order_id`, orderController.ratingOrder);
 
 //Lấy đánh giá đơn hàng ra
 router.get(`/getRating_Order/:order_id`, orderController.getRatingOrder)
+
+//Lấy thông tin đơn hàng
+router.post('/findDataOrder', orderController.findDataOrder);
 
 // //Update one field Blog
 // router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)

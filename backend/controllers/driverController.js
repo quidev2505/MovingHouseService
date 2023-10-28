@@ -1,5 +1,6 @@
 const Driver = require('../models/Driver');
 const DriverAccount = require('../models/DriverAccount')
+const Order = require('../models/Order')
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 
@@ -409,8 +410,6 @@ const driverController = {
                 return search.toLowerCase() === ""
                     ? item
                     : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
-
-
             });
 
             // //Dùng vòng lặp lướt qua các đơn hàng đã thanh toán
@@ -457,7 +456,7 @@ const driverController = {
                 } else {
                     res.status(501).json('Error');
                 }
-            }, 2000);
+            }, 700);
 
 
         } catch (e) {

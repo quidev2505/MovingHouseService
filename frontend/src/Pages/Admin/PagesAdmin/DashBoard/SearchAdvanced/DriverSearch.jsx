@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FileSearchOutlined } from "@ant-design/icons";
-import { Image, Table, Avatar, Tag, Input, Space, Button } from "antd";
+import {
+  FileSearchOutlined,
+  SyncOutlined,
+  FileExcelOutlined,
+} from "@ant-design/icons";
+import { Image, Table, Avatar, Tag, Input, Space, Button, Select } from "antd";
 import axios from "axios";
 import Highlighter from "react-highlight-words";
 
 import { SearchOutlined } from "@ant-design/icons";
 
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
+import * as XLSX from "xlsx"; //Xử lý file Excel
+
 import LoadingOverlayComponent from "../../../../../Components/LoadingOverlayComponent";
+import { Toast } from "../../../../../Components/ToastColor";
 
 function DriverSearch() {
   const [fullname, setFullName] = useState("");
@@ -16,12 +25,68 @@ function DriverSearch() {
 
   const [dataDriver, setDataDriver] = useState([]);
 
-  // const [showTable, setShowTable] = useState(false);
+  const [showTable, setShowTable] = useState(false);
 
   const [isActive, setIsActive] = useState(false);
 
   const findData = async () => {
+    //Kiểm tra xem đã nhập 1 trong 3 ô chưa
+    if (
+      profile_code == "" &&
+      phonenumber == "" &&
+      fullname == "" &&
+      address == ""
+    ) {
+      await Toast.fire({
+        icon: "warning",
+        title: "Vui lòng nhập ít nhất 1 ô dữ liệu tìm kiếm !",
+      });
+    } else {
+      setIsActive(true);
+      setShowTable(true);
+
+      const api_call = await axios.post("/v1/driver/findDriverAdvanced", {
+        profile_code,
+        phonenumber,
+        fullname,
+        address,
+      });
+
+      const data_get = api_call.data;
+      const data_get_new = data_get.map((item, index) => {
+        const ob = {
+          key: index,
+          profile_code: item.profile_code,
+          fullname: item.fullname,
+          phonenumber: item.phonenumber,
+          date_of_birth: item.date_of_birth,
+          citizen_id: item.citizen_id,
+          address: item.address,
+          avatar: item.avatar,
+          gender: item.gender,
+          star_average: item.star_average,
+          vehicle_type: item.vehicle_type,
+          location_delivery: item.location_delivery,
+          id_delivery: item.id_delivery.length,
+          id_rating: item.id_rating.length,
+          current_position: item.current_position,
+          status: item.status,
+        };
+
+        return ob;
+      });
+
+      // console.log(data_get);
+      setIsActive(false);
+      setDataDriver(data_get_new);
+      // setShowTable(true);
+    }
+  };
+
+  // Khi nhấn vào nút tìm tất cả
+  const findDataAll = async () => {
     setIsActive(true);
+    setShowTable(true);
 
     // setShowTable(false);
     const api_call = await axios.post("/v1/driver/findDriverAdvanced", {
@@ -32,9 +97,34 @@ function DriverSearch() {
     });
 
     const data_get = api_call.data;
+    console.log(data_get);
+
+    const data_get_new = data_get.map((item, index) => {
+      const ob = {
+        key: index,
+        profile_code: item.profile_code,
+        fullname: item.fullname,
+        phonenumber: item.phonenumber,
+        date_of_birth: item.date_of_birth,
+        citizen_id: item.citizen_id,
+        address: item.address,
+        avatar: item.avatar,
+        gender: item.gender,
+        star_average: item.star_average,
+        vehicle_type: item.vehicle_type,
+        location_delivery: item.location_delivery,
+        id_delivery: item.id_delivery.length,
+        id_rating: item.id_rating.length,
+        current_position: item.current_position,
+        status: item.status,
+      };
+
+      return ob;
+    });
+
     // console.log(data_get);
     setIsActive(false);
-    setDataDriver(data_get);
+    setDataDriver(data_get_new);
     // setShowTable(true);
   };
 
@@ -247,7 +337,7 @@ function DriverSearch() {
       },
     },
     {
-      title: "Địa chỉ",
+      title: "Địa chỉ thường trú",
       dataIndex: "address",
       key: "address",
       ...getColumnSearchProps("address"),
@@ -384,7 +474,7 @@ function DriverSearch() {
       title: "Lượt vận chuyển",
       dataIndex: "id_delivery",
       key: "id_delivery",
-      sorter: (a, b) => a.id_delivery.length - b.id_delivery.length,
+      sorter: (a, b) => a.id_delivery - b.id_delivery,
       render: (id_delivery) => {
         return (
           <td
@@ -392,7 +482,7 @@ function DriverSearch() {
               fontWeight: "500",
             }}
           >
-            {id_delivery.length}
+            {id_delivery}
           </td>
         );
       },
@@ -401,7 +491,7 @@ function DriverSearch() {
       title: "Lượt đánh giá",
       dataIndex: "id_rating",
       key: "id_rating",
-      sorter: (a, b) => a.id_rating.length - b.id_rating.length,
+      sorter: (a, b) => a.id_rating - b.id_rating,
       render: (id_rating) => {
         return (
           <td
@@ -409,7 +499,7 @@ function DriverSearch() {
               fontWeight: "500",
             }}
           >
-            {id_rating.length}
+            {id_rating}
           </td>
         );
       },
@@ -455,6 +545,26 @@ function DriverSearch() {
     },
   ];
 
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const start = () => {
+    setLoading(true);
+    // ajax request after empty completing
+    setTimeout(() => {
+      setSelectedRowKeys([]);
+      setLoading(false);
+    }, 1000);
+  };
+  const onSelectChange = (newSelectedRowKeys) => {
+    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const hasSelected = selectedRowKeys.length > 0;
+
   const onChange = (pagination, filters, sorter, extra) => {
     if (
       filters.fullname == null &&
@@ -463,10 +573,107 @@ function DriverSearch() {
       filters.gender == null
     ) {
       //Gọi API
-      findData();
+      findDataAll();
     } else {
       setDataDriver(extra.currentDataSource);
     }
+  };
+
+  //Xử lý xuất ra file Excel
+  //Download Excel
+  const download_data_xslx = () => {
+    Swal.fire({
+      title: "Bạn muốn tải xuống dữ liệu ?",
+      text: "Hãy nhấn vào xác nhận để tải xuống !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          //Create file xsls Excel
+          // flatten object like this {id: 1, title:'', category: ''};
+          //Lấy từ mảng đã chọn ra
+          const arrSolve = selectedRowKeys.map((item, index) => {
+            return dataDriver[item];
+          });
+
+          let count = 0;
+          const rows =
+            arrSolve &&
+            arrSolve.map((item, index) => {
+              count++;
+              return {
+                STT: count,
+                profile_code: item.profile_code,
+                fullname: item.fullname,
+                phonenumber: item.phonenumber,
+                date_of_birth: item.date_of_birth,
+                citizen_id: item.citizen_id,
+                address: item.address,
+                avatar: item.avatar,
+                gender: item.gender,
+                star_average: item.star_average,
+                vehicle_type: item.vehicle_type,
+                location_delivery: item.location_delivery,
+                id_delivery: item.id_delivery,
+                id_rating: item.id_rating,
+                current_position: item.current_position,
+                status: item.status,
+              };
+            });
+
+          // create workbook and worksheet
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.json_to_sheet(rows);
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+
+          // customize header names
+          XLSX.utils.sheet_add_aoa(worksheet, [
+            [
+              "Số thứ tự",
+              "Mã hồ sơ",
+              "Tên tài xế",
+              "Số điện thoại",
+              "Ngày sinh",
+              "CCCD",
+              "Địa chỉ",
+              "Ảnh đại diện",
+              "Giới tính",
+              "Sao trung bình",
+              "Loại phương tiện",
+              "Địa điểm vận chuyển",
+              "Lượt vận chuyển",
+              "Lượt đánh giá",
+              "Vị trí hiện tại",
+              "Trạng thái",
+            ],
+          ]);
+
+          XLSX.writeFile(workbook, "TimKiemTaiXe.xlsx", {
+            compression: true,
+          });
+          Swal.fire({
+            title: "Tải xuống thành công !",
+            text: "Hoàn thành !",
+            icon: "success",
+            confirmButtonText: "Xác nhận",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Tải xuống thất bại!",
+          text: "Đơn hàng !",
+          icon: "warning",
+          confirmButtonText: "Xác nhận",
+        });
+        console.log(e);
+      });
   };
 
   return (
@@ -493,6 +700,9 @@ function DriverSearch() {
         style={{
           margin: "0 auto",
           marginBottom: "18px",
+          border: "1px solid  rgb(37, 196, 196)",
+          padding: "20px",
+          borderRadius: "5px",
         }}
       >
         <div
@@ -525,7 +735,7 @@ function DriverSearch() {
         >
           <label>Họ và tên</label>
           <input
-            placeholder="Nhập vào tên khách hàng"
+            placeholder="Nhập vào tên tài xế"
             style={{
               width: "200px",
               borderRadius: "7px",
@@ -603,15 +813,106 @@ function DriverSearch() {
             TÌM KIẾM
           </button>
         </div>
+
+        {/* Nút liệt kê tất cả */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginRight: "20px",
+            justifyContent: "flex-end",
+          }}
+        >
+          <button
+            style={{
+              backgroundColor: "red",
+              padding: "5px",
+              borderRadius: "5px",
+              color: "white",
+              cursor: "pointer",
+              border: "1px solid red",
+            }}
+            onClick={() => findDataAll()}
+          >
+            TẤT CẢ
+          </button>
+        </div>
       </div>
 
       {/* Bảng dữ liệu */}
       <LoadingOverlayComponent status={isActive}>
-        <Table
-          columns={columnDriver}
-          dataSource={dataDriver}
-          onChange={onChange}
-        />
+        {showTable ? (
+          <div>
+            <div
+              style={{
+                marginBottom: 16,
+                display: "flex",
+                marginTop: 16,
+              }}
+            >
+              <Button
+                type="primary"
+                onClick={start}
+                disabled={!hasSelected}
+                loading={loading}
+              >
+                Bỏ tất cả lựa chọn
+              </Button>
+              <span
+                style={{
+                  marginLeft: 10,
+                  fontWeight: 500,
+                }}
+              >
+                {hasSelected
+                  ? `- Đã chọn ${selectedRowKeys.length} hàng dữ liệu`
+                  : ""}
+              </span>
+            </div>
+            <div className="d-flex">
+              <Tag
+                icon={<SyncOutlined spin />}
+                color="#ff671d"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: "fit-content",
+                  marginBottom: 7,
+                }}
+              >
+                Kết quả : {dataDriver.length} hàng dữ liệu
+              </Tag>
+              {/* Nút xuất ra file excel */}
+              <div
+                onClick={() => download_data_xslx()}
+                style={{
+                  cursor: "pointer",
+                  width: "40px",
+                  height: "40px",
+                  backgroundColor: "green",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
+                  borderRadius: "5px",
+                  marginBottom: "10px",
+                  marginRight: "20px",
+                  marginTop: "10px",
+                }}
+              >
+                <FileExcelOutlined />
+              </div>
+            </div>
+            <Table
+              rowSelection={rowSelection}
+              columns={columnDriver}
+              dataSource={dataDriver}
+              onChange={onChange}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </LoadingOverlayComponent>
     </>
   );
