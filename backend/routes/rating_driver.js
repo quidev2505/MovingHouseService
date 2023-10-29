@@ -8,6 +8,9 @@ const RatingDriver = require("../controllers/ratingDriverController");
 //Read Comment Blog
 router.get('/get_rating_driver/:driver_name', RatingDriver.getRatingDriver)
 
+//Find Rating Driver Advanced
+router.post('/findRatingDriver', RatingDriver.findRatingDriver)
+
 // //Read Comment Blog Admin
 // router.post('/read_comment_blog_id', CommentBlog.readCommentBlogAdmin)
 

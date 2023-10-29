@@ -6,14 +6,33 @@ import api_url from "../../api_url"
 import { Ionicons } from '@expo/vector-icons';
 
 import { Card, Divider } from '@rneui/themed';
-
+import { Input, Icon } from '@rneui/themed';
 function Order({ navigation }) {
     console.disableYellowBox = true;
     const [dataOrder, setDataOrder] = useState([])
     const [statusDriver, setStatusDriver] = useState("");
     const [location_delivery, setLocationDelivery] = useState("")
 
+
+
+    //Tìm kiếm theo mã đơn hàng
+    const [inputSearch, setInputSearch] = useState("")
+
     const location_order = useRef("TPHCM và tỉnh lân cận")
+
+
+    const searchFilter = () => {
+
+        if (inputSearch !== '') {
+            const data_new_search = dataOrder.filter((item, index) => {
+                return item.order_id.includes(inputSearch)
+            })
+            setDataOrder(data_new_search)
+        } else {
+            get_info_all_order();
+        }
+    }
+
 
     //Lấy thông tin tất cả đơn hàng
     const get_info_all_order = async () => {
@@ -132,9 +151,9 @@ function Order({ navigation }) {
 
 
     useEffect(() => {
-        setInterval(() => {
-            get_info_all_order();
-        }, 5000)
+
+        get_info_all_order();
+
     }, [])
 
 
@@ -160,7 +179,23 @@ function Order({ navigation }) {
         <ScrollView refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-
+            {/* Ô nhập tìm kiếm theo mã đơn hàng */}
+            <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 320, height: 40, margin: 20, marginLeft: 25, marginTop: 30 }}>
+                <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                    <Input
+                        value={inputSearch}
+                        onChangeText={(e) => setInputSearch(e)}
+                        placeholder='Nhập vào mã đơn hàng...'
+                    />
+                    <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -10 }} onPress={() => searchFilter(inputSearch)}>
+                        <Ionicons
+                            style={{ color: "black" }}
+                            name="search-circle"
+                            size={30}
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
 
             {dataOrder.length === 0 ? (
                 <>

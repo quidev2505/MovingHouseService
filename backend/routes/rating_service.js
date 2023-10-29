@@ -8,6 +8,9 @@ const RatingService = require("../controllers/ratingServiceController");
 //Read ALl Rating Serivice
 router.get('/get_all_rating', RatingService.getRatingSerice)
 
+//Find Rating Service Advanced
+router.post('/findRatingService', RatingService.findRatingService)
+
 // //Read Comment Blog Admin
 // router.post('/read_comment_blog_id', CommentBlog.readCommentBlogAdmin)
 

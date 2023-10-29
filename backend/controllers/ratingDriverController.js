@@ -209,6 +209,86 @@ const ratingDriverController = {
             console.log(e)
             res.status(501).json(e)
         }
+    },
+
+    //Loại bỏ kí tự có dấu
+    removeVietnameseTones: (str) => {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        // Some system encode vietnamese combining accent as individual utf-8 characters
+        // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+        str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+        str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+        // Remove extra spaces
+        // Bỏ các khoảng trắng liền nhau
+        str = str.replace(/ + /g, " ");
+        str = str.trim();
+        // Remove punctuations
+        // Bỏ dấu câu, kí tự đặc biệt
+        str = str.replace(
+            /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,
+            " "
+        );
+        return str;
+    },
+    //Tìm kiếm đánh giá tài xế
+    findRatingDriver: async (req, res) => {
+        try {
+            const { fullnameDriver, fullnameCustomer } = req.body;
+
+            //Gọi dữ liệu đánh giá tài xế
+            const call_api_rating_driver = await RatingDriver.find();
+            const data_rating_driver = call_api_rating_driver;
+
+            const data_all = data_rating_driver.map((item, index) => {
+                return {
+                    rating_date: item.rating_date,
+                    star: item.star,
+                    comment: item.comment,
+                    customer_name: item.customer_name,
+                    driver_name: item.driver_name
+                }
+            })
+
+
+            //Khu vực xử lý dữ liệu nhập vào
+            let new_arr = data_all.filter((item) => {
+                // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+                let word_Change_VN = ratingDriverController.removeVietnameseTones(fullnameDriver != '' ? item.driver_name : fullnameCustomer != '' ? item.customer_name : '');
+                let word_search = ratingDriverController.removeVietnameseTones(fullnameDriver || fullnameCustomer);
+                // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
+                let search = fullnameDriver || fullnameCustomer
+
+                return search.toLowerCase() === ""
+                    ? item
+                    : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
+            });
+
+            setTimeout(() => {
+                if (new_arr) {
+                    res.status(201).json(new_arr);
+                } else {
+                    res.status(501).json('Error');
+                }
+            }, 500);
+
+
+        } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
     }
 
 

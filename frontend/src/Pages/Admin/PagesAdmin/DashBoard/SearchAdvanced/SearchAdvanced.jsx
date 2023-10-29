@@ -3,6 +3,8 @@ import { Image, Table, Avatar, Select } from "antd";
 import CustomerSearch from "./CustomerSearch";
 import DriverSearch from "./DriverSearch";
 import OrderSearch from "./OrderSearch";
+import RatingDriver from "./RatingDriver";
+import RatingService from "./RatingService";
 
 function SearchAdvanced() {
   const [categoryChoose, setCategoryChoose] = useState("");
@@ -58,6 +60,14 @@ function SearchAdvanced() {
                   value: "Đơn hàng",
                   label: "Đơn hàng",
                 },
+                {
+                  value: "Đánh giá tài xế",
+                  label: "Đánh giá tài xế",
+                },
+                {
+                  value: "Đánh giá dịch vụ",
+                  label: "Đánh giá dịch vụ",
+                },
               ]}
             />
           </div>
@@ -69,6 +79,10 @@ function SearchAdvanced() {
           <DriverSearch />
         ) : categoryChoose == "Đơn hàng" ? (
           <OrderSearch />
+        ) : categoryChoose == "Đánh giá tài xế" ? (
+          <RatingDriver />
+        ) : categoryChoose == "Đánh giá dịch vụ" ? (
+          <RatingService />
         ) : (
           ""
         )}
