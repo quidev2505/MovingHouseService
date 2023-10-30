@@ -38,38 +38,49 @@ function OrderSearch() {
       setShowTable(true);
       const typeFilter = "Theo id đơn hàng";
 
-      const api_call = await axios.post("/v1/order/findDataOrder", {
-        order_id,
-        typeFilter,
-      });
+      try {
+        const api_call = await axios.post("/v1/order/findDataOrder", {
+          order_id,
+          typeFilter,
+        });
 
-      const data_get = api_call.data;
-      const data_get_new = data_get.map((item, index) => {
-        const ob = {
-          key: index,
-          order_id: item.order_id,
-          date_created: item.date_created,
-          service_name: item.service_name,
-          date_start: item.date_start,
-          date_end: item.date_end,
-          fromLocation: item.fromLocation,
-          toLocation: item.toLocation,
-          vehicle_name: item.vehicle_name,
-          driver_name: item.driver_name,
-          totalOrder: item.totalOrder,
-          status: item.status,
-          distance: item.distance,
-          duration: item.duration,
-          payment_status: item.payment_status,
-        };
+        const data_get = api_call.data;
+        const data_get_new = data_get.map((item, index) => {
+          const ob = {
+            key: index,
+            order_id: item.order_id,
+            date_created: item.date_created,
+            service_name: item.service_name,
+            date_start: item.date_start,
+            date_end: item.date_end,
+            fromLocation: item.fromLocation,
+            toLocation: item.toLocation,
+            vehicle_name: item.vehicle_name,
+            driver_name: item.driver_name,
+            totalOrder: item.totalOrder,
+            status: item.status,
+            distance: item.distance,
+            duration: item.duration,
+            payment_status: item.payment_status,
+          };
 
-        return ob;
-      });
+          return ob;
+        });
 
-      // console.log(data_get);
-      setIsActive(false);
-      setDataOrder(data_get_new);
-      // setShowTable(true);
+        // console.log(data_get);
+        setIsActive(false);
+        setDataOrder(data_get_new);
+        // setShowTable(true);
+      } catch (e) {
+        if (e.response.data == "Not Found") {
+          await Toast.fire({
+            icon: "warning",
+            title: "Không có mã đơn hàng cần tìm !",
+          });
+        }
+        setIsActive(false);
+        setDataOrder([]);
+      }
     }
   };
 

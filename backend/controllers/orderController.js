@@ -596,40 +596,48 @@ const orderController = {
                     res.status(501).json('Error');
                 }
             } else {
-                const api_call_order = await Order.findOne({
-                    order_id: order_id
-                })
+                try {
+                    const api_call_order = await Order.findOne({
+                        order_id: order_id
+                    })
 
-                //Lấy order detail id
-                const order_detailId = api_call_order.order_detail_id;
 
-                const arr_orderDetail = await OrderDetail.findOne({ _id: order_detailId })
+                    //Lấy order detail id
+                    const order_detailId = api_call_order.order_detail_id;
 
-                const arr_new = []
-                const ob = {
-                    order_id: api_call_order.order_id,
-                    date_created: api_call_order.date_created,
-                    service_name: api_call_order.service_name,
-                    date_start: api_call_order.date_start,
-                    date_end: api_call_order.date_end,
-                    fromLocation: api_call_order.fromLocation,
-                    toLocation: api_call_order.toLocation,
-                    vehicle_name: api_call_order.vehicle_name,
-                    driver_name: api_call_order.driver_name,
-                    totalOrder: api_call_order.totalOrder,
-                    status: api_call_order.status,
-                    distance: arr_orderDetail.distance,
-                    duration: arr_orderDetail.duration,
-                    payment_status: arr_orderDetail.payment_status
+                    const arr_orderDetail = await OrderDetail.findOne({ _id: order_detailId })
+
+                    const arr_new = []
+                    const ob = {
+                        order_id: api_call_order.order_id,
+                        date_created: api_call_order.date_created,
+                        service_name: api_call_order.service_name,
+                        date_start: api_call_order.date_start,
+                        date_end: api_call_order.date_end,
+                        fromLocation: api_call_order.fromLocation,
+                        toLocation: api_call_order.toLocation,
+                        vehicle_name: api_call_order.vehicle_name,
+                        driver_name: api_call_order.driver_name,
+                        totalOrder: api_call_order.totalOrder,
+                        status: api_call_order.status,
+                        distance: arr_orderDetail.distance,
+                        duration: arr_orderDetail.duration,
+                        payment_status: arr_orderDetail.payment_status
+                    }
+
+                    arr_new.push(ob);
+
+                    if (arr_new) {
+                        res.status(201).json(arr_new)
+                    } else {
+                        res.status(501).json('Error');
+                    }
+                } catch (e) {
+                    console.log(e)
+                    res.status(501).json('Not Found');
+
                 }
 
-                arr_new.push(ob);
-
-                if (arr_new) {
-                    res.status(201).json(arr_new)
-                } else {
-                    res.status(501).json('Error');
-                }
             }
 
         } catch (e) {

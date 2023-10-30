@@ -1,6 +1,7 @@
 const Driver = require('../models/Driver');
 const DriverAccount = require('../models/DriverAccount')
 const Order = require('../models/Order')
+const OrderDetail = require('../models/OrderDetailder')
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 
@@ -460,6 +461,19 @@ const driverController = {
 
 
         } catch (e) {
+            console.log(e)
+            res.status(501).json(e)
+        }
+    },
+
+    //Thông tin thêm cho tài xế
+    findMoreDriverInfo: async (req, res) => {
+        try{
+            //Đầu tiên gọi ra mảng id_delivery lấy tất cả order_id mà tài xế đã giao
+            const data_call_driver = await Driver.find()
+            
+            
+        }catch(e){
             console.log(e)
             res.status(501).json(e)
         }

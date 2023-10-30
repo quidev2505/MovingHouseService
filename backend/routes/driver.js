@@ -47,7 +47,8 @@ router.put('/update_driver/:id', upload.single("file"), driverController.updateD
 //Find Driver Advanced
 router.post('/findDriverAdvanced', driverController.findDriverAdvaned)
 
-
+//Find More Info Driver
+router.get('/findMoreDriverInfo', driverController.findMoreDriverInfo)
 
 // //Update one field Blog
 // router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)

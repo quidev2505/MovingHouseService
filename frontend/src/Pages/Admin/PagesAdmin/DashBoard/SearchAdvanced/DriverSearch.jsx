@@ -676,6 +676,17 @@ function DriverSearch() {
       });
   };
 
+  const [infoChoose, setInfoChoose] = useState("");
+  //Khu vực hiển thị thông tin thêm
+  const CategoryFilter = (value) => {
+    setInfoChoose(value);
+  };
+
+  //Gọi API thông tin thêm
+  const moreData = async() => {
+    const api_more_data = await axios.get(`/v1/driver`)
+  }
+
   return (
     <>
       <p
@@ -838,6 +849,86 @@ function DriverSearch() {
           </button>
         </div>
       </div>
+
+      {/* Khu vực thông tin thêm */}
+      <div
+        className="d-flex mt-5"
+        style={{
+          margin: "0 auto",
+          marginBottom: "18px",
+          border: "1px solid  rgb(37, 196, 196)",
+          padding: "20px",
+          borderRadius: "5px",
+        }}
+      >
+        {/* Danh mục cần tìm */}
+        <div className="d-fle mt-3" style={{ flexDirection: "column" }}>
+          <h6 className="fw-bold">Thông tin thêm</h6>
+          <div className="form-outline mb-3 form_input_handle">
+            <Select
+              defaultValue="Chưa chọn"
+              style={{
+                width: 250,
+              }}
+              onChange={CategoryFilter}
+              options={[
+                {
+                  value: "Chưa chọn",
+                  label: "Chưa chọn",
+                },
+                {
+                  value: "Tổng khoảng cách vận chuyển",
+                  label: "Tổng khoảng cách vận chuyển",
+                },
+                {
+                  value: "Tổng thời gian vận chuyển",
+                  label: "Tổng thời gian vận chuyển",
+                },
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* Nút liệt kê tất cả */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginRight: "20px",
+            justifyContent: "center",
+            marginTop: "25px",
+            marginLeft: "10px",
+          }}
+        >
+          <button
+            style={{
+              backgroundColor: "red",
+              padding: "5px",
+              borderRadius: "5px",
+              color: "white",
+              cursor: "pointer",
+              border: "1px solid red",
+            }}
+            onClick={() => moreData()}
+          >
+            LIỆT KÊ
+          </button>
+        </div>
+      </div>
+
+      {/* Khu vực bảng dữ liệu */}
+      {infoChoose == "Tổng khoảng cách vận chuyển" ? (
+        <LoadingOverlayComponent status={isActive}>
+          <Table
+            rowSelection={rowSelection}
+            columns={columnDriver}
+            dataSource={dataDriver}
+            onChange={onChange}
+          />
+        </LoadingOverlayComponent>
+      ) : (
+        ""
+      )}
 
       {/* Bảng dữ liệu */}
       <LoadingOverlayComponent status={isActive}>
