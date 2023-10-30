@@ -676,16 +676,95 @@ function DriverSearch() {
       });
   };
 
-  const [infoChoose, setInfoChoose] = useState("");
+  const [infoChoose, setInfoChoose] = useState("Chưa chọn");
   //Khu vực hiển thị thông tin thêm
   const CategoryFilter = (value) => {
     setInfoChoose(value);
   };
 
+  const [dataDistance, setDataDistance] = useState([]);
+
+  const [isActiveMore, setIsActiveMore] = useState([]);
+
   //Gọi API thông tin thêm
-  const moreData = async() => {
-    const api_more_data = await axios.get(`/v1/driver`)
-  }
+  const moreData = async () => {
+    if (infoChoose != "Chưa chọn") {
+      setIsActiveMore(true);
+      const api_more_data = await axios.get(`/v1/driver/findMoreDriverInfo`);
+      console.log(api_more_data.data);
+      setIsActiveMore(false);
+      setDataDistance(api_more_data.data);
+    } else {
+      await Toast.fire({
+        icon: "warning",
+        title: "Vui lòng chọn 1 loại thông tin thêm !",
+      });
+    }
+  };
+
+  const columnDistance = [
+    {
+      title: "Tên tài xế",
+      dataIndex: "name",
+      key: "name",
+      ...getColumnSearchProps("name"),
+      render: (name) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {name}
+          </td>
+        );
+      },
+    },
+    {
+      title: "ID đơn hàng",
+      dataIndex: "arrIdOrder",
+      key: "arrIdOrder",
+      ...getColumnSearchProps("arrIdOrder"),
+      render: (arrIdOrder) => {
+        return (
+          <td
+            style={{
+              fontWeight: "bold",
+              color: "black",
+            }}
+          >
+            {arrIdOrder.map((item, index) => {
+              return (
+                <span>
+                  {item}
+                  {index < arrIdOrder.length - 1 ? "-" : " "}
+                </span>
+              );
+            })}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Tổng khoảng cách",
+      dataIndex: "sumDistance",
+      key: "sumDistance",
+      ...getColumnSearchProps("sumDistance"),
+      render: (sumDistance) => {
+        return (
+          <td
+            style={{
+              fontWeight: "bold",
+              color: "orange",
+            }}
+          >
+            {sumDistance.toFixed(2)} km
+          </td>
+        );
+      },
+    },
+  ];
 
   return (
     <>
@@ -880,10 +959,10 @@ function DriverSearch() {
                   value: "Tổng khoảng cách vận chuyển",
                   label: "Tổng khoảng cách vận chuyển",
                 },
-                {
-                  value: "Tổng thời gian vận chuyển",
-                  label: "Tổng thời gian vận chuyển",
-                },
+                // {
+                //   value: "Tổng thời gian vận chuyển",
+                //   label: "Tổng thời gian vận chuyển",
+                // },
               ]}
             />
           </div>
@@ -918,11 +997,10 @@ function DriverSearch() {
 
       {/* Khu vực bảng dữ liệu */}
       {infoChoose == "Tổng khoảng cách vận chuyển" ? (
-        <LoadingOverlayComponent status={isActive}>
+        <LoadingOverlayComponent status={isActiveMore}>
           <Table
-            rowSelection={rowSelection}
-            columns={columnDriver}
-            dataSource={dataDriver}
+            columns={columnDistance}
+            dataSource={dataDistance}
             onChange={onChange}
           />
         </LoadingOverlayComponent>

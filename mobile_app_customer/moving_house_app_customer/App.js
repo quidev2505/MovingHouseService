@@ -25,6 +25,7 @@ import StepByStep from './Screens/Driver/StepDelivery/StepByStep';
 import DeliveryHistory from './Screens/Driver/DeliveryHistory';
 import RatingHistory from './Screens/Driver/RatingHistory';
 import RatingOrder from './Screens/Customer/RatingOrder/RatingOrder';
+import ChatWithDriver from './Screens/Customer/ChatWithDriver';
 
 
 
@@ -61,8 +62,13 @@ function App() {
           {/* Customer */}
           <Stack.Screen name="CustomerLogin" component={CustomerLogin} />
           <Stack.Screen name="HomeScreenCustomer" component={HomeScreenCustomer} />
+
           {/* Theo dõi đơn hàng */}
           <Stack.Screen name="OrderTracking" component={OrderTracking} />
+
+
+          {/* Chat với tài xế */}
+          <Stack.Screen name="ChatWithDriver" component={ChatWithDriver} />
 
           {/* Chi tiết đơn hàng khách hàng */}
           <Stack.Screen name="OrderDetailCustomer" component={OrderDetailCustomer} />

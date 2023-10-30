@@ -1,7 +1,7 @@
 const Driver = require('../models/Driver');
 const DriverAccount = require('../models/DriverAccount')
 const Order = require('../models/Order')
-const OrderDetail = require('../models/OrderDetailder')
+const OrderDetail = require('../models/OrderDetail')
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 
@@ -468,12 +468,57 @@ const driverController = {
 
     //Thông tin thêm cho tài xế
     findMoreDriverInfo: async (req, res) => {
-        try{
+        try {
             //Đầu tiên gọi ra mảng id_delivery lấy tất cả order_id mà tài xế đã giao
             const data_call_driver = await Driver.find()
-            
-            
-        }catch(e){
+
+            var arr_total_distance = [];
+            //Thực hiện tính tổng thời gian vận chuyển và tổng quãng đường vận chuyển
+            for (let i = 0; i < data_call_driver.length; i++) {
+                let arr_id_order = data_call_driver[i].id_delivery;
+                let name_driver = data_call_driver[i].fullname;
+                //Thực hiện tính tổng thời gian
+                if (arr_id_order.length > 0) {
+                    let sum_distance = 0;
+                    arr_id_order.forEach(async (item, index) => {
+                        const order_detail_id = await Order.findOne({ order_id: item });
+
+                        const orderDetail = await OrderDetail.findOne({ _id: order_detail_id.order_detail_id });
+
+                        const distance_split = orderDetail.distance.split(" ")[0];
+
+
+                        sum_distance += Number(distance_split)
+                    })
+
+
+                    setTimeout(() => {
+                        if (sum_distance > 0) {
+                            const ob = {
+                                name: name_driver,
+                                sumDistance: sum_distance,
+                                arrIdOrder: arr_id_order
+                            }
+
+                            arr_total_distance.push(ob)
+                        }
+                    }, 1000)
+
+
+                } else {
+                    continue;
+                }
+            }
+
+            if (arr_total_distance) {
+                setTimeout(() => {
+                    res.status(201).json(arr_total_distance)
+                }, 1000)
+            } else {
+                res.status(501).json('error')
+            }
+
+        } catch (e) {
             console.log(e)
             res.status(501).json(e)
         }

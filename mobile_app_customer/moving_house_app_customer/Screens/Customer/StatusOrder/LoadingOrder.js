@@ -19,6 +19,9 @@ function LoadingOrder({ navigation }) {
     //Tìm kiếm theo mã đơn hàng
     const [inputSearch, setInputSearch] = useState("")
 
+    //Tên khách hàng
+    const [fullnameCustomer, setFullNameCustomer] = useState("");
+
 
     //Lấy thông tin khách hàng
     const get_info_order = async () => {
@@ -28,6 +31,7 @@ function LoadingOrder({ navigation }) {
 
             if (dataLocal) {
                 const fullname = dataLocal.fullname;
+                setFullNameCustomer(fullname)
 
                 let id_customer = await axios.get(
                     `${api_url}/v1/customer/get_customer_with_fullname/${fullname}`
@@ -68,8 +72,6 @@ function LoadingOrder({ navigation }) {
                                     }
 
                                 });
-
-
 
                             setDataOrder(data_order)
                         })
@@ -243,9 +245,16 @@ function LoadingOrder({ navigation }) {
                                     </View>
 
                                     {item.status === "Đang thực hiện" ? (
-                                        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrderTracking', { status: "Đang tải", order_id: item.order_id })}>
-                                            <Text style={styles.buttonText}>Theo dõi đơn hàng 🗺️</Text>
-                                        </TouchableOpacity>
+                                        <>
+                                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrderTracking', { status: "Đang tải", order_id: item.order_id })}>
+                                                <Text style={styles.buttonText}>Theo dõi đơn hàng 🗺️</Text>
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity style={styles.buttonChat} onPress={() => navigation.navigate('ChatWithDriver', { status: "Đang tải", order_id: item.order_id, customer_name: fullnameCustomer, driver_name: item.driver_name[0]})}>
+                                                <Text style={styles.buttonText}>Chat với tài xế 💬</Text>
+                                            </TouchableOpacity>
+                                        </>
+
                                     ) : ''}
 
                                 </Card>
@@ -265,6 +274,14 @@ const styles = StyleSheet.create({
 
     button: {
         backgroundColor: '#ff5643',
+        borderRadius: 5,
+        padding: 10,
+        width: 350,
+        marginTop: 20
+    },
+
+    buttonChat: {
+        backgroundColor: 'rgb(37, 196, 196)',
         borderRadius: 5,
         padding: 10,
         width: 350,
