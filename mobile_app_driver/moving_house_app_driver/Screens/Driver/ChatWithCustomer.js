@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu và
 import { db } from "./config"
 import { ref, set, get, child, getDatabase } from "firebase/database"
 
-function ChatWithDriver({ route, navigation }) {
+function ChatWithCustomer({ route, navigation }) {
     const [orderId, setOrderId] = useState()
     const [navigate_ori, setNavigateOri] = useState("");
     const [driverName, setDriverName] = useState("");
@@ -30,10 +30,10 @@ function ChatWithDriver({ route, navigation }) {
         setCustomerName(customer_name)
 
         //Gọi tin nhắn
-setInterval(()=>{
-      call_mess(order_id)
-}, 2000)
-  
+        setInterval(() => {
+            call_mess(order_id)
+        }, 1200)
+
     }, [])
 
     const [domMess, setDomMess] = useState()
@@ -52,12 +52,15 @@ setInterval(()=>{
 
                 const DOM = arrValueResult.map((item, index) => {
                     return (
+
                         <View style={{ marginBottom: 10, marginTop: 3 }}>
-                            <View style={{ marginLeft: item.role == "customer" ? "60%" : "10%", backgroundColor: item.role == "customer" ? "rgb(137, 198, 244)" : "#fff", borderRadius: 10, padding: 5, width: 150 }}>
+                            <View style={{ marginLeft: item.role == "driver" ? "60%" : "5%", backgroundColor: item.role == "driver" ? "rgb(137, 198, 244)" : "#fff", borderRadius: 10, padding: 5, width: 150 }}>
                                 <Text style={{ borderRadius: 10, width: 100, padding: 10, fontSize: 17 }}>{item.content}</Text>
                                 <Text style={{ fontSize: 12, paddingLeft: 10 }}>{item.time}</Text>
                             </View>
                         </View>
+
+
                     )
                 })
 
@@ -73,7 +76,7 @@ setInterval(()=>{
 
 
     const back = () => {
-        navigation.navigate(navigate_ori)
+        navigation.navigate('StepByStep')
     }
 
     const sendMess = () => {
@@ -82,11 +85,12 @@ setInterval(()=>{
 
         const timeSolve = new Date()
         set(ref(db, 'chatTogether/' + orderId + '/' + timeNow), {
-            role: 'customer',
+            role: 'driver',
             content: inputChat,
             senderName: customerName,
             time: `${timeSolve.getHours()}:${timeSolve.getMinutes()} - ${timeSolve.getDate()}/${timeSolve.getMonth() + 1}/${timeSolve.getFullYear()}`
         });
+
 
         setInputChat("")
     }
@@ -102,18 +106,17 @@ setInterval(()=>{
                             size={25}
                             color="green"
                         />
-                        <Text style={{ fontSize: 20 }}>Tài xế: {driverName}</Text>
+                        <Text style={{ fontSize: 20 }}>Khách hàng: {customerName}</Text>
                         <Text></Text>
                     </View>
                 </View>
-<ScrollView>
-                <View style={{marginTop:5, marginBottom:80}}>
+                <ScrollView>
+                    <View style={{ marginTop: 5, marginBottom:80}}>
 
-               {domMess}
+                        {domMess}
 
-     
-                </View>
-</ScrollView>
+                    </View>
+                </ScrollView>
                 <View style={{ position: "absolute", bottom: 0 }}>
                     {/* Ô nhập tìm kiếm theo mã đơn hàng */}
                     <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 320, height: 40, margin: 20, marginLeft: 25, marginTop: 30 }}>
@@ -140,4 +143,4 @@ setInterval(()=>{
     )
 }
 
-export default ChatWithDriver
+export default ChatWithCustomer

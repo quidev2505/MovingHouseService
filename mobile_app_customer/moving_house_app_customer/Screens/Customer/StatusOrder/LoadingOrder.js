@@ -37,6 +37,7 @@ function LoadingOrder({ navigation }) {
                     `${api_url}/v1/customer/get_customer_with_fullname/${fullname}`
                 );
 
+
                 if (id_customer) {
                     await axios
                         .get(`${api_url}/v1/order/viewOrderWithCustomerId/${id_customer.data._id}`)
@@ -118,7 +119,7 @@ function LoadingOrder({ navigation }) {
         }>
             {/* Ô nhập tìm kiếm theo mã đơn hàng */}
             <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 320, height: 40, margin: 20, marginLeft: 25, marginTop: 30 }}>
-                <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center",borderRadius:10 }}>
                     <Input
                         value={inputSearch}
                         onChangeText={(e) => setInputSearch(e)}

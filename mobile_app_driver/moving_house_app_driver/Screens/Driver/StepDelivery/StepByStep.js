@@ -89,7 +89,23 @@ function StepByStep({ route, navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    <View style={{
+                        position: "fixed",
+                        bottom: 5,
+                        left: 5,
+                        backgroundColor: "green",
+                        width: 50,
+                        height: 50,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10
+                    }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
+                            <Text style={styles.buttonText}>💬</Text>
+                        </TouchableOpacity>
 
+                    </View>
                 </View>
             );
         } catch (e) {
@@ -125,7 +141,23 @@ function StepByStep({ route, navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    <View style={{
+                        position: "fixed",
+                        bottom: 5,
+                        left: 5,
+                        backgroundColor: "green",
+                        width: 50,
+                        height: 50,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10
+                    }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
+                            <Text style={styles.buttonText}>💬</Text>
+                        </TouchableOpacity>
 
+                    </View>
                 </View>
             );
         } catch (e) {
@@ -158,6 +190,23 @@ function StepByStep({ route, navigation }) {
                                 <Text style={styles.buttonText}>Bước kế tiếp</Text>
                             </TouchableOpacity>
                         </View>
+                    </View>
+                    <View style={{
+                        position: "fixed",
+                        bottom: 5,
+                        left: 5,
+                        backgroundColor: "green",
+                        width: 50,
+                        height: 50,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10
+                    }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
+                            <Text style={styles.buttonText}>💬</Text>
+                        </TouchableOpacity>
+
                     </View>
                 </View>
             );
@@ -192,6 +241,23 @@ function StepByStep({ route, navigation }) {
                                 <Text style={styles.buttonText}>Xác nhận đã đến điểm nhận hàng</Text>
                             </TouchableOpacity>
                         </View>
+                    </View>
+                    <View style={{
+                        position: "fixed",
+                        bottom: 5,
+                        left: 5,
+                        backgroundColor: "green",
+                        width: 50,
+                        height: 50,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10
+                    }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
+                            <Text style={styles.buttonText}>💬</Text>
+                        </TouchableOpacity>
+
                     </View>
                 </View>
             );
@@ -302,8 +368,25 @@ function StepByStep({ route, navigation }) {
                         </View>
 
                     ) : ''}
+                    <View style={{
+                        position: "fixed",
+                        bottom: 5,
+                        left: 5,
+                        backgroundColor: "green",
+                        width: 50,
+                        height: 50,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10
+                    }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
+                            <Text style={styles.buttonText}>💬</Text>
+                        </TouchableOpacity>
 
+                    </View>
                 </View>
+
             );
         } catch (e) {
             console.log(e)
@@ -312,6 +395,7 @@ function StepByStep({ route, navigation }) {
     };
 
     const [data_user, setDataUser] = useState()
+    const [data_driver, setDataDriver] = useState()
 
     //Component thanh toán hóa đơn
     const PaymentOrder = (props) => {
@@ -436,6 +520,24 @@ function StepByStep({ route, navigation }) {
                                     Xác nhận đã thanh toán hóa đơn</Text>
                             </TouchableOpacity>
                         </View>
+                    </View>
+                    
+                    <View style={{
+                        position: "fixed",
+                        bottom: 5,
+                        left: 5,
+                        backgroundColor: "green",
+                        width: 50,
+                        height: 50,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: 10
+                    }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
+                            <Text style={styles.buttonText}>💬</Text>
+                        </TouchableOpacity>
+
                     </View>
 
                 </View>
@@ -617,10 +719,11 @@ function StepByStep({ route, navigation }) {
 
 
     useEffect(() => {
-        const { data_user, data_order } = route.params;
+        const { data_user, data_order, data_driver } = route.params;
         get_location(data_order.from_location, data_order.to_location, data_order.fromLocation_detail, data_order.toLocation_detail)
         setDataOrder(data_order)
         setDataUser(data_user)
+        setDataDriver(data_driver)
     }, [])
 
     return (

@@ -10,12 +10,21 @@ function ContactCustomer({ route, navigation }) {
 
     const [nextStep, setNextStep] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [dataDriver, setDataDriver] = useState("")
 
-
+    const call_driver = async () => {
+        const value_local = await AsyncStorage.getItem('already_login_driver');
+        const dataLocal = JSON.parse(value_local)
+        if (dataLocal) {
+            const username = dataLocal.username
+            setDataDriver(username)
+        }
+    }
 
     useEffect(() => {
         /* 2. Get the param */
         const { data_user, data_order } = route.params;
+
 
         setDataUser(data_user)
         setDataOrderDetail(data_order)
@@ -23,7 +32,7 @@ function ContactCustomer({ route, navigation }) {
 
     //Bước kế tiếp
     const next_step = () => {
-        navigation.navigate('StepByStep', { data_user: dataUser, data_order: dataOrderDetail })
+        navigation.navigate('StepByStep', { data_user: dataUser, data_order: dataOrderDetail, data_driver: dataDriver })
     }
 
 
@@ -62,7 +71,7 @@ function ContactCustomer({ route, navigation }) {
                             {dataUser.phonenumber}
                         </Text>
                     </Text>
-                    <Text style={{ fontSize: 20, marginTop: 10, padding: 10, borderWidth:2, borderColor:"orange", borderRadius:5 }}>
+                    <Text style={{ fontSize: 20, marginTop: 10, padding: 10, borderWidth: 2, borderColor: "orange", borderRadius: 5 }}>
                         Lưu ý:
                         {"\n"}
                         + Cần xác nhận với khách hàng về các loại chi phí phát sinh.
