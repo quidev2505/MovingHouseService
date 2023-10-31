@@ -22,6 +22,7 @@ function DriverSearch() {
   const [phonenumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [profile_code, setProfileCode] = useState("");
+  const [licensePlate, setLicensePlate] = useState("");
 
   const [dataDriver, setDataDriver] = useState([]);
 
@@ -35,7 +36,8 @@ function DriverSearch() {
       profile_code == "" &&
       phonenumber == "" &&
       fullname == "" &&
-      address == ""
+      address == "" &&
+      licensePlate == ""
     ) {
       await Toast.fire({
         icon: "warning",
@@ -53,6 +55,7 @@ function DriverSearch() {
       });
 
       const data_get = api_call.data;
+      console.log(data_get);
       const data_get_new = data_get.map((item, index) => {
         const ob = {
           key: index,
@@ -69,6 +72,7 @@ function DriverSearch() {
           location_delivery: item.location_delivery,
           id_delivery: item.id_delivery.length,
           id_rating: item.id_rating.length,
+          license_plate: item.license_plate,
           current_position: item.current_position,
           status: item.status,
         };
@@ -115,6 +119,7 @@ function DriverSearch() {
         location_delivery: item.location_delivery,
         id_delivery: item.id_delivery.length,
         id_rating: item.id_rating.length,
+        license_plate: item.license_plate,
         current_position: item.current_position,
         status: item.status,
       };
@@ -122,6 +127,7 @@ function DriverSearch() {
       return ob;
     });
 
+    console.log(data_get_new);
     // console.log(data_get);
     setIsActive(false);
     setDataDriver(data_get_new);
@@ -332,6 +338,24 @@ function DriverSearch() {
             }}
           >
             {citizen_id}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Biển số xe",
+      dataIndex: "license_plate",
+      key: "license_plate",
+      ...getColumnSearchProps("license_plate"),
+      render: (license_plate) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {license_plate}
           </td>
         );
       },
@@ -613,6 +637,7 @@ function DriverSearch() {
                 phonenumber: item.phonenumber,
                 date_of_birth: item.date_of_birth,
                 citizen_id: item.citizen_id,
+                license_plate: item.license_plate,
                 address: item.address,
                 avatar: item.avatar,
                 gender: item.gender,
@@ -641,6 +666,7 @@ function DriverSearch() {
               "Số điện thoại",
               "Ngày sinh",
               "CCCD",
+              "Biển số xe",
               "Địa chỉ",
               "Ảnh đại diện",
               "Giới tính",

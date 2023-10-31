@@ -84,6 +84,12 @@ function EditDriver() {
         break;
       }
     }
+
+    //Xử lý ngày tháng
+    const date_get = dataDriver.date_of_birth;
+    const date_split = date_get.split("-");
+    const date_new = `${date_split[2]}-${date_split[1]}-${date_split[0]}`;
+
     const formData = new FormData();
     formData.append("file", image);
     formData.append("imgURL", imgURL);
@@ -94,9 +100,10 @@ function EditDriver() {
     formData.append("citizen_id", dataDriver.citizen_id);
     formData.append("phonenumber", dataDriver.phonenumber);
     formData.append("fullname", dataDriver.fullname);
-    formData.append("date_of_birth", dataDriver.date_of_birth);
+    formData.append("date_of_birth", date_new);
     formData.append("email", dataDriver.email);
     formData.append("address", dataDriver.address);
+    formData.append("license_plate", dataDriver.license_plate);
     formData.append("vehicle_type", vehicle_type);
     formData.append("location_delivery", location_delivery);
 
@@ -140,6 +147,15 @@ function EditDriver() {
       .get(`/v1/driver/view_detail_driver/${id}`)
       .then((data) => {
         const data_driver = data.data;
+        //Xử lý hiển thị ngày
+        console.log(data_driver);
+        const date_get = data_driver.date_of_birth;
+        const date_split = date_get.split("-");
+        const date_show = `${date_split[2]}-${date_split[1]}-${date_split[0]}`;
+
+        data_driver.date_of_birth = date_show;
+        console.log(data_driver);
+
         setDataDriver(data_driver);
         setGender(data_driver.gender);
         setVehicleType(data_driver.vehicle_type);
@@ -549,6 +565,35 @@ function EditDriver() {
                               onChange={handleChangeVehicleType}
                               options={dataVehicle}
                             />
+                          </div>
+
+                          <div style={{ marginBottom: "5px" }}>
+                            <label
+                              htmlFor="license_plate"
+                              className="label-color"
+                              style={{ marginBottom: "5px" }}
+                            >
+                              Biển số xe
+                            </label>
+                            <div className="form-outline mb-3  form_input_handle">
+                              <input
+                                type="text"
+                                id="license_plate"
+                                className="form-control form-control-lg"
+                                placeholder="Nhập vào biển số"
+                                style={{
+                                  fontSize: "17px",
+                                  borderRadius: "3px",
+                                }}
+                                value={dataDriver.license_plate}
+                                onChange={(e) =>
+                                  setDataDriver({
+                                    ...dataDriver,
+                                    license_plate: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
                           </div>
                         </div>
 

@@ -80,6 +80,7 @@ function InfoDriver({ navigation }) {
               date_of_birth: data_driver.date_of_birth,
               id_rating: data_driver.id_rating,
               id_delivery: data_driver.id_delivery,
+              license_plate: item.license_plate,
               status: data_driver.status,
               current_position: data_driver.current_position
             }
@@ -217,6 +218,13 @@ function InfoDriver({ navigation }) {
                 size={20}
               />
               <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.phonenumber}</Text>
+            </View>
+            <View style={{ display: "flex", flexDirection: "row" }}>
+              <Ionicons
+                name="id-card-sharp"
+                size={20}
+              />
+              <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.license_plate}</Text>
             </View>
           </View>
 

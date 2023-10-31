@@ -119,7 +119,13 @@ function AddDriver() {
   const onSubmit = async (data) => {
     try {
       if (image || imgURL !== "") {
+        //Xử lý ngày tháng
+        const date_get = data.date_of_birth;
+        const date_split = date_get.split("-");
+        const date_new = `${date_split[2]}-${date_split[1]}-${date_split[0]}`;
+
         const formData = new FormData();
+
         formData.append("file", image);
         formData.append("imgURL", imgURL);
         formData.append("username", createAccountRandom.username);
@@ -129,10 +135,11 @@ function AddDriver() {
         formData.append("citizen_id", data.citizen_id);
         formData.append("phonenumber", data.phonenumber);
         formData.append("fullname", data.fullname);
-        formData.append("date_of_birth", data.date_of_birth);
+        formData.append("date_of_birth", date_new);
         formData.append("email", data.email);
         formData.append("address", data.address);
         formData.append("vehicle_type", vehicle_type);
+        formData.append("license_plate", data.license_plate);
         formData.append("location_delivery", location_delivery);
 
         await axios
@@ -580,6 +587,34 @@ function AddDriver() {
                               onChange={handleChangeVehicleType}
                               options={dataVehicle}
                             />
+                          </div>
+                          
+                          <div style={{ marginBottom: "5px" }}>
+                            <label
+                              htmlFor="license_plate"
+                              className="label-color"
+                              style={{ marginBottom: "5px" }}
+                            >
+                              Biển số xe
+                            </label>
+                            <div className="form-outline mb-3  form_input_handle">
+                              <input
+                                type="text"
+                                id="license_plate"
+                                className="form-control form-control-lg"
+                                placeholder="Nhập vào biển số xe"
+                                style={{
+                                  fontSize: "17px",
+                                  borderRadius: "3px",
+                                }}
+                                {...register("license_plate", {
+                                  required: true,
+                                })}
+                              />
+                              {errors?.license_plate?.type === "required" && (
+                                <p>Không được để trống</p>
+                              )}
+                            </div>
                           </div>
                         </div>
 

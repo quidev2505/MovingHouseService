@@ -36,6 +36,7 @@ import {
   AimOutlined,
   CarOutlined,
   ArrowRightOutlined,
+  IdcardOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -682,8 +683,14 @@ function DriverAdmin() {
                     >
                       <AimOutlined /> {data_result.location_delivery}
                     </div>
-                    <div className="col"></div>
-                    <div className="col"></div>
+                    <div className="col">
+                      <CarOutlined />
+                      &nbsp;&nbsp;{data_result.vehicle_type}
+                    </div>
+                    <div className="col">
+                      <IdcardOutlined />
+                      &nbsp;&nbsp;{data_result.license_plate}
+                    </div>
                   </div>
                 </div>
               </div>

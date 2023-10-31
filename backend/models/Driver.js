@@ -41,6 +41,11 @@ const driverSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    //Biển số xe
+    license_plate: {
+        type: String,
+        required: true
+    },
     location_delivery: {
         type: String,
         required: true

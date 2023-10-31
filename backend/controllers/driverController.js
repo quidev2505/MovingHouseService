@@ -37,6 +37,7 @@ const driverController = {
                 email: data_input.email,
                 address: data_input.address,
                 vehicle_type: data_input.vehicle_type,
+                license_plate: data_input.license_plate,
                 location_delivery: data_input.location_delivery,
                 avatar: IMG,
                 current_position: data_input.address
@@ -395,7 +396,8 @@ const driverController = {
                     citizen_id: item.citizen_id,//
                     star_average: item.star_average,//
                     status: item.status,//
-                    current_position: item.current_position//
+                    current_position: item.current_position,//
+                    license_plate: item.license_plate
                 }
             })
 
