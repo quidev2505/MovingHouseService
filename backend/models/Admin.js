@@ -43,7 +43,7 @@ const adminSchema = new mongoose.Schema({
     },//Ảnh đại diện người dùng
     status: {
         type: String,
-        default: true
+        default: "Sẵn sàng"
     },//Gồm 2 trạng thái: Hoạt động, tạm ngưng
     department: {
         type: String,

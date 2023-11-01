@@ -261,10 +261,10 @@ function GetOrder({ navigation }) {
 
                 {/* Hiển thị trạng thái tài xế */}
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", paddingLeft: 13 }}>
-                    <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "green" : "red", width: "fit-content", borderRadius: 10, display: "flex", alignItems: "center", lineHeight: 40 }}>{statusDriver}</Text>
+                    <Text style={{ marginLeft: 10, marginTop: 10, padding: 10, color: "white", backgroundColor: statusDriver === "Sẵn sàng" ? "#6ab04c" : "#eb4d4b", width: "fit-content", borderRadius: 10, display: "flex", alignItems: "center", lineHeight: 40 }}>{statusDriver}</Text>
 
 
-                    <Text style={{ marginRight: 10, marginTop: 10, padding: 10, width: "70%", color: "white", backgroundColor: location_delivery === "TPHCM và tỉnh lân cận" ? "red" : "purple", borderRadius: 10, textAlign: "center", marginLeft: 10 }}>
+                    <Text style={{ marginRight: 10, marginTop: 10, padding: 10, width: "70%", color: "white", backgroundColor: location_delivery === "TPHCM và tỉnh lân cận" ? "#eb3b5a" : "#a55eea", borderRadius: 10, textAlign: "center", marginLeft: 10 }}>
                         <Ionicons
                             name="location-sharp"
                             size={20}
@@ -277,35 +277,34 @@ function GetOrder({ navigation }) {
                     </Text>
                 </View>
 
+
+                {/* Lọc ra đơn hiện đang có và đơn đã nhận hàng. */}
+                <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", marginTop: 10, height: 50, borderWidth: 0.5, borderColor: "#ccc", backgroundColor:"white", padding:5 }}>
+                    <TouchableOpacity style={{ backgroundColor: colorTab ? 'orange' : '#ccc', padding: 5, borderRadius: 5, height: "fit-content" }} onPress={() => filterOrder("Hiện có")}>
+                        <Text style={{ color: "white", fontWeight: "bold",fontSize:16 }}>Danh sách đơn hiện có</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ backgroundColor: colorTab ? '#ccc' : 'orange', color: "white", padding: 5, borderRadius: 5, height: "fit-content" }} onPress={() => filterOrder("Đã nhận")}>
+                        <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>Danh sách đơn đã nhận</Text>
+                    </TouchableOpacity>
+                </View>
+
+
                 {/* Ô nhập tìm kiếm theo mã đơn hàng */}
-                <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 320, height: 40, margin: 20, marginLeft: 25, marginTop: 30 }}>
-                    <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width:310, height: 30, margin: 10, marginLeft: 25, marginTop: 30 }}>
+                    <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderRadius: 8 }}>
                         <Input
                             value={inputSearch}
                             onChangeText={(e) => setInputSearch(e)}
                             placeholder='Nhập vào mã đơn hàng...'
                         />
-                        <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -10 }} onPress={() => searchFilter(inputSearch)}>
+                        <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -12 }} onPress={() => searchFilter(inputSearch)}>
                             <Ionicons
-                                style={{ color: "black" }}
+                                style={{ color: "black", marginTop:-10 }}
                                 name="search-circle"
                                 size={30}
                             />
                         </TouchableOpacity>
                     </View>
-                </View>
-
-
-
-
-                {/* Lọc ra đơn hiện đang có và đơn đã nhận hàng. */}
-                <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", marginTop: 10, height: 40 }}>
-                    <TouchableOpacity style={{ backgroundColor: colorTab ? 'orange' : '#ccc', padding: 5, borderRadius: 5, height: "fit-content" }} onPress={() => filterOrder("Hiện có")}>
-                        <Text style={{ color: "white", fontWeight: "bold" }}>Danh sách đơn hiện có</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ backgroundColor: colorTab ? '#ccc' : 'orange', color: "white", padding: 5, borderRadius: 5, height: "fit-content" }} onPress={() => filterOrder("Đã nhận")}>
-                        <Text style={{ color: "white", fontWeight: "bold" }}>Danh sách đơn đã nhận</Text>
-                    </TouchableOpacity>
                 </View>
 
 

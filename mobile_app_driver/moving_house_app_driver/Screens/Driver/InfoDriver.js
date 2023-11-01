@@ -80,7 +80,7 @@ function InfoDriver({ navigation }) {
               date_of_birth: data_driver.date_of_birth,
               id_rating: data_driver.id_rating,
               id_delivery: data_driver.id_delivery,
-              license_plate: item.license_plate,
+              license_plate: data_driver.license_plate,
               status: data_driver.status,
               current_position: data_driver.current_position
             }
@@ -219,13 +219,7 @@ function InfoDriver({ navigation }) {
               />
               <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.phonenumber}</Text>
             </View>
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              <Ionicons
-                name="id-card-sharp"
-                size={20}
-              />
-              <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.license_plate}</Text>
-            </View>
+
           </View>
 
 
@@ -253,6 +247,13 @@ function InfoDriver({ navigation }) {
               size={20}
             />
             <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.vehicle_type}</Text>
+          </View>
+          <View style={{ display: "flex", flexDirection: "row", marginTop: 15, marginLeft: 5 }}>
+            <Ionicons
+              name="card"
+              size={20}
+            />
+            <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.license_plate}</Text>
           </View>
 
           <View style={{ display: "flex", flexDirection: "row", marginTop: 15, marginLeft: 5 }}>
@@ -417,7 +418,7 @@ const styles = StyleSheet.create({
     zIndex: -1
   },
   button1: {
-    backgroundColor: 'red',
+    backgroundColor: '#eb4d4b',
     borderRadius: 10,
     padding: 10,
     height: "fit-content",
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
     zIndex: -1
   },
   vanchuyen: {
-    backgroundColor: 'blue',
+    backgroundColor: '#22a6b3',
     borderRadius: 10,
     padding: 10,
     height: "fit-content",

@@ -180,16 +180,16 @@ function Order({ navigation }) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
             {/* Ô nhập tìm kiếm theo mã đơn hàng */}
-            <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 320, height: 40, margin: 20, marginLeft: 25, marginTop: 30 }}>
-                <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 310, height: 30, margin: 10, marginLeft: 25, marginTop: 30 }}>
+                <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderRadius: 8 }}>
                     <Input
                         value={inputSearch}
                         onChangeText={(e) => setInputSearch(e)}
                         placeholder='Nhập vào mã đơn hàng...'
                     />
-                    <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -10 }} onPress={() => searchFilter(inputSearch)}>
+                    <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -12 }} onPress={() => searchFilter(inputSearch)}>
                         <Ionicons
-                            style={{ color: "black" }}
+                            style={{ color: "black", marginTop: -10 }}
                             name="search-circle"
                             size={30}
                         />

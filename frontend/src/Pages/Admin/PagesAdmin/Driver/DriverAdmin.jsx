@@ -573,7 +573,8 @@ function DriverAdmin() {
     });
 
     let data_delivery_driver = await axios.get(`/v1/order/viewAllOrder`);
-    let arr_delivery_driver = data_delivery_driver.data.map((item, index) => {
+    const arr_delivery_driver = []
+    data_delivery_driver.data.forEach((item, index) => {
       if (
         item.status === "Đã hoàn thành" &&
         item.driver_name.includes(id.fullname)
@@ -586,7 +587,7 @@ function DriverAdmin() {
           date_end: item.date_end,
         };
 
-        return ob;
+        arr_delivery_driver.push(ob)
       }
     });
 

@@ -84,15 +84,18 @@ function ChatWithCustomer({ route, navigation }) {
         const timeNow = Date.now()
 
         const timeSolve = new Date()
-        set(ref(db, 'chatTogether/' + orderId + '/' + timeNow), {
-            role: 'driver',
-            content: inputChat,
-            senderName: customerName,
-            time: `${timeSolve.getHours()}:${timeSolve.getMinutes()} - ${timeSolve.getDate()}/${timeSolve.getMonth() + 1}/${timeSolve.getFullYear()}`
-        });
+        if (inputChat !== '') {
+            set(ref(db, 'chatTogether/' + orderId + '/' + timeNow), {
+                role: 'driver',
+                content: inputChat,
+                senderName: customerName,
+                time: `${timeSolve.getHours()}:${timeSolve.getMinutes()} - ${timeSolve.getDate()}/${timeSolve.getMonth() + 1}/${timeSolve.getFullYear()}`
+            });
 
 
-        setInputChat("")
+            setInputChat("")
+        }
+
     }
 
     return (
@@ -111,26 +114,26 @@ function ChatWithCustomer({ route, navigation }) {
                     </View>
                 </View>
                 <ScrollView>
-                    <View style={{ marginTop: 5, marginBottom:80}}>
+                    <View style={{ marginTop: 5, marginBottom: 80 }}>
 
                         {domMess}
 
                     </View>
                 </ScrollView>
-                <View style={{ position: "absolute", bottom: 0 }}>
+                <View style={{ position: "absolute", bottom: 15, backgroundColor:"transparent" }}>
                     {/* Ô nhập tìm kiếm theo mã đơn hàng */}
-                    <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 320, height: 40, margin: 20, marginLeft: 25, marginTop: 30 }}>
-                        <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderRadius: 20 }}>
+                    <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 310, height: 30, margin: 10, marginLeft: 25, marginTop: 30 }}>
+                        <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderRadius: 10 }}>
                             <Input
                                 value={inputChat}
                                 onChangeText={(e) => setInputChat(e)}
                                 placeholder='Nhập vào tin nhắn...'
                             />
-                            <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -10, opacity: inputChat !== '' ? 1 : 0.2 }} onPress={() => sendMess()}>
+                            <TouchableOpacity style={{ borderColor: "#ccc", marginLeft: 15, marginBottom: -25, opacity: inputChat !== '' ? 1 : 0.2 }} onPress={() => sendMess()}>
                                 <Ionicons
-                                    style={{ color: "black" }}
+                                    style={{ color: "black", marginTop: -15 }}
                                     name="send-sharp"
-                                    size={30}
+                                    size={35}
                                 />
                             </TouchableOpacity>
                         </View>

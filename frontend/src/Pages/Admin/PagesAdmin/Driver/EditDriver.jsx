@@ -154,7 +154,6 @@ function EditDriver() {
         const date_show = `${date_split[2]}-${date_split[1]}-${date_split[0]}`;
 
         data_driver.date_of_birth = date_show;
-        console.log(data_driver);
 
         setDataDriver(data_driver);
         setGender(data_driver.gender);

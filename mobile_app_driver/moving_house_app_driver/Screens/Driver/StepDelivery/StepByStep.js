@@ -69,44 +69,31 @@ function StepByStep({ route, navigation }) {
             }, [])
 
             return (
-                <View>
-                    <Text style={{ backgroundColor: "orange", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Điểm lấy hàng: {fromLocation.name} </Text>
-
-                    <Text style={{ backgroundColor: "green", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Trạng thái: Đã đến điểm lấy hàng</Text>
-                    <Image
-                        source={{ uri: `https://rsapi.goong.io/staticmap/route?origin=${fromLocation?.lat},${fromLocation?.lon}&destination=${toLocation?.lat},${toLocation?.lon}&vehicle=car&color=blue&api_key=5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy` }}
-                        style={{ width: 400, height: 300, marginTop: 50, objectFit: "fill" }}
-                        resizeMode="contain"
-                    />
-
-
+                <>
                     <View>
-                        <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
-                            <TouchableOpacity style={styles.button} onPress={() => {
-                                setActive((active) => active + 1)
-                            }}>
-                                <Text style={styles.buttonText}>Xác nhận đã đến điểm lấy hàng</Text>
-                            </TouchableOpacity>
+                        <Text style={{ backgroundColor: "orange", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Điểm lấy hàng: {fromLocation.name} </Text>
+
+                        <Text style={{ backgroundColor: "green", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Trạng thái: Đã đến điểm lấy hàng</Text>
+                        <Image
+                            source={{ uri: `https://rsapi.goong.io/staticmap/route?origin=${fromLocation?.lat},${fromLocation?.lon}&destination=${toLocation?.lat},${toLocation?.lon}&vehicle=car&color=blue&api_key=5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy` }}
+                            style={{ width: 400, height: 300, marginTop: 50, objectFit: "fill" }}
+                            resizeMode="contain"
+                        />
+
+
+                        <View>
+                            <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
+                                <TouchableOpacity style={styles.button} onPress={() => {
+                                    setActive((active) => active + 1)
+                                }}>
+                                    <Text style={styles.buttonText}>Xác nhận đã đến điểm lấy hàng</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                    <View style={{
-                        position: "fixed",
-                        bottom: 5,
-                        left: 5,
-                        backgroundColor: "green",
-                        width: 50,
-                        height: 50,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 10
-                    }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
-                            <Text style={styles.buttonText}>💬</Text>
-                        </TouchableOpacity>
 
                     </View>
-                </View>
+
+                </>
             );
         } catch (e) {
             console.log(e)
@@ -141,23 +128,7 @@ function StepByStep({ route, navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{
-                        position: "fixed",
-                        bottom: 5,
-                        left: 5,
-                        backgroundColor: "green",
-                        width: 50,
-                        height: 50,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 10
-                    }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
-                            <Text style={styles.buttonText}>💬</Text>
-                        </TouchableOpacity>
 
-                    </View>
                 </View>
             );
         } catch (e) {
@@ -191,23 +162,7 @@ function StepByStep({ route, navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{
-                        position: "fixed",
-                        bottom: 5,
-                        left: 5,
-                        backgroundColor: "green",
-                        width: 50,
-                        height: 50,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 10
-                    }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
-                            <Text style={styles.buttonText}>💬</Text>
-                        </TouchableOpacity>
 
-                    </View>
                 </View>
             );
         } catch (e) {
@@ -242,23 +197,7 @@ function StepByStep({ route, navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{
-                        position: "fixed",
-                        bottom: 5,
-                        left: 5,
-                        backgroundColor: "green",
-                        width: 50,
-                        height: 50,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 10
-                    }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
-                            <Text style={styles.buttonText}>💬</Text>
-                        </TouchableOpacity>
 
-                    </View>
                 </View>
             );
         } catch (e) {
@@ -368,23 +307,7 @@ function StepByStep({ route, navigation }) {
                         </View>
 
                     ) : ''}
-                    <View style={{
-                        position: "fixed",
-                        bottom: 5,
-                        left: 5,
-                        backgroundColor: "green",
-                        width: 50,
-                        height: 50,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 10
-                    }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
-                            <Text style={styles.buttonText}>💬</Text>
-                        </TouchableOpacity>
 
-                    </View>
                 </View>
 
             );
@@ -521,24 +444,7 @@ function StepByStep({ route, navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    
-                    <View style={{
-                        position: "fixed",
-                        bottom: 5,
-                        left: 5,
-                        backgroundColor: "green",
-                        width: 50,
-                        height: 50,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 10
-                    }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user.fullname, driver_name: data_driver.fullname })}>
-                            <Text style={styles.buttonText}>💬</Text>
-                        </TouchableOpacity>
 
-                    </View>
 
                 </View>
 
@@ -732,6 +638,23 @@ function StepByStep({ route, navigation }) {
                 <View>
                     <View style={{ display: "flex", flexDirection: "row", height: 90, backgroundColor: "white", justifyContent: "space-between", padding: 10, paddingTop: 50 }}>
                         <Text style={{ fontSize: 20 }}>{titleHome}</Text>
+                        <View style={{
+                            position: "fixed",
+                            top: -15,
+                            right: 10,
+                            backgroundColor: "green",
+                            width: 50,
+                            height: 50,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: 10,
+                        }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('ChatWithCustomer', { order_id: data_order.order_id, customer_name: data_user?.fullname, driver_name: data_driver.fullname })}>
+                                <Text style={styles.buttonText}>💬</Text>
+                            </TouchableOpacity>
+
+                        </View>
                     </View>
                 </View>
 
@@ -756,7 +679,9 @@ function StepByStep({ route, navigation }) {
                     />
                 </View>
             </View>
+
         </ScrollView>
+
 
     )
 }

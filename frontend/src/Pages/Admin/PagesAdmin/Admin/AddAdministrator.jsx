@@ -16,8 +16,7 @@ import axios from "axios";
 function AddAdministrator() {
   const navigate = useNavigate();
   const [gender, setGender] = useState("Nam");
-  const [department, setDepartment] =
-    useState("Nhân viên");
+  const [department, setDepartment] = useState("Nhân viên");
 
   //Tạo ra tên đăng nhập và mật khẩu ngẫu nhiên
   const [createAccountRandom, setCreateAccountRandom] = useState({});
@@ -96,6 +95,11 @@ function AddAdministrator() {
   const onSubmit = async (data) => {
     try {
       if (image || imgURL !== "") {
+        //Xử lý ngày tháng
+        const date_get = data.date_of_birth;
+        const date_split = date_get.split("-");
+        const date_new = `${date_split[2]}-${date_split[1]}-${date_split[0]}`;
+
         const formData = new FormData();
         formData.append("file", image);
         formData.append("imgURL", imgURL);
@@ -106,7 +110,7 @@ function AddAdministrator() {
         formData.append("citizen_id", data.citizen_id);
         formData.append("phonenumber", data.phonenumber);
         formData.append("fullname", data.fullname);
-        formData.append("date_of_birth", data.date_of_birth);
+        formData.append("date_of_birth", date_new);
         formData.append("email", data.email);
         formData.append("address", data.address);
         formData.append("department", department);

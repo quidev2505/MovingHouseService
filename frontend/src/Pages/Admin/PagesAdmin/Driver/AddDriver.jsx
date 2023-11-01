@@ -60,7 +60,7 @@ function AddDriver() {
     const characters =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    // Tạo mật khẩu gồm 4 kí tự và 2 số
+    // Tạo mật khẩu gồm 4 kí tự (Trong đó có thể có cả số) và 2 số
     let password = "";
     for (let i = 0; i < 6; i++) {
       if (i < 4) {

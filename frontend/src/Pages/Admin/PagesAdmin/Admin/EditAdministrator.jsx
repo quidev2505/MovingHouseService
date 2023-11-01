@@ -54,6 +54,12 @@ function EditAdministrator() {
         break;
       }
     }
+
+    //Xử lý ngày tháng
+    const date_get = dataAdmin.date_of_birth;
+    const date_split = date_get.split("-");
+    const date_new = `${date_split[2]}-${date_split[1]}-${date_split[0]}`;
+
     const formData = new FormData();
     formData.append("file", image);
     formData.append("imgURL", imgURL);
@@ -64,7 +70,7 @@ function EditAdministrator() {
     formData.append("citizen_id", dataAdmin.citizen_id);
     formData.append("phonenumber", dataAdmin.phonenumber);
     formData.append("fullname", dataAdmin.fullname);
-    formData.append("date_of_birth", dataAdmin.date_of_birth);
+    formData.append("date_of_birth", date_new);
     formData.append("email", dataAdmin.email);
     formData.append("address", dataAdmin.address);
     if (check) {
@@ -107,6 +113,14 @@ function EditAdministrator() {
       .get(`/v1/admin/view_detail_admin/${id}`)
       .then((data) => {
         const data_admin = data.data;
+
+        //Xử lý hiển thị ngày
+        const date_get = data_admin.date_of_birth;
+        const date_split = date_get.split("-");
+        const date_show = `${date_split[2]}-${date_split[1]}-${date_split[0]}`;
+
+        data_admin.date_of_birth = date_show;
+
         setDataAdmin(data_admin);
         setGender(data_admin.gender);
 
@@ -488,7 +502,6 @@ function EditAdministrator() {
                             />
                           </div>
                         </div>
-                        
                       </div>
                     </div>
                   </div>
