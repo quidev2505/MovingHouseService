@@ -777,6 +777,27 @@ th.ant-table-cell {
 }
 
 
+.xh_2 .ant-table {
+    height: 520px;
+
+    .ant-table-content {
+        overflow: hidden !important;
+        min-height: 520px;
+    }
+}
+
+
+.xh_3 .ant-table {
+    height: 520px;
+
+    .ant-table-content {
+        overflow: hidden !important;
+        min-height: 520px;
+    }
+}
+
+
+
 //Tạo ra thanh scroll phía bên trong content Admin page
 .ant-table-content {
     overflow-y: scroll;
@@ -942,8 +963,11 @@ th.ant-table-cell {
 
 
 .dash_board_admin {
-    .xh_1 .ant-table-content, .xh_2 .ant-table-content, .xh_3 .ant-table-content{
+
+    .xh_1 .ant-table-content,
+    .xh_2 .ant-table-content,
+    .xh_3 .ant-table-content {
         overflow: hidden !important;
-        height:fit-content;
+        height: fit-content;
     }
 }

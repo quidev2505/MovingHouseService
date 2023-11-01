@@ -392,7 +392,9 @@ function CalendarAdmin() {
   useEffect(() => {
     get_item();
     //Lấy thông tin tất cả tài xế hiện lên bản đồ
-    get_info_all_driver();
+    setTimeout(() => {
+      get_info_all_driver();
+    }, 1000);
   }, []);
 
   return (

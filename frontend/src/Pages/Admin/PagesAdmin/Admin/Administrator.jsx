@@ -1065,7 +1065,12 @@ function Administrator() {
                       className="col"
                       style={{
                         borderRadius: "5px",
-                        backgroundColor: "green",
+                        backgroundColor:
+                          data_result.department == "Nhân sự"
+                            ? "#FF5500"
+                            : data_result.department == "Quản lý"
+                            ? "#108EE9"
+                            : "#CCCCCC",
                         color: "white",
                         fontWeight: "bold",
                         marginTop: "5px",

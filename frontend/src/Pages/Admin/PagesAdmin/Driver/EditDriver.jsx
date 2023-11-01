@@ -623,10 +623,6 @@ function EditDriver() {
                                   value: "Hà Nội và tỉnh lân cận",
                                   label: "Hà Nội và tỉnh lân cận",
                                 },
-                                {
-                                  value: "Đà Nẵng và tỉnh lân cận",
-                                  label: "Đà Nẵng và tỉnh lân cận",
-                                },
                               ]}
                             />
                           </div>

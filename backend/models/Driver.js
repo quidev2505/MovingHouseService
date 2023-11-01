@@ -66,7 +66,7 @@ const driverSchema = new mongoose.Schema({
     },//Số sao trung bình của tài xế
     status: {
         type: String,
-        default: "Sẵn Sàng"
+        default: "Sẵn sàng"
     },//Gồm 2 trạng thái: Đang Bận, Sẵn Sàng,
     current_position: {
         type: String,
