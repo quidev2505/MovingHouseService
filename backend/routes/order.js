@@ -15,6 +15,8 @@ router.post('/create_order', orderController.createOrder)
 // View All Order
 router.get('/viewAllOrder', orderController.viewAllOrder)
 
+// Xem khu vực vận chuyển
+router.get('/viewDeliveryArea', orderController.viewDeliveryArea)
 
 // View Order With Order Id
 router.get('/viewOrderWithOrderId/:order_id', orderController.ViewOrderWithOrderId)

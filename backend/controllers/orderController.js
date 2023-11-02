@@ -37,6 +37,7 @@ const orderController = {
                 distance: req.body.distance,
                 duration: req.body.duration,
                 fromLocation_detail: req.body.fromLocation_detail,
+
                 toLocation_detail: req.body.toLocation_detail,
                 man_power_quantity: req.body.man_power_quantity,
                 vehicle_price: req.body.price_vehicle,
@@ -61,6 +62,7 @@ const orderController = {
                     service_name: req.body.service_name,
                     date_start: req.body.date_start,
                     time_start: req.body.time_start,
+                    deliveryArea: req.body.deliveryArea,
                     fromLocation: req.body.fromLocation,
                     toLocation: req.body.toLocation,
                     vehicle_name: req.body.vehicle_name,
@@ -97,6 +99,19 @@ const orderController = {
     viewAllOrder: async (req, res) => {
         try {
             const data_all_order = await Order.find();
+            if (data_all_order) {
+                res.status(201).json(data_all_order)
+            } else {
+                res.status(501).json(e)
+            }
+        } catch (e) {
+            res.status(501).json(e)
+        }
+    },
+    //View DeliveryArea
+    viewDeliveryArea: async (req, res) => {
+        try {
+            const data_all_order = await Order.find({status: "Đã hoàn thành"});
             if (data_all_order) {
                 res.status(201).json(data_all_order)
             } else {

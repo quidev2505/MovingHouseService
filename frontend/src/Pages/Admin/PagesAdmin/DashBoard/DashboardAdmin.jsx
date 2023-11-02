@@ -39,6 +39,7 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 import ReportRevenueMonth from "./ReportRevenueMonth";
 import ReportRevenueYear from "./ReportRevenueYear";
 import ReportOrder from "./ReportOrder";
+import ReportDeliveryArea from "./ReportDeliveryArea";
 import ReportDriver from "./ReportDriver";
 import ReportCustomer from "./ReportCustomer";
 import SearchAdvanced from "./SearchAdvanced/SearchAdvanced";
@@ -140,6 +141,9 @@ function DashBoardAdmin() {
   const [serviceNameFilter, setServiceNameFilter] = useState("Tất cả");
   const [serviceNameDropDown, setServiceNameDropDown] = useState([]);
 
+  //Lọc theo khu vực
+  const [deliveryAreaFilter, setDeliveryAreaFilter] = useState("Tất cả");
+
   //DỮ LIỆU THỐNG KÊ THEO THÁNG
   const labels =
     filterDashBoard === "THỐNG KÊ DOANH THU THEO THÁNG"
@@ -238,6 +242,21 @@ function DashBoardAdmin() {
     ],
   };
 
+  const [arrayDeliveryAreaType, setArrDeliveryAreaType] = useState([0, 0]);
+  //Thống kê khu vực giao hàng
+  const dataPieDeliveryArea = {
+    labels: ["THÀNH PHỐ HCM VÀ CÁC TỈNH LÂN CẬN", "HÀ NỘI VÀ CÁC TỈNH LÂN CẬN"],
+    datasets: [
+      {
+        label: "Thống kê số đơn hàng theo khu vực giao hàng",
+        data: arrayDeliveryAreaType,
+        backgroundColor: ["#ffce56", "#4bc0c0"],
+        borderColor: ["rgba(255, 206, 86, 1)", "rgba(75, 192, 192, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   //Mảng tên tài xế
   const [labelDriver, setLabelDriver] = useState([]);
 
@@ -315,6 +334,10 @@ function DashBoardAdmin() {
     let call_api_customer = await axios.get(`/v1/customer/get_all_customer`);
     let arr_customer = call_api_customer.data;
     setTotalCountCustomer(arr_customer.length);
+
+    //Xem đơn hàng theo khu vực
+    var call_api_order = await axios.get(`/v1/order/viewDeliveryArea`);
+    var arr_deliveryArea = call_api_order.data;
 
     //Xét xem chọn lọc theo gì
     switch (filterDashBoard) {
@@ -423,6 +446,54 @@ function DashBoardAdmin() {
 
         //Bỏ vô biểu đồ tròn
         setArrOrderType(arr_sum_order_type);
+        break;
+      }
+      case "THỐNG KÊ KHU VỰC GIAO HÀNG": {
+        //Mảng chứa dữ liệu số đơn hàng theo khu vực
+        const arr_sum_order_type = [0, 0];
+
+        //Tính doanh thu theo từng năm
+        arr_deliveryArea.forEach((item, index) => {
+          console.log(item)
+          if (deliveryAreaFilter === "Tất cả") {
+            let delivery_order = item.deliveryArea;
+            let index_check = 0;
+            switch (delivery_order) {
+              case "TPHCM và các tỉnh lân cận": {
+                index_check = 0;
+                break;
+              }
+              case "Hà Nội và các tỉnh lân cận": {
+                index_check = 1;
+                break;
+              }
+              default: {
+                break;
+              }
+            }
+            arr_sum_order_type[index_check] += 1;
+          } else if (item.deliveryArea === deliveryAreaFilter) {
+            let delivery_order = item.deliveryArea;
+            let index_check = 0;
+            switch (delivery_order) {
+              case "TPHCM và các tỉnh lân cận": {
+                index_check = 0;
+                break;
+              }
+              case "Hà Nội và các tỉnh lân cận": {
+                index_check = 1;
+                break;
+              }
+              default: {
+                break;
+              }
+            }
+            arr_sum_order_type[index_check] += 1;
+          }
+        });
+
+        //Bỏ vô biểu đồ tròn
+        setArrDeliveryAreaType(arr_sum_order_type);
         break;
       }
       case "THỐNG KÊ TÀI XẾ": {
@@ -710,7 +781,7 @@ function DashBoardAdmin() {
     arr_total_order_service.sort((a, b) => b.star_average - a.star_average);
 
     // Sắp xếp mảng theo giá giảm dần theo lượt đánh giá
-    arr_total_order_service.sort((a, b) => b.rating- a.rating);
+    arr_total_order_service.sort((a, b) => b.rating - a.rating);
 
     const arr_final = arr_total_order_service.map((item, index) => {
       item.stt = index + 1;
@@ -1008,6 +1079,22 @@ function DashBoardAdmin() {
     try {
       setOrderPass(
         Number(getElementsAtEvent(chartRefOrder.current, event)[0].index + 1)
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  //Xử lý khi click vào khu vực bất kì
+  const chartRefDeliveryArea = useRef();
+  const [deliveryAreaPass, setDeliveryAreaPass] = useState(5);
+
+  const onClickFilteDeliveryArea = (event) => {
+    try {
+      setDeliveryAreaPass(
+        Number(
+          getElementsAtEvent(chartRefDeliveryArea.current, event)[0].index + 1
+        )
       );
     } catch (e) {
       console.log(e);
@@ -1313,6 +1400,9 @@ function DashBoardAdmin() {
                         <option value="THỐNG KÊ ĐƠN HÀNG">
                           THỐNG KÊ ĐƠN HÀNG
                         </option>
+                        <option value="THỐNG KÊ KHU VỰC GIAO HÀNG">
+                          THỐNG KÊ KHU VỰC GIAO HÀNG
+                        </option>
                         <option value="THỐNG KÊ TÀI XẾ">THỐNG KÊ TÀI XẾ</option>
                         <option value="THỐNG KÊ KHÁCH HÀNG">
                           THỐNG KÊ KHÁCH HÀNG
@@ -1516,6 +1606,85 @@ function DashBoardAdmin() {
                         {/* Khu vực bảng thống kê đơn hàng */}
                         <ReportOrder orderPass={orderPass} />
                       </>
+                    ) : filterDashBoard === "THỐNG KÊ KHU VỰC GIAO HÀNG" ? (
+                      <>
+                        {/* <select
+                      style={{
+                        borderRadius: "5px",
+                        padding: "10px",
+                        border: "1px solid #ccc",
+                        color: "black",
+                        float: "right",
+                      }}
+                      value={serviceNameFilter}
+                      onChange={(e) => setServiceNameFilter(e.target.value)}
+                    >
+                      <option value="Tất cả">Tất cả</option>
+                      {serviceNameDropDown &&
+                        serviceNameDropDown.map((item, index) => {
+                          return <option value={item}>{item}</option>;
+                        })}
+                    </select> */}
+                        <div
+                          style={{
+                            width: "700px",
+                            height: "700px",
+                            margin: "0 auto",
+                            paddingTop: "-200px",
+                          }}
+                        >
+                          <p
+                            style={{
+                              float: "left",
+                              fontWeight: "bold",
+                              color: "orange",
+                            }}
+                          >
+                            ( Đơn vị: đơn)
+                          </p>
+
+                          <Pie
+                            ref={chartRefDeliveryArea}
+                            data={dataPieDeliveryArea}
+                            options={options_pie}
+                            plugins={[ChartDataLabels]}
+                            onClick={onClickFilteDeliveryArea}
+                          />
+                        </div>
+
+                        {/* Hiển thị tất cả đơn của toàn bộ*/}
+                        <div
+                          style={{
+                            backgroundColor: "#f1a062",
+                            color: "white",
+                            display: "inline-block",
+                            borderRadius: "5px",
+                            padding: "5px",
+                            float: "right",
+                            marginTop: "5px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              marginLeft: "5px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              width: "70px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setDeliveryAreaPass(6)}
+                          >
+                            <FilterOutlined />
+                            Tất cả
+                          </span>
+                        </div>
+
+                        {/* Khu vực bảng thống kê khu vực giao hàng */}
+                        <ReportDeliveryArea
+                          deliveryAreaPass={deliveryAreaPass}
+                        />
+                      </>
                     ) : filterDashBoard === "THỐNG KÊ TÀI XẾ" ? (
                       <>
                         {/* <select
@@ -1536,7 +1705,10 @@ function DashBoardAdmin() {
                         })}
                     </select> */}
                         <DatalistInput
-                          style={{ width: "fit-content", float: "right" }}
+                          style={{
+                            width: "fit-content",
+                            float: "right",
+                          }}
                           placeholder="Nhập vào tên tài xế"
                           // label="Select ice cream flavor"
                           onSelect={(item) => setDriverNameFilter(item.value)}
@@ -1580,7 +1752,10 @@ function DashBoardAdmin() {
                         })}
                     </select> */}
                         <DatalistInput
-                          style={{ width: "fit-content", float: "right" }}
+                          style={{
+                            width: "fit-content",
+                            float: "right",
+                          }}
                           placeholder="Nhập vào tên khách hàng"
                           // label="Select ice cream flavor"
                           onSelect={(item) => setCustomerNameFilter(item.value)}

@@ -39,14 +39,15 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       fromLocation: data_from_local.step2.fromLocation.name,
       from_location_detail: data_from_local.step2.from_location_detail,
       toLocation: data_from_local.step2.toLocation.name,
+      deliveryArea: data_from_local.step2.deliveryArea,
       to_location_detail: data_from_local.step2.to_location_detail,
       price_vehicle: data_from_local.step3.priceStep3,
       name_vehicle: data_from_local.step3.vehicle_choose.vehicle_name,
       man_power: {
-        quantity: data_from_local.step4.man_power_count.quantity_man,
-        price: data_from_local.step4.man_power_count.total_price_man,
+        quantity: data_from_local.step4?.man_power_count.quantity_man,
+        price: data_from_local.step4?.man_power_count.total_price_man,
       },
-      moving_fee: data_from_local.step4.moving_fee,
+      moving_fee: data_from_local.step4?.moving_fee,
       service_fee: data_from_local.step4.service_fee,
       noteDriver: data_from_local.step4.noteDriver,
       dataChooseItem: data_from_local.step4.dataChooseItem,
@@ -61,25 +62,29 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   };
 
   const get_total_order = (dataInput) => {
-    let total = 0;
-    let price_moving_fee = 0;
-    dataInput.step4.moving_fee.forEach((item, index) => {
-      price_moving_fee += item.price;
-    });
+    try {
+      let total = 0;
+      let price_moving_fee = 0;
+      dataInput.step4?.moving_fee.forEach((item, index) => {
+        price_moving_fee += item.price;
+      });
 
-    let price_service_fee = 0;
-    dataInput.step4.service_fee.forEach((item, index) => {
-      price_service_fee += item.price;
-    });
+      let price_service_fee = 0;
+      dataInput.step4?.service_fee.forEach((item, index) => {
+        price_service_fee += item.price;
+      });
 
-    total = Number(
-      dataInput.step3.priceStep3 +
-        dataInput.step4.man_power_count.total_price_man +
-        price_moving_fee +
-        price_service_fee
-    );
+      total = Number(
+        dataInput.step3.priceStep3 +
+          dataInput.step4.man_power_count.total_price_man +
+          price_moving_fee +
+          price_service_fee
+      );
 
-    return total;
+      return total;
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const check_payment_success = () => {

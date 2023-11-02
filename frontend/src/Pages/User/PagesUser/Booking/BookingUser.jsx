@@ -104,6 +104,7 @@ function BookingUser() {
       fromLocation: data_from_local.step2.fromLocation.name,
       fromLocation_detail: data_from_local.step2.from_location_detail,
       toLocation: data_from_local.step2.toLocation.name,
+      deliveryArea:data_from_local.step2.deliveryArea,
       toLocation_detail: data_from_local.step2.to_location_detail,
       price_vehicle: data_from_local.step3.priceStep3,
       vehicle_name: data_from_local.step3.vehicle_choose.vehicle_name,

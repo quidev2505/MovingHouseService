@@ -38,6 +38,10 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true
     }, //Dạng: địa chỉ
+    deliveryArea: {
+        type: String,
+        required:true
+    },
     vehicle_name: {
         type: String,
         required: true

@@ -33,6 +33,10 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   const [toLocation, setToLocation] = useState({});
   const [to_location_detail, setToLocationDetail] = useState(""); //Địa chỉ nhận hàng cụ thể
 
+
+  //Khu vực giao hàng
+  const [deliveryArea, setDeliveryArea] = useState("");
+
   //Tính khoảng cách
   const [distance, setDistance] = useState();
 
@@ -67,6 +71,93 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
       });
   };
 
+  function checkTinh(latitude, longitude) {
+    // Lấy danh sách tỉnh lân cận của TPHCM và Hà Nội
+    const tinhLanCanTphcm = [
+      "Long An",
+      "Đồng Nai",
+      "Bình Dương",
+      "Bình Phước",
+      "Tây Ninh",
+      "Bà Rịa - Vũng Tàu",
+      "Tiền Giang",
+      "Bến Tre",
+      "Trà Vinh",
+      "Vĩnh Long",
+      "Đồng Tháp",
+      "An Giang",
+      "Kiên Giang",
+      "Cần Thơ",
+    ];
+    const tinhLanCanHaNoi = [
+      "Hà Nam",
+      "Hưng Yên",
+      "Thái Bình",
+      "Nam Định",
+      "Bắc Ninh",
+      "Lạng Sơn",
+      "Quảng Ninh",
+      "Thái Nguyên",
+      "Bắc Giang",
+      "Phú Thọ",
+      "Vĩnh Phúc",
+      "Hà Nội",
+      "Hải Phòng",
+      "Hưng Yên",
+    ];
+
+    // Tính toán tọa độ trung tâm của TPHCM và Hà Nội
+    const tinhTphcm = {
+      latitude: 10.827021,
+      longitude: 106.693918,
+    };
+    const tinhHaNoi = {
+      latitude: 21.027767,
+      longitude: 105.833132,
+    };
+
+    // Kiểm tra vị trí có nằm trong bán kính 500km xung quanh trung tâm của TPHCM
+    const isInRadiusTphcm =
+      calculateDistance(
+        latitude,
+        longitude,
+        tinhTphcm.latitude,
+        tinhTphcm.longitude
+      ) <= 500;
+
+    // Kiểm tra vị trí có nằm trong bán kính 500km xung quanh trung tâm của Hà Nội
+    const isInRadiusHaNoi =
+      calculateDistance(
+        latitude,
+        longitude,
+        tinhHaNoi.latitude,
+        tinhHaNoi.longitude
+      ) <= 500;
+
+    // Trả về kết quả
+    return isInRadiusTphcm
+      ? "TPHCM và các tỉnh lân cận"
+      : isInRadiusHaNoi
+      ? "Hà Nội và các tỉnh lân cận"
+      : null;
+  }
+
+  // Hàm tính toán khoảng cách giữa hai điểm
+  function calculateDistance(latitude1, longitude1, latitude2, longitude2) {
+    const R = 6371; // Bán kính Trái Đất (km)
+
+    // Tính toán toạ độ x và y của hai điểm
+    const x1 = (longitude1 * Math.PI * R) / 180;
+    const y1 = (latitude1 * Math.PI * R) / 180;
+    const x2 = (longitude2 * Math.PI * R) / 180;
+    const y2 = (latitude2 * Math.PI * R) / 180;
+
+    // Tính toán khoảng cách
+    const d = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+    return d;
+  }
+
   const get_location_from_choose = () => {
     let choose_option = locationFromChoose;
     if (choose_option) {
@@ -85,6 +176,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         });
         setLocationFrom("");
       } else {
+        setDeliveryArea(checkTinh(ob.lat, ob.lng)); 
         setFromLocation(ob);
       }
     }
@@ -104,7 +196,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   }
 
   useEffect(() => {
-    if (locationFrom && locationFrom.length >= 5) {
+    if (locationFrom && locationFrom.length >= 3) {
       get_location_list();
     }
   }, [locationFrom]);
@@ -170,7 +262,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   };
 
   useEffect(() => {
-    if (locationTo && locationTo.length >= 5) {
+    if (locationTo && locationTo.length >= 3) {
       get_location_list_to();
     }
   }, [locationTo]);
@@ -437,6 +529,8 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         locationFrom: fromLocation.display_name,
         locationTo: toLocation.display_name,
 
+        deliveryArea: deliveryArea,
+
         locationFromChoose: locationFromChoose,
         from_location_detail: from_location_detail,
         fromLocation: fromLocation,
@@ -456,6 +550,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
       setCheckFill(false);
     }
   }, [
+    deliveryArea,
     locationFrom,
     locationTo,
     fromLocation,
