@@ -20,46 +20,36 @@ import {
 import * as XLSX from "xlsx"; //Xử lý file Excel
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
-function ReportDeliveryArea({ orderPass }) {
-  const [reportOrder, setReportOrder] = useState([]);
+function ReportDeliveryArea({ deliveryAreaPass }) {
+  const [reportDeliveryArea, setReportDeliveryArea] = useState([]);
 
-  var orderFilterNew = "";
-  switch (orderPass) {
+  var deliveryAreaFilterNew = "";
+  switch (deliveryAreaPass) {
     case 1:
-      orderFilterNew = "Đã hủy";
+      deliveryAreaFilterNew = "TPHCM và các tỉnh lân cận";
       break;
     case 2:
-      orderFilterNew = "Đang tìm tài xế";
+      deliveryAreaFilterNew = "Hà Nội và các tỉnh lân cận";
       break;
     case 3:
-      orderFilterNew = "Đang thực hiện";
-      break;
-    case 4:
-      orderFilterNew = "Thanh toán hóa đơn";
-      break;
-    case 5:
-      orderFilterNew = "Đã hoàn thành";
-      break;
-    case 6:
-      orderFilterNew = "Tất cả";
+      deliveryAreaFilterNew = "Tất cả";
       break;
     default:
       break;
   }
 
-  const getDataOrder = async () => {
-    console.log(orderPass);
-    console.log(orderFilterNew);
+  const getDataDeliveryArea = async () => {
     try {
-      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
+      var call_api_order = await axios.get(`/v1/order/viewDeliveryArea`);
       var arr_order = call_api_order.data;
 
       //Xử lý những đơn đã hoàn thành và date_end != null
       //Tính doanh thu theo từng tháng
       let arr_solve = [];
       let count = 0;
+
       arr_order.forEach((item, index) => {
-        if (orderFilterNew == item.status) {
+        if (deliveryAreaFilterNew == item.deliveryArea) {
           count++;
           const ob = {
             stt: count,
@@ -68,12 +58,16 @@ function ReportDeliveryArea({ orderPass }) {
             service_name: item.service_name,
             date_start: item.date_start,
             date_end: item.date_end,
+            deliveryArea: item.deliveryArea,
+            fromLocation: item.fromLocation,
+            toLocation: item.toLocation,
             totalOrder: item.totalOrder,
             status: item.status,
           };
 
           arr_solve.push(ob);
-        } else if (orderFilterNew == "Tất cả") {
+					console.log(arr_solve)
+        } else if (deliveryAreaFilterNew == "Tất cả") {
           count++;
           const ob = {
             stt: count,
@@ -81,6 +75,9 @@ function ReportDeliveryArea({ orderPass }) {
             date_created: item.date_created,
             service_name: item.service_name,
             date_start: item.date_start,
+            deliveryArea: item.deliveryArea,
+            fromLocation: item.fromLocation,
+            toLocation: item.toLocation,
             date_end: item.date_end,
             totalOrder: item.totalOrder,
             status: item.status,
@@ -90,7 +87,8 @@ function ReportDeliveryArea({ orderPass }) {
         }
       });
 
-      setReportOrder(arr_solve);
+			console.log(arr_solve)
+      setReportDeliveryArea(arr_solve);
     } catch (e) {
       console.log(e);
     }
@@ -218,7 +216,7 @@ function ReportDeliveryArea({ orderPass }) {
   });
 
   //Bảng xếp hạng đánh giá tài xế
-  const columnOrder = [
+  const columnDeliveryArea = [
     {
       title: "STT",
       dataIndex: "stt",
@@ -273,11 +271,11 @@ function ReportDeliveryArea({ orderPass }) {
       },
     },
     {
-      title: "Ngày bắt đầu",
-      dataIndex: "date_start",
-      key: "date_start",
-      ...getColumnSearchProps("date_start"),
-      render: (date_start) => {
+      title: "Điểm bắt đầu",
+      dataIndex: "fromLocation",
+      key: "fromLocation",
+      ...getColumnSearchProps("fromLocation"),
+      render: (fromLocation) => {
         return (
           <td
             style={{
@@ -285,17 +283,17 @@ function ReportDeliveryArea({ orderPass }) {
               color: "black",
             }}
           >
-            {date_start}
+            {fromLocation}
           </td>
         );
       },
     },
     {
-      title: "Ngày kết thúc",
-      dataIndex: "date_end",
-      key: "date_end",
-      ...getColumnSearchProps("date_end"),
-      render: (date_end) => {
+      title: "Điểm kết thúc",
+      dataIndex: "toLocation",
+      key: "toLocation",
+      ...getColumnSearchProps("toLocation"),
+      render: (toLocation) => {
         return (
           <td
             style={{
@@ -303,7 +301,25 @@ function ReportDeliveryArea({ orderPass }) {
               color: "black",
             }}
           >
-            {date_end === null ? "Chưa xác định" : date_end}
+            {toLocation}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Thuộc khu vực",
+      dataIndex: "deliveryArea",
+      key: "deliveryArea",
+      ...getColumnSearchProps("deliveryArea"),
+      render: (deliveryArea) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {deliveryArea}
           </td>
         );
       },
@@ -399,8 +415,8 @@ function ReportDeliveryArea({ orderPass }) {
 
   useEffect(() => {
     //Gọi API
-    getDataOrder();
-  }, [orderPass]);
+    getDataDeliveryArea();
+  }, [deliveryAreaPass]);
 
   const onChange = (pagination, filters, sorter, extra) => {
     if (
@@ -411,9 +427,9 @@ function ReportDeliveryArea({ orderPass }) {
       filters.date_end == null
     ) {
       //Gọi API
-      getDataOrder();
+      getDataDeliveryArea();
     } else {
-      setReportOrder(extra.currentDataSource);
+      setReportDeliveryArea(extra.currentDataSource);
     }
   };
 
@@ -421,7 +437,7 @@ function ReportDeliveryArea({ orderPass }) {
   //Download Excel
   const download_data_xslx = () => {
     Swal.fire({
-      title: "Bạn muốn tải báo cáo thống kê đơn hàng ?",
+      title: "Bạn muốn tải báo cáo thống kê khu vực giao hàng ?",
       text: "Hãy nhấn vào xác nhận để tải xuống !",
       icon: "warning",
       showCancelButton: true,
@@ -435,13 +451,14 @@ function ReportDeliveryArea({ orderPass }) {
           //Create file xsls Excel
           // flatten object like this {id: 1, title:'', category: ''};
           const rows =
-            reportOrder &&
-            reportOrder.map((item, index) => ({
+            reportDeliveryArea &&
+            reportDeliveryArea.map((item, index) => ({
               STT: index + 1,
               order_id: item.order_id,
               date_created: item.date_created,
-              date_start: item.date_start,
-              date_end: item.date_end,
+              fromLocation: item.fromLocation,
+              toLocation: item.toLocation,
+              deliveryArea: item.deliveryArea,
               service_name: item.service_name,
               status: item.status,
               totalOrder: item.totalOrder,
@@ -451,7 +468,7 @@ function ReportDeliveryArea({ orderPass }) {
           const workbook = XLSX.utils.book_new();
           const worksheet = XLSX.utils.json_to_sheet(rows);
 
-          XLSX.utils.book_append_sheet(workbook, worksheet, "Orders");
+          XLSX.utils.book_append_sheet(workbook, worksheet, "DeliveryArea");
 
           // customize header names
           XLSX.utils.sheet_add_aoa(worksheet, [
@@ -459,15 +476,16 @@ function ReportDeliveryArea({ orderPass }) {
               "Số thứ tự",
               "Mã đơn hàng",
               "Ngày tạo đơn",
-              "Ngày bắt đầu",
-              "Ngày kết thúc",
+              "Điểm bắt đầu",
+              "Điểm kết thúc",
+              "Thuộc khu vực",
               "Tên dịch vụ",
               "Trạng thái đơn hàng",
               "Tổng đơn hàng",
             ],
           ]);
 
-          XLSX.writeFile(workbook, "ThongKeDonHang.xlsx", {
+          XLSX.writeFile(workbook, "ThongKeKhuVucGiaoHang.xlsx", {
             compression: true,
           });
           Swal.fire({
@@ -516,7 +534,7 @@ function ReportDeliveryArea({ orderPass }) {
               alignItems: "center",
             }}
           >
-            Số lượng đơn hàng: {reportOrder.length}
+            Số lượng đơn hàng: {reportDeliveryArea.length}
           </Tag>
           {/* Nút xuất ra file excel */}
           <div
@@ -540,8 +558,8 @@ function ReportDeliveryArea({ orderPass }) {
           </div>
         </div>
         <Table
-          columns={columnOrder}
-          dataSource={reportOrder}
+          columns={columnDeliveryArea}
+          dataSource={reportDeliveryArea}
           onChange={onChange}
         />
       </div>

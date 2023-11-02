@@ -454,7 +454,6 @@ function DashBoardAdmin() {
 
         //Tính doanh thu theo từng năm
         arr_deliveryArea.forEach((item, index) => {
-          console.log(item)
           if (deliveryAreaFilter === "Tất cả") {
             let delivery_order = item.deliveryArea;
             let index_check = 0;
@@ -470,6 +469,10 @@ function DashBoardAdmin() {
               default: {
                 break;
               }
+            }
+
+            if (delivery_order == undefined) {
+              console.log(item);
             }
             arr_sum_order_type[index_check] += 1;
           } else if (item.deliveryArea === deliveryAreaFilter) {
@@ -491,6 +494,7 @@ function DashBoardAdmin() {
             arr_sum_order_type[index_check] += 1;
           }
         });
+        console.log(arr_sum_order_type);
 
         //Bỏ vô biểu đồ tròn
         setArrDeliveryAreaType(arr_sum_order_type);
@@ -1087,7 +1091,7 @@ function DashBoardAdmin() {
 
   //Xử lý khi click vào khu vực bất kì
   const chartRefDeliveryArea = useRef();
-  const [deliveryAreaPass, setDeliveryAreaPass] = useState(5);
+  const [deliveryAreaPass, setDeliveryAreaPass] = useState(1);
 
   const onClickFilteDeliveryArea = (event) => {
     try {
@@ -1673,7 +1677,7 @@ function DashBoardAdmin() {
                               width: "70px",
                               cursor: "pointer",
                             }}
-                            onClick={() => setDeliveryAreaPass(6)}
+                            onClick={() => setDeliveryAreaPass(3)}
                           >
                             <FilterOutlined />
                             Tất cả
