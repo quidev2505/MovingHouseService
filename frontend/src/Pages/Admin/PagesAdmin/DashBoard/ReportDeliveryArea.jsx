@@ -22,7 +22,9 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
 function ReportDeliveryArea({ deliveryAreaPass }) {
   const [reportDeliveryArea, setReportDeliveryArea] = useState([]);
-
+  //Tổng đơn theo thống kê
+  const [totalReport, setTotalReport] = useState(0);
+  var totalReportCal = 0;
   var deliveryAreaFilterNew = "";
   switch (deliveryAreaPass) {
     case 1:
@@ -64,9 +66,8 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
             totalOrder: item.totalOrder,
             status: item.status,
           };
-
+          totalReportCal += item.totalOrder;
           arr_solve.push(ob);
-					console.log(arr_solve)
         } else if (deliveryAreaFilterNew == "Tất cả") {
           count++;
           const ob = {
@@ -82,12 +83,12 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
             totalOrder: item.totalOrder,
             status: item.status,
           };
-
+          totalReportCal += item.totalOrder;
           arr_solve.push(ob);
         }
       });
 
-			console.log(arr_solve)
+      setTotalReport(totalReportCal);
       setReportDeliveryArea(arr_solve);
     } catch (e) {
       console.log(e);
@@ -280,7 +281,7 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
           <td
             style={{
               fontWeight: "500",
-              color: "black",
+              color: "red",
             }}
           >
             {fromLocation}
@@ -298,7 +299,7 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
           <td
             style={{
               fontWeight: "500",
-              color: "black",
+              color: "rgb(37, 196, 196)",
             }}
           >
             {toLocation}
@@ -416,7 +417,7 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
   useEffect(() => {
     //Gọi API
     getDataDeliveryArea();
-  }, [deliveryAreaPass]);
+  }, [deliveryAreaPass, reportDeliveryArea]);
 
   const onChange = (pagination, filters, sorter, extra) => {
     if (
@@ -518,24 +519,38 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
           marginTop: "50px",
         }}
       >
-        <div
-          className="d-flex"
-          style={{
-            alignItems: "center",
-            padding: "10px",
-            justifyContent: "space-between",
-          }}
-        >
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#ff671d"
+        <div className="d-flex" style={{ justifyContent: "space-between" }}>
+          <div
+            className="d-flex"
             style={{
-              display: "flex",
               alignItems: "center",
+              padding: "10px",
+              justifyContent: "space-between",
             }}
           >
-            Số lượng đơn hàng: {reportDeliveryArea.length}
-          </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#ff671d"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              Số lượng đơn hàng: {reportDeliveryArea.length}
+            </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#4bc0c0"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: "5px",
+              }}
+            >
+              Tổng tất cả đơn hàng:&nbsp;
+              {totalReport.toLocaleString()} đ
+            </Tag>
+          </div>
           {/* Nút xuất ra file excel */}
           <div
             onClick={() => download_data_xslx()}

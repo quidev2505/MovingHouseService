@@ -25,14 +25,16 @@ import "sweetalert2/src/sweetalert2.scss";
 
 function ReportCustomer({ customerPass }) {
   const [reportCustomer, setReportCustomer] = useState([]);
+  //Tổng đơn theo thống kê
+  const [totalReport, setTotalReport] = useState(0);
   var filterNew = "";
+  var totalReportCal = 0;
   if (customerPass == "Tất cả") {
     filterNew = "Tất cả";
   } else {
     filterNew = customerPass;
   }
   const getDataCustomer = async () => {
-    console.log(customerPass);
     // console.log(orderPass);
     // console.log(orderFilterNew);
     try {
@@ -98,6 +100,8 @@ function ReportCustomer({ customerPass }) {
             totalPayment: sumPayment[index],
           };
 
+          totalReportCal += sumPayment[index];
+
           arr_solve.push(ob);
         } else if (filterNew == "Tất cả") {
           count++;
@@ -112,10 +116,12 @@ function ReportCustomer({ customerPass }) {
             totalPayment: sumPayment[index],
           };
 
+          totalReportCal += sumPayment[index];
+
           arr_solve.push(ob);
         }
       });
-
+      setTotalReport(totalReportCal);
       console.log(arr_solve);
       setReportCustomer(arr_solve);
     } catch (e) {
@@ -524,20 +530,40 @@ function ReportCustomer({ customerPass }) {
         <div
           className="d-flex"
           style={{
-            alignItems: "center",
-            padding: "10px",
+            justifyContent: "space-between",
           }}
         >
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#ff671d"
+          <div
+            className="d-flex"
             style={{
-              display: "flex",
               alignItems: "center",
+              padding: "10px",
+              justifyContent: "space-between",
             }}
           >
-            Số lượng khách hàng: {reportCustomer.length}
-          </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#ff671d"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              Số lượng khách hàng: {reportCustomer.length}
+            </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#4bc0c0"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: "5px",
+              }}
+            >
+              Tổng tất cả thanh toán:&nbsp;
+              {totalReport.toLocaleString()} đ
+            </Tag>
+          </div>
           {/* Nút xuất ra file excel */}
           <div
             onClick={() => download_data_xslx()}

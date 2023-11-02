@@ -22,9 +22,7 @@ function OrderDetailDriver({ route, navigation }) {
     //Dữ liệu khách hàng
     const [dataUser, setDataUser] = useState({})
 
-    const get_detail_order = async (id_input, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start) => {
-
-
+    const get_detail_order = async (id_input, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start, driverVehicle, orderVehicle) => {
         await axios.get(`${api_url}/v1/order/viewOrderDetail/${id_input}`).then(async (data) => {
             const data_customer = data.data[0];
             const ob_detail_order = {
@@ -52,7 +50,9 @@ function OrderDetailDriver({ route, navigation }) {
                 from_location: from_location,
                 to_location: to_location,
                 date_start: date_start,
-                time_start: time_start
+                time_start: time_start,
+                driverVehicle: driverVehicle,
+                orderVehicle: orderVehicle
             }
 
             //Kiểm tra xem đã có tài xế này tham gia chưa
@@ -108,9 +108,9 @@ function OrderDetailDriver({ route, navigation }) {
 
     useEffect(() => {
         /* 2. Get the param */
-        const { data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start } = route.params;
+        const { data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start, driverVehicle, orderVehicle } = route.params;
 
-        get_detail_order(data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start)
+        get_detail_order(data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start, driverVehicle, orderVehicle)
 
     }, [])
 
@@ -119,27 +119,34 @@ function OrderDetailDriver({ route, navigation }) {
     }
 
     //Cập nhật lại tài xế vào đơn hàng
-    const get_order = async (id_order, driver_name, fullname_driver, quantity_driver) => {
+    const get_order = async (id_order, driver_name, fullname_driver, quantity_driver, driverVehicle, orderVehicle) => {
         try {
             const arr_driver_name = driver_name.map((item, index) => {
                 return item;
             })
 
-
-            arr_driver_name.push(fullname_driver)
-
-
-            await axios.patch(`${api_url}/v1/order/updateonefield_order/${id_order}`, {
-                driver_name: arr_driver_name,
-            }).then((data) => {
-                Alert.alert('Thông báo', 'Nhận đơn hàng thành công !', [
-                    { text: 'Xác nhận', onPress: () => navigation.navigate("NHẬN ĐƠN") },
+            if (driverVehicle != orderVehicle) {
+                Alert.alert('Thông báo', 'Phương tiện bạn đăng ký vận chuyển không phù hợp với đơn hàng hiện tại !', [
+                    { text: 'Xác nhận', onPress: () => { } },
                 ]);
+            } else {
+                arr_driver_name.push(fullname_driver)
 
 
-            }).catch((e) => {
-                console.log(e)
-            })
+                await axios.patch(`${api_url}/v1/order/updateonefield_order/${id_order}`, {
+                    driver_name: arr_driver_name,
+                }).then((data) => {
+                    Alert.alert('Thông báo', 'Nhận đơn hàng thành công !', [
+                        { text: 'Xác nhận', onPress: () => navigation.navigate("NHẬN ĐƠN") },
+                    ]);
+
+
+                }).catch((e) => {
+                    console.log(e)
+                })
+            }
+
+
 
 
 
@@ -416,10 +423,9 @@ function OrderDetailDriver({ route, navigation }) {
 
                                         </TouchableOpacity>
                                     ) : fullDriver !== true ? (
-                                        <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id)}>
+                                        <TouchableOpacity style={styles.button1} onPress={() => get_order(dataOrderDetail.order_id, dataOrderDetail.driver_name, dataOrderDetail.fullname_driver, dataOrderDetail.quantity_driver, dataOrderDetail.customer_id, dataOrderDetail.driverVehicle, dataOrderDetail.orderVehicle)}>
                                             <Text style={styles.buttonText}>Nhấn để nhận đơn
                                             </Text>
-
                                         </TouchableOpacity>
                                     ) : ''}
                                 </View>

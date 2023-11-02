@@ -65,7 +65,7 @@ function InfoDriver({ navigation }) {
 
             const ob = {
               username: username,
-              avatar: `${api_url}/${data_driver.avatar}`,
+              avatar: data_driver.avatar.length > 20 ? data_driver.avatar : `${api_url}/${data_driver.avatar}`,
               fullname: data_driver.fullname,
               address: data_driver.address,
               gender: data_driver.gender,
@@ -179,6 +179,9 @@ function InfoDriver({ navigation }) {
     })
   }
 
+
+
+
   return (
     <ScrollView refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -246,7 +249,22 @@ function InfoDriver({ navigation }) {
               name="car"
               size={20}
             />
-            <Text style={{ marginLeft: 10, fontSize: 17 }}>{dataDriver.vehicle_type}</Text>
+            <Text style={{ marginLeft: 10, fontSize: 17, marginRight: 10 }}>{dataDriver.vehicle_type}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert('Thông báo', 'Liên hệ quản trị viên khi có thay đổi về phương tiện vận chuyển !', [
+                  { text: 'Xác nhận', onPress: () => {}},
+                ]);
+
+              }}
+
+            >
+              <Ionicons
+                name="alert-circle-outline"
+                size={25}
+                color={"green"}
+              />
+            </TouchableOpacity>
           </View>
           <View style={{ display: "flex", flexDirection: "row", marginTop: 15, marginLeft: 5 }}>
             <Ionicons

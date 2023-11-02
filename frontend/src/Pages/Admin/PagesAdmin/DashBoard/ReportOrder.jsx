@@ -23,6 +23,10 @@ import "sweetalert2/src/sweetalert2.scss";
 function ReportOrder({ orderPass }) {
   const [reportOrder, setReportOrder] = useState([]);
 
+  //Tổng đơn theo thống kê
+  const [totalReport, setTotalReport] = useState(0);
+
+  var totalReportCal = 0;
   var orderFilterNew = "";
   switch (orderPass) {
     case 1:
@@ -72,6 +76,7 @@ function ReportOrder({ orderPass }) {
             status: item.status,
           };
 
+          totalReportCal += item.totalOrder;
           arr_solve.push(ob);
         } else if (orderFilterNew == "Tất cả") {
           count++;
@@ -86,9 +91,12 @@ function ReportOrder({ orderPass }) {
             status: item.status,
           };
 
+          totalReportCal += item.totalOrder;
           arr_solve.push(ob);
         }
       });
+
+      setTotalReport(totalReportCal);
 
       setReportOrder(arr_solve);
     } catch (e) {
@@ -500,24 +508,39 @@ function ReportOrder({ orderPass }) {
           marginTop: "50px",
         }}
       >
-        <div
-          className="d-flex"
-          style={{
-            alignItems: "center",
-            padding: "10px",
-            justifyContent: "space-between",
-          }}
-        >
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#ff671d"
+        <div className="d-flex" style={{ justifyContent: "space-between" }}>
+          <div
+            className="d-flex"
             style={{
-              display: "flex",
               alignItems: "center",
+              padding: "10px",
+              flexDirection: "column",
+              alignItems: "flex-start",
             }}
           >
-            Số lượng đơn hàng: {reportOrder.length}
-          </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#ff671d"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              Số lượng đơn hàng: {reportOrder.length}
+            </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#4bc0c0"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: "5px",
+              }}
+            >
+              Tổng tất cả đơn hàng:&nbsp;
+              {totalReport.toLocaleString()} đ
+            </Tag>
+          </div>
           {/* Nút xuất ra file excel */}
           <div
             onClick={() => download_data_xslx()}

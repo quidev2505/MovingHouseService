@@ -48,7 +48,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         price: data_from_local.step4?.man_power_count.total_price_man,
       },
       moving_fee: data_from_local.step4?.moving_fee,
-      service_fee: data_from_local.step4.service_fee,
+      service_fee: data_from_local.step4?.service_fee,
       noteDriver: data_from_local.step4.noteDriver,
       dataChooseItem: data_from_local.step4.dataChooseItem,
       totalOrder: totalOrder,
