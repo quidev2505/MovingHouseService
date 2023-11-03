@@ -74,12 +74,18 @@ function StepByStep({ route, navigation }) {
                         <Text style={{ backgroundColor: "orange", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Điểm lấy hàng: {fromLocation.name} </Text>
 
                         <Text style={{ backgroundColor: "green", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Trạng thái: Đã đến điểm lấy hàng</Text>
-                        <Image
+                        {/* <Image
                             source={{ uri: `https://rsapi.goong.io/staticmap/route?origin=${fromLocation?.lat},${fromLocation?.lon}&destination=${toLocation?.lat},${toLocation?.lon}&vehicle=car&color=blue&api_key=5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy` }}
                             style={{ width: 400, height: 300, marginTop: 50, objectFit: "fill" }}
                             resizeMode="contain"
-                        />
+                        /> */}
 
+
+                        <Image
+                            source={{ uri: `https://i.pinimg.com/originals/a4/b2/7e/a4b27e666a3c2e76df34df0902d152ed.png` }}
+                            style={{ width: 350, height: 300, marginTop: 50, objectFit: "contain" }}
+                            resizeMode="contain"
+                        />
 
                         <View>
                             <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
@@ -181,11 +187,13 @@ function StepByStep({ route, navigation }) {
                 <View>
                     <Text style={{ backgroundColor: "orange", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Điểm nhận hàng: {toLocation.name}</Text>
                     <Text style={{ backgroundColor: "green", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Trạng thái: Đã đến điểm nhận hàng</Text>
+
                     <Image
-                        source={{ uri: `https://rsapi.goong.io/staticmap/route?origin=${fromLocation?.lat},${fromLocation?.lon}&destination=${toLocation?.lat},${toLocation?.lon}&vehicle=car&color=blue&api_key=5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy` }}
-                        style={{ width: 400, height: 300, marginTop: 50, objectFit: "fill" }}
+                        source={{ uri: `https://cdn-icons-png.flaticon.com/512/6614/6614868.png` }}
+                        style={{ width: 350, height: 300, marginTop: 50, objectFit: "contain" }}
                         resizeMode="contain"
                     />
+
 
 
                     <View>

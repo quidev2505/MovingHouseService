@@ -25,6 +25,7 @@ import DeliveryHistory from './Screens/Driver/DeliveryHistory';
 import RatingHistory from './Screens/Driver/RatingHistory';
 import RatingOrder from './Screens/Customer/RatingOrder/RatingOrder';
 import ChatWithCustomer from './Screens/Driver/ChatWithCustomer';
+import ViewProcessOrder from './Screens/Driver/OrderDetail/ViewProcessOrder';
 
 
 
@@ -65,8 +66,11 @@ function App() {
           {/* Chi tiết đơn hàng khách hàng */}
           <Stack.Screen name="OrderDetailCustomer" component={OrderDetailCustomer} />
 
-          {/* Chi tiết đơn hàng khách hàng */}
+          {/* Chat với khách hàng*/}
           <Stack.Screen name="ChatWithCustomer" component={ChatWithCustomer} />
+
+          {/*Tài xế thứ n xem đơn hàng */}
+          <Stack.Screen name="ViewProcessOrder" component={ViewProcessOrder} />
 
           {/* Đánh giá đơn hàng đã hoàn thành*/}
           <Stack.Screen name="RatingOrder" component={RatingOrder} />

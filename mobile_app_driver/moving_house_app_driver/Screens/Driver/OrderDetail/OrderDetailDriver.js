@@ -110,6 +110,7 @@ function OrderDetailDriver({ route, navigation }) {
         /* 2. Get the param */
         const { data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start, driverVehicle, orderVehicle } = route.params;
 
+
         get_detail_order(data_order, driver_name, order_id, fullname_driver, quantity_driver, customer_id, from_location, to_location, date_start, time_start, driverVehicle, orderVehicle)
 
     }, [])
@@ -119,13 +120,15 @@ function OrderDetailDriver({ route, navigation }) {
     }
 
     //Cập nhật lại tài xế vào đơn hàng
-    const get_order = async (id_order, driver_name, fullname_driver, quantity_driver, driverVehicle, orderVehicle) => {
+    const get_order = async (id_order, driver_name, fullname_driver, quantity_driver, customer_id, driverVehicle, orderVehicle) => {
         try {
             const arr_driver_name = driver_name.map((item, index) => {
                 return item;
             })
 
-            if (driverVehicle != orderVehicle) {
+
+
+            if (driverVehicle.trim() !== orderVehicle.trim()) {
                 Alert.alert('Thông báo', 'Phương tiện bạn đăng ký vận chuyển không phù hợp với đơn hàng hiện tại !', [
                     { text: 'Xác nhận', onPress: () => { } },
                 ]);
@@ -191,6 +194,8 @@ function OrderDetailDriver({ route, navigation }) {
 
     //Khi nhấn nút tiếp theo
     const check_info_customer = async () => {
+
+
         //Lấy thông tin khách hàng ra
         let data_customer = await axios.get(`${api_url}/v1/customer/get_customer_with_id/${customerID}`)
 
@@ -198,25 +203,37 @@ function OrderDetailDriver({ route, navigation }) {
         let data_user = await axios.get(`${api_url}/v1/customer/get_info_user_with_customer_name/${data_customer.data.fullname}`)
 
 
-        const ob = {
-            appId: 13517,
-            appToken: "dgTdxEATT0B2p3KZWHDHVd",
-            title: "[🚚] Đã có tài xế nhận đơn hàng của bạn ! [🚚]",
-            body: `[📦] Khách hàng: ${data_user.data.fullname} [📦]`,
-            dateSent: Date.now(),
-        }
-        axios.post('https://app.nativenotify.com/api/notification', ob).then((data) => {
-            console.log(data)
-        }).catch((e) => console.log(e))
+        let check_order_receiver = await axios.get(`${api_url}/v1/order/viewOrderWithOrderId/${dataOrderDetail.order_id}`)
 
-        //Cập nhật lại trạng thái đơn hàng
-        await axios.patch(`${api_url}/v1/order/updateonefield_order/${dataOrderDetail.order_id}`, {
-            status: "Đang thực hiện"
-        }).then((data) => {
-            navigation.navigate('ContactCustomer', { data_user: data_user.data, data_order: dataOrderDetail })
-        }).catch((e) => {
-            console.log(e)
-        })
+        //Nếu mà chưa có ai nhấn trước
+        if (check_order_receiver.data.order_receiver == "") {
+            const ob = {
+                appId: 13517,
+                appToken: "dgTdxEATT0B2p3KZWHDHVd",
+                title: "[🚚] Đã có tài xế nhận đơn hàng của bạn ! [🚚]",
+                body: `[📦] Khách hàng: ${data_user.data.fullname} [📦]`,
+                dateSent: Date.now(),
+            }
+            axios.post('https://app.nativenotify.com/api/notification', ob).then((data) => {
+                console.log()
+            }).catch((e) => console.log(e))
+
+            //Cập nhật lại trạng thái đơn hàng và người nhận đơn hàng
+            await axios.patch(`${api_url}/v1/order/updateonefield_order/${dataOrderDetail.order_id}`, {
+                status: "Đang thực hiện",
+                order_receiver: dataOrderDetail.fullname_driver
+            }).then((data) => {
+                navigation.navigate('ContactCustomer', { data_user: data_user.data, data_order: dataOrderDetail })
+            }).catch((e) => {
+                console.log(e)
+            })
+        } else {
+            if (check_order_receiver.data.order_receiver == dataOrderDetail.fullname_driver) {
+                navigation.navigate('ContactCustomer', { data_user: data_user.data, data_order: dataOrderDetail })
+            } else {
+                navigation.navigate('ViewProcessOrder', { data_user: data_user.data, data_order: dataOrderDetail })
+            }
+        }
     }
 
 

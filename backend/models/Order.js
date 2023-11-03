@@ -40,7 +40,7 @@ const orderSchema = new mongoose.Schema({
     }, //Dạng: địa chỉ
     deliveryArea: {
         type: String,
-        required:true
+        required: true
     },
     vehicle_name: {
         type: String,
@@ -70,6 +70,10 @@ const orderSchema = new mongoose.Schema({
     // 5. Đã hủy
     //Nếu đã hủy đơn hàng
     reason_cancel: {
+        type: String,
+        default: null
+    },
+    order_receiver: {
         type: String,
         default: null
     }
