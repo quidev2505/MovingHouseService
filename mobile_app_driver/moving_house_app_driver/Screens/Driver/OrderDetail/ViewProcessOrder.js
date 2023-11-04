@@ -252,7 +252,7 @@ function ViewProcessOrder({ route, navigation }) {
                     </View>
                 </View>
             </View>
-            <View style={{ marginLeft: 40, marginTop: 80 }}>
+            <View style={{ marginLeft: 20, marginTop: 80 }}>
                 <Timeline
                     data={dataTimeLine}
                     circleSize={25}

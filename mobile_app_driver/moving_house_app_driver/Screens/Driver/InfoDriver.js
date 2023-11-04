@@ -13,7 +13,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 import DatalistInput from '@avul/react-native-datalist-input';
 
+
 function InfoDriver({ navigation }) {
+ 
+
   console.disableYellowBox = true;
 
   const [check_show_dropdown, setCheckShowDropDown] = useState(false)
@@ -207,6 +210,7 @@ function InfoDriver({ navigation }) {
         <View style={{ marginTop: 20, width: "100%", padding: 10 }}>
           <Text style={{ backgroundColor: "orange", padding: 5, borderRadius: 5, color: "white", fontSize: 19 }}>Thông tin hồ sơ</Text>
 
+
           <View style={{ display: "flex", flexDirection: "row", marginTop: 15, marginLeft: 5, marginRight: 5, justifyContent: "space-between" }}>
             <View style={{ display: "flex", flexDirection: "row" }}>
               <Ionicons
@@ -253,7 +257,7 @@ function InfoDriver({ navigation }) {
             <TouchableOpacity
               onPress={() => {
                 Alert.alert('Thông báo', 'Liên hệ quản trị viên khi có thay đổi về phương tiện vận chuyển !', [
-                  { text: 'Xác nhận', onPress: () => {}},
+                  { text: 'Xác nhận', onPress: () => { } },
                 ]);
 
               }}

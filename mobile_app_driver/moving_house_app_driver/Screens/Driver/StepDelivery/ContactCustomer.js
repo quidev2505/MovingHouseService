@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@rneui/themed';
 
+import call from 'react-native-phone-call'
 
 function ContactCustomer({ route, navigation }) {
     const [dataUser, setDataUser] = useState({})
@@ -11,6 +12,18 @@ function ContactCustomer({ route, navigation }) {
     const [nextStep, setNextStep] = useState(false);
     const [loading, setLoading] = useState(false);
     const [dataDriver, setDataDriver] = useState("")
+
+    const handleCall = () => {
+        const args = {
+            number: dataUser.phonenumber, // String value with the number to call
+            prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
+            skipCanOpen: true // Skip the canOpenURL check
+        }
+
+        call(args).catch(console.error)
+    };
+
+
 
     const call_driver = async () => {
         const value_local = await AsyncStorage.getItem('already_login_driver');
@@ -24,8 +37,8 @@ function ContactCustomer({ route, navigation }) {
     useEffect(() => {
         /* 2. Get the param */
         const { data_user, data_order } = route.params;
-
-
+  
+        
         setDataUser(data_user)
         setDataOrderDetail(data_order)
     }, [])
@@ -38,7 +51,7 @@ function ContactCustomer({ route, navigation }) {
 
 
     return (
-        <View>
+        <ScrollView>
             <View>
                 <View style={{ display: "flex", flexDirection: "row", height: 90, backgroundColor: "white", justifyContent: "space-between", padding: 10, paddingTop: 50 }}>
                     {/* <Ionicons
@@ -83,10 +96,12 @@ function ContactCustomer({ route, navigation }) {
                 <View style={{ marginTop: 290 }}>
                     <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
                         <TouchableOpacity style={styles.button} onPress={() => {
+                            
                             setLoading(true)
                             setTimeout(() => {
                                 setNextStep(true)
                                 setLoading(false)
+                                handleCall()
                             }, 1000)
                         }}>
                             <Text style={styles.buttonText}>Liên hệ với khách hàng</Text>
@@ -95,9 +110,8 @@ function ContactCustomer({ route, navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
