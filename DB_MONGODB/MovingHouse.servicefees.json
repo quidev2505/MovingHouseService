@@ -112,22 +112,6 @@
 },
 {
   "_id": {
-    "$oid": "64f947d4a7db5535462e4b17"
-  },
-  "fee_name": "Lắp đặt đồ đạc",
-  "price": 1000000,
-  "unit": "Tủ",
-  "status": true,
-  "createdAt": {
-    "$date": "2023-09-07T03:47:32.689Z"
-  },
-  "updatedAt": {
-    "$date": "2023-09-07T03:47:32.689Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
     "$oid": "64f947eca7db5535462e4b1a"
   },
   "fee_name": "Nâng cẩu",
@@ -146,7 +130,7 @@
   "_id": {
     "$oid": "64f95c75a7db5535462e4b31"
   },
-  "fee_name": "Thêm nhân công bốc vác",
+  "fee_name": "Nhân công bốc xếp",
   "price": 370000,
   "unit": "Người",
   "status": true,
@@ -154,7 +138,23 @@
     "$date": "2023-09-07T05:15:33.363Z"
   },
   "updatedAt": {
-    "$date": "2023-09-07T05:15:33.363Z"
+    "$date": "2023-09-21T13:19:36.964Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650a5f104ba8fc20f726ccc5"
+  },
+  "fee_name": "Phí bảo hiểm đồ đạc",
+  "price": 1500000,
+  "unit": "Món",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T02:55:12.306Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T02:55:12.306Z"
   },
   "__v": 0
 }]

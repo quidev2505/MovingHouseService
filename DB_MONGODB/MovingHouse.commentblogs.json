@@ -277,4 +277,264 @@
     "$date": "2023-09-17T10:06:14.631Z"
   },
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6509204fcf79520a46e99946"
+  },
+  "comment_content": "Hay quá",
+  "comment_time": "11:15:11, 19/9/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009b921cd1d1fbed47f471"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-19T04:15:11.919Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-19T04:16:51.624Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65092065cf79520a46e9995a"
+  },
+  "comment_content": "hihi",
+  "comment_time": "11:15:33, 19/9/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009f3b1cd1d1fbed47f478"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-19T04:15:33.920Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-19T04:15:33.920Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650a6aca4ba8fc20f726cdd9"
+  },
+  "comment_content": "hay hay",
+  "comment_time": "10:45:14, 20/9/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009f3b1cd1d1fbed47f478"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T03:45:14.338Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T03:45:14.338Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650bf0f518201e4cd9437aa5"
+  },
+  "comment_content": "ok",
+  "comment_time": "14:29:57, 21/9/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "6500953b1cd1d1fbed47f44a"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-21T07:29:57.325Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-21T07:29:57.325Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650d492d955ce72e50359bd4"
+  },
+  "comment_content": "ok nha",
+  "comment_time": "14:58:37, 22/9/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009f3b1cd1d1fbed47f478"
+  },
+  "status": false,
+  "createdAt": {
+    "$date": "2023-09-22T07:58:37.993Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-01T16:47:07.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650e8716be25d4f920a448be"
+  },
+  "comment_content": "hihi",
+  "comment_time": "13:35:02, 23/9/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009b921cd1d1fbed47f471"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-23T06:35:02.127Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-23T06:35:02.127Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65167d4648fe0157642f33fe"
+  },
+  "comment_content": "ok nha",
+  "comment_time": "14:31:17, 29/9/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009b921cd1d1fbed47f471"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-29T07:31:18.078Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-29T07:31:18.078Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65167d4b48fe0157642f3404"
+  },
+  "comment_content": "....",
+  "comment_time": "14:31:23, 29/9/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009b921cd1d1fbed47f471"
+  },
+  "status": false,
+  "createdAt": {
+    "$date": "2023-09-29T07:31:23.248Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-01T16:46:14.519Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651ef662a288f0706a3bbdd8"
+  },
+  "comment_content": "Bài viết hữu ích !",
+  "comment_time": "00:46:10, 6/10/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009f3b1cd1d1fbed47f478"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-10-05T17:46:10.109Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-05T17:46:10.109Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652ab86125db311c7e8ffab3"
+  },
+  "comment_content": "mới bình luận",
+  "comment_time": "22:48:49, 14/10/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009b921cd1d1fbed47f471"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-10-14T15:48:49.712Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-14T15:48:49.712Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652ab8c4678dc9e62a22499c"
+  },
+  "comment_content": "hihi",
+  "comment_time": "22:50:28, 14/10/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "65009f3b1cd1d1fbed47f478"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-10-14T15:50:28.442Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-14T15:50:28.442Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652ad068678dc9e62a224c84"
+  },
+  "comment_content": "ok nhA",
+  "comment_time": "00:31:20, 15/10/2023",
+  "fullname": "Phan Thành Quí",
+  "avatar": "uploads\\1694575777858.jpg",
+  "blog_id": {
+    "$oid": "6500953b1cd1d1fbed47f44a"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-10-14T17:31:20.770Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-14T17:31:20.770Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652f9733f5468176a28e8f4a"
+  },
+  "comment_content": "Wow, kiến thức thật hữu ích !",
+  "comment_time": "15:28:35, 18/10/2023",
+  "fullname": "Phan Hữu Tình",
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Phan Hữu Tình",
+  "blog_id": {
+    "$oid": "652f971bf5468176a28e8f33"
+  },
+  "status": true,
+  "createdAt": {
+    "$date": "2023-10-18T08:28:35.625Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-18T08:28:35.625Z"
+  },
+  "__v": 0
 }]

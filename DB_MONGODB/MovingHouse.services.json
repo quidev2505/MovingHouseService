@@ -3,25 +3,25 @@
     "$oid": "64f73856008ce88410041561"
   },
   "name": "Chuyển nhà theo yêu cầu",
-  "vehicle": "Xe tải 1.5 tấn, 2 tấn, 2.5 tấn, 3 tấn,...",
+  "vehicle": "Xe bán tải, xe van 500kg, xe tải 1.5 tấn, xe tải 2 tấn",
   "needPeople": 0,
   "distance": "0",
   "price": 0,
   "status": true,
   "process": [
-    "Khảo sát và ký kết hợp đồng,Tháo dỡ đồ đạc,Đóng gói đồ đạc,Lắp đặt đồ đạc tại nhà mới,Vận chuyển đồ đạc bằng xe tải"
+    "Khảo sát và ký kết hợp đồng,Tháo dỡ đồ đạc,Vận chuyển đồ đạc bằng xe tải 1.5 tấn,Đóng gói đồ đạc,Lắp đặt đồ đạc tại nhà mới"
   ],
   "bonus": [
-    "Vận chuyển đồ đạc lên chung cư, nhà cao tầng,Vệ sinh nhà mới sau khi chuyển nhà,Bảo hiểm đồ đạc"
+    "Vận chuyển đồ đạc lên chung cư, nhà cao tầng,Vệ sinh nhà mới sau khi chuyển nhà,Bảo hiểm đồ đạc,Vận chuyển thú cưng,Vận chuyển cây cảnh"
   ],
-  "image": "uploads\\1694533875044.png",
+  "image": "https://cdn-icons-png.flaticon.com/512/3565/3565697.png",
   "warranty_policy": "Bồi thường 100% giá trị đồ đạc nếu bị hư hỏng trong quá trình vận chuyển",
   "suitable_for": "Phù hợp với những khách hàng có nhu cầu chuyển nhà đặc biệt, như chuyển nhà đi xa, chuyển nhà văn phòng,...",
   "createdAt": {
     "$date": "2023-09-05T14:16:54.750Z"
   },
   "updatedAt": {
-    "$date": "2023-09-12T15:51:15.056Z"
+    "$date": "2023-10-20T05:34:58.920Z"
   },
   "__v": 0
 },
@@ -32,14 +32,14 @@
   "name": "Chuyển nhà trọn gói",
   "vehicle": " Xe tải 1.5 tấn",
   "needPeople": 4,
-  "distance": "10km trong nội thành",
+  "distance": "Tùy thuộc vào yêu cầu của khách hàng",
   "price": 10000000,
   "status": true,
   "process": [
-    "Vận chuyển đồ đạc bằng xe tải,Khảo sát và ký kết hợp đồng,Tháo dỡ đồ đạc,Đóng gói đồ đạc,Vận chuyển đồ đạc bằng xe tải 1.5 tấn,Lắp đặt đồ đạc tại nhà mới"
+    "Khảo sát và ký kết hợp đồng,Tháo dỡ đồ đạc,Đóng gói đồ đạc,Vận chuyển đồ đạc bằng xe tải 1.5 tấn,Lắp đặt đồ đạc tại nhà mới"
   ],
   "bonus": [
-    "Vận chuyển đồ đạc lên chung cư, nhà cao tầng,Vệ sinh nhà mới sau khi chuyển nhà,Bảo hiểm đồ đạc"
+    "Vận chuyển đồ đạc lên chung cư, nhà cao tầng,Vệ sinh nhà mới sau khi chuyển nhà,Bảo hiểm đồ đạc,Vận chuyển thú cưng,Vận chuyển cây cảnh,Vận chuyển đồ đạc đặc biệt,Vận chuyển đồ đạc đi nước ngoài"
   ],
   "image": "uploads\\1694534026380.png",
   "warranty_policy": "Bồi thường 100% giá trị đồ đạc nếu bị hư hỏng trong quá trình vận chuyển",
@@ -48,7 +48,7 @@
     "$date": "2023-09-06T02:10:22.986Z"
   },
   "updatedAt": {
-    "$date": "2023-09-12T15:53:46.393Z"
+    "$date": "2023-10-20T03:55:39.053Z"
   },
   "__v": 0
 },
@@ -59,23 +59,23 @@
   "name": "Chuyển nhà tự đóng gói",
   "vehicle": "Xe tải 1.5 tấn",
   "needPeople": 2,
-  "distance": "10km trong nội thành",
+  "distance": "Tùy thuộc vào yêu cầu của khách hàng",
   "price": 5000000,
   "status": true,
   "process": [
-    "Vận chuyển đồ đạc bằng xe tải 1.5 tấn,Lắp đặt đồ đạc tại nhà mới"
+    "Khảo sát và ký kết hợp đồng,Tháo dỡ đồ đạc,Đóng gói đồ đạc,Vận chuyển đồ đạc bằng xe tải 1.5 tấn,Lắp đặt đồ đạc tại nhà mới,Tư vấn khách hàng về các gói dịch vụ chuyển nhà,Hỗ trợ khách hàng giải quyết các vấn đề phát sinh trong quá trình vận chuyển"
   ],
   "bonus": [
-    "Vận chuyển đồ đạc lên chung cư, nhà cao tầng,Vệ sinh nhà mới sau khi chuyển nhà,Bảo hiểm đồ đạc"
+    "Bảo hiểm đồ đạc,Vận chuyển thú cưng,Vận chuyển cây cảnh,Vệ sinh nhà mới sau khi chuyển nhà,Vận chuyển đồ đạc lên chung cư, nhà cao tầng"
   ],
-  "image": "uploads\\1694534034030.png",
+  "image": "https://cdn-icons-png.flaticon.com/512/7059/7059579.png",
   "warranty_policy": "Bồi thường 100% giá trị đồ đạc nếu bị hư hỏng trong quá trình vận chuyển",
   "suitable_for": "Phù hợp với những khách hàng có số lượng đồ đạc ít, muốn tự tay đóng gói đồ đạc để tiết kiệm chi phí.",
   "createdAt": {
     "$date": "2023-09-06T02:32:42.550Z"
   },
   "updatedAt": {
-    "$date": "2023-09-12T15:53:54.036Z"
+    "$date": "2023-10-20T04:12:57.595Z"
   },
   "__v": 0
 }]

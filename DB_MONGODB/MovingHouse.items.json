@@ -1,0 +1,323 @@
+[{
+  "_id": {
+    "$oid": "650b0a3804eaa8daba9c0cda"
+  },
+  "name": "Sofa",
+  "image": "uploads\\1695222430103.png",
+  "size": "200cmx100cmx80cm",
+  "category": "Phòng khách",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:05:28.203Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-18T09:16:03.616Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0ad304eaa8daba9c0ce2"
+  },
+  "name": "Bàn ghế",
+  "image": "uploads\\1695222483970.jfif",
+  "size": "120cmx80cmx70cm",
+  "category": "Phòng khách",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:08:03.974Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:08:03.974Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0b4e04eaa8daba9c0ce6"
+  },
+  "name": "Kệ tivi",
+  "image": "uploads\\1695222606584.jfif",
+  "size": "120cmx30cmx30cm",
+  "category": "Phòng khách",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:10:06.587Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:10:06.587Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0b9004eaa8daba9c0cea"
+  },
+  "name": "Tủ",
+  "image": "uploads\\1695222672176.jfif",
+  "size": "120cmx40cmx120cm",
+  "category": "Phòng khách",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:11:12.179Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:11:12.179Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0be504eaa8daba9c0cf2"
+  },
+  "name": "Tivi",
+  "image": "uploads\\1695222757658.jfif",
+  "size": "32 - 85 inch ",
+  "category": "Phòng khách",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:12:37.666Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:12:37.666Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0c1f04eaa8daba9c0cf6"
+  },
+  "name": "Dàn âm thanh",
+  "image": "uploads\\1695222815127.jfif",
+  "size": "50 - 200 cm",
+  "category": "Phòng khách",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:13:35.130Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:13:35.130Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0c7504eaa8daba9c0cfe"
+  },
+  "name": "Giường",
+  "image": "uploads\\1695222901488.jfif",
+  "size": "200cmx120cmx40cm",
+  "category": "Phòng ngủ",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:15:01.491Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:15:01.491Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0ca504eaa8daba9c0d02"
+  },
+  "name": "Tủ quần áo",
+  "image": "uploads\\1695222949536.jfif",
+  "size": "120cmx60cmx120cm",
+  "category": "Phòng ngủ",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:15:49.540Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:15:49.540Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0cd804eaa8daba9c0d06"
+  },
+  "name": "Bàn trang điểm",
+  "image": "uploads\\1695223000763.jfif",
+  "size": "100cmx50cmx70cm",
+  "category": "Phòng ngủ",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:16:40.773Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:16:40.773Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0d4c04eaa8daba9c0d0a"
+  },
+  "name": "Tủ lạnh",
+  "image": "uploads\\1695223116746.jfif",
+  "size": "60cmx50cmx180cm",
+  "category": "Phòng bếp",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:18:36.754Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:21:59.170Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b0e3b04eaa8daba9c0d1a"
+  },
+  "name": "Máy giặt",
+  "image": "uploads\\1695223355974.jfif",
+  "size": "60cmx50cmx80cm",
+  "category": "Phòng bếp",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:22:35.978Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-07T02:37:52.873Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b16a004eaa8daba9c0d21"
+  },
+  "name": "Bàn ăn",
+  "image": "uploads\\1695225504189.jpg",
+  "size": "120cmx70cm",
+  "category": "Phòng bếp",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:58:24.194Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:58:24.194Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b16fb04eaa8daba9c0d25"
+  },
+  "name": "Lò nướng",
+  "image": "uploads\\1695225595280.jpg",
+  "size": "60cmx50cmx60cm",
+  "category": "Phòng bếp",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T15:59:55.288Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T15:59:55.288Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b232304eaa8daba9c0d5d"
+  },
+  "name": " Chảo, nồi, xoong",
+  "image": "uploads\\1695228707827.jpg",
+  "size": "20cmx10cmx10cm",
+  "category": "Phòng bếp",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T16:51:47.871Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T16:51:47.871Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b23d304eaa8daba9c0d73"
+  },
+  "name": " Bát đĩa",
+  "image": "uploads\\1695228883258.jpg",
+  "size": "20cm-30cm",
+  "category": "Phòng bếp",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T16:54:43.262Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T16:54:43.262Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b240504eaa8daba9c0d77"
+  },
+  "name": "Bồn tắm",
+  "image": "uploads\\1695228933901.jpg",
+  "size": "60cmx50cm",
+  "category": "Phòng tắm",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T16:55:33.905Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T16:55:33.905Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b242d04eaa8daba9c0d7b"
+  },
+  "name": " Vòi sen",
+  "image": "uploads\\1695228973663.jpg",
+  "size": "60cmx20cmx20cm",
+  "category": "Phòng tắm",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T16:56:13.670Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T16:56:39.649Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b246c04eaa8daba9c0d85"
+  },
+  "name": "Gương",
+  "image": "uploads\\1695229036191.jpg",
+  "size": "60cmx40cmx40cm",
+  "category": "Phòng tắm",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T16:57:16.197Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T16:57:16.197Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "650b249504eaa8daba9c0d89"
+  },
+  "name": "Bàn làm việc",
+  "image": "uploads\\1695229077948.jpg",
+  "size": "120cmx80cm",
+  "category": "Phòng làm việc",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-20T16:57:57.951Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-20T16:57:57.951Z"
+  },
+  "__v": 0
+}]

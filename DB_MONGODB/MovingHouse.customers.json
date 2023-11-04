@@ -10,7 +10,7 @@
     "$date": "2023-09-09T16:55:40.138Z"
   },
   "updatedAt": {
-    "$date": "2023-09-13T03:29:37.873Z"
+    "$date": "2023-10-12T15:40:01.843Z"
   },
   "__v": 0
 },
@@ -19,14 +19,14 @@
     "$oid": "650080ef1ef1c8e4d12e6330"
   },
   "fullname": "Phan Hữu Tình",
-  "address": null,
+  "address": "Gần bách hóa xanh, hiếu nghĩa",
   "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Phan Hữu Tình",
-  "gender": null,
+  "gender": "Nữ",
   "createdAt": {
     "$date": "2023-09-12T15:17:03.284Z"
   },
   "updatedAt": {
-    "$date": "2023-09-12T15:17:03.284Z"
+    "$date": "2023-10-16T10:30:28.600Z"
   },
   "__v": 0
 },
@@ -35,14 +35,46 @@
     "$oid": "65012c409878b3b011e9c40f"
   },
   "fullname": "Nguyễn Trọng Trí",
-  "address": null,
-  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Nguyễn Trọng Trí",
-  "gender": null,
+  "address": "Châu Đốc, An Giang",
+  "avatar": "uploads\\1698858652626.png",
+  "gender": "Nam",
   "createdAt": {
     "$date": "2023-09-13T03:28:00.246Z"
   },
   "updatedAt": {
-    "$date": "2023-09-13T03:28:00.246Z"
+    "$date": "2023-11-01T17:10:52.632Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651538a1ca5857c6dddf0887"
+  },
+  "fullname": "Phan Thành Nhân",
+  "address": "Long An, Long Hồ, Vĩnh Long",
+  "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Phan Thành Nhân",
+  "gender": "Nam",
+  "createdAt": {
+    "$date": "2023-09-28T08:26:09.020Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-28T08:26:58.952Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "654286dc676dab262ce7aaf1"
+  },
+  "fullname": "Huỳnh Thiên Hương",
+  "address": "Bạc Liêu",
+  "avatar": "uploads\\1698858780932.png",
+  "gender": "Nữ",
+  "createdAt": {
+    "$date": "2023-11-01T17:11:56.373Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T17:13:00.934Z"
   },
   "__v": 0
 }]

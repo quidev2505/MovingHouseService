@@ -36,7 +36,7 @@ const cors = require("cors");
 //Connect to mongodb Atlas
 const mongoose = require('mongoose')
 
-const url = process.env.MONGODB_URI;
+const url = process.env.MONGODB_URI_ATLAS;
 
 const connectionParams = {
     useNewUrlParser: true,

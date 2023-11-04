@@ -1,0 +1,160 @@
+[{
+  "_id": {
+    "$oid": "651426a71a003688f943daa0"
+  },
+  "username": "QT3999001",
+  "password": "$2a$12$Zmlv00Ch0oQasSWObFj.C.FmChOMyWbXVXMATqP.9LUGsB6hwIy/e",
+  "status_account": true,
+  "department": "Nhân viên",
+  "avatar": "https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+  "createdAt": {
+    "$date": "2023-09-27T12:57:11.496Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-28T02:36:36.024Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6514e8e44ca9e81e1a2798aa"
+  },
+  "username": "QT3999002",
+  "password": "$2a$12$w5VLJ6/wrbj7b75kX2P6/u/eZU1MPpMoEU3vctPSzpkPI.FAa..M6",
+  "status_account": true,
+  "department": "Nhân sự",
+  "avatar": "uploads\\1695869156231.png",
+  "createdAt": {
+    "$date": "2023-09-28T02:45:56.352Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-28T10:11:15.313Z"
+  },
+  "__v": 0,
+  "otp_code": "null"
+},
+{
+  "_id": {
+    "$oid": "6514f210daaabb7ff9b2df1b"
+  },
+  "username": "QT3999003",
+  "password": "$2a$12$t5FhYSvR1.tJ8H8Nrq.uQeb7XfaTHBtYal52LpdBrC4Hj0XeWvnlu",
+  "status_account": true,
+  "department": "Quản lý",
+  "avatar": "uploads\\1695871504400.png",
+  "createdAt": {
+    "$date": "2023-09-28T03:25:04.495Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-28T05:17:39.874Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6515411a4995b427dd867551"
+  },
+  "username": "QT3999004",
+  "password": "$2a$12$8GqlQkKkb8ygeQpg8qw6ieaZBQ3QRC4Ce50YqFVApWdvktFqK3XI2",
+  "status_account": true,
+  "department": "Nhân sự",
+  "avatar": "uploads\\1695891738180.ico",
+  "otp_code": "null",
+  "createdAt": {
+    "$date": "2023-09-28T09:02:18.276Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-28T10:18:42.802Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "654227276653da3a6746bf41"
+  },
+  "username": "QT3999005",
+  "password": "$2a$12$CqshqpjTeWx140VeypeUTOXGR5QIzRjYlrvvq9pVE8ptwoZKX51ya",
+  "status_account": true,
+  "department": "Nhân viên",
+  "avatar": "uploads\\1698834215641.png",
+  "otp_code": null,
+  "createdAt": {
+    "$date": "2023-11-01T10:23:35.801Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T13:56:43.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6542290cf6478e480072632d"
+  },
+  "username": "QT3999006",
+  "password": "$2b$10$Cp0c8pimHotVvoRXNa.F/eS.lVLxZunFg4SndfmWnbxGB3KVx8R/G",
+  "status_account": true,
+  "department": "Nhân viên",
+  "avatar": "uploads\\1698834700533.png",
+  "otp_code": null,
+  "createdAt": {
+    "$date": "2023-11-01T10:31:40.645Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T10:31:40.645Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65422986f6478e4800726339"
+  },
+  "username": "QT3999007",
+  "password": "$2b$10$Y37cfO5/H3ObzWXzoKbHU.//X0fD71bWjF3IXhi6jwGz8ypp7KJ7q",
+  "status_account": true,
+  "department": "Nhân sự",
+  "avatar": "uploads\\1698834822658.png",
+  "otp_code": null,
+  "createdAt": {
+    "$date": "2023-11-01T10:33:42.731Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T10:33:42.731Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "654229e3f6478e4800726345"
+  },
+  "username": "QT3999008",
+  "password": "$2b$10$O3gjYGkvcKcvHacdbxvo4.tIpOsjuQ.e57Rvh2nUJsUp0UcwegXQO",
+  "status_account": true,
+  "department": "Quản lý",
+  "avatar": "uploads\\1698834915185.png",
+  "otp_code": null,
+  "createdAt": {
+    "$date": "2023-11-01T10:35:15.258Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T10:35:15.258Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65422a95f6478e4800726377"
+  },
+  "username": "QT3999009",
+  "password": "$2b$10$pit2OUA6JfytuPywbRIDV.epOxwMIl3aR/12dL.R4iUjwcYVHzPum",
+  "status_account": true,
+  "department": "Quản lý",
+  "avatar": "uploads\\1698835093728.jpg",
+  "otp_code": null,
+  "createdAt": {
+    "$date": "2023-11-01T10:38:13.801Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T10:38:13.801Z"
+  },
+  "__v": 0
+}]

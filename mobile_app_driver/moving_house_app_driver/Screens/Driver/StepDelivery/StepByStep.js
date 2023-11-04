@@ -68,6 +68,15 @@ function StepByStep({ route, navigation }) {
                 setTitleHome(props.title)
             }, [])
 
+
+            const updateStatusOrder = async () => {
+                //Cập nhật đơn hàng
+                await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
+                    status: "Đã đến điểm lấy hàng"
+                });
+            }
+
+
             return (
                 <>
                     <View>
@@ -90,6 +99,7 @@ function StepByStep({ route, navigation }) {
                         <View>
                             <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
                                 <TouchableOpacity style={styles.button} onPress={() => {
+                                    updateStatusOrder()
                                     setActive((active) => active + 1)
                                 }}>
                                     <Text style={styles.buttonText}>Xác nhận đã đến điểm lấy hàng</Text>
@@ -113,6 +123,15 @@ function StepByStep({ route, navigation }) {
             useEffect(() => {
                 setTitleHome(props.title)
             }, [])
+
+
+            const updateStatusOrder = async () => {
+                //Cập nhật đơn hàng
+                await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
+                    status: "Hoàn thành bốc hàng hóa"
+                });
+            }
+
             return (
                 <View>
                     <Text style={{ backgroundColor: "orange", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Điểm lấy hàng : {fromLocation.name}</Text>
@@ -128,6 +147,7 @@ function StepByStep({ route, navigation }) {
                     <View>
                         <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
                             <TouchableOpacity style={styles.button} onPress={() => {
+                                updateStatusOrder()
                                 setActive((active) => active + 1)
                             }}>
                                 <Text style={styles.buttonText}>Xác nhận hoàn thành bốc hàng hóa</Text>
@@ -148,6 +168,14 @@ function StepByStep({ route, navigation }) {
             useEffect(() => {
                 setTitleHome(props.title)
             }, [])
+
+            const updateStatusOrder = async () => {
+                //Cập nhật đơn hàng
+                await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
+                    status: "Vận chuyển hàng hóa"
+                });
+            }
+
             return (
                 <View>
                     <Text style={{ backgroundColor: "green", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Trạng thái: Đang vận chuyển hàng hóa</Text>
@@ -162,6 +190,7 @@ function StepByStep({ route, navigation }) {
                     <View>
                         <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
                             <TouchableOpacity style={styles.button} onPress={() => {
+                                updateStatusOrder()
                                 setActive((active) => active + 1)
                             }}>
                                 <Text style={styles.buttonText}>Bước kế tiếp</Text>
@@ -183,6 +212,16 @@ function StepByStep({ route, navigation }) {
             useEffect(() => {
                 setTitleHome(props.title)
             }, [])
+
+
+            const updateStatusOrder = async () => {
+                //Cập nhật đơn hàng
+                await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
+                    status: "Đã đến điểm nhận hàng"
+                });
+            }
+
+
             return (
                 <View>
                     <Text style={{ backgroundColor: "orange", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Điểm nhận hàng: {toLocation.name}</Text>
@@ -199,6 +238,7 @@ function StepByStep({ route, navigation }) {
                     <View>
                         <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
                             <TouchableOpacity style={styles.button} onPress={() => {
+                                updateStatusOrder()
                                 setActive((active) => active + 1)
                             }}>
                                 <Text style={styles.buttonText}>Xác nhận đã đến điểm nhận hàng</Text>
@@ -252,6 +292,13 @@ function StepByStep({ route, navigation }) {
                 })
             }
 
+            const updateStatusOrder = async () => {
+                //Cập nhật đơn hàng
+                await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
+                    status: "Xác nhận trạng thái giao hàng"
+                });
+            }
+
             return (
                 <View>
                     <Image
@@ -267,6 +314,7 @@ function StepByStep({ route, navigation }) {
                     <View>
                         <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
                             <TouchableOpacity style={styles.button1} onPress={() => {
+                                updateStatusOrder()
                                 setActive((active) => active + 1)
                             }}>
                                 <Text style={styles.buttonText}>Giao hàng thành công, đã dỡ hàng!</Text>

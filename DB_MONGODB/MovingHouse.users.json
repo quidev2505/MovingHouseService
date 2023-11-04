@@ -3,16 +3,16 @@
     "$oid": "64fca38c90928cab7c85c8d4"
   },
   "fullname": "Phan Thành Quí",
-  "email": "phanok@gmail.com",
+  "email": "quidev2505@gmail.com",
   "phonenumber": "0907532754",
-  "password": "$2b$10$v0EjM3Ad4qVdlICAT.qCVOSSX2E1UV0dpXcwvTe0nU.TnT.4rQM8G",
-  "otp_code": null,
+  "password": "$2a$12$OjvgA6BZk69p9Ts9VIYQieD7si5ycKJwB1jIwZ9myJ/J6CF/EdJUy",
+  "otp_code": "null",
   "status": true,
   "createdAt": {
     "$date": "2023-09-09T16:55:40.129Z"
   },
   "updatedAt": {
-    "$date": "2023-09-13T03:29:37.883Z"
+    "$date": "2023-10-25T02:41:39.334Z"
   },
   "__v": 0
 },
@@ -23,14 +23,14 @@
   "fullname": "Phan Hữu Tình",
   "email": "huutinh@gmail.com",
   "phonenumber": "0905642545",
-  "password": "$2b$10$GFZF03Bgp1qhHriyGdVpM.VaAAm8OFX3HYUdxMRr7mrf4fM1edvSa",
+  "password": "$2a$12$AF1oSO493gwgqxvvbn055eJ2H.tfwkwmyUFrL7DJFKivFKdaXmkU2",
   "otp_code": null,
   "status": true,
   "createdAt": {
     "$date": "2023-09-12T15:17:03.269Z"
   },
   "updatedAt": {
-    "$date": "2023-09-12T15:17:03.269Z"
+    "$date": "2023-10-16T10:30:28.609Z"
   },
   "__v": 0
 },
@@ -41,14 +41,50 @@
   "fullname": "Nguyễn Trọng Trí",
   "email": "tri123@gmail.com",
   "phonenumber": "0945655545",
-  "password": "$2b$10$l8PyiCPNPXP7RKilujcmguJd/L10CtBh33UNn8jp6I9uuWXt7Mc2y",
+  "password": "$2a$12$fUJtUMnnI598a8eRmxaH8ORNWLc8F3DYbhXa3SAtCNvZbSZix7aeW",
   "otp_code": null,
   "status": true,
   "createdAt": {
     "$date": "2023-09-13T03:28:00.238Z"
   },
   "updatedAt": {
-    "$date": "2023-09-13T03:28:00.238Z"
+    "$date": "2023-11-01T17:10:52.644Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651538a1ca5857c6dddf0885"
+  },
+  "fullname": "Phan Thành Nhân",
+  "email": "thanhnhan123@gmail.com",
+  "phonenumber": "0907489566",
+  "password": "$2a$12$U1f9SHm8yW.Yt4LCu.DcbOTCyRAuIvXIOQ3OuEdK5Idh7nRzObkDu",
+  "otp_code": "null",
+  "status": true,
+  "createdAt": {
+    "$date": "2023-09-28T08:26:09.014Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-28T08:28:10.321Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "654286dc676dab262ce7aaef"
+  },
+  "fullname": "Huỳnh Thiên Hương",
+  "email": "huynhthienhuong123@gmail.com",
+  "phonenumber": "0901212256",
+  "password": "$2b$10$EyL3NWVY5RJ2KALf6UoDUOVeQCmqc0ChFKTmm4s4uGelHPWRLPEJ2",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-11-01T17:11:56.366Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T17:13:00.938Z"
   },
   "__v": 0
 }]

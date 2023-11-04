@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "651232e887a07a270ccec199"
+  },
+  "username": "TX0099001",
+  "password": "$2a$12$1QlPSu/WCRT60ZStJzvuneD/3uN.qfZhp/0hkJCMYG.ilxkcFrg1.",
+  "status_account": true,
+  "createdAt": {
+    "$date": "2023-09-26T01:24:56.168Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-31T15:07:46.421Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651234dd87a07a270ccec1a8"
+  },
+  "username": "TX0099002",
+  "password": "$2a$12$XHlr68QdG.jbh9k6/3eRk.9SzIgMP00Js/yF1d9JHJzuYNIfMx5LS",
+  "status_account": true,
+  "createdAt": {
+    "$date": "2023-09-26T01:33:17.492Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-26T01:33:17.492Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6518f32a69c8171c453135ab"
+  },
+  "username": "TX0099003",
+  "password": "$2b$10$HmJQ/SWHj.04cGYK/MX6fuzBLBH4vGYbLLfFVu24uehIaQjHqLA4u",
+  "status_account": true,
+  "createdAt": {
+    "$date": "2023-10-01T04:18:50.328Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-01T04:18:50.328Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65426355c64b2be4e490ea3f"
+  },
+  "username": "TX0099004",
+  "password": "$2b$10$3AhY8u6pRkI/sH8eO3FURe9pRAo6ckjRJvNX3YigLQQ/fCT.GP6H.",
+  "status_account": true,
+  "createdAt": {
+    "$date": "2023-11-01T14:40:21.362Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T14:40:21.362Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6542640c676dab262ce7a736"
+  },
+  "username": "TX0099005",
+  "password": "$2b$10$2jY8f6.IKvjkfKCFkZJka.dPhcrA/fkBBqN6j3L0gl/QcrchokL9y",
+  "status_account": true,
+  "createdAt": {
+    "$date": "2023-11-01T14:43:24.964Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T14:43:24.964Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "654264c3676dab262ce7a747"
+  },
+  "username": "TX0099006",
+  "password": "$2b$10$KwFmtXLX8fZ0lqO8Zm9eCum462NDRtPubwQpsiR6GDvkh2imSy5s6",
+  "status_account": true,
+  "createdAt": {
+    "$date": "2023-11-01T14:46:27.431Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T14:46:27.431Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65426868676dab262ce7a78f"
+  },
+  "username": "TX0099007",
+  "password": "$2b$10$lsoyVWxk7Y7FmRjKMnPHI.g7Ga45W9wB.uGw6ZCZYqhNdBoZ93XL.",
+  "status_account": true,
+  "createdAt": {
+    "$date": "2023-11-01T15:02:00.307Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T15:02:00.307Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6542691a676dab262ce7a799"
+  },
+  "username": "TX0099008",
+  "password": "$2b$10$e8.Tr49lgVqIyT/lOLeIlORxDW0i5.UdRnxsR0.DCNoA.yez3Pxf6",
+  "status_account": true,
+  "createdAt": {
+    "$date": "2023-11-01T15:04:58.704Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T15:04:58.704Z"
+  },
+  "__v": 0
+}]

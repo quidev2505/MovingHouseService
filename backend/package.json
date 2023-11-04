@@ -25,7 +25,6 @@
     "nodemon": "^3.0.1",
     "one-time-password": "^0.1.6",
     "sharp": "^0.32.5",
-    "socket.io": "^4.7.2",
     "textflow.js": "^0.1.4"
   }
 }

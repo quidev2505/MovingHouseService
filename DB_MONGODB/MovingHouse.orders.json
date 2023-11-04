@@ -1,0 +1,1322 @@
+[{
+  "_id": {
+    "$oid": "651982111fce88ae877de032"
+  },
+  "order_id": "65514926",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "21:28:33,1/10/2022",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "02/10/2022",
+  "time_start": "09:05",
+  "date_end": "12/10/2022,10:50:0",
+  "fromLocation": "Tỉnh Sóc Trăng, Việt Nam",
+  "toLocation": "Tỉnh Bạc Liêu, Việt Nam",
+  "vehicle_name": "Xe tải 1 tấn (x1)",
+  "driver_name": [
+    "Nguyễn Trọng Tú"
+  ],
+  "totalOrder": 9680000,
+  "order_detail_id": {
+    "$oid": "651982111fce88ae877de030"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-01T14:28:33.150Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-04T01:25:51.433Z"
+  },
+  "__v": 0,
+  "deliveryArea": "TPHCM và các tỉnh lân cận"
+},
+{
+  "_id": {
+    "$oid": "651a2acf499cc2d233683a76"
+  },
+  "order_id": "17767644",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "09:28:31,2/10/2021",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "25/10/2021",
+  "time_start": "13:12",
+  "date_end": "12/10/2021,10:50:0",
+  "fromLocation": "Thành phố Cần Thơ, Việt Nam",
+  "toLocation": "Tỉnh Trà Vinh, Việt Nam",
+  "vehicle_name": "Xe tải 1.5 tấn (x1)",
+  "driver_name": [
+    "Nguyễn Trọng Tú"
+  ],
+  "totalOrder": 5636000,
+  "order_detail_id": {
+    "$oid": "651a2acf499cc2d233683a74"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-02T02:28:31.828Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-04T01:25:44.771Z"
+  },
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651ae5a536c4eabc76697bfe"
+  },
+  "order_id": "67419725",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "22:45:41,2/10/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "23/10/2023",
+  "time_start": "09:05",
+  "date_end": "22:45:41,2/10/2023",
+  "fromLocation": "Tỉnh Trà Vinh, Việt Nam",
+  "toLocation": "Thành phố Cần Thơ, Việt Nam",
+  "vehicle_name": "Xe tải 500kg (x2)",
+  "driver_name": [
+    "Nguyễn Trọng Tú",
+    "Đặng Thế Thành"
+  ],
+  "totalOrder": 12487350,
+  "order_detail_id": {
+    "$oid": "651ae5a536c4eabc76697bfc"
+  },
+  "status": "Đang thực hiện",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-02T15:45:41.906Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-03T16:33:51.496Z"
+  },
+  "__v": 0,
+  "order_receiver": "Nguyễn Trọng Tú"
+},
+{
+  "_id": {
+    "$oid": "651c527d493e2e2b3dcb58b4"
+  },
+  "order_id": "82227647",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "00:42:21,4/10/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "12/10/2023",
+  "time_start": "09:06",
+  "date_end": "12/10/2023,10:50:0",
+  "fromLocation": "Thành phố Cần Thơ, Việt Nam",
+  "toLocation": "Tỉnh Hậu Giang, Việt Nam",
+  "vehicle_name": "Xe van 1 tấn (x3)",
+  "driver_name": [
+    "Huỳnh Công Phát",
+    "Nguyễn Trọng Tú",
+    "Phan Trí Đức"
+  ],
+  "totalOrder": 11814500,
+  "order_detail_id": {
+    "$oid": "651c527d493e2e2b3dcb58b2"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": "Điểm nhận hàng không đúng thực tế",
+  "createdAt": {
+    "$date": "2023-10-03T17:42:21.427Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-05T15:02:36.331Z"
+  },
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651c5335493e2e2b3dcb58c5"
+  },
+  "order_id": "07933368",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "00:45:25,4/10/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "25/10/2023",
+  "time_start": "13:05",
+  "date_end": null,
+  "fromLocation": "Tỉnh Sóc Trăng, Việt Nam",
+  "toLocation": "Thành phố Đà Nẵng, Việt Nam",
+  "vehicle_name": "Xe bán tải (x4)",
+  "driver_name": [],
+  "totalOrder": 12530222,
+  "order_detail_id": {
+    "$oid": "651c5335493e2e2b3dcb58c3"
+  },
+  "status": "Đã hủy",
+  "reason_cancel": "2.Không thể liên hệ khách hàng",
+  "createdAt": {
+    "$date": "2023-10-03T17:45:25.169Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-07T02:35:49.353Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651cbda4c9f3f07f2ab3fc2d"
+  },
+  "order_id": "01361918",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "08:19:32,4/10/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "19/10/2023",
+  "time_start": "12:05",
+  "date_end": "19/10/2023,15:59:0",
+  "fromLocation": "Tỉnh Bến Tre, Việt Nam",
+  "toLocation": "Tỉnh Đồng Tháp, Việt Nam",
+  "vehicle_name": "Xe van 1 tấn (x2)",
+  "driver_name": [
+    "Huỳnh Công Phát",
+    "Phan Trí Đức"
+  ],
+  "totalOrder": 18855800,
+  "order_detail_id": {
+    "$oid": "651cbda4c9f3f07f2ab3fc2b"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "createdAt": {
+    "$date": "2023-10-04T01:19:32.999Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-05T17:03:09.339Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651e6d60fa4c72d714b59ff9"
+  },
+  "order_id": "10225634",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "15:01:36,5/10/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "12/10/2023",
+  "time_start": "09:05",
+  "date_end": "12/10/2023,10:39:0",
+  "fromLocation": "Tỉnh Sóc Trăng, Việt Nam",
+  "toLocation": "Thành phố Cần Thơ, Việt Nam",
+  "vehicle_name": "Xe van 500kg (x2)",
+  "driver_name": [
+    "Phan Trí Đức",
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 12874000,
+  "order_detail_id": {
+    "$oid": "651e6d60fa4c72d714b59ff7"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-05T08:01:36.917Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-05T14:55:30.184Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "651ef5efa288f0706a3bbdb3"
+  },
+  "order_id": "78829175",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "00:44:15,6/10/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "07/10/2023",
+  "time_start": "09:12",
+  "date_end": "07/10/2023,11:51:0",
+  "fromLocation": "665D Lo Thay Cai, Ben Tre, Vietnam, Bến Tre City, Bến Tre Province, 0275, Vietnam",
+  "toLocation": "Cần thơ, Phạm Ngọc Thạch, Cái Khế, Phường Cái Khế, Ninh Kiều District, Can Tho City, 94111, Vietnam",
+  "vehicle_name": "Xe tải 2 tấn (x1)",
+  "driver_name": [
+    "Nguyễn Trọng Tú"
+  ],
+  "totalOrder": 15915400,
+  "order_detail_id": {
+    "$oid": "651ef5efa288f0706a3bbdb1"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-05T17:44:15.743Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-06T04:07:57.606Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6520c8c931ec7c54491875b7"
+  },
+  "order_id": "07855153",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "09:56:09,7/10/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "23/10/2023",
+  "time_start": "16:13",
+  "date_end": null,
+  "fromLocation": "Cầu Cần Thơ, Phường Hưng Phú, Cái Răng District, Can Tho City, Vinh Long province, 8200, Vietnam",
+  "toLocation": "Trà Vinh City, Tra Vinh province, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x2)",
+  "driver_name": [],
+  "totalOrder": 13517000,
+  "order_detail_id": {
+    "$oid": "6520c8c931ec7c54491875b5"
+  },
+  "status": "Đã hủy",
+  "reason_cancel": "1.Người mua thay đổi ý định mua hàng",
+  "createdAt": {
+    "$date": "2023-10-07T02:56:09.615Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-23T04:48:32.152Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6529f348fc7c87cf916bed9d"
+  },
+  "order_id": "71330130",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "08:47:52,14/10/2023",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "20/10/2023",
+  "time_start": "12:05",
+  "date_end": null,
+  "fromLocation": "Bạc Liêu City, Bac Lieu province, 97000, Vietnam",
+  "toLocation": "Cần thơ, Phạm Ngọc Thạch, Cái Khế, Phường Cái Khế, Ninh Kiều District, Can Tho City, 94111, Vietnam",
+  "vehicle_name": "Xe bán tải (x1)",
+  "driver_name": [
+    "Phan Trí Đức"
+  ],
+  "totalOrder": 9200000,
+  "order_detail_id": {
+    "$oid": "6529f348fc7c87cf916bed9b"
+  },
+  "status": "Đang thực hiện",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-14T01:47:52.883Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-23T04:13:52.326Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652a01095b00779b47d146d9"
+  },
+  "order_id": "03592611",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "09:46:33,14/10/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "25/10/2023",
+  "time_start": "13:05",
+  "date_end": "25/10/2023,15:8:0",
+  "fromLocation": "Trà Vinh City, Tra Vinh province, Vietnam",
+  "toLocation": "Cần thơ, Phạm Ngọc Thạch, Cái Khế, Phường Cái Khế, Ninh Kiều District, Can Tho City, 94111, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 11631500,
+  "order_detail_id": {
+    "$oid": "652a01095b00779b47d146d7"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-14T02:46:33.500Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-14T02:47:32.432Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652a8d1d997649dfa6b81f3d"
+  },
+  "order_id": "31824211",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "19:44:13,14/10/2023",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "24/10/2023",
+  "time_start": "09:05",
+  "date_end": "24/10/2023,10:8:0",
+  "fromLocation": "Cần thơ, Phạm Ngọc Thạch, Cái Khế, Phường Cái Khế, Ninh Kiều District, Can Tho City, 94111, Vietnam",
+  "toLocation": "Vĩnh Long, Vinh Long province, 891311, Vietnam",
+  "vehicle_name": "Xe tải 1.5 tấn (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 11498300,
+  "order_detail_id": {
+    "$oid": "652a8d1d997649dfa6b81f3b"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-14T12:44:13.739Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-17T10:32:23.532Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652aac2197968ac8c7edafa9"
+  },
+  "order_id": "86905102",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "21:56:33,14/06/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "15/06/2023",
+  "time_start": "11:04",
+  "date_end": "18/06/2023,14:43:0",
+  "fromLocation": "Bến Tre Province, Vietnam",
+  "toLocation": "Cần thơ, Phạm Ngọc Thạch, Cái Khế, Phường Cái Khế, Ninh Kiều District, Can Tho City, 94111, Vietnam",
+  "vehicle_name": "Xe tải 1.5 tấn (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 15495500,
+  "order_detail_id": {
+    "$oid": "652aac2197968ac8c7edafa7"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-14T14:56:33.747Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-15T09:51:33.494Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652c01da410f707294461904"
+  },
+  "order_id": "78295481",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "22:14:33,15/10/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "17/10/2023",
+  "time_start": "12:04",
+  "date_end": "17/10/2023,13:31:0",
+  "fromLocation": "Sóc Trăng, Soc Trang province, Vietnam",
+  "toLocation": "Trà Vinh City, Tra Vinh province, Vietnam",
+  "vehicle_name": "Xe tải 1.5 tấn (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 13212000,
+  "order_detail_id": {
+    "$oid": "652c01da410f707294461902"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-15T15:14:34.094Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-18T02:27:39.230Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652d061bc124175c9e66e164"
+  },
+  "order_id": "00192185",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "16:44:59,16/10/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "23/10/2023",
+  "time_start": "09:05",
+  "date_end": "23/10/2023,10:33:0",
+  "fromLocation": "Trà Vinh City, Tra Vinh province, Vietnam",
+  "toLocation": "Sóc Trăng, Soc Trang province, Vietnam",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 11125500,
+  "order_detail_id": {
+    "$oid": "652d061bc124175c9e66e162"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-16T09:45:00.008Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-16T17:15:33.608Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652d13f9e8bd2f8d3bc62ac1"
+  },
+  "order_id": "10813887",
+  "customer_id": {
+    "$oid": "650080ef1ef1c8e4d12e6330"
+  },
+  "date_created": "17:44:09,16/07/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "17/07/2023",
+  "time_start": "14:05",
+  "date_end": "18/07/2023,14:43:0",
+  "fromLocation": "Ấp Thượng, Tân Quới, Thanh Bình, Đồng Tháp, 723, Quốc lộ 30, Thanh Bình District, Dong Thap Province, 81615, Vietnam",
+  "toLocation": "Cần thơ, Phạm Ngọc Thạch, Cái Khế, Phường Cái Khế, Ninh Kiều District, Can Tho City, 94111, Vietnam",
+  "vehicle_name": "Xe tải 500kg (x1)",
+  "driver_name": [
+    "Nguyễn Trọng Tú"
+  ],
+  "totalOrder": 12735450,
+  "order_detail_id": {
+    "$oid": "652d13f9e8bd2f8d3bc62abf"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "createdAt": {
+    "$date": "2023-10-16T10:44:09.827Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-17T09:19:03.069Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652e8ef1c6e5f1bae9e4de82"
+  },
+  "order_id": "98371214",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "20:41:05,17/08/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "18/08/2023",
+  "time_start": "09:06",
+  "date_end": "18/08/2023,14:43:0",
+  "fromLocation": "Bạc Liêu City, Bac Lieu province, 97000, Vietnam",
+  "toLocation": "Sóc Trăng, Soc Trang province, Vietnam",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Nguyễn Trọng Tú"
+  ],
+  "totalOrder": 9902000,
+  "order_detail_id": {
+    "$oid": "652e8ef1c6e5f1bae9e4de80"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-17T13:41:05.872Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-17T13:41:05.872Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652e9a29c6e5f1bae9e4de95"
+  },
+  "order_id": "71642295",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "21:28:56,17/10/2023",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "18/10/2023",
+  "time_start": "13:05",
+  "date_end": "18/10/2023,14:43:0",
+  "fromLocation": "Hậu Giang Province, Vietnam",
+  "toLocation": "Sóc Trăng, Soc Trang province, Vietnam",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 10258800,
+  "order_detail_id": {
+    "$oid": "652e9a28c6e5f1bae9e4de93"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-17T14:28:57.513Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-18T02:21:41.334Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "652f91bda8e2e2dcae565865"
+  },
+  "order_id": "89994625",
+  "customer_id": {
+    "$oid": "650080ef1ef1c8e4d12e6330"
+  },
+  "date_created": "15:05:17,18/09/2023",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "19/09/2023",
+  "time_start": "12:05",
+  "date_end": "19/09/2023,14:43:0",
+  "fromLocation": "Cầu Cần Thơ, Phường Hưng Phú, Cái Răng District, Can Tho City, Vinh Long province, 8200, Vietnam",
+  "toLocation": "Bến Tre Province, Vietnam",
+  "vehicle_name": "Xe tải 500kg (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 13185200,
+  "order_detail_id": {
+    "$oid": "652f91bda8e2e2dcae565863"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-18T08:05:17.847Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-18T08:05:17.847Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6531e70b1ca18e4f6b9c7b49"
+  },
+  "order_id": "98506788",
+  "customer_id": {
+    "$oid": "650080ef1ef1c8e4d12e6330"
+  },
+  "date_created": "09:33:47,20/10/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "24/10/2023",
+  "time_start": "08:04",
+  "date_end": null,
+  "fromLocation": "Cần thơ, Phạm Ngọc Thạch, Cái Khế, Phường Cái Khế, Ninh Kiều District, Can Tho City, 94111, Vietnam",
+  "toLocation": "Sóc Trăng, Soc Trang province, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x1)",
+  "driver_name": [
+    "Nguyễn Trọng Tú"
+  ],
+  "totalOrder": 10774600,
+  "order_detail_id": {
+    "$oid": "6531e70b1ca18e4f6b9c7b47"
+  },
+  "status": "Đang thực hiện",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-20T02:33:47.435Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T17:39:33.897Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65366d3e674d81545d759cfa"
+  },
+  "order_id": "56551618",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "19:55:25,23/10/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "24/10/2023",
+  "time_start": "14:05",
+  "date_end": "25/10/2023,16:53:0",
+  "fromLocation": "Sóc Trăng, Soc Trang province, Vietnam",
+  "toLocation": "Trà Cú, Trà Cú District, Tra Vinh province, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x1)",
+  "driver_name": [
+    "Nguyễn Trọng Tú"
+  ],
+  "totalOrder": 10660000,
+  "order_detail_id": {
+    "$oid": "65366d3e674d81545d759cf8"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-23T12:55:26.124Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-23T16:50:11.235Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65372ffc76791e3e022bc116"
+  },
+  "order_id": "36215527",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "09:46:19,24/10/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "26/10/2023",
+  "time_start": "08:06",
+  "date_end": null,
+  "fromLocation": "Sóc Trăng, Soc Trang province, Vietnam",
+  "toLocation": "Vĩnh Long, Vinh Long province, 891311, Vietnam",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 11612750,
+  "order_detail_id": {
+    "$oid": "65372ffc76791e3e022bc114"
+  },
+  "status": "Đang thực hiện",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-24T02:46:20.037Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T03:39:44.239Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65373b8a76791e3e022bc4c7"
+  },
+  "order_id": "65313719",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "10:35:38,24/10/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "27/10/2023",
+  "time_start": "09:05",
+  "date_end": "27/10/2023,10:41:0",
+  "fromLocation": "Cà Mau City, Ca Mau province, 970000, Vietnam",
+  "toLocation": "Bạc Liêu City, Bac Lieu province, 97000, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 11290400,
+  "order_detail_id": {
+    "$oid": "65373b8a76791e3e022bc4c5"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-24T03:35:38.564Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-24T03:54:15.011Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6537902556f2325e8611808c"
+  },
+  "order_id": "13445149",
+  "customer_id": {
+    "$oid": "64fca38c90928cab7c85c8d6"
+  },
+  "date_created": "16:36:37,24/10/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "26/10/2023",
+  "time_start": "08:05",
+  "date_end": null,
+  "fromLocation": "Trà Vinh City, Tra Vinh province, Vietnam",
+  "toLocation": "Cần thơ, Phạm Ngọc Thạch, Cái Khế, Phường Cái Khế, Ninh Kiều District, Can Tho City, 94111, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x1)",
+  "driver_name": [
+    "Huỳnh Công Phát"
+  ],
+  "totalOrder": 11291500,
+  "order_detail_id": {
+    "$oid": "6537902556f2325e8611808a"
+  },
+  "status": "Đang thực hiện",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-10-24T09:36:37.956Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T04:01:57.809Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65428a85676dab262ce7ab53"
+  },
+  "order_id": "15352837",
+  "customer_id": {
+    "$oid": "654286dc676dab262ce7aaf1"
+  },
+  "date_created": "00:27:33,2/11/2022",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "21/11/2022",
+  "time_start": "13:06",
+  "date_end": "21/11/2022,10:50:0",
+  "fromLocation": "Ngõ 95, kim mã, hà nội, Kim Mã, Phường Kim Mã, Ba Dinh District, Hanoi, 118508, Vietnam",
+  "toLocation": "Lô 6, cụm CN Lai Xá, xã Kim Chung, Hoài Đức,Hà Nội, Lô 6 - Cụm CN Lai Xá, Kim Chung Commune, Hoai Duc District, Hanoi, 24, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x1)",
+  "driver_name": [
+    "Cao Văn Nam"
+  ],
+  "totalOrder": 10000000,
+  "order_detail_id": {
+    "$oid": "65428a85676dab262ce7ab51"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "Hà Nội và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-01T17:27:33.749Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T17:27:33.749Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65428b6b676dab262ce7abed"
+  },
+  "order_id": "38204434",
+  "customer_id": {
+    "$oid": "651538a1ca5857c6dddf0887"
+  },
+  "date_created": "00:31:23,2/11/2022",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "14/11/2022",
+  "time_start": "13:12",
+  "date_end": "14/11/2022,10:50:0",
+  "fromLocation": "tphcm, Số nhà 122, Đường Trần Quý, Ward 6, District 11, Cho Lon, Ho Chi Minh City, 72716, Vietnam",
+  "toLocation": "Hồ Chí Minh, Trảng Bàng Town, Tay Ninh province, Vietnam",
+  "vehicle_name": "Xe tải 500kg (x1)",
+  "driver_name": [
+    "Đặng Thế Thành"
+  ],
+  "totalOrder": 2973500,
+  "order_detail_id": {
+    "$oid": "65428b6b676dab262ce7abeb"
+  },
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-01T17:31:23.415Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T17:31:23.415Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65428be0676dab262ce7ac1c"
+  },
+  "order_id": "89606520",
+  "customer_id": {
+    "$oid": "65012c409878b3b011e9c40f"
+  },
+  "date_created": "00:33:20,2/11/2022",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "13/11/2022",
+  "time_start": "09:05",
+  "date_end": "13/11/2022,10:50:0",
+  "fromLocation": "Đại học Cần Thơ (Khu 1), Ba Mươi Tháng Tư, Phường Hưng Lợi, Ninh Kiều District, Can Tho City, +84 292 3895 937, Vietnam",
+  "toLocation": "Trà Vinh City, Tra Vinh province, Vietnam",
+  "vehicle_name": "Xe tải 1.5 tấn (x1)",
+  "driver_name": [
+    "Lê Minh Tân"
+  ],
+  "totalOrder": 5647500,
+  "order_detail_id": {
+    "$oid": "65428be0676dab262ce7ac1a"
+  },
+  "status": "Đã hoàn thành",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-01T17:33:20.087Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-01T17:33:20.087Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6543019e094bff92241e22ed"
+  },
+  "order_id": "66544150",
+  "customer_id": {
+    "$oid": "651538a1ca5857c6dddf0887"
+  },
+  "date_created": "08:55:42,02/01/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "07/01/2023",
+  "time_start": "13:05",
+  "date_end": "07/01/2023,15:50:0",
+  "fromLocation": "Ấp Thượng, Tân Quới, Thanh Bình, Đồng Tháp, 723, Quốc lộ 30, Thanh Bình District, Dong Thap Province, 81615, Vietnam",
+  "toLocation": "Vĩnh Long, Vinh Long province, 891311, Vietnam",
+  "vehicle_name": "Xe tải 500kg (x1)",
+  "driver_name": [
+    "Trương Minh Nhựt"
+  ],
+  "totalOrder": 3917800,
+  "order_detail_id": {
+    "$oid": "6543019e094bff92241e22eb"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T01:55:42.668Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T01:55:42.668Z"
+  },
+  "__v": 0,
+  "deliveryArea": "TPHCM và các tỉnh lân cận"
+},
+{
+  "_id": {
+    "$oid": "654303b4094bff92241e230d"
+  },
+  "order_id": "75905080",
+  "customer_id": {
+    "$oid": "651538a1ca5857c6dddf0887"
+  },
+  "date_created": "09:04:36,12/02/2023",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "21/02/2023",
+  "time_start": "12:05",
+  "date_end": "21/02/2023,15:50:0",
+  "fromLocation": "Bắc Ninh, Bac Ninh province, Vietnam",
+  "toLocation": "Yên Phong District, Bac Ninh province, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x1)",
+  "driver_name": [
+    "Phan Khiết Thuần"
+  ],
+  "totalOrder": 2090000,
+  "order_detail_id": {
+    "$oid": "654303b4094bff92241e230b"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T02:04:36.902Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T02:04:36.902Z"
+  },
+  "__v": 0,
+  "deliveryArea": "TPHCM và các tỉnh lân cận"
+},
+{
+  "_id": {
+    "$oid": "6543103f094bff92241e234c"
+  },
+  "order_id": "95044803",
+  "customer_id": {
+    "$oid": "65012c409878b3b011e9c40f"
+  },
+  "date_created": "09:58:07,23/03/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "25/03/2023",
+  "time_start": "13:13",
+  "date_end": "25/03/2023,15:30:0",
+  "fromLocation": "Cầu Kinh 8 - Tân Hiệp, Kiên Giang, Đông Phước, Thạnh Đông A, Tân Hiệp District, Kien Giang Province, Vietnam",
+  "toLocation": "Ấp Thượng, Tân Quới, Thanh Bình, Đồng Tháp, 723, Quốc lộ 30, Thanh Bình District, Dong Thap Province, 81615, Vietnam",
+  "vehicle_name": "Xe tải 500kg (x1)",
+  "driver_name": [
+    "Lê Minh Tân"
+  ],
+  "totalOrder": 4483250,
+  "order_detail_id": {
+    "$oid": "6543103f094bff92241e234a"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T02:58:07.058Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T02:58:07.058Z"
+  },
+  "__v": 0,
+  "deliveryArea": "TPHCM và các tỉnh lân cận"
+},
+{
+  "_id": {
+    "$oid": "654310e5094bff92241e237b"
+  },
+  "order_id": "06102349",
+  "customer_id": {
+    "$oid": "65012c409878b3b011e9c40f"
+  },
+  "date_created": "10:00:53,02/04/2023",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "10/04/2023",
+  "time_start": "16:06",
+  "date_end": "10/04/2023,18:30:0",
+  "fromLocation": "Ấp Thượng, Tân Quới, Thanh Bình, Đồng Tháp, 723, Quốc lộ 30, Thanh Bình District, Dong Thap Province, 81615, Vietnam",
+  "toLocation": "Trà Cú, Trà Cú District, Tra Vinh province, Vietnam",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Đặng Thế Thành"
+  ],
+  "totalOrder": 5478250,
+  "order_detail_id": {
+    "$oid": "654310e5094bff92241e2379"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T03:00:53.222Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T03:00:53.222Z"
+  },
+  "__v": 0,
+  "deliveryArea": "TPHCM và các tỉnh lân cận"
+},
+{
+  "_id": {
+    "$oid": "6543124a094bff92241e2392"
+  },
+  "order_id": "98461396",
+  "customer_id": {
+    "$oid": "65012c409878b3b011e9c40f"
+  },
+  "date_created": "10:06:50,17/05/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "20/05/2023",
+  "time_start": "12:00",
+  "date_end": "20/05/2023,14:30:0",
+  "fromLocation": "Vĩnh Long, Vinh Long province, 891311, Vietnam",
+  "toLocation": "Sóc Trăng, Soc Trang province, Vietnam",
+  "vehicle_name": "Xe tải 1 tấn (x2)",
+  "driver_name": [
+    "Phan Khiết Thuần"
+  ],
+  "totalOrder": 8562000,
+  "order_detail_id": {
+    "$oid": "6543124a094bff92241e2390"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T03:06:50.463Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T03:06:50.463Z"
+  },
+  "__v": 0,
+  "deliveryArea": "TPHCM và các tỉnh lân cận"
+},
+{
+  "_id": {
+    "$oid": "654312e0094bff92241e23b2"
+  },
+  "order_id": "17730985",
+  "customer_id": {
+    "$oid": "65012c409878b3b011e9c40f"
+  },
+  "date_created": "10:09:20,02/12/2022",
+  "service_name": "Chuyển nhà tự đóng gói",
+  "date_start": "20/12/2022",
+  "time_start": "13:05",
+  "date_end": "20/12/2022,14:30:0",
+  "fromLocation": "Tri Tôn, Tri Tôn District, An Giang Province, Vietnam",
+  "toLocation": "Bạc Liêu City, Bac Lieu province, 97000, Vietnam",
+  "vehicle_name": "Xe van 1 tấn (x1)",
+  "driver_name": [
+    "Phan Khiết Thuần"
+  ],
+  "totalOrder": 6944600,
+  "order_detail_id": {
+    "$oid": "654312e0094bff92241e23b0"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T03:09:20.255Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T03:09:20.255Z"
+  },
+  "__v": 0,
+  "deliveryArea": "TPHCM và các tỉnh lân cận"
+},
+{
+  "_id": {
+    "$oid": "654332a2e51c93c7eb5c01c4"
+  },
+  "order_id": "79995197",
+  "customer_id": {
+    "$oid": "65012c409878b3b011e9c40f"
+  },
+  "date_created": "12:24:50,2/09/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "05/09/2023",
+  "time_start": "16:05",
+  "date_end": "05/09/2023,21:50:0",
+  "fromLocation": "Tri Tôn, Tri Tôn District, An Giang Province, Vietnam",
+  "toLocation": "Bạc Liêu City, Bac Lieu province, 97000, Vietnam",
+  "deliveryArea": "TPHCM và các tỉnh lân cận",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Trương Minh Nhựt"
+  ],
+  "totalOrder": 14225500,
+  "order_detail_id": {
+    "$oid": "654332a2e51c93c7eb5c01c2"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T05:24:50.402Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T05:24:50.402Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6543a29342b0417fb3d534c9"
+  },
+  "order_id": "54603348",
+  "customer_id": {
+    "$oid": "654286dc676dab262ce7aaf1"
+  },
+  "date_created": "20:22:27,20/10/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "23/10/2023",
+  "time_start": "16:05",
+  "date_end": "23/10/2023,20:50:0",
+  "fromLocation": "Gia Bình, Gia Bình District, Bac Ninh province, Vietnam",
+  "toLocation": "Quốc lộ 6, Cao Phong District, Hoà Bình province, Vietnam",
+  "deliveryArea": "Hà Nội và các tỉnh lân cận",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Đặng Thế Thành"
+  ],
+  "totalOrder": 4452000,
+  "order_detail_id": {
+    "$oid": "6543a29342b0417fb3d534c7"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T13:22:27.736Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T13:22:27.736Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6543a68c42b0417fb3d534e9"
+  },
+  "order_id": "91922123",
+  "customer_id": {
+    "$oid": "654286dc676dab262ce7aaf1"
+  },
+  "date_created": "20:39:24,18/08/2023",
+  "service_name": "Chuyển nhà theo yêu cầu",
+  "date_start": "19/08/2023",
+  "time_start": "13:05",
+  "date_end": "19/08/2023,15:50:0",
+  "fromLocation": "Kim Động District, Hung Yen Province, Vietnam",
+  "toLocation": "Cao Phong District, Hoà Bình province, Vietnam",
+  "deliveryArea": "Hà Nội và các tỉnh lân cận",
+  "vehicle_name": "Xe tải 1.5 tấn (x1)",
+  "driver_name": [
+    "Lê Minh Tân"
+  ],
+  "totalOrder": 8067000,
+  "order_detail_id": {
+    "$oid": "6543a68c42b0417fb3d534e7"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T13:39:24.631Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T13:39:24.631Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6543aad642b0417fb3d53526"
+  },
+  "order_id": "83046315",
+  "customer_id": {
+    "$oid": "654286dc676dab262ce7aaf1"
+  },
+  "date_created": "20:57:42,18/05/2022",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "19/05/2022",
+  "time_start": "16:05",
+  "date_end": "19/05/2022,18:50:0",
+  "fromLocation": "Phố Yên Thế, Điện Biên, Dien Bien Ward, Ba Dinh District, Hanoi, 111103, Vietnam",
+  "toLocation": "Việt Trì, Phu Tho Province, Vietnam",
+  "deliveryArea": "Hà Nội và các tỉnh lân cận",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Phan Khiết Thuần"
+  ],
+  "totalOrder": 9045750,
+  "order_detail_id": {
+    "$oid": "6543aad642b0417fb3d53524"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T13:57:42.639Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T13:57:42.639Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6543ab7b42b0417fb3d53545"
+  },
+  "order_id": "49688889",
+  "customer_id": {
+    "$oid": "654286dc676dab262ce7aaf1"
+  },
+  "date_created": "21:00:27,3/01/2023",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "05/01/2023",
+  "time_start": "15:05",
+  "date_end": "05/01/2023,18:50:0",
+  "fromLocation": "Tam Dương District, Vinh Phuc Province, Vietnam",
+  "toLocation": "Hoàng Đan, Tam Dương District, Vinh Phuc Province, Vietnam",
+  "deliveryArea": "Hà Nội và các tỉnh lân cận",
+  "vehicle_name": "Xe van 500kg (x2)",
+  "driver_name": [
+    "Cao Văn Nam",
+    "Phan Trí Đức"
+  ],
+  "totalOrder": 1955200,
+  "order_detail_id": {
+    "$oid": "6543ab7b42b0417fb3d53543"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T14:00:27.877Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T14:00:27.877Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6543ae5f42b0417fb3d53569"
+  },
+  "order_id": "34281211",
+  "customer_id": {
+    "$oid": "654286dc676dab262ce7aaf1"
+  },
+  "date_created": "21:12:47,19/04/2023",
+  "service_name": "Chuyển nhà trọn gói",
+  "date_start": "20/04/2023",
+  "time_start": "11:00",
+  "date_end": "20/04/2023,15:50:0",
+  "fromLocation": "Kiến An, Phường Ngọc Sơn, Quận Kiến An, Haiphong, Vietnam",
+  "toLocation": "Hải Dương Province, Vietnam",
+  "deliveryArea": "Hà Nội và các tỉnh lân cận",
+  "vehicle_name": "Xe van 500kg (x1)",
+  "driver_name": [
+    "Phan Trí Đức"
+  ],
+  "totalOrder": 2178600,
+  "order_detail_id": {
+    "$oid": "6543ae5f42b0417fb3d53567"
+  },
+  "status": "Đã hoàn thành",
+  "reason_cancel": null,
+  "createdAt": {
+    "$date": "2023-11-02T14:12:47.268Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-02T14:12:47.268Z"
+  },
+  "__v": 0
+}]
