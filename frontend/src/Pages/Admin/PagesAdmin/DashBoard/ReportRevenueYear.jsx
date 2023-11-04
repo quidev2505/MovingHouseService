@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Image, Table, Avatar, Input, Space, Button, Tag } from "antd";
+import {
+  Image,
+  Table,
+  Avatar,
+  Input,
+  Space,
+  Button,
+  Tag,
+  DatePicker,
+} from "antd";
 import Highlighter from "react-highlight-words";
 import {
   EditOutlined,
@@ -21,8 +30,20 @@ import * as XLSX from "xlsx"; //Xử lý file Excel
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
 import "sweetalert2/src/sweetalert2.scss";
+
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+
+const { RangePicker } = DatePicker;
+
+const dateFormat = "DD/MM/YYYY";
+
 function ReportVenueYear({ yearPass }) {
   const [reportVenueYearData, setReportVenueYearData] = useState([]);
+  // /Khoảng thời gian
+  const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
   //Tổng đơn theo thống kê
   const [totalReport, setTotalReport] = useState(0);
   const yearPassFilter = yearPass === "2023" ? yearPass : "202" + yearPass;
@@ -332,8 +353,20 @@ function ReportVenueYear({ yearPass }) {
     getDataVenueYear();
   }, [yearPass]);
 
+  //Thiết lập lọc theo khoảng thời gian
+  const changeRangeTime = (a, b, c) => {
+    //b là range thời gian
+    setStartRange(b[0]);
+    setEndRange(b[1]);
+  };
+
   const onChangeTable = (pagination, filters, sorter, extra) => {
-    if (filters.year_show == null && filters.order_id == null && filters.date_start == null && filters.date_end == null) {
+    if (
+      filters.year_show == null &&
+      filters.order_id == null &&
+      filters.date_start == null &&
+      filters.date_end == null
+    ) {
       //Gọi API
       getDataVenueYear();
     } else {
@@ -415,6 +448,87 @@ function ReportVenueYear({ yearPass }) {
       });
   };
 
+  const isDateInRange = (date, startDate, endDate) => {
+    // Lấy ngày, tháng, năm của ngày cần kiểm tra
+    const [day, month, year] = date.split("/");
+
+    // Lấy ngày, tháng, năm của ngày bắt đầu và ngày kết thúc
+    const [startDay, startMonth, startYear] = startDate.split("/");
+    const [endDay, endMonth, endYear] = endDate.split("/");
+
+    // console.log(date)
+    // console.log(startDate)
+    // console.log(endDate)
+
+    //Trường hợp chỉ đưa về 1 giá trị đúng và các trường hợp còn lại sai hết
+
+    // So sánh ngày, tháng, năm của ngày cần kiểm tra với ngày bắt đầu và ngày kết thúc
+    if (day >= startDay && day <= endDay) {
+      // Nếu ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
+      if (month >= startMonth || (month === startMonth && day >= startDay)) {
+        // Nếu tháng cần kiểm tra lớn hơn hoặc bằng tháng bắt đầu, hoặc tháng bằng tháng bắt đầu và ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
+        if (month <= endMonth || (month === endMonth && day <= endDay)) {
+          // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng kết thúc, hoặc tháng bằng tháng kết thúc và ngày cần kiểm tra nhỏ hơn hoặc bằng ngày kết thúc
+          if (year <= endYear && year >= startYear) {
+            // Nếu năm cần kiểm tra nằm trong khoảng năm của ngày bắt đầu và ngày kết thúc
+            return true;
+          }
+        }
+      } else {
+        // Nếu tháng cần kiểm tra nhỏ hơn tháng bắt đầu
+        return false;
+      }
+    } else {
+      //Nếu ngày bắt đầu và ngày kết thúc đều nhỏ hơn ngày hiện tại và tháng bắng nhau
+      if (
+        day > startDay &&
+        day > endDay &&
+        month == startMonth &&
+        month == endMonth
+      ) {
+        return false;
+      }
+
+      //Nếu tháng bằng nhau
+      if (day < startDay && month == startMonth) {
+        return false;
+      } else {
+        // Nếu ngày cần kiểm tra nhỏ hơn ngày bắt đầu
+        if (month >= startMonth && month <= endMonth) {
+          // Nếu tháng cần kiểm tra lớn hơn tháng bắt đầu
+          return true;
+        } else {
+          // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng bắt đầu
+          return false;
+        }
+      }
+    }
+
+    return false;
+  };
+
+  //Lọc theo khoảng thời gian
+  const filterRangeDate = () => {
+    // console.log(reportVenueMonthData);
+    // console.log(startRange)
+    // console.log(endRange);
+    if (startRange == "" && endRange == "") {
+      getDataVenueYear();
+    }
+    let total = 0;
+    let arr_result = [];
+    reportVenueYearData.forEach((item, index) => {
+      if (isDateInRange(item.date_end.split(",")[0], startRange, endRange)) {
+        total += item.totalOrder;
+        arr_result.push(item);
+      }
+    });
+
+    setTotalReport(total);
+
+    setReportVenueYearData(arr_result);
+  };
+
   return (
     <>
       {/* KHU VỰC DỮ LIỆU THỐNG KÊ DẠNG BẢNG */}
@@ -431,10 +545,15 @@ function ReportVenueYear({ yearPass }) {
           style={{
             alignItems: "center",
             padding: "10px",
-            justifyContent:"space-between"
+            justifyContent: "space-between",
           }}
         >
-          <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <Tag
               icon={<SyncOutlined spin />}
               color="#ff671d"
@@ -451,33 +570,77 @@ function ReportVenueYear({ yearPass }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                marginTop:"5px"
+                marginTop: "5px",
               }}
             >
               Tổng doanh thu:&nbsp;
               {totalReport.toLocaleString()} đ
             </Tag>
-          </div>
 
-          {/* Nút xuất ra file excel */}
-          <div
-            onClick={() => download_data_xslx()}
-            style={{
-              cursor: "pointer",
-              width: "40px",
-              height: "40px",
-              backgroundColor: "green",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "white",
-              borderRadius: "5px",
-              marginBottom: "10px",
-              marginRight: "20px",
-              marginTop: "10px",
-            }}
-          >
-            <FileExcelOutlined />
+            {/* Nút xuất ra file excel */}
+            <div
+              onClick={() => download_data_xslx()}
+              style={{
+                cursor: "pointer",
+                width: "40px",
+                height: "40px",
+                backgroundColor: "green",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                borderRadius: "5px",
+                marginBottom: "10px",
+                marginRight: "20px",
+                marginTop: "10px",
+              }}
+            >
+              <FileExcelOutlined />
+            </div>
+          </div>
+          {/* Thống kê theo khoảng thời gian từ đâu đến đâu. */}
+          <div>
+            <div
+              style={{
+                border: "1px solid orange",
+                borderRadius: "10px",
+                margin: "10px",
+                padding: "10px",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "15px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {" "}
+                <FilterOutlined />
+                &nbsp; Khoảng thời gian{" "}
+                <SearchOutlined
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "orange",
+                    color: "white",
+                    padding: "10px",
+                    marginLeft: "10px",
+                  }}
+                  onClick={() => filterRangeDate()}
+                />
+              </p>
+              <div className="d-flex">
+                <RangePicker
+                  defaultValue={[
+                    dayjs("09/09/2023", dateFormat),
+                    dayjs("19/11/2023", dateFormat),
+                  ]}
+                  format={dateFormat}
+                  onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
+                />
+              </div>
+            </div>
           </div>
         </div>
         <Table

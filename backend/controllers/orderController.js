@@ -108,6 +108,19 @@ const orderController = {
             res.status(501).json(e)
         }
     },
+    //View All Order
+    viewAllOrderDetail: async (req, res) => {
+        try {
+            const data_all_order_detail = await OrderDetail.find();
+            if (data_all_order_detail) {
+                res.status(201).json(data_all_order)
+            } else {
+                res.status(501).json(e)
+            }
+        } catch (e) {
+            res.status(501).json(e)
+        }
+    },
     //View DeliveryArea
     viewDeliveryArea: async (req, res) => {
         try {

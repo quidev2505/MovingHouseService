@@ -50,11 +50,24 @@ const orderDetailSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    //Phí phát sinh
+    //Tên phí phát sinh
     more_fee_name: {
         type: String,
         default: null
     },
+    //Giá phí phát sinh
     more_fee_price: {
+        type: Number,
+        default: 0
+    },
+    //Phí đền bù (nếu có)
+    offset_fee_name: {
+        type: String,
+        default: null
+    },
+    //Giá phí đền bù
+    offset_fee_price: {
         type: Number,
         default: 0
     },

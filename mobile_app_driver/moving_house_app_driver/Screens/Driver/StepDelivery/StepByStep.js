@@ -382,8 +382,13 @@ function StepByStep({ route, navigation }) {
             useEffect(() => {
                 setTitleHome(props.title)
             }, [])
+
             const [contentFeeMore, setContentFeeMore] = useState("") //Nội dung phí phát sinh
             const [sumFeeMore, setSumFeeMore] = useState("0") //Tổng phí phát sinh
+
+            const [contentFeeOffset, setContentFeeOffset] = useState("") //Nội dung phí đền bù
+            const [sumFeeOffset, setSumFeeOffset] = useState("0") //Tổng phí đền bù
+
 
 
             //Xác nhận đã thanh toán hóa đơn
@@ -393,7 +398,9 @@ function StepByStep({ route, navigation }) {
                     await axios.patch(`${api_url}/v1/order/updateonefield_order_detail/${data_order.order_detail_id}`, {
                         more_fee_name: contentFeeMore,
                         more_fee_price: sumFeeMore,
-                        totalOrderNew: Number(data_order.totalOrder + Number(sumFeeMore)),
+                        offset_fee_name: contentFeeOffset,
+                        offset_fee_price: sumFeeOffset,
+                        totalOrderNew: Number(data_order.totalOrder + Number(sumFeeMore) - Number(sumFeeOffset)),
                         payment_status: "Đã thanh toán"
                     })
 
@@ -431,7 +438,7 @@ function StepByStep({ route, navigation }) {
 
 
                     <View>
-                        <Text style={{ fontSize: 18, color: "green", marginTop: 15 }}>Nhập vào nội dung phí phát sinh (nếu có):</Text>
+                        <Text style={{ fontSize: 18, color: "green", marginTop: 15 }}>Nhập vào nội dung chi phí phát sinh (nếu có):</Text>
 
                         <Text>
                             <RNTextArea
@@ -439,7 +446,7 @@ function StepByStep({ route, navigation }) {
                                 placeholderTextColor="black"
                                 exceedCharCountColor="#990606"
                                 placeholder={"Viết vào các chi phí phát sinh cách nhau bởi dấu phẩy,..."}
-                                style={{ height: 170, borderColor: "#ccc", borderWidth: 1, width: 350, borderRadius: 10 }}
+                                style={{ height: 120, borderColor: "#ccc", borderWidth: 1, width: 350, borderRadius: 10 }}
                                 onChangeText={(text) => setContentFeeMore(text)}
                             />
                         </Text>
@@ -447,6 +454,27 @@ function StepByStep({ route, navigation }) {
                         <Input
                             value={sumFeeMore}
                             onChangeText={(value) => { setSumFeeMore(value) }}
+                            placeholder="Tổng cộng phí phát sinh"
+                        />
+                    </View>
+
+                    <View>
+                        <Text style={{ fontSize: 18, color: "red", marginTop: 15 }}>Nhập vào nội dung phí đền bù hư hỏng (nếu có):</Text>
+
+                        <Text>
+                            <RNTextArea
+                                maxCharLimit={150}
+                                placeholderTextColor="black"
+                                exceedCharCountColor="#990606"
+                                placeholder={"Viết vào các chi phí đền bù cách nhau bởi dấu phẩy,..."}
+                                style={{ height: 120, borderColor: "#ccc", borderWidth: 1, width: 350, borderRadius: 10 }}
+                                onChangeText={(text) => setContentFeeOffset(text)}
+                            />
+                        </Text>
+
+                        <Input
+                            value={sumFeeOffset}
+                            onChangeText={(value) => { setSumFeeOffset(value) }}
                             placeholder="Tổng cộng phí phát sinh"
                         />
                     </View>
@@ -472,11 +500,15 @@ function StepByStep({ route, navigation }) {
                             </View>
                             <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                                 <Text style={{ fontWeight: "bold", fontSize: 15 }}>Chi phí phát sinh: </Text>
-                                <Text style={{ fontSize: 20, color: "orange" }}>{Number(sumFeeMore).toLocaleString()} đ</Text>
+                                <Text style={{ fontSize: 20, color: "orange" }}>+ {Number(sumFeeMore).toLocaleString()} đ</Text>
+                            </View>
+                            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                                <Text style={{ fontWeight: "bold", fontSize: 15 }}>Chi phí đền bù: </Text>
+                                <Text style={{ fontSize: 20, color: "red" }}>- {Number(sumFeeOffset).toLocaleString()} đ</Text>
                             </View>
                             <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                                 <Text style={{ fontWeight: "bold", fontSize: 20 }}>Tổng chi phí phải trả: </Text>
-                                <Text style={{ fontSize: 25, color: "green" }}>{Number(data_order.totalOrder + Number(sumFeeMore)).toLocaleString()} đ</Text>
+                                <Text style={{ fontSize: 25, color: "green" }}>{Number(data_order.totalOrder + Number(sumFeeMore) - Number(sumFeeOffset)).toLocaleString() } đ</Text>
                             </View>
                         </View>
                     </View>
