@@ -27,8 +27,8 @@ const http = require('http');
 
 
 
-//Socket.io
-const { Server } = require('socket.io'); // Add this
+// //Socket.io
+// const { Server } = require('socket.io'); // Add this
 
 //Cors
 const cors = require("cors");
@@ -36,7 +36,7 @@ const cors = require("cors");
 //Connect to mongodb Atlas
 const mongoose = require('mongoose')
 
-const url = process.env.MONGODB_URI_ATLAS;
+const url = process.env.MONGODB_URI;
 
 const connectionParams = {
     useNewUrlParser: true,

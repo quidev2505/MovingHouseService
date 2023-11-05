@@ -203,16 +203,20 @@
   "payment_method": "Thanh toán cho tài xế",
   "totalOrder": 12487350,
   "vehicle_price": 3209850,
-  "totalOrderNew": 0,
+  "totalOrderNew": 11487350,
   "note_driver": "Giao nhanh",
-  "payment_status": "Chưa thanh toán",
+  "payment_status": "Đã thanh toán",
   "createdAt": {
     "$date": "2023-10-02T15:45:41.878Z"
   },
   "updatedAt": {
-    "$date": "2023-10-02T15:45:41.878Z"
+    "$date": "2023-11-04T15:28:41.548Z"
   },
-  "__v": 0
+  "__v": 0,
+  "more_fee_name": "phí xe cộ, chờ đợi",
+  "more_fee_price": 500000,
+  "offset_fee_name": "hỏng 1 cái bàn",
+  "offset_fee_price": 1500000
 },
 {
   "_id": {
@@ -2372,240 +2376,6 @@
   },
   "updatedAt": {
     "$date": "2023-11-02T03:09:20.248Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "654331abde4c59cb88899b6b"
-  },
-  "distance": "199.82 km",
-  "duration": "5 giờ 7 phút",
-  "fromLocation_detail": "An Giang",
-  "toLocation_detail": "Bạc Liêu",
-  "man_power_quantity": 2,
-  "man_power_price": 740000,
-  "moving_fee": [
-    {
-      "name": "Bốc xếp tầng trệt 1 chiều (75.000 đ)",
-      "price": 75000
-    },
-    {
-      "name": "Phí chờ (25.000 đ/ 30 phút)",
-      "price": 25000
-    }
-  ],
-  "service_fee": [
-    {
-      "name": "Thùng Carton (50.000 đ/ Thùng)",
-      "price": 50000
-    },
-    {
-      "name": "Màng bọc PE (20.000 đ/ Cuộn)",
-      "price": 20000
-    },
-    {
-      "name": "Băng dính (10.000 đ/ Cuộn)",
-      "price": 10000
-    },
-    {
-      "name": "Dây buộc (10.000 đ/ Cuộn)",
-      "price": 10000
-    },
-    {
-      "name": "Xe nâng (500.000 đ/ Ca)",
-      "price": 500000
-    },
-    {
-      "name": "Đóng gói đồ đạc (300.000 đ/ Thùng)",
-      "price": 300000
-    },
-    {
-      "name": "Tháo lắp đồ đạc (1.000.000 đ/ Người)",
-      "price": 1000000
-    },
-    {
-      "name": "Nâng cẩu (5.000.000 đ/ Ca)",
-      "price": 5000000
-    },
-    {
-      "name": "Phí bảo hiểm đồ đạc (1.500.000 đ/ Món)",
-      "price": 1500000
-    }
-  ],
-  "item_detail": [
-    "Sofa (x1)",
-    "Bàn ghế (x1)"
-  ],
-  "payment_method": "Thanh toán cho tài xế",
-  "totalOrder": 14225500,
-  "more_fee_name": null,
-  "more_fee_price": 0,
-  "vehicle_price": 4995500,
-  "totalOrderNew": 0,
-  "note_driver": "Giao nhanh",
-  "payment_status": "Chưa thanh toán",
-  "createdAt": {
-    "$date": "2023-11-02T05:20:43.485Z"
-  },
-  "updatedAt": {
-    "$date": "2023-11-02T05:20:43.485Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "65433228abcffd0e62367dc6"
-  },
-  "distance": "199.82 km",
-  "duration": "5 giờ 7 phút",
-  "fromLocation_detail": "An Giang",
-  "toLocation_detail": "Bạc Liêu",
-  "man_power_quantity": 2,
-  "man_power_price": 740000,
-  "moving_fee": [
-    {
-      "name": "Bốc xếp tầng trệt 1 chiều (75.000 đ)",
-      "price": 75000
-    },
-    {
-      "name": "Phí chờ (25.000 đ/ 30 phút)",
-      "price": 25000
-    }
-  ],
-  "service_fee": [
-    {
-      "name": "Thùng Carton (50.000 đ/ Thùng)",
-      "price": 50000
-    },
-    {
-      "name": "Màng bọc PE (20.000 đ/ Cuộn)",
-      "price": 20000
-    },
-    {
-      "name": "Băng dính (10.000 đ/ Cuộn)",
-      "price": 10000
-    },
-    {
-      "name": "Dây buộc (10.000 đ/ Cuộn)",
-      "price": 10000
-    },
-    {
-      "name": "Xe nâng (500.000 đ/ Ca)",
-      "price": 500000
-    },
-    {
-      "name": "Đóng gói đồ đạc (300.000 đ/ Thùng)",
-      "price": 300000
-    },
-    {
-      "name": "Tháo lắp đồ đạc (1.000.000 đ/ Người)",
-      "price": 1000000
-    },
-    {
-      "name": "Nâng cẩu (5.000.000 đ/ Ca)",
-      "price": 5000000
-    },
-    {
-      "name": "Phí bảo hiểm đồ đạc (1.500.000 đ/ Món)",
-      "price": 1500000
-    }
-  ],
-  "item_detail": [
-    "Sofa (x1)",
-    "Bàn ghế (x1)"
-  ],
-  "payment_method": "Thanh toán cho tài xế",
-  "totalOrder": 14225500,
-  "more_fee_name": null,
-  "more_fee_price": 0,
-  "vehicle_price": 4995500,
-  "totalOrderNew": 0,
-  "note_driver": "Giao nhanh",
-  "payment_status": "Chưa thanh toán",
-  "createdAt": {
-    "$date": "2023-11-02T05:22:48.081Z"
-  },
-  "updatedAt": {
-    "$date": "2023-11-02T05:22:48.081Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "6543323f3d280e2a9b3c1b3c"
-  },
-  "distance": "199.82 km",
-  "duration": "5 giờ 7 phút",
-  "fromLocation_detail": "An Giang",
-  "toLocation_detail": "Bạc Liêu",
-  "man_power_quantity": 2,
-  "man_power_price": 740000,
-  "moving_fee": [
-    {
-      "name": "Bốc xếp tầng trệt 1 chiều (75.000 đ)",
-      "price": 75000
-    },
-    {
-      "name": "Phí chờ (25.000 đ/ 30 phút)",
-      "price": 25000
-    }
-  ],
-  "service_fee": [
-    {
-      "name": "Thùng Carton (50.000 đ/ Thùng)",
-      "price": 50000
-    },
-    {
-      "name": "Màng bọc PE (20.000 đ/ Cuộn)",
-      "price": 20000
-    },
-    {
-      "name": "Băng dính (10.000 đ/ Cuộn)",
-      "price": 10000
-    },
-    {
-      "name": "Dây buộc (10.000 đ/ Cuộn)",
-      "price": 10000
-    },
-    {
-      "name": "Xe nâng (500.000 đ/ Ca)",
-      "price": 500000
-    },
-    {
-      "name": "Đóng gói đồ đạc (300.000 đ/ Thùng)",
-      "price": 300000
-    },
-    {
-      "name": "Tháo lắp đồ đạc (1.000.000 đ/ Người)",
-      "price": 1000000
-    },
-    {
-      "name": "Nâng cẩu (5.000.000 đ/ Ca)",
-      "price": 5000000
-    },
-    {
-      "name": "Phí bảo hiểm đồ đạc (1.500.000 đ/ Món)",
-      "price": 1500000
-    }
-  ],
-  "item_detail": [
-    "Sofa (x1)",
-    "Bàn ghế (x1)"
-  ],
-  "payment_method": "Thanh toán cho tài xế",
-  "totalOrder": 14225500,
-  "more_fee_name": null,
-  "more_fee_price": 0,
-  "vehicle_price": 4995500,
-  "totalOrderNew": 0,
-  "note_driver": "Giao nhanh",
-  "payment_status": "Chưa thanh toán",
-  "createdAt": {
-    "$date": "2023-11-02T05:23:11.785Z"
-  },
-  "updatedAt": {
-    "$date": "2023-11-02T05:23:11.785Z"
   },
   "__v": 0
 },

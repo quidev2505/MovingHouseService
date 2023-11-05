@@ -78,7 +78,7 @@
   "service_name": "Chuyển nhà tự đóng gói",
   "date_start": "23/10/2023",
   "time_start": "09:05",
-  "date_end": "22:45:41,2/10/2023",
+  "date_end": "23/10/2023,11:22:0",
   "fromLocation": "Tỉnh Trà Vinh, Việt Nam",
   "toLocation": "Thành phố Cần Thơ, Việt Nam",
   "vehicle_name": "Xe tải 500kg (x2)",
@@ -86,17 +86,17 @@
     "Nguyễn Trọng Tú",
     "Đặng Thế Thành"
   ],
-  "totalOrder": 12487350,
+  "totalOrder": 12987350,
   "order_detail_id": {
     "$oid": "651ae5a536c4eabc76697bfc"
   },
-  "status": "Đang thực hiện",
+  "status": "Đã hoàn thành",
   "reason_cancel": null,
   "createdAt": {
     "$date": "2023-10-02T15:45:41.906Z"
   },
   "updatedAt": {
-    "$date": "2023-11-03T16:33:51.496Z"
+    "$date": "2023-11-04T15:28:44.599Z"
   },
   "__v": 0,
   "order_receiver": "Nguyễn Trọng Tú"
