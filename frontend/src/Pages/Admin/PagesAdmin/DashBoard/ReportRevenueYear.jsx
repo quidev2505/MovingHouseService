@@ -54,6 +54,12 @@ function ReportVenueYear({ yearPass }) {
       var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
       var arr_order = call_api_order.data;
 
+      //Tính tổng chi phí, lợi nhuận (lợi nhuận = doanh thu - chi phí)
+      var call_api_order_detail = await axios.get(
+        `/v1/order/viewAllOrderDetail`
+      );
+      var arr_order_detail = call_api_order_detail.data;
+
       //Xử lý những đơn đã hoàn thành và date_end != null
       //Tính doanh thu theo từng tháng
       let arr_solve = [];
@@ -72,6 +78,11 @@ function ReportVenueYear({ yearPass }) {
             date_end: item.date_end,
             year_show: item.date_start.split("/")[2],
             totalOrder: item.totalOrder,
+            moreFeeName: arr_order_detail[index]?.more_fee_name,
+            moreFeePrice: arr_order_detail[index]?.more_fee_price,
+            offsetFeeName: arr_order_detail[index]?.offset_fee_name,
+            offsetFeePrice: arr_order_detail[index]?.offset_fee_price,
+            profit: arr_order_detail[index]?.totalOrderNew,
           };
           totalReportCal += item.totalOrder;
           arr_solve.push(ob);
@@ -88,6 +99,11 @@ function ReportVenueYear({ yearPass }) {
             date_end: item.date_end,
             year_show: item.date_start.split("/")[2],
             totalOrder: item.totalOrder,
+            moreFeeName: arr_order_detail[index]?.more_fee_name,
+            moreFeePrice: arr_order_detail[index]?.more_fee_price,
+            offsetFeeName: arr_order_detail[index]?.offset_fee_name,
+            offsetFeePrice: arr_order_detail[index]?.offset_fee_price,
+            profit: arr_order_detail[index]?.totalOrderNew,
           };
           totalReportCal += item.totalOrder;
           arr_solve.push(ob);
@@ -330,6 +346,63 @@ function ReportVenueYear({ yearPass }) {
       align: "center",
     },
     {
+      title: "Phí phát sinh",
+      dataIndex: "moreFeeName",
+      key: "moreFeeName",
+      render: (moreFeeName) => (
+        <td
+          style={{
+            fontWeight: "400",
+          }}
+        >
+          {moreFeeName || "[Không có]"}
+        </td>
+      ),
+    },
+    {
+      title: "Chi phí phát sinh",
+      dataIndex: "moreFeePrice",
+      key: "moreFeePrice",
+      render: (moreFeePrice) => (
+        <td
+          style={{
+            fontWeight: "400",
+          }}
+        >
+          {moreFeePrice?.toLocaleString() || 0} đ
+        </td>
+      ),
+    },
+    {
+      title: "Phí đền bù",
+      dataIndex: "offsetFeeName",
+      key: "offsetFeeName",
+      render: (offsetFeeName) => (
+        <td
+          style={{
+            fontWeight: "400",
+          }}
+        >
+          {offsetFeeName || "[Không có]"}
+        </td>
+      ),
+    },
+    {
+      title: "Chi phí đền bù",
+      dataIndex: "offsetFeePrice",
+      key: "offsetFeePrice",
+      render: (offsetFeePrice) => (
+        <td
+          style={{
+            fontWeight: "600",
+            color: "#E64C00",
+          }}
+        >
+          {offsetFeePrice?.toLocaleString() || 0} đ
+        </td>
+      ),
+    },
+    {
       title: "Tổng đơn hàng",
       dataIndex: "totalOrder",
       key: "totalOrder",
@@ -339,10 +412,27 @@ function ReportVenueYear({ yearPass }) {
         <td
           style={{
             fontWeight: "600",
-            color: "#f2c92d",
+            color: "#49C1C1",
           }}
         >
           {totalOrder.toLocaleString()} đ
+        </td>
+      ),
+    },
+    {
+      title: "Lợi nhuận",
+      dataIndex: "profit",
+      key: "profit",
+      // defaultSortOrder: "ascend",
+      sorter: (a, b) => a.totalOrder - b.totalOrder,
+      render: (profit) => (
+        <td
+          style={{
+            fontWeight: "600",
+            color: "#FFA500",
+          }}
+        >
+          {profit?.toLocaleString() || 0} đ
         </td>
       ),
     },

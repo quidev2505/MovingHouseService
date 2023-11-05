@@ -51,18 +51,26 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   const [dayFilter, setDayFilter] = useState("");
 
   //Tổng đơn theo thống kê
-  const [totalReport, setTotalReport] = useState(0);
+  const [totalReport, setTotalReport] = useState(0); //Tổng doanh thu
+  const [totalReportProfit, setTotalReportProfit] = useState(0); //Tổng lợi nhuận
+  const [totalReportFee, setTotalReportFee] = useState(0); //Tổng chi phí
   const monthPassFilter = monthPass < 10 ? "0" + monthPass : monthPass;
 
   const getDataVenueMonth = async () => {
     var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
     var arr_order = call_api_order.data;
 
+    //Tính tổng chi phí, lợi nhuận (lợi nhuận = doanh thu - chi phí)
+    var call_api_order_detail = await axios.get(`/v1/order/viewAllOrderDetail`);
+    var arr_order_detail = call_api_order_detail.data;
+
     //Xử lý những đơn đã hoàn thành và date_end != null
     //Tính doanh thu theo từng tháng
     let arr_solve = [];
     let count = 0;
     var totalReportCal = 0;
+    var totalReportCalProfit = 0;
+    var totalReportCalFee = 0;
     arr_order.forEach((item, index) => {
       if (
         item.status === "Đã hoàn thành" &&
@@ -78,9 +86,18 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           date_end: item.date_end,
           month_show: item.date_start.split("/")[1],
           totalOrder: item.totalOrder,
+          moreFeeName: arr_order_detail[index]?.more_fee_name,
+          moreFeePrice: arr_order_detail[index]?.more_fee_price,
+          offsetFeeName: arr_order_detail[index]?.offset_fee_name,
+          offsetFeePrice: arr_order_detail[index]?.offset_fee_price,
+          profit: arr_order_detail[index]?.totalOrderNew,
         };
 
         totalReportCal += item.totalOrder;
+        totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
+        totalReportCalFee += Number(
+          isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+        );
         arr_solve.push(ob);
       } else if (
         monthPassFilter == "00" &&
@@ -96,14 +113,25 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           date_end: item.date_end,
           month_show: item.date_start.split("/")[1],
           totalOrder: item.totalOrder,
+          moreFeeName: arr_order_detail[index]?.more_fee_name,
+          moreFeePrice: arr_order_detail[index]?.more_fee_price,
+          offsetFeeName: arr_order_detail[index]?.offset_fee_name,
+          offsetFeePrice: arr_order_detail[index]?.offset_fee_price,
+          profit: arr_order_detail[index]?.totalOrderNew,
         };
 
         totalReportCal += item.totalOrder;
+        totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
+        totalReportCalFee += Number(
+          isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+        );
         arr_solve.push(ob);
       }
     });
 
     setTotalReport(totalReportCal);
+    setTotalReportProfit(totalReportCalProfit);
+    setTotalReportFee(totalReportCalFee);
 
     setReportVenueMonthData(arr_solve);
   };
@@ -377,6 +405,63 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
       align: "center",
     },
     {
+      title: "Phí phát sinh",
+      dataIndex: "moreFeeName",
+      key: "moreFeeName",
+      render: (moreFeeName) => (
+        <td
+          style={{
+            fontWeight: "400",
+          }}
+        >
+          {moreFeeName || "[Không có]"}
+        </td>
+      ),
+    },
+    {
+      title: "Chi phí phát sinh",
+      dataIndex: "moreFeePrice",
+      key: "moreFeePrice",
+      render: (moreFeePrice) => (
+        <td
+          style={{
+            fontWeight: "400",
+          }}
+        >
+          {moreFeePrice?.toLocaleString() || 0} đ
+        </td>
+      ),
+    },
+    {
+      title: "Phí đền bù",
+      dataIndex: "offsetFeeName",
+      key: "offsetFeeName",
+      render: (offsetFeeName) => (
+        <td
+          style={{
+            fontWeight: "400",
+          }}
+        >
+          {offsetFeeName || "[Không có]"}
+        </td>
+      ),
+    },
+    {
+      title: "Chi phí đền bù",
+      dataIndex: "offsetFeePrice",
+      key: "offsetFeePrice",
+      render: (offsetFeePrice) => (
+        <td
+          style={{
+            fontWeight: "600",
+            color: "#E64C00",
+          }}
+        >
+          {offsetFeePrice?.toLocaleString() || 0} đ
+        </td>
+      ),
+    },
+    {
       title: "Tổng đơn hàng",
       dataIndex: "totalOrder",
       key: "totalOrder",
@@ -386,10 +471,27 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
         <td
           style={{
             fontWeight: "600",
-            color: "#f2c92d",
+            color: "#49C1C1",
           }}
         >
           {totalOrder.toLocaleString()} đ
+        </td>
+      ),
+    },
+    {
+      title: "Lợi nhuận",
+      dataIndex: "profit",
+      key: "profit",
+      // defaultSortOrder: "ascend",
+      sorter: (a, b) => a.totalOrder - b.totalOrder,
+      render: (profit) => (
+        <td
+          style={{
+            fontWeight: "600",
+            color: "#FFA500",
+          }}
+        >
+          {profit?.toLocaleString() || 0} đ
         </td>
       ),
     },
@@ -606,7 +708,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
     // console.log(startRange)
     // console.log(endRange);
     if (startRange == "" && endRange == "") {
-      getDataVenueMonth()
+      getDataVenueMonth();
     }
     let total = 0;
     let arr_result = [];
@@ -757,6 +859,30 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           >
             Tổng doanh thu:&nbsp;
             {totalReport.toLocaleString()} đ
+          </Tag>
+          <Tag
+            icon={<SyncOutlined spin />}
+            color="#4bc0c0"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: 5,
+            }}
+          >
+            Tổng lợi nhuận:&nbsp;
+            {totalReportProfit.toLocaleString()} đ
+          </Tag>
+          <Tag
+            icon={<SyncOutlined spin />}
+            color="#4bc0c0"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: 5,
+            }}
+          >
+            Tổng chi phí:&nbsp;
+            {totalReportFee.toLocaleString()} đ
           </Tag>
           {/* Nút xuất ra file excel */}
           <div

@@ -31,6 +31,8 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  PointElement,
+  LineElement,
 } from "chart.js";
 import { Bar, getElementsAtEvent } from "react-chartjs-2";
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
@@ -51,7 +53,9 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  PointElement,
+  LineElement
 );
 
 export const options = {
@@ -66,7 +70,7 @@ export const options = {
       text: "",
     },
     datalabels: {
-      display: true,
+      display: false,
       color: "white",
       formatter: function(value, context) {
         return value.toLocaleString();
@@ -179,14 +183,58 @@ function DashBoardAdmin() {
     0,
   ]);
 
+  //Lưu trữ mảng chứa chi phí
+  const [arrTotalFee, setArrTotalFee] = useState([
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ]);
+
+  //Lưu trữ mảng chứa lợi nhuận
+  const [arrProfit, setArrProfit] = useState([
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ]);
+
   //Dữ liệu biểu đồ
   const dataChart = {
     labels,
     datasets: [
       {
-        label: "Tổng doanh thu tháng",
+        label: "Tổng doanh thu",
         data: arrTotalOrder,
-        backgroundColor: "#4bc0c0",
+        backgroundColor: "rgb(75, 192, 192)",
+      },
+      {
+        label: "Tổng chi phí",
+        data: arrTotalFee,
+        backgroundColor: "rgb(255, 85, 0)",
+      },
+      {
+        type: "line",
+        label: "Tổng lợi nhuận",
+        data: arrProfit,
+        borderColor: "orange",
+        fill: false,
       },
     ],
   };
@@ -197,14 +245,32 @@ function DashBoardAdmin() {
   //Lưu trữ mảng chứa doanh thu
   const [arrTotalOrderYear, setArrTotalOrderYear] = useState([0, 0, 0]);
 
+  //Lưu trữ mảng chứa chi phí
+  const [arrTotalFeeYear, setArrTotalFeeYear] = useState([0, 0, 0]);
+
+  //Lưu trữ mảng chứa lợi nhuận
+  const [arrProfitYear, setArrProfitYear] = useState([0, 0, 0]);
+
   //Dữ liệu biểu đồ năm
   const dataChartYear = {
     labels,
     datasets: [
       {
-        label: "Tổng doanh thu năm",
+        label: "Tổng doanh thu",
         data: arrTotalOrderYear,
-        backgroundColor: "#ff671d",
+        backgroundColor: "rgb(75, 192, 192)",
+      },
+      {
+        label: "Tổng chi phí",
+        data: arrTotalFeeYear,
+        backgroundColor: "rgb(255, 85, 0)",
+      },
+      {
+        type: "line",
+        label: "Tổng lợi nhuận",
+        data: arrProfitYear,
+        borderColor: "orange",
+        fill: false,
       },
     ],
   };
@@ -325,6 +391,10 @@ function DashBoardAdmin() {
     var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
     var arr_order = call_api_order.data;
 
+    //Tính tổng chi phí, lợi nhuận (lợi nhuận = doanh thu - chi phí)
+    var call_api_order_detail = await axios.get(`/v1/order/viewAllOrderDetail`);
+    var arr_order_detail = call_api_order_detail.data;
+
     //Tính tổng số tài xế
     let call_api_driver = await axios.get(`/v1/driver/show_all_driver`);
     let arr_driver = call_api_driver.data;
@@ -345,34 +415,72 @@ function DashBoardAdmin() {
         //Mảng chứa dữ liệu các tháng
         const arr_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+        //Tính chi phí các tháng
+        const arr_monthly_fee = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        //Tính lợi nhuận các tháng
+        const arr_monthly_profit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
         //Tính doanh thu theo từng tháng
         arr_order.forEach((item, index) => {
           if (item.status === "Đã hoàn thành" && item.date_end !== null) {
             let year_split = item.date_end.split(",")[0].split("/")[2];
             if (year_split === yearFilter) {
+              //Tính doanh thu
               let split_month = item.date_end.split(",")[0].split("/")[1];
               arr_monthly[split_month - 1] += item.totalOrder;
+              //Tính chi phí
+              for (let i = 0; i < arr_order_detail.length; i++) {
+                if (item.order_detail_id == arr_order_detail[i]._id) {
+                  arr_monthly_fee[split_month - 1] +=
+                    arr_order_detail[i].more_fee_price;
+                  //Tính lợi nhuận
+                  arr_monthly_profit[split_month - 1] +=
+                    arr_order_detail[i].totalOrderNew;
+                }
+              }
             }
           }
         });
 
         setArrTotalOrder(arr_monthly); //Đưa dữ liệu tháng vô biểu đồ
+        setArrTotalFee(arr_monthly_fee); //Tính toán chi phí theo tháng
+        setArrProfit(arr_monthly_profit); //Tính toán lợi nhuận theo tháng
         break;
       }
       case "THỐNG KÊ DOANH THU THEO NĂM": {
         //Mảng chứa dữ liệu các năm (3 năm)
         const arr_year = [0, 0, 0];
 
+        //Tính chi phí các tháng
+        const arr_year_fee = [0, 0, 0];
+
+        //Tính lợi nhuận các tháng
+        const arr_year_profit = [0, 0, 0];
+
         //Tính doanh thu theo từng năm
         arr_order.forEach((item, index) => {
           if (item.status === "Đã hoàn thành" && item.date_end !== null) {
             let split_year = item.date_end.split(",")[0].split("/")[2];
-            console.log(split_year);
+
             arr_year[split_year.split("")[3] - 1] += item.totalOrder;
+
+            //Tính chi phí
+            for (let i = 0; i < arr_order_detail.length; i++) {
+              if (item.order_detail_id == arr_order_detail[i]._id) {
+                arr_year_fee[split_year.split("")[3] - 1] +=
+                  arr_order_detail[i].more_fee_price;
+                //Tính lợi nhuận
+                arr_year_profit[split_year.split("")[3] - 1] +=
+                  arr_order_detail[i].totalOrderNew;
+              }
+            }
           }
         });
 
         setArrTotalOrderYear(arr_year); //Đưa dữ liệu năm vô biểu đồ
+        setArrTotalFeeYear(arr_year_fee); //Tính toán chi phí theo năm
+        setArrProfitYear(arr_year_profit); //Tính toán lợi nhuận theo năm
         break;
       }
       case "THỐNG KÊ ĐƠN HÀNG": {
@@ -1442,6 +1550,7 @@ function DashBoardAdmin() {
                           ( Đơn vị: VNĐ)
                         </p>
                         <Bar
+                          type="bar"
                           ref={chartRef}
                           options={options}
                           data={dataChart}

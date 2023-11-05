@@ -15,7 +15,7 @@ router.post('/create_order', orderController.createOrder)
 // View All Order
 router.get('/viewAllOrder', orderController.viewAllOrder)
 
-// View All Order Detail
+// View All Order Detail With Status Already Payment
 router.get('/viewAllOrderDetail', orderController.viewAllOrderDetail)
 
 // Xem khu vực vận chuyển

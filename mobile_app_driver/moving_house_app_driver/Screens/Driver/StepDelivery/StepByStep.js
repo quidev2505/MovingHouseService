@@ -406,7 +406,6 @@ function StepByStep({ route, navigation }) {
 
                     //Cập nhật đơn hàng
                     await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
-                        totalOrder: Number(data_order.totalOrder + Number(sumFeeMore)),
                         status: "Thanh toán hóa đơn"
                     });
 

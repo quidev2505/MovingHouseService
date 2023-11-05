@@ -111,20 +111,21 @@ const orderController = {
     //View All Order
     viewAllOrderDetail: async (req, res) => {
         try {
-            const data_all_order_detail = await OrderDetail.find();
+            const data_all_order_detail = await OrderDetail.find({ payment_status: 'Đã thanh toán' });
             if (data_all_order_detail) {
-                res.status(201).json(data_all_order)
+                res.status(201).json(data_all_order_detail)
             } else {
                 res.status(501).json(e)
             }
         } catch (e) {
+            console.log(e)
             res.status(501).json(e)
         }
     },
     //View DeliveryArea
     viewDeliveryArea: async (req, res) => {
         try {
-            const data_all_order = await Order.find({status: "Đã hoàn thành"});
+            const data_all_order = await Order.find({ status: "Đã hoàn thành" });
             if (data_all_order) {
                 res.status(201).json(data_all_order)
             } else {
