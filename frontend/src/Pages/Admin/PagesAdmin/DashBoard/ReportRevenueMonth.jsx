@@ -53,7 +53,8 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   //Tổng đơn theo thống kê
   const [totalReport, setTotalReport] = useState(0); //Tổng doanh thu
   const [totalReportProfit, setTotalReportProfit] = useState(0); //Tổng lợi nhuận
-  const [totalReportFee, setTotalReportFee] = useState(0); //Tổng chi phí
+  const [totalReportFee, setTotalReportFee] = useState(0); //Tổng chi phí đền bù
+  const [totalReportMoreFee, setTotalReportMoreFee] = useState(0); //Tổng chi phí phát sinh
   const monthPassFilter = monthPass < 10 ? "0" + monthPass : monthPass;
 
   const getDataVenueMonth = async () => {
@@ -71,6 +72,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
     var totalReportCal = 0;
     var totalReportCalProfit = 0;
     var totalReportCalFee = 0;
+    var totalReportCalMoreFee = 0;
     arr_order.forEach((item, index) => {
       if (
         item.status === "Đã hoàn thành" &&
@@ -79,26 +81,34 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
         item.date_start.split("/")[2] == yearFilter
       ) {
         count++;
-        const ob = {
-          stt: count,
-          order_id: item.order_id,
-          date_start: item.date_start,
-          date_end: item.date_end,
-          month_show: item.date_start.split("/")[1],
-          totalOrder: item.totalOrder,
-          moreFeeName: arr_order_detail[index]?.more_fee_name,
-          moreFeePrice: arr_order_detail[index]?.more_fee_price,
-          offsetFeeName: arr_order_detail[index]?.offset_fee_name,
-          offsetFeePrice: arr_order_detail[index]?.offset_fee_price,
-          profit: arr_order_detail[index]?.totalOrderNew,
-        };
+        for (let i = 0; i < arr_order_detail.length; i++) {
+          if (arr_order_detail[i]._id == item.order_detail_id) {
+            const ob = {
+              stt: count,
+              order_id: item.order_id,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              month_show: item.date_start.split("/")[1],
+              totalOrder: item.totalOrder,
+              moreFeeName: arr_order_detail[i].more_fee_name,
+              moreFeePrice: arr_order_detail[i].more_fee_price,
+              offsetFeeName: arr_order_detail[i].offset_fee_name,
+              offsetFeePrice: arr_order_detail[i].offset_fee_price,
+              profit: arr_order_detail[i].totalOrderNew,
+            };
 
-        totalReportCal += item.totalOrder;
-        totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
-        totalReportCalFee += Number(
-          isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
-        );
-        arr_solve.push(ob);
+            totalReportCal += item.totalOrder;
+            totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
+            totalReportCalFee += Number(
+              isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+            );
+            totalReportCalMoreFee += Number(
+              isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
+            );
+            arr_solve.push(ob);
+            break;
+          }
+        }
       } else if (
         monthPassFilter == "00" &&
         item.status === "Đã hoàn thành" &&
@@ -106,32 +116,41 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
         item.date_start.split("/")[2] == yearFilter
       ) {
         count++;
-        const ob = {
-          stt: count,
-          order_id: item.order_id,
-          date_start: item.date_start,
-          date_end: item.date_end,
-          month_show: item.date_start.split("/")[1],
-          totalOrder: item.totalOrder,
-          moreFeeName: arr_order_detail[index]?.more_fee_name,
-          moreFeePrice: arr_order_detail[index]?.more_fee_price,
-          offsetFeeName: arr_order_detail[index]?.offset_fee_name,
-          offsetFeePrice: arr_order_detail[index]?.offset_fee_price,
-          profit: arr_order_detail[index]?.totalOrderNew,
-        };
+        for (let i = 0; i < arr_order_detail.length; i++) {
+          if (arr_order_detail[i]._id == item.order_detail_id) {
+            const ob = {
+              stt: count,
+              order_id: item.order_id,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              month_show: item.date_start.split("/")[1],
+              totalOrder: item.totalOrder,
+              moreFeeName: arr_order_detail[i].more_fee_name,
+              moreFeePrice: arr_order_detail[i].more_fee_price,
+              offsetFeeName: arr_order_detail[i].offset_fee_name,
+              offsetFeePrice: arr_order_detail[i].offset_fee_price,
+              profit: arr_order_detail[i].totalOrderNew,
+            };
 
-        totalReportCal += item.totalOrder;
-        totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
-        totalReportCalFee += Number(
-          isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
-        );
-        arr_solve.push(ob);
+            totalReportCal += item.totalOrder;
+            totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
+            totalReportCalFee += Number(
+              isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+            );
+            totalReportCalMoreFee += Number(
+              isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
+            );
+            arr_solve.push(ob);
+            break;
+          }
+        }
       }
     });
 
     setTotalReport(totalReportCal);
     setTotalReportProfit(totalReportCalProfit);
     setTotalReportFee(totalReportCalFee);
+    setTotalReportMoreFee(totalReportCalMoreFee);
 
     setReportVenueMonthData(arr_solve);
   };
@@ -425,7 +444,8 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
       render: (moreFeePrice) => (
         <td
           style={{
-            fontWeight: "400",
+            fontWeight: "600",
+            color: "rgb(255, 201, 121)",
           }}
         >
           {moreFeePrice?.toLocaleString() || 0} đ
@@ -851,7 +871,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           </Tag>
           <Tag
             icon={<SyncOutlined spin />}
-            color="#4bc0c0"
+            color="#2db7f5"
             style={{
               display: "flex",
               alignItems: "center",
@@ -860,9 +880,34 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
             Tổng doanh thu:&nbsp;
             {totalReport.toLocaleString()} đ
           </Tag>
+
           <Tag
             icon={<SyncOutlined spin />}
-            color="#4bc0c0"
+            color="gold"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: 5,
+            }}
+          >
+            Tổng chi phí phát sinh:&nbsp;
+            {totalReportMoreFee.toLocaleString()} đ
+          </Tag>
+          <Tag
+            icon={<SyncOutlined spin />}
+            color="red"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: 5,
+            }}
+          >
+            Tổng chi phí đền bù:&nbsp;
+            {totalReportFee.toLocaleString()} đ
+          </Tag>
+          <Tag
+            icon={<SyncOutlined spin />}
+            color="orange"
             style={{
               display: "flex",
               alignItems: "center",
@@ -871,18 +916,6 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           >
             Tổng lợi nhuận:&nbsp;
             {totalReportProfit.toLocaleString()} đ
-          </Tag>
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#4bc0c0"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: 5,
-            }}
-          >
-            Tổng chi phí:&nbsp;
-            {totalReportFee.toLocaleString()} đ
           </Tag>
           {/* Nút xuất ra file excel */}
           <div

@@ -215,6 +215,22 @@ function DashBoardAdmin() {
     0,
   ]);
 
+  //Lưu trữ mảng chứa chi phí phát sinh
+  const [arrMoreFee, setArrMoreFee] = useState([
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ]);
+
   //Dữ liệu biểu đồ
   const dataChart = {
     labels,
@@ -225,9 +241,14 @@ function DashBoardAdmin() {
         backgroundColor: "rgb(75, 192, 192)",
       },
       {
-        label: "Tổng chi phí",
+        label: "Tổng chi phí đền bù",
         data: arrTotalFee,
         backgroundColor: "rgb(255, 85, 0)",
+      },
+      {
+        label: "Tổng chi phí phát sinh",
+        data: arrMoreFee,
+        backgroundColor: "rgb(255, 201, 121)",
       },
       {
         type: "line",
@@ -261,10 +282,16 @@ function DashBoardAdmin() {
         backgroundColor: "rgb(75, 192, 192)",
       },
       {
-        label: "Tổng chi phí",
+        label: "Tổng chi phí phát sinh",
+        data: arrMoreFee,
+        backgroundColor: "rgb(255, 201, 121)",
+      },
+      {
+        label: "Tổng chi phí đền bù",
         data: arrTotalFeeYear,
         backgroundColor: "rgb(255, 85, 0)",
       },
+
       {
         type: "line",
         label: "Tổng lợi nhuận",
@@ -421,6 +448,9 @@ function DashBoardAdmin() {
         //Tính lợi nhuận các tháng
         const arr_monthly_profit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+        //Tính chi phí phát sinh
+        const arr_monthly_more_fee = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
         //Tính doanh thu theo từng tháng
         arr_order.forEach((item, index) => {
           if (item.status === "Đã hoàn thành" && item.date_end !== null) {
@@ -432,20 +462,28 @@ function DashBoardAdmin() {
               //Tính chi phí
               for (let i = 0; i < arr_order_detail.length; i++) {
                 if (item.order_detail_id == arr_order_detail[i]._id) {
-                  arr_monthly_fee[split_month - 1] +=
+                  //Tính chi phí phát sinh
+                  arr_monthly_more_fee[split_month - 1] +=
                     arr_order_detail[i].more_fee_price;
+                  //Tính chi phí đền bù
+                  arr_monthly_fee[split_month - 1] +=
+                    arr_order_detail[i].offset_fee_price;
                   //Tính lợi nhuận
                   arr_monthly_profit[split_month - 1] +=
                     arr_order_detail[i].totalOrderNew;
+                  break;
                 }
               }
             }
           }
         });
 
+        //Lợi nhuận = doanh thu + chi phí phát sinh - chi phí đền bù
         setArrTotalOrder(arr_monthly); //Đưa dữ liệu tháng vô biểu đồ
         setArrTotalFee(arr_monthly_fee); //Tính toán chi phí theo tháng
         setArrProfit(arr_monthly_profit); //Tính toán lợi nhuận theo tháng
+        setArrMoreFee(arr_monthly_more_fee); //Tính toán lợi nhuận theo tháng
+
         break;
       }
       case "THỐNG KÊ DOANH THU THEO NĂM": {
