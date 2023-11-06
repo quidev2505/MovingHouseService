@@ -266,11 +266,14 @@ function DashBoardAdmin() {
   //Lưu trữ mảng chứa doanh thu
   const [arrTotalOrderYear, setArrTotalOrderYear] = useState([0, 0, 0]);
 
-  //Lưu trữ mảng chứa chi phí
+  //Lưu trữ mảng chứa chi phí đền bù
   const [arrTotalFeeYear, setArrTotalFeeYear] = useState([0, 0, 0]);
 
   //Lưu trữ mảng chứa lợi nhuận
   const [arrProfitYear, setArrProfitYear] = useState([0, 0, 0]);
+
+  //Lưu trữ mảng chứa chi phí phát sinh
+  const [arrMoreFeeYear, setArrMoreFeeYear] = useState([0, 0, 0]);
 
   //Dữ liệu biểu đồ năm
   const dataChartYear = {
@@ -283,7 +286,7 @@ function DashBoardAdmin() {
       },
       {
         label: "Tổng chi phí phát sinh",
-        data: arrMoreFee,
+        data: arrMoreFeeYear,
         backgroundColor: "rgb(255, 201, 121)",
       },
       {
@@ -480,9 +483,9 @@ function DashBoardAdmin() {
 
         //Lợi nhuận = doanh thu + chi phí phát sinh - chi phí đền bù
         setArrTotalOrder(arr_monthly); //Đưa dữ liệu tháng vô biểu đồ
-        setArrTotalFee(arr_monthly_fee); //Tính toán chi phí theo tháng
+        setArrTotalFee(arr_monthly_fee); //Tính toán chi phí đền bù theo tháng
         setArrProfit(arr_monthly_profit); //Tính toán lợi nhuận theo tháng
-        setArrMoreFee(arr_monthly_more_fee); //Tính toán lợi nhuận theo tháng
+        setArrMoreFee(arr_monthly_more_fee); //Tính toán phí phát sinh theo tháng
 
         break;
       }
@@ -490,11 +493,14 @@ function DashBoardAdmin() {
         //Mảng chứa dữ liệu các năm (3 năm)
         const arr_year = [0, 0, 0];
 
-        //Tính chi phí các tháng
+        //Tính chi phí đền bù các năm
         const arr_year_fee = [0, 0, 0];
 
         //Tính lợi nhuận các tháng
         const arr_year_profit = [0, 0, 0];
+
+        //Tính chi phí phát sinh các năm
+        const arr_year_more_fee = [0, 0, 0];
 
         //Tính doanh thu theo từng năm
         arr_order.forEach((item, index) => {
@@ -506,8 +512,12 @@ function DashBoardAdmin() {
             //Tính chi phí
             for (let i = 0; i < arr_order_detail.length; i++) {
               if (item.order_detail_id == arr_order_detail[i]._id) {
-                arr_year_fee[split_year.split("")[3] - 1] +=
+                //Tính chi phí phát sinh
+                arr_year_more_fee[split_year.split("")[3] - 1] +=
                   arr_order_detail[i].more_fee_price;
+                //Tính chi phí đền bù
+                arr_year_fee[split_year.split("")[3] - 1] +=
+                  arr_order_detail[i].offset_fee_price;
                 //Tính lợi nhuận
                 arr_year_profit[split_year.split("")[3] - 1] +=
                   arr_order_detail[i].totalOrderNew;
@@ -519,6 +529,8 @@ function DashBoardAdmin() {
         setArrTotalOrderYear(arr_year); //Đưa dữ liệu năm vô biểu đồ
         setArrTotalFeeYear(arr_year_fee); //Tính toán chi phí theo năm
         setArrProfitYear(arr_year_profit); //Tính toán lợi nhuận theo năm
+        setArrMoreFeeYear(arr_year_more_fee); //Tính toán phí phát sinh theo tháng
+
         break;
       }
       case "THỐNG KÊ ĐƠN HÀNG": {

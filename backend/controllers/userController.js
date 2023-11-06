@@ -1,39 +1,56 @@
 const User = require('../models/User');
+const Customer = require('../models/Customer');
+
 const bcrypt = require('bcrypt');
 const userController = {
     //Get_all_user
     get_all_user: async (req, res) => {
-        try{
+        try {
             const user = await User.find();
-            res.status(200).json(user);
-        }catch(e){
+            const customer = await Customer.find();
+
+            const result_new = user.map((item, index) => {
+                const ob = {
+                    _id: item._id,
+                    email: item.email,
+                    fullname: item.fullname,
+                    phonenumber: item.phonenumber,
+                    status: item.status,
+                    address: customer[index].address,
+                    gender: customer[index].gender
+                }
+                return ob;
+            })
+
+            res.status(200).json(result_new);
+        } catch (e) {
             res.status(500).json(e);
         }
     },
     //Lock account Customer
-    lockAccountCustomer: async(req, res) => {
-        try{
+    lockAccountCustomer: async (req, res) => {
+        try {
             const id_user = req.params.id;
             const check = await User.updateOne({ _id: id_user }, req.body, { new: true })
-            if(check){
+            if (check) {
                 res.status(200).json('success')
-            }else{
+            } else {
                 res.status(500).json('error');
             }
-        }catch(e){
+        } catch (e) {
             res.status(500).json(e)
         }
     },
     //GET ALL USERS
-    getAllUsers: async(req, res)=>{
-        try{
+    getAllUsers: async (req, res) => {
+        try {
             const user = await User.find();
             res.status(200).json(user);
-        }catch(err){
+        } catch (err) {
             res.status(500).json(err);
         }
     },
-    
+
     //DELETE USER
     deleteUser: async (req, res) => {
         try {

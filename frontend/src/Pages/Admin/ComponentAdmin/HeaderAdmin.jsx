@@ -34,6 +34,8 @@ function HeaderAdmin() {
     (state) => state.admin.login?.currentAdmin
   );
 
+  console.log(check_admin_login)
+
   const items = [
     {
       label: (

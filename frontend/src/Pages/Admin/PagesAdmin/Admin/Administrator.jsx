@@ -435,6 +435,30 @@ function Administrator() {
       key: "fullname",
     },
     {
+      title: "Giới tính",
+      dataIndex: "gender",
+      key: "gender",
+      filters: [
+        {
+          text: "Nam",
+          value: "Nam",
+        },
+        {
+          text: "Nữ",
+          value: "Nữ",
+        },
+      ],
+      onFilter: (value, record) => String(record.gender).indexOf(value) == 0,
+      render: (gender, id) => (
+        <div className="d-flex">
+          <Tag color={gender == "Nam" ? "green" : "volcano"} key={gender}>
+            {gender == "Nam" ? "Nam" : "Nữ"}
+          </Tag>
+        </div>
+      ),
+    },
+
+    {
       title: "Email",
       dataIndex: "email",
       key: "email",
@@ -445,6 +469,12 @@ function Administrator() {
       dataIndex: "phonenumber",
       key: "phonenumber",
       ...getColumnSearchProps("phonenumber"),
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+      ...getColumnSearchProps("address"),
     },
     {
       title: "Thao tác",
@@ -902,6 +932,8 @@ function Administrator() {
                     email: item.email,
                     fullname: item.fullname,
                     phonenumber: item.phonenumber,
+                    address: item.address,
+                    gender: item.gender,
                     status: item.status,
                     status_account: arr_data_account_status[index],
                     avatar: arrAvatar[index],
@@ -919,6 +951,7 @@ function Administrator() {
                 ? item
                 : word_Change_VN.toLowerCase().includes(word_search);
             });
+
             setDataSource2(new_arr);
           })
           .catch((e) => {

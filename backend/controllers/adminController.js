@@ -289,7 +289,9 @@ const adminController = {
             }
 
             const check_update = await Admin.findByIdAndUpdate(id, req.body);
-            if (check_update) {
+            const check_update_adminAccount = await AdminAccount.findOneAndUpdate({username:req.body.username}, {avatar: req.body.avatar});
+            
+            if (check_update && check_update_adminAccount) {
                 res.status(201).json('Update success')
             } else {
                 res.status(501).json('Update fail')

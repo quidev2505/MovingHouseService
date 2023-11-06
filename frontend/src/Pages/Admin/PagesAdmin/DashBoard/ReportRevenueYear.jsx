@@ -46,8 +46,10 @@ function ReportVenueYear({ yearPass }) {
   const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
   //Tổng đơn theo thống kê
   const [totalReport, setTotalReport] = useState(0);
+  const [totalReportProfit, setTotalReportProfit] = useState(0); //Tổng lợi nhuận
+  const [totalReportFee, setTotalReportFee] = useState(0); //Tổng chi phí đền bù
+  const [totalReportMoreFee, setTotalReportMoreFee] = useState(0); //Tổng chi phí phát sinh
   const yearPassFilter = yearPass === "2023" ? yearPass : "202" + yearPass;
-  var totalReportCal = 0;
 
   const getDataVenueYear = async () => {
     try {
@@ -64,6 +66,10 @@ function ReportVenueYear({ yearPass }) {
       //Tính doanh thu theo từng tháng
       let arr_solve = [];
       let count = 0;
+      var totalReportCal = 0;
+      var totalReportCalProfit = 0;
+      var totalReportCalFee = 0;
+      var totalReportCalMoreFee = 0;
       arr_order.forEach((item, index) => {
         if (
           item.status === "Đã hoàn thành" &&
@@ -71,45 +77,70 @@ function ReportVenueYear({ yearPass }) {
           item.date_start.split("/")[2] == yearPassFilter
         ) {
           count++;
-          const ob = {
-            stt: count,
-            order_id: item.order_id,
-            date_start: item.date_start,
-            date_end: item.date_end,
-            year_show: item.date_start.split("/")[2],
-            totalOrder: item.totalOrder,
-            moreFeeName: arr_order_detail[index]?.more_fee_name,
-            moreFeePrice: arr_order_detail[index]?.more_fee_price,
-            offsetFeeName: arr_order_detail[index]?.offset_fee_name,
-            offsetFeePrice: arr_order_detail[index]?.offset_fee_price,
-            profit: arr_order_detail[index]?.totalOrderNew,
-          };
-          totalReportCal += item.totalOrder;
-          arr_solve.push(ob);
+          for (let i = 0; i < arr_order_detail.length; i++) {
+            if (arr_order_detail[i]._id == item.order_detail_id) {
+              const ob = {
+                stt: count,
+                order_id: item.order_id,
+                date_start: item.date_start,
+                date_end: item.date_end,
+                year_show: item.date_start.split("/")[2],
+                totalOrder: item.totalOrder,
+                moreFeeName: arr_order_detail[i].more_fee_name,
+                moreFeePrice: arr_order_detail[i].more_fee_price,
+                offsetFeeName: arr_order_detail[i].offset_fee_name,
+                offsetFeePrice: arr_order_detail[i].offset_fee_price,
+                profit: arr_order_detail[i].totalOrderNew,
+              };
+              totalReportCal += item.totalOrder;
+              totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
+              totalReportCalFee += Number(
+                isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+              );
+              totalReportCalMoreFee += Number(
+                isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
+              );
+              arr_solve.push(ob);
+            }
+          }
         } else if (
           yearPassFilter == "2024" &&
           item.status === "Đã hoàn thành" &&
           item.date_end !== null
         ) {
           count++;
-          const ob = {
-            stt: count,
-            order_id: item.order_id,
-            date_start: item.date_start,
-            date_end: item.date_end,
-            year_show: item.date_start.split("/")[2],
-            totalOrder: item.totalOrder,
-            moreFeeName: arr_order_detail[index]?.more_fee_name,
-            moreFeePrice: arr_order_detail[index]?.more_fee_price,
-            offsetFeeName: arr_order_detail[index]?.offset_fee_name,
-            offsetFeePrice: arr_order_detail[index]?.offset_fee_price,
-            profit: arr_order_detail[index]?.totalOrderNew,
-          };
-          totalReportCal += item.totalOrder;
-          arr_solve.push(ob);
+          for (let i = 0; i < arr_order_detail.length; i++) {
+            if (arr_order_detail[i]._id == item.order_detail_id) {
+              const ob = {
+                stt: count,
+                order_id: item.order_id,
+                date_start: item.date_start,
+                date_end: item.date_end,
+                year_show: item.date_start.split("/")[2],
+                totalOrder: item.totalOrder,
+                moreFeeName: arr_order_detail[i].more_fee_name,
+                moreFeePrice: arr_order_detail[i].more_fee_price,
+                offsetFeeName: arr_order_detail[i].offset_fee_name,
+                offsetFeePrice: arr_order_detail[i].offset_fee_price,
+                profit: arr_order_detail[i].totalOrderNew,
+              };
+              totalReportCal += item.totalOrder;
+              totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
+              totalReportCalFee += Number(
+                isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+              );
+              totalReportCalMoreFee += Number(
+                isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
+              );
+              arr_solve.push(ob);
+            }
+          }
         }
       });
       setTotalReport(totalReportCal);
+      setTotalReportProfit(totalReportCalProfit);
+      setTotalReportFee(totalReportCalFee);
+      setTotalReportMoreFee(totalReportCalMoreFee);
       setReportVenueYearData(arr_solve);
     } catch (e) {
       console.log(e);
@@ -665,6 +696,42 @@ function ReportVenueYear({ yearPass }) {
             >
               Tổng doanh thu:&nbsp;
               {totalReport.toLocaleString()} đ
+            </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="gold"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: 5,
+              }}
+            >
+              Tổng chi phí phát sinh:&nbsp;
+              {totalReportMoreFee.toLocaleString()} đ
+            </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="red"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: 5,
+              }}
+            >
+              Tổng chi phí đền bù:&nbsp;
+              {totalReportFee.toLocaleString()} đ
+            </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="orange"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: 5,
+              }}
+            >
+              Tổng lợi nhuận:&nbsp;
+              {totalReportProfit.toLocaleString()} đ
             </Tag>
 
             {/* Nút xuất ra file excel */}
