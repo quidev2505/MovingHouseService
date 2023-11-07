@@ -123,20 +123,22 @@ function ChatWithCustomer({ route, navigation }) {
                 <View style={{ position: "absolute", bottom: 15, backgroundColor:"transparent" }}>
                     {/* Ô nhập tìm kiếm theo mã đơn hàng */}
                     <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 310, height: 30, margin: 10, marginLeft: 25, marginTop: 30 }}>
-                        <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderRadius: 10 }}>
+                        <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderTopLeftRadius:10, borderBottomLeftRadius:10 }}>
                             <Input
                                 value={inputChat}
                                 onChangeText={(e) => setInputChat(e)}
                                 placeholder='Nhập vào tin nhắn...'
                             />
-                            <TouchableOpacity style={{ borderColor: "#ccc", marginLeft: 15, marginBottom: -25, opacity: inputChat !== '' ? 1 : 0.2 }} onPress={() => sendMess()}>
+  <View style={{backgroundColor:"white", height:60, display:"flex", paddingTop:30}}>
+                          <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -10, opacity: inputChat !== '' ? 1 : 0.2 }} onPress={() => sendMess()}>
                                 <Ionicons
-                                    style={{ color: "black", marginTop: -15 }}
+                                    style={{ color: inputChat !== '' ? 'green' : 'black', marginTop: -15 }}
                                     name="send-sharp"
                                     size={35}
                                 />
                             </TouchableOpacity>
                         </View>
+</View>
                     </View>
                 </View>
             </SafeAreaView>

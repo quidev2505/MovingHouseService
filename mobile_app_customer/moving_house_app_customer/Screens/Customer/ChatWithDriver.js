@@ -30,10 +30,10 @@ function ChatWithDriver({ route, navigation }) {
         setCustomerName(customer_name)
 
         //Gọi tin nhắn
-setInterval(()=>{
-      call_mess(order_id)
-}, 2000)
-  
+        setInterval(() => {
+            call_mess(order_id)
+        }, 1500)
+
     }, [])
 
     const [domMess, setDomMess] = useState()
@@ -81,17 +81,17 @@ setInterval(()=>{
         const timeNow = Date.now()
 
         const timeSolve = new Date()
- if (inputChat !== '') {
-  set(ref(db, 'chatTogether/' + orderId + '/' + timeNow), {
-            role: 'customer',
-            content: inputChat,
-            senderName: customerName,
-            time: `${timeSolve.getHours()}:${timeSolve.getMinutes()} - ${timeSolve.getDate()}/${timeSolve.getMonth() + 1}/${timeSolve.getFullYear()}`
-        });
+        if (inputChat !== '') {
+            set(ref(db, 'chatTogether/' + orderId + '/' + timeNow), {
+                role: 'customer',
+                content: inputChat,
+                senderName: customerName,
+                time: `${timeSolve.getHours()}:${timeSolve.getMinutes()} - ${timeSolve.getDate()}/${timeSolve.getMonth() + 1}/${timeSolve.getFullYear()}`
+            });
 
-        setInputChat("")
-}
-      
+            setInputChat("")
+        }
+
     }
 
     return (
@@ -109,30 +109,33 @@ setInterval(()=>{
                         <Text></Text>
                     </View>
                 </View>
-<ScrollView>
-                <View style={{marginTop:5, marginBottom:80}}>
+                <ScrollView>
+                    <View style={{ marginTop: 5, marginBottom: 80 }}>
 
-               {domMess}
+                        {domMess}
 
-     
-                </View>
-</ScrollView>
+
+                    </View>
+                </ScrollView>
                 <View style={{ position: "absolute", bottom: 15 }}>
                     {/* Ô nhập tìm kiếm theo mã đơn hàng */}
-                    <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 310, height: 30, margin: 10, marginLeft: 25, marginTop: 30  }}>
-                        <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderRadius: 10}}>
+                    <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 310, height: 30, margin: 10, marginLeft: 25, marginTop: 30 }}>
+                        <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderTopLeftRadius:10, borderBottomLeftRadius:10 }}>
                             <Input
                                 value={inputChat}
                                 onChangeText={(e) => setInputChat(e)}
                                 placeholder='Nhập vào tin nhắn...'
                             />
-                            <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -10, opacity: inputChat !== '' ? 1 : 0.2 }} onPress={() => sendMess()}>
-                                <Ionicons
-                                    style={{ color: "black" , marginTop: -15}}
-                                    name="send-sharp"
-                                    size={35}
-                                />
-                            </TouchableOpacity>
+                            <View style={{backgroundColor:"white", height:60, display:"flex", paddingTop:30}}>
+                                <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -10, opacity: inputChat !== '' ? 1 : 0.2 }} onPress={() => sendMess()}>
+                                    <Ionicons
+                                        style={{ color: inputChat !== '' ? 'green' : 'black', marginTop: -15 }}
+                                        name="send-sharp"
+                                        size={35}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
                     </View>
                 </View>

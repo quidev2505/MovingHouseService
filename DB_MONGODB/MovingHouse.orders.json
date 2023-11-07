@@ -17,6 +17,7 @@
   "driver_name": [
     "Nguyễn Trọng Tú"
   ],
+  "order_receiver": "Nguyễn Trọng Tú",
   "totalOrder": 9680000,
   "order_detail_id": {
     "$oid": "651982111fce88ae877de030"
@@ -51,6 +52,7 @@
   "driver_name": [
     "Nguyễn Trọng Tú"
   ],
+  "order_receiver": "Nguyễn Trọng Tú",
   "totalOrder": 5636000,
   "order_detail_id": {
     "$oid": "651a2acf499cc2d233683a74"
@@ -86,7 +88,7 @@
     "Nguyễn Trọng Tú",
     "Đặng Thế Thành"
   ],
-  "totalOrder": 12987350,
+  "totalOrder": 12487350,
   "order_detail_id": {
     "$oid": "651ae5a536c4eabc76697bfc"
   },
@@ -122,7 +124,8 @@
     "Nguyễn Trọng Tú",
     "Phan Trí Đức"
   ],
-  "totalOrder": 11814500,
+  "order_receiver": "Huỳnh Công Phát",
+  "totalOrder": 11094500,
   "order_detail_id": {
     "$oid": "651c527d493e2e2b3dcb58b2"
   },
@@ -188,7 +191,8 @@
     "Huỳnh Công Phát",
     "Phan Trí Đức"
   ],
-  "totalOrder": 18855800,
+  "order_receiver": "Huỳnh Công Phát",
+  "totalOrder": 18355800,
   "order_detail_id": {
     "$oid": "651cbda4c9f3f07f2ab3fc2b"
   },
@@ -223,6 +227,7 @@
     "Phan Trí Đức",
     "Huỳnh Công Phát"
   ],
+  "order_receiver": "Phan Trí Đức",
   "totalOrder": 12874000,
   "order_detail_id": {
     "$oid": "651e6d60fa4c72d714b59ff7"
@@ -257,7 +262,8 @@
   "driver_name": [
     "Nguyễn Trọng Tú"
   ],
-  "totalOrder": 15915400,
+  "order_receiver": "Nguyễn Trọng Tú",
+  "totalOrder": 15675400,
   "order_detail_id": {
     "$oid": "651ef5efa288f0706a3bbdb1"
   },
@@ -355,6 +361,7 @@
   "driver_name": [
     "Huỳnh Công Phát"
   ],
+  "order_receiver": "Huỳnh Công Phát",
   "totalOrder": 11631500,
   "order_detail_id": {
     "$oid": "652a01095b00779b47d146d7"
@@ -389,6 +396,7 @@
   "driver_name": [
     "Huỳnh Công Phát"
   ],
+  "order_receiver": "Huỳnh Công Phát",
   "totalOrder": 11498300,
   "order_detail_id": {
     "$oid": "652a8d1d997649dfa6b81f3b"
@@ -423,6 +431,7 @@
   "driver_name": [
     "Huỳnh Công Phát"
   ],
+  "order_receiver": "Huỳnh Công Phát",
   "totalOrder": 15495500,
   "order_detail_id": {
     "$oid": "652aac2197968ac8c7edafa7"
@@ -457,6 +466,7 @@
   "driver_name": [
     "Huỳnh Công Phát"
   ],
+  "order_receiver": "Huỳnh Công Phát",
   "totalOrder": 13212000,
   "order_detail_id": {
     "$oid": "652c01da410f707294461902"
@@ -491,6 +501,7 @@
   "driver_name": [
     "Huỳnh Công Phát"
   ],
+  "order_receiver": "Huỳnh Công Phát",
   "totalOrder": 11125500,
   "order_detail_id": {
     "$oid": "652d061bc124175c9e66e162"
@@ -525,6 +536,7 @@
   "driver_name": [
     "Nguyễn Trọng Tú"
   ],
+  "order_receiver": "Nguyễn Trọng Tú",
   "totalOrder": 12735450,
   "order_detail_id": {
     "$oid": "652d13f9e8bd2f8d3bc62abf"
@@ -559,6 +571,7 @@
   "driver_name": [
     "Nguyễn Trọng Tú"
   ],
+  "order_receiver": "Nguyễn Trọng Tú",
   "totalOrder": 9902000,
   "order_detail_id": {
     "$oid": "652e8ef1c6e5f1bae9e4de80"
@@ -593,7 +606,8 @@
   "driver_name": [
     "Huỳnh Công Phát"
   ],
-  "totalOrder": 10258800,
+  "order_receiver": "Huỳnh Công Phát",
+  "totalOrder": 9958800,
   "order_detail_id": {
     "$oid": "652e9a28c6e5f1bae9e4de93"
   },
@@ -627,6 +641,7 @@
   "driver_name": [
     "Huỳnh Công Phát"
   ],
+  "order_receiver": "Huỳnh Công Phát",
   "totalOrder": 13185200,
   "order_detail_id": {
     "$oid": "652f91bda8e2e2dcae565863"
@@ -694,6 +709,7 @@
   "driver_name": [
     "Nguyễn Trọng Tú"
   ],
+  "order_receiver": "Nguyễn Trọng Tú",
   "totalOrder": 10660000,
   "order_detail_id": {
     "$oid": "65366d3e674d81545d759cf8"
@@ -761,6 +777,7 @@
   "driver_name": [
     "Huỳnh Công Phát"
   ],
+  "order_receiver": "Huỳnh Công Phát",
   "totalOrder": 11290400,
   "order_detail_id": {
     "$oid": "65373b8a76791e3e022bc4c5"
@@ -828,6 +845,7 @@
   "driver_name": [
     "Cao Văn Nam"
   ],
+  "order_receiver": "Cao Văn Nam",
   "totalOrder": 10000000,
   "order_detail_id": {
     "$oid": "65428a85676dab262ce7ab51"
@@ -862,6 +880,7 @@
   "driver_name": [
     "Đặng Thế Thành"
   ],
+  "order_receiver": "Đặng Thế Thành",
   "totalOrder": 2973500,
   "order_detail_id": {
     "$oid": "65428b6b676dab262ce7abeb"
@@ -896,6 +915,7 @@
   "driver_name": [
     "Lê Minh Tân"
   ],
+  "order_receiver": "Lê Minh Tân",
   "totalOrder": 5647500,
   "order_detail_id": {
     "$oid": "65428be0676dab262ce7ac1a"
@@ -930,6 +950,7 @@
   "driver_name": [
     "Trương Minh Nhựt"
   ],
+  "order_receiver": "Trương Minh Nhựt",
   "totalOrder": 3917800,
   "order_detail_id": {
     "$oid": "6543019e094bff92241e22eb"
@@ -964,6 +985,7 @@
   "driver_name": [
     "Phan Khiết Thuần"
   ],
+  "order_receiver": "Phan Khiết Thuần",
   "totalOrder": 2090000,
   "order_detail_id": {
     "$oid": "654303b4094bff92241e230b"
@@ -998,6 +1020,7 @@
   "driver_name": [
     "Lê Minh Tân"
   ],
+  "order_receiver": "Lê Minh Tân",
   "totalOrder": 4483250,
   "order_detail_id": {
     "$oid": "6543103f094bff92241e234a"
@@ -1032,6 +1055,7 @@
   "driver_name": [
     "Đặng Thế Thành"
   ],
+  "order_receiver": "Đặng Thế Thành",
   "totalOrder": 5478250,
   "order_detail_id": {
     "$oid": "654310e5094bff92241e2379"
@@ -1066,6 +1090,7 @@
   "driver_name": [
     "Phan Khiết Thuần"
   ],
+  "order_receiver": "Phan Khiết Thuần",
   "totalOrder": 8562000,
   "order_detail_id": {
     "$oid": "6543124a094bff92241e2390"
@@ -1100,6 +1125,7 @@
   "driver_name": [
     "Phan Khiết Thuần"
   ],
+  "order_receiver": "Phan Khiết Thuần",
   "totalOrder": 6944600,
   "order_detail_id": {
     "$oid": "654312e0094bff92241e23b0"
@@ -1135,6 +1161,7 @@
   "driver_name": [
     "Trương Minh Nhựt"
   ],
+  "order_receiver": "Trương Minh Nhựt",
   "totalOrder": 14225500,
   "order_detail_id": {
     "$oid": "654332a2e51c93c7eb5c01c2"
@@ -1169,6 +1196,7 @@
   "driver_name": [
     "Đặng Thế Thành"
   ],
+  "order_receiver": "Đặng Thế Thành",
   "totalOrder": 4452000,
   "order_detail_id": {
     "$oid": "6543a29342b0417fb3d534c7"
@@ -1203,6 +1231,7 @@
   "driver_name": [
     "Lê Minh Tân"
   ],
+  "order_receiver": "Lê Minh Tân",
   "totalOrder": 8067000,
   "order_detail_id": {
     "$oid": "6543a68c42b0417fb3d534e7"
@@ -1237,6 +1266,7 @@
   "driver_name": [
     "Phan Khiết Thuần"
   ],
+  "order_receiver": "Phan Khiết Thuần",
   "totalOrder": 9045750,
   "order_detail_id": {
     "$oid": "6543aad642b0417fb3d53524"
@@ -1272,6 +1302,7 @@
     "Cao Văn Nam",
     "Phan Trí Đức"
   ],
+  "order_receiver": "Cao Văn Nam",
   "totalOrder": 1955200,
   "order_detail_id": {
     "$oid": "6543ab7b42b0417fb3d53543"
@@ -1306,6 +1337,7 @@
   "driver_name": [
     "Phan Trí Đức"
   ],
+  "order_receiver": "Phan Trí Đức",
   "totalOrder": 2178600,
   "order_detail_id": {
     "$oid": "6543ae5f42b0417fb3d53567"

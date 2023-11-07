@@ -87,4 +87,94 @@
     "$date": "2023-11-01T17:13:00.938Z"
   },
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65491a62a4b1038bcde8e08d"
+  },
+  "fullname": "Cao Thiên Lý",
+  "email": "caothienly123@gmail.com",
+  "phonenumber": "0956623256",
+  "password": "$2b$10$xwRiSt2UTuevTzViKvwAzuy4cm53nu/6fRE9D0RIztt/vnZbmcJFq",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-11-06T16:54:58.196Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-06T16:58:43.724Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65491acca4b1038bcde8e0b1"
+  },
+  "fullname": "Huỳnh Phước Tấn",
+  "email": "huynhphuoctan123@gmail.com",
+  "phonenumber": "0954458975",
+  "password": "$2b$10$zArOkgeP31RXqKC80DVwgeYZ94jESv5Grqdn9kW17JWZUDThuhT8q",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-11-06T16:56:44.314Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-06T16:58:16.675Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65491b8ca4b1038bcde8e0f6"
+  },
+  "fullname": "Lê Thanh Tường",
+  "email": "lethanhtuong123@gmail.com",
+  "phonenumber": "0845562569",
+  "password": "$2b$10$2OOpm/lR8G/ZpsCRFHk0Z.mAMsrNblhJzVgjEYJtiZACcZjN0c.jK",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-11-06T16:59:56.729Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-06T17:00:29.469Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65491c15a4b1038bcde8e119"
+  },
+  "fullname": "Trần Công Thọ",
+  "email": "trancongtho123@gmail.com",
+  "phonenumber": "0945568788",
+  "password": "$2b$10$WESHM.J9EzT1S8LSW.4Y8uOeT9cavTCvU5jt/tK8/mmJck3DHoPvi",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-11-06T17:02:13.230Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-06T17:02:32.616Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65491c7ea4b1038bcde8e13c"
+  },
+  "fullname": "Huỳnh Thị Xuân",
+  "email": "huynhthixuan123@gmail.com",
+  "phonenumber": "0845562562",
+  "password": "$2b$10$nhHf4e3uo0iH.W5/TvHRb.XgMICV2S0opN4SG.asKZgTcd8miXm0u",
+  "otp_code": null,
+  "status": true,
+  "createdAt": {
+    "$date": "2023-11-06T17:03:58.058Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-06T17:04:30.463Z"
+  },
+  "__v": 0
 }]
