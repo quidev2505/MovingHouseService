@@ -206,7 +206,7 @@ function OrderDetailDriver({ route, navigation }) {
         let check_order_receiver = await axios.get(`${api_url}/v1/order/viewOrderWithOrderId/${dataOrderDetail.order_id}`)
 
         //Nếu mà chưa có ai nhấn trước
-        if (check_order_receiver.data.order_receiver == "") {
+        if (check_order_receiver.data.order_receiver == null) {
             const ob = {
                 appId: 13517,
                 appToken: "dgTdxEATT0B2p3KZWHDHVd",

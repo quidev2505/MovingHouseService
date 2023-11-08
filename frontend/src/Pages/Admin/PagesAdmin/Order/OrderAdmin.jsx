@@ -1305,8 +1305,15 @@ function OrderAdmin() {
                 className="d-flex"
                 style={{ justifyContent: "space-between" }}
               >
-                <p>Phí thuê xe</p>
+                <p>Phí thuê xe vận chuyển ({item.distance})</p>
                 <p>{item.vehicle_price.toLocaleString()} đ</p>
+              </div>
+              <div
+                className="d-flex"
+                style={{ justifyContent: "space-between" }}
+              >
+                <p>Nhân công bốc vác (x{item.man_power_quantity})</p>
+                <p>{item.man_power_price.toLocaleString()} đ</p>
               </div>
 
               <div>
@@ -1356,7 +1363,7 @@ function OrderAdmin() {
                     >
                       <p>{item.more_fee_name}</p>
                       <p className="fw-bold" style={{ color: "green" }}>
-                        {item.more_fee_price.toLocaleString()} đ
+                        +{item.more_fee_price.toLocaleString()} đ
                       </p>
                     </div>
                   </>
@@ -1364,13 +1371,30 @@ function OrderAdmin() {
                   ""
                 )}
 
-                <div
-                  className="d-flex"
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <p>Trạng thái thanh toán</p>
-                  <p style={{ color: "orange" }}>{item.payment_status}</p>
-                </div>
+                {/* Phí đền bù */}
+                {item.offset_fee_name !== null ? (
+                  <>
+                    <div
+                      className="d-flex"
+                      style={{ justifyContent: "space-between" }}
+                    >
+                      <p className="fw-bold">* Chi phí đền bù: </p>
+                      <p className="fw-bold"></p>
+                    </div>
+
+                    <div
+                      className="d-flex"
+                      style={{ justifyContent: "space-between" }}
+                    >
+                      <p>{item.offset_fee_name}</p>
+                      <p className="fw-bold" style={{ color: "red" }}>
+                        -{item.offset_fee_price.toLocaleString()} đ
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
 
                 <div
                   className="d-flex"
@@ -1388,6 +1412,22 @@ function OrderAdmin() {
                   <p className="fw-bold" style={{ color: "red" }}>
                     {item.totalOrderNew.toLocaleString()} đ
                   </p>
+                </div>
+
+                <div
+                  className="d-flex"
+                  style={{ justifyContent: "space-between", marginTop: "25px" }}
+                >
+                  <p
+                    style={{
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      color: "#c1b8b2",
+                    }}
+                  >
+                    TRẠNG THÁI THANH TOÁN
+                  </p>
+                  <p style={{ color: "orange" }}>{item.payment_status}</p>
                 </div>
               </div>
             </>

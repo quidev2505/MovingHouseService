@@ -2,6 +2,7 @@ const Customer = require('../models/Customer');
 const User = require('../models/User')
 const Order = require('../models/Order')
 const CommentBlog = require('../models/CommentBlog')
+const moment = require("moment");
 
 const fs = require('fs');
 
@@ -212,6 +213,7 @@ const customerController = {
                     avatar: data_customer[index].avatar,
                     gender: data_customer[index].gender,
                     customer_id: data_customer[index]._id,
+                    createdAt: moment(item.createdAt).format("DD/MM/YYYY HH:mm:ss")
                 }
             })
 

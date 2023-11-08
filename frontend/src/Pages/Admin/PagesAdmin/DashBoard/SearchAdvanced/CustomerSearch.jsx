@@ -59,6 +59,7 @@ function CustomerSearch() {
           totalOrderComplete: item.totalOrderComplete,
           totalOrderCancel: item.totalOrderCancel,
           totalPayment: item.totalPayment,
+          createdAt: item.createdAt
         };
 
         return ob;
@@ -97,6 +98,7 @@ function CustomerSearch() {
         totalOrderComplete: item.totalOrderComplete,
         totalOrderCancel: item.totalOrderCancel,
         totalPayment: item.totalPayment,
+        createdAt: item.createdAt
       };
 
       return ob;
@@ -280,6 +282,24 @@ function CustomerSearch() {
             }}
           >
             {address == null ? "Chưa cập nhật" : address}
+          </td>
+        );
+      },
+    },
+    {
+      title: "Ngày tạo tài khoản",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      ...getColumnSearchProps("createdAt"),
+      render: (createdAt) => {
+        return (
+          <td
+            style={{
+              fontWeight: "500",
+              color: "black",
+            }}
+          >
+            {createdAt}
           </td>
         );
       },

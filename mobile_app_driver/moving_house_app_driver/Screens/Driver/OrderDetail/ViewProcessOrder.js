@@ -29,7 +29,6 @@ function ViewProcessOrder({ route, navigation }) {
 
         let call_api_order = await axios.get(`${api_url}/v1/order/viewOrderWithOrderId/${order_id}`)
 
-        console.log(call_api_order)
         const statusOrder = call_api_order.data.status;
 
         //7 trạng thái

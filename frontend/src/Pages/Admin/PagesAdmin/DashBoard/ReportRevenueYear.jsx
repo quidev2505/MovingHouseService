@@ -723,7 +723,7 @@ function ReportVenueYear({ yearPass }) {
             </Tag>
             <Tag
               icon={<SyncOutlined spin />}
-              color="orange"
+              color="rgb(255, 165, 0)"
               style={{
                 display: "flex",
                 alignItems: "center",
