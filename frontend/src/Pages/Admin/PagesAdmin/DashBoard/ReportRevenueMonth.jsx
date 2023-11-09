@@ -44,8 +44,8 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   const [reportVenueMonthData, setReportVenueMonthData] = useState([]);
 
   //Khoảng thời gian
-  const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
-  const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
+  const [startRange, setStartRange] = useState(`01/01/${yearFilter}`); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState(`31/12/${yearFilter}`); //Thời gian cuối
 
   //Thống kê doanh thu ngày
   const [dayFilter, setDayFilter] = useState("");
@@ -60,9 +60,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
   // eslint-disable-next-line arrow-body-style
   const disabledDate = (current) => {
-    console.log(current)
-    // Can not select days before today and today
-    return current && current < dayjs().endOf("day");
+    return current.year() != yearFilter;
   };
 
   const getDataVenueMonth = async () => {
@@ -802,9 +800,10 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
             <div className="d-flex">
               <RangePicker
                 defaultValue={[
-                  dayjs("09/09/2023", dateFormat),
-                  dayjs("19/11/2023", dateFormat),
+                  dayjs(`01/01/${yearFilter}`, dateFormat),
+                  dayjs(`31/12/${yearFilter}`, dateFormat),
                 ]}
+                disabledDate={disabledDate}
                 format={dateFormat}
                 onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
               />

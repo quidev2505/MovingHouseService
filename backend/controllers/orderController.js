@@ -602,6 +602,7 @@ const orderController = {
                 const arr_result = api_call_order.map((item, index) => {
                     const ob = {
                         order_id: item.order_id,
+                        customer_id: item.customer_id,
                         date_created: item.date_created,
                         service_name: item.service_name,
                         date_start: item.date_start,
@@ -651,7 +652,8 @@ const orderController = {
                         status: api_call_order.status,
                         distance: arr_orderDetail.distance,
                         duration: arr_orderDetail.duration,
-                        payment_status: arr_orderDetail.payment_status
+                        payment_status: arr_orderDetail.payment_status,
+                        customer_id: api_call_order.customer_id
                     }
 
                     arr_new.push(ob);

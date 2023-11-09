@@ -42,14 +42,20 @@ const dateFormat = "DD/MM/YYYY";
 function ReportVenueYear({ yearPass }) {
   const [reportVenueYearData, setReportVenueYearData] = useState([]);
   // /Khoảng thời gian
-  const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
-  const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
+  const [startRange, setStartRange] = useState('01/01/2023'); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState('31/12/2023'); //Thời gian cuối
   //Tổng đơn theo thống kê
   const [totalReport, setTotalReport] = useState(0);
   const [totalReportProfit, setTotalReportProfit] = useState(0); //Tổng lợi nhuận
   const [totalReportFee, setTotalReportFee] = useState(0); //Tổng chi phí đền bù
   const [totalReportMoreFee, setTotalReportMoreFee] = useState(0); //Tổng chi phí phát sinh
   const yearPassFilter = yearPass === "2023" ? yearPass : "202" + yearPass;
+
+  //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
+  // eslint-disable-next-line arrow-body-style
+  const disabledDate = (current) => {
+    return current.year() != yearPassFilter;
+  };
 
   const getDataVenueYear = async () => {
     try {
@@ -790,9 +796,10 @@ function ReportVenueYear({ yearPass }) {
               <div className="d-flex">
                 <RangePicker
                   defaultValue={[
-                    dayjs("09/09/2023", dateFormat),
-                    dayjs("19/11/2023", dateFormat),
+                    dayjs('01/01/2023', dateFormat),
+                    dayjs('31/12/2023', dateFormat),
                   ]}
+                  disabledDate={disabledDate}
                   format={dateFormat}
                   onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
                 />

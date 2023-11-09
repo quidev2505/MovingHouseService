@@ -129,7 +129,9 @@ function DashBoardAdmin() {
     "THỐNG KÊ DOANH THU THEO THÁNG"
   );
 
-  const [yearFilter, setYearFilter] = useState("2023");
+  const [yearFilter, setYearFilter] = useState(
+    new Date().getFullYear().toString()
+  );
 
   //Lọc theo tên tài xế
   const [driverNameFilter, setDriverNameFilter] = useState("Tất cả");
@@ -409,7 +411,7 @@ function DashBoardAdmin() {
   const get_dashboard_data = async () => {
     setIsActive(true);
     //Lấy dữ liệu dịch vụ
-    var call_api_service = await axios.get(`/v1/service//list_service`);
+    var call_api_service = await axios.get(`/v1/service/list_service`);
     var name_service = call_api_service.data;
     const arr_service = name_service.map((item, index) => {
       return item.name;
@@ -1202,7 +1204,7 @@ function DashBoardAdmin() {
 
   //Xử lý khi click vào tháng bất kì của tháng thống kê
   const chartRef = useRef();
-  const [monthPass, setMonthPass] = useState("10");
+  const [monthPass, setMonthPass] = useState(new Date().getMonth() + 1);
 
   const onClickFilterMonth = (event) => {
     console.log(event);
@@ -1221,7 +1223,7 @@ function DashBoardAdmin() {
 
   //Xử lý khi click vào tháng bất kì của tháng thống kê
   const chartRefYear = useRef();
-  const [yearPass, setYearPass] = useState("2023");
+  const [yearPass, setYearPass] = useState(new Date().getFullYear().toString());
 
   const onClickFilterYear = (event) => {
     try {

@@ -1520,10 +1520,20 @@ function OrderAdmin() {
               let new_arr_service_driver = data_order.filter((item) => {
                 //Tìm theo tên của tài xế
                 let driverNameInDB = item.driver_name;
+
                 //Tên tài xế nhập vào
                 let driverNameInput = searchAllOrder;
-                console.log(driverNameInDB.includes(driverNameInput));
-                if (driverNameInDB.includes(driverNameInput)) {
+
+                let count = 0;
+                driverNameInDB.forEach((item1, index) => {
+                  let word_Change_VN = removeVietnameseTones(item1);
+                  let word_search = removeVietnameseTones(driverNameInput);
+                  if (word_Change_VN.toLowerCase().includes(word_search)) {
+                    count++;
+                  }
+                });
+
+                if (count > 0) {
                   return item;
                 }
               });

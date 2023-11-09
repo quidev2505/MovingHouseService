@@ -40,10 +40,18 @@ const dateFormat = "DD/MM/YYYY";
 function ReportOrder({ orderPass }) {
   const [reportOrder, setReportOrder] = useState([]);
   // /Khoảng thời gian
-  const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
-  const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
+  const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState("31/12/2023"); //Thời gian cuối
   //Tổng đơn theo thống kê
   const [totalReport, setTotalReport] = useState(0);
+
+  //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
+  // eslint-disable-next-line arrow-body-style
+  const disabledDate = (current) => {
+    return (
+      current.year() != 2023 && current.year() != 2022 && current.year() != 2021
+    );
+  };
 
   var totalReportCal = 0;
   var orderFilterNew = "";
@@ -76,7 +84,6 @@ function ReportOrder({ orderPass }) {
     try {
       var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
       var arr_order = call_api_order.data;
-
 
       //Xử lý những đơn đã hoàn thành và date_end != null
       //Tính doanh thu theo từng tháng
@@ -617,7 +624,12 @@ function ReportOrder({ orderPass }) {
           marginTop: "50px",
         }}
       >
-        <div className="d-flex" style={{ justifyContent: "space-between" }}>
+        <div
+          className="d-flex"
+          style={{
+            justifyContent: "space-between",
+          }}
+        >
           <div
             className="d-flex"
             style={{
@@ -685,9 +697,10 @@ function ReportOrder({ orderPass }) {
               <div className="d-flex">
                 <RangePicker
                   defaultValue={[
-                    dayjs("09/09/2023", dateFormat),
-                    dayjs("19/11/2023", dateFormat),
+                    dayjs("01/01/2021", dateFormat),
+                    dayjs("31/12/2023", dateFormat),
                   ]}
+                  disabledDate={disabledDate}
                   format={dateFormat}
                   onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
                 />

@@ -311,7 +311,18 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
       title: "Thuộc khu vực",
       dataIndex: "deliveryArea",
       key: "deliveryArea",
-      ...getColumnSearchProps("deliveryArea"),
+      filters: [
+        {
+          text: "TPHCM và các tỉnh lân cận",
+          value: "TPHCM và các tỉnh lân cận",
+        },
+        {
+          text: "Hà Nội và các tỉnh lân cận",
+          value: "Hà Nội và các tỉnh lân cận",
+        },
+      ],
+      onFilter: (value, record) =>
+        String(record.deliveryArea).indexOf(value) == 0,
       render: (deliveryArea) => {
         return (
           <td
