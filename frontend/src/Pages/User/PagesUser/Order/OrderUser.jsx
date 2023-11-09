@@ -56,8 +56,8 @@ function OrderUser() {
   const [orderCount, setOrderCount] = useState(0);
 
   //Khoảng thời gian
-  const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
-  const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
+  const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState("31/12/2023"); //Thời gian cuối
 
   //Khoảng tổng giá đơn hàng
   const [startRangePrice, setStartRangePrice] = useState(1); //Giá bắt đầu
@@ -145,11 +145,9 @@ function OrderUser() {
                 : word_Change_VN.toLowerCase().includes(word_search);
             });
             setOrderCount(new_arr_service.length);
-
             setDataOrder(new_arr_service);
           } else {
             setOrderCount(new_arr.length);
-
             setDataOrder(new_arr);
           }
 
@@ -1383,8 +1381,8 @@ function OrderUser() {
                 <div className="d-flex">
                   <RangePicker
                     defaultValue={[
-                      dayjs("09/09/2023", dateFormat),
-                      dayjs("19/11/2023", dateFormat),
+                      dayjs("01/01/2021", dateFormat),
+                      dayjs("31/12/2023", dateFormat),
                     ]}
                     format={dateFormat}
                     onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}

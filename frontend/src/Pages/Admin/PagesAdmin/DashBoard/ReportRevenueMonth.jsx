@@ -57,6 +57,14 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   const [totalReportMoreFee, setTotalReportMoreFee] = useState(0); //Tổng chi phí phát sinh
   const monthPassFilter = monthPass < 10 ? "0" + monthPass : monthPass;
 
+  //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
+  // eslint-disable-next-line arrow-body-style
+  const disabledDate = (current) => {
+    console.log(current)
+    // Can not select days before today and today
+    return current && current < dayjs().endOf("day");
+  };
+
   const getDataVenueMonth = async () => {
     var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
     var arr_order = call_api_order.data;
@@ -832,6 +840,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
             <DatePicker
               onChange={onChange}
               format="DD/MM/YYYY"
+              disabledDate={disabledDate}
               placeholder="Chọn ngày thống kê"
               style={{
                 width: "170px",

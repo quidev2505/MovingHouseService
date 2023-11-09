@@ -113,7 +113,7 @@ function OrderDetail({ route, navigation }) {
                   />
                 </Text>
                 <Text>
-                  {dataOrderDetail.fromLocation_detail}
+                  {dataOrderDetail.toLocation_detail}
                 </Text>
               </View>
             </View>
