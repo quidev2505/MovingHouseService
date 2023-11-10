@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 // import { createAxios } from "../../createInstance";
 // import { logOutSuccess } from "../../redux/authSlice";
 //Icon
-import { FaRegUser } from "react-icons/fa6";
+import { FaRegUser, FaPhone } from "react-icons/fa6";
 import { Tooltip } from "antd";
 import { FiLogOut } from "react-icons/fi";
 import { Badge } from "antd";
@@ -175,8 +175,12 @@ const NavBar = () => {
           <Link to="/" className="nav-link" style={{ marginLeft: "29px" }}>
             <img
               alt=""
-              src="./img/anh_logo.png"
-              style={{ width: "fit-content", height: "30px" }}
+              src="./img/logo_new_version.png"
+              style={{
+                width: "fit-content",
+                height: "30px",
+                objectFit: "cover",
+              }}
               className="img_logo"
             />
           </Link>
@@ -218,8 +222,12 @@ const NavBar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/" className="nav-link">
-                  (+84) 907532754
+                <Link
+                  to="/"
+                  className="nav-link"
+                  style={{ color: "#E16D2A", backgroundColor: "#F2E6E6", borderRadius:"20px" }}
+                >
+                  <FaPhone></FaPhone> &nbsp;(+84) 992356425
                 </Link>
               </li>
             </ul>

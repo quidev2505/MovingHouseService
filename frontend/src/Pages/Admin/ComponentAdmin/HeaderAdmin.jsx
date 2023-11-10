@@ -34,7 +34,7 @@ function HeaderAdmin() {
     (state) => state.admin.login?.currentAdmin
   );
 
-  console.log(check_admin_login)
+  console.log(check_admin_login);
 
   const items = [
     {
@@ -180,15 +180,16 @@ function HeaderAdmin() {
   return (
     <div className="HeaderAdmin">
       <img
-        className="img-fluid"
-        src="/img/logo_main.png"
+        src="./img/logo_new_version.png"
+        alt="anh_logo"
         style={{
-          width: "130px",
-          height: "34px",
-          objectFit: "contain",
+          width: "123px",
+          height: "117px",
+          objectFit: "cover",
+          marginBottom: "-38px",
+          marginTop: "-29px",
         }}
-        alt=""
-      ></img>
+      />
 
       <Space style={{ cursor: "pointer" }}>
         <Badge count={numberNotify}>

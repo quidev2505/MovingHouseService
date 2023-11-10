@@ -13,7 +13,7 @@ function HomeScreen({ navigation }) {
 
             <View style={{ marginTop: -70 }}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign:"center" }}>Chào mừng đến với dịch vụ dọn nhà</Text>
-                <Text style={{ fontSize: 60, color: "orange" }}>FAST MOVE</Text>
+                <Text style={{ fontSize:30, color: "orange", textAlign:"center" }}>FAST MOVE COMPANY</Text>
             </View>
             <View style={{height:120}}>
 

@@ -7,26 +7,26 @@ function HomeScreen({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: "white" }}>
             <Image
                 source={{ uri: 'https://img.freepik.com/free-vector/house-moving-concept-illustration_52683-45582.jpg?w=996&t=st=1696089880~exp=1696090480~hmac=03587a86c73bbc25f4027ba58bad857e0f1ff88866761cb0ce60c16589bcf592' }}
-                style={{ width: 500, height:500, marginTop: -200, objectFit:"contain" }}
+                style={{ width: 500, height: 500, marginTop: -200, objectFit: "contain" }}
                 resizeMode="contain"
             />
 
             <View style={{ marginTop: -70 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign:"center" }}>Chào mừng đến với dịch vụ dọn nhà</Text>
-                <Text style={{ fontSize: 60, color: "orange" }}>FAST MOVE</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: "center" }}>Chào mừng đến với dịch vụ dọn nhà</Text>
+                <Text style={{ fontSize: 30, color: "orange", textAlign: "center" }}>FAST MOVE COMPANY</Text>
             </View>
-            <View style={{height:120}}>
+            <View style={{ height: 120 }}>
 
             </View>
             <View>
-                <Text style={{fontSize:23, marginBottom:25, color:"#ccc"}}>Chọn loại tài khoản của bạn</Text>
+                <Text style={{ fontSize: 23, marginBottom: 25, color: "#ccc" }}>Chọn loại tài khoản của bạn</Text>
             </View>
-            <View style={{marginBottom:-50}}>
+            <View style={{ marginBottom: -50 }}>
                 {/* Tài xế */}
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DriverLogin')}>
                     <Text style={styles.buttonText}>TÀI XẾ</Text>
                 </TouchableOpacity>
-                <Divider width={1} style={{marginTop:20, marginBottom:20}}/>
+                <Divider width={1} style={{ marginTop: 20, marginBottom: 20 }} />
                 {/* Khách hàng */}
                 <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('CustomerLogin')}>
                     <Text style={styles.buttonText}>KHÁCH HÀNG</Text>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         color: 'white',
-        textAlign:"center"
+        textAlign: "center"
     },
 });
 

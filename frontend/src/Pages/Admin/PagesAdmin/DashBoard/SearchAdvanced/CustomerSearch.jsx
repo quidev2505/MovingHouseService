@@ -47,6 +47,8 @@ function CustomerSearch() {
 
       const data_get = api_call.data;
 
+
+
       const data_get_new = data_get.map((item, index) => {
         const ob = {
           key: index,

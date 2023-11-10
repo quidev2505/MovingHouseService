@@ -106,15 +106,15 @@ const adminController = {
             const transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
-                    user: "quidev2505@gmail.com",
+                    user: process.env.USER_GGMAIL,
                     pass: process.env.PASS_GGMAIL
                 }
             });
 
             const mailOptions = {
-                from: "quidev2505@gmail.com",
+                from: `Fast Move Company <${process.env.USER_GGMAIL}>`,
                 to: `${email_otp}`,
-                subject: " 🚚 [FastMove]",
+                subject: " 🚚 [Fast Move Company]",
                 html: `Mã OTP 6 số để khôi phục mật khẩu của bạn là : <h1 style="color:red">${token}</h1>`
             }
 
@@ -143,7 +143,7 @@ const adminController = {
         let dataAdmin = await Admin.findOne({ email: email_otp });
 
         let username_admin_account = dataAdmin.username;
-        let dataAdmin_Account = await AdminAccount.findOne({username: username_admin_account});
+        let dataAdmin_Account = await AdminAccount.findOne({ username: username_admin_account });
         //Get OTP in DB
         let OTP_DB = dataAdmin_Account.otp_code;
 
@@ -167,7 +167,7 @@ const adminController = {
 
         //Update New Password When user input new password
         if (dataAdmin) {
-            await AdminAccount.updateOne({username: dataAdmin.username}, { otp_code: 'null' })
+            await AdminAccount.updateOne({ username: dataAdmin.username }, { otp_code: 'null' })
             await AdminAccount.updateOne({ username: dataAdmin.username }, { password: hashed }).then((data) => {
                 res.status(200).json('Successful Change Password !')
 

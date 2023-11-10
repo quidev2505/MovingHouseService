@@ -860,93 +860,117 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
         <div
           className="d-flex"
           style={{
-            alignItems: "center",
-            padding: "10px",
-            flexDirection: "column",
             alignItems: "flex-start",
+            padding: "10px",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            border: "1px solid orange",
+            borderRadius: "5px",
+            margin: "5px",
+            marginTop: "10px",
           }}
         >
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#4bc0c0"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "5px",
-            }}
-          >
-            Số lượng đơn hàng: {reportVenueMonthData.length}
-          </Tag>
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="#2db7f5"
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            Tổng doanh thu:&nbsp;
-            {totalReport.toLocaleString()} đ
-          </Tag>
-
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="gold"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: 5,
-            }}
-          >
-            Tổng chi phí phát sinh:&nbsp;
-            {totalReportMoreFee.toLocaleString()} đ
-          </Tag>
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="red"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: 5,
-            }}
-          >
-            Tổng chi phí đền bù:&nbsp;
-            {totalReportFee.toLocaleString()} đ
-          </Tag>
-          <Tag
-            icon={<SyncOutlined spin />}
-            color="rgb(255, 165, 0)"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: 5,
-            }}
-          >
-            Tổng lợi nhuận:&nbsp;
-            {totalReportProfit.toLocaleString()} đ
-          </Tag>
-          {/* Nút xuất ra file excel */}
+          <div>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="rgb(0, 144, 247)"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "5px",
+                fontSize: "12px",
+              }}
+            >
+              Số lượng đơn hàng: {reportVenueMonthData.length}
+            </Tag>
+          </div>
           <div
-            onClick={() => download_data_xslx()}
-            style={{
-              cursor: "pointer",
-              width: "40px",
-              height: "40px",
-              backgroundColor: "green",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "white",
-              borderRadius: "5px",
-              marginBottom: "10px",
-              marginRight: "20px",
-              marginTop: "10px",
-            }}
+            className="col"
+            style={{ display: "flex", flexDirection: "column" }}
           >
-            <FileExcelOutlined />
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#22CFCF"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: "12px",
+              }}
+            >
+              Tổng doanh thu:&nbsp;
+              {totalReport.toLocaleString()} đ
+            </Tag>
+
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#FFBA53"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: 5,
+                fontSize: "11px",
+              }}
+            >
+              Tổng chi phí phát sinh:&nbsp;
+              {totalReportMoreFee.toLocaleString()} đ
+            </Tag>
+          </div>
+
+          <div
+            className="col"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#E64C00"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: "12px",
+              }}
+            >
+              Tổng chi phí đền bù:&nbsp;
+              {totalReportFee.toLocaleString()} đ
+            </Tag>
+            <Tag
+              icon={<SyncOutlined spin />}
+              color="#FFA500"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: 5,
+                fontSize: "11px",
+              }}
+            >
+              Tổng lợi nhuận:&nbsp;
+              {totalReportProfit.toLocaleString()} đ
+            </Tag>
           </div>
         </div>
+        {/* Nút xuất ra file excel */}
+        <div
+          onClick={() => download_data_xslx()}
+          style={{
+            cursor: "pointer",
+            width: "40px",
+            height: "40px",
+            backgroundColor: "green",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+            borderRadius: "5px",
+            marginBottom: "10px",
+            marginRight: "20px",
+            marginTop: "10px",
+            float: "left",
+            marginLeft: "10px",
+          }}
+        >
+          <FileExcelOutlined />
+        </div>
         <Table
+        style={{margin:"10px"}}
           columns={columnVenueMonthData}
           dataSource={reportVenueMonthData}
           onChange={onChangeTable}

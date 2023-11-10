@@ -69,13 +69,14 @@ function VerifyOTP() {
                     <div className="card-body p-5 text-center">
                       {/* //Img icon */}
                       <img
-                        src="./img/logo_main.png"
+                        src="./img/logo_new_version.png"
                         alt="anh_logo"
                         style={{
-                          width: "213px",
-                          height: "64px",
-                          objectFit: "contain",
-                          marginBottom: "5px",
+                          width: "194px",
+                          height: "176px",
+                          objectFit: "cover",
+                          marginBottom: "-38px",
+                          marginTop: "-41px",
                         }}
                       />
 

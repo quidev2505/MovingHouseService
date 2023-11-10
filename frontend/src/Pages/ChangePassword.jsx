@@ -10,7 +10,6 @@ import axios from "axios";
 import LoadingOverlayComponent from "../Components/LoadingOverlayComponent";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-
 function ChangePasword() {
   const nav = useNavigate();
   const [isActive, setIsActive] = useState(true);
@@ -99,13 +98,14 @@ function ChangePasword() {
                       <div className="card-body p-5 text-center">
                         {/* //Img icon */}
                         <img
-                          src="./img/logo_main.png"
+                          src="./img/logo_new_version.png"
                           alt="anh_logo"
                           style={{
-                            width: "213px",
-                            height: "64px",
-                            objectFit: "contain",
-                            marginBottom: "15px",
+                            width: "194px",
+                            height: "176px",
+                            objectFit: "cover",
+                            marginBottom: "-38px",
+                            marginTop: "-41px",
                           }}
                         />
                         <h3
@@ -127,8 +127,7 @@ function ChangePasword() {
                             {...register("password", {
                               required: true,
                               minLength: 8,
-                              pattern:
-                                /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/,
+                              pattern: /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/,
                             })}
                           />
 

@@ -278,15 +278,15 @@ const authControllers = {
             const transporter = nodemailer.createTransport({
                 service: "gmail",
                 auth: {
-                    user: "quidev2505@gmail.com",
+                    user: process.env.USER_GGMAIL,
                     pass: process.env.PASS_GGMAIL
                 }
             });
 
             const mailOptions = {
-                from: "quidev2505@gmail.com",
+                from: `Fast Move Company <${process.env.USER_GGMAIL}>`,
                 to: `${email_otp}`,
-                subject: " 🚚 [FastMove]",
+                subject: " 🚚 [Fast Move Company]",
                 html: `Mã OTP 6 số để khôi phục mật khẩu của bạn là : <h1 style="color:red">${token}</h1>`
             }
 

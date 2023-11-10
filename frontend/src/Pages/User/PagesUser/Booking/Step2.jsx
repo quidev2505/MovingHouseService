@@ -33,7 +33,6 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   const [toLocation, setToLocation] = useState({});
   const [to_location_detail, setToLocationDetail] = useState(""); //Địa chỉ nhận hàng cụ thể
 
-
   //Khu vực giao hàng
   const [deliveryArea, setDeliveryArea] = useState("");
 
@@ -46,23 +45,26 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   //Thiết lập địa lấy hàng FROM
   const get_location_list = async () => {
     await axios
-      .get(`https://geocode.maps.co/search?q=${locationFrom}&format=json`)
+      .get(
+        `https://rsapi.goong.io/geocode?address=${locationFrom}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
+      )
       .then((data) => {
-        let result = data.data;
+        let result = data.data.results;
         if (result) {
           let arr_result = result.map((item, index) => {
             const ob = {
-              id: item.display_name,
-              value: item.display_name,
+              id: item.formatted_address,
+              value: item.formatted_address,
               location: {
-                lat: item.lat,
-                lon: item.lon,
+                lat: item.geometry.location.lat,
+                lon: item.geometry.location.lng,
                 display_name: item.display_name,
               },
             };
             return ob;
           });
 
+          console.log(arr_result)
           setDataList(arr_result);
         }
       })
@@ -176,7 +178,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
         });
         setLocationFrom("");
       } else {
-        setDeliveryArea(checkTinh(ob.lat, ob.lng)); 
+        setDeliveryArea(checkTinh(ob.lat, ob.lng));
         setFromLocation(ob);
       }
     }
@@ -196,7 +198,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   }
 
   useEffect(() => {
-    if (locationFrom && locationFrom.length >= 3) {
+    if (locationFrom && locationFrom.length >= 6) {
       get_location_list();
     }
   }, [locationFrom]);
@@ -210,17 +212,19 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   //Thiết lập địa điểm nhận hàng TO
   const get_location_list_to = async () => {
     await axios
-      .get(`https://geocode.maps.co/search?q=${locationTo}&format=json`)
+      .get(
+        `https://rsapi.goong.io/geocode?address=${locationTo}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
+      )
       .then((data) => {
-        let result = data.data;
+        let result = data.data.results;
         if (result) {
           let arr_result = result.map((item, index) => {
             const ob = {
-              id: item.display_name,
-              value: item.display_name,
+              id: item.formatted_address,
+              value: item.formatted_address,
               location: {
-                lat: item.lat,
-                lon: item.lon,
+                lat: item.geometry.location.lat,
+                lon: item.geometry.location.lng,
                 display_name: item.display_name,
               },
             };
@@ -262,7 +266,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   };
 
   useEffect(() => {
-    if (locationTo && locationTo.length >= 3) {
+    if (locationTo && locationTo.length >= 6) {
       get_location_list_to();
     }
   }, [locationTo]);

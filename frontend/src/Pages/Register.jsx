@@ -47,7 +47,7 @@ function Register() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ChatBotIcon/>
+        <ChatBotIcon />
         <div classname="container">
           <section style={{ backgroundColor: "#f9f9f9", height: "100%" }}>
             <div className="container py-5 h-100">
@@ -73,13 +73,14 @@ function Register() {
                       >
                         {/* //Img icon */}
                         <img
-                          src="./img/logo_main.png"
+                          src="./img/logo_new_version.png"
                           alt="anh_logo"
                           style={{
-                            width: "213px",
-                            height: "64px",
-                            objectFit: "contain",
-                            marginBottom: "15px",
+                            width: "194px",
+                            height: "176px",
+                            objectFit: "cover",
+                            marginBottom: "-38px",
+                            marginTop: "-41px",
                           }}
                         />
 
@@ -115,8 +116,7 @@ function Register() {
                             {...register("email", {
                               required: true,
                               minLength: 5,
-                              pattern:
-                                /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
+                              pattern: /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
                             })}
                           />
                           {errors?.email?.type === "required" && (
@@ -169,8 +169,7 @@ function Register() {
                             {...register("password", {
                               required: true,
                               minLength: 8,
-                              pattern:
-                                /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/,
+                              pattern: /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/,
                             })}
                           />
 
@@ -204,7 +203,7 @@ function Register() {
                           )}
                         </div>
 
-                        <div style={{ textAlign: "left", marginTop:"30px" }}>
+                        <div style={{ textAlign: "left", marginTop: "30px" }}>
                           Bằng cách nhấp vào Đăng ký bên dưới, bạn đã đọc toàn
                           bộ văn bản và đồng ý với
                           <span style={{ color: "#f16622" }}>
