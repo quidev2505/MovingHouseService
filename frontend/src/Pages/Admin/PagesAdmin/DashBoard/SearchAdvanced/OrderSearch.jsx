@@ -38,6 +38,8 @@ const dateFormat = "DD/MM/YYYY";
 function OrderSearch() {
   const [order_id, setOrderId] = useState("");
 
+  const [customerName, setCustomerName] = useState("");
+
   const [dataOrder, setDataOrder] = useState([]);
 
   const [showTable, setShowTable] = useState(false);
@@ -45,8 +47,8 @@ function OrderSearch() {
   const [isActive, setIsActive] = useState(false);
 
   //Khoảng thời gian
-  const [startRange, setStartRange] = useState("09/09/2023"); //Thời gian bắt đầu
-  const [endRange, setEndRange] = useState("19/11/2023"); //Thời gian cuối
+  const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState("31/12/2023"); //Thời gian cuối
 
   //Thiết lập lọc theo khoảng thời gian
   const changeRangeTime = (a, b, c) => {
@@ -135,10 +137,10 @@ function OrderSearch() {
 
   const findData = async () => {
     //Kiểm tra xem đã nhập 1 trong 3 ô chưa
-    if (order_id == "") {
+    if (order_id == "" && customerName == "") {
       await Toast.fire({
         icon: "warning",
-        title: "Vui lòng nhập vào ô dữ liệu tìm kiếm !",
+        title: "Vui lòng nhập vào ít nhất 1 ô dữ liệu tìm kiếm !",
       });
     } else {
       setIsActive(true);
@@ -148,10 +150,13 @@ function OrderSearch() {
       try {
         const api_call = await axios.post("/v1/order/findDataOrder", {
           order_id,
+          customerName,
           typeFilter,
         });
 
         const data_get = api_call.data;
+        console.log(data_get);
+
         const data_get_new = data_get.map((item, index) => {
           const ob = {
             key: index,
@@ -169,6 +174,7 @@ function OrderSearch() {
             distance: item.distance,
             duration: item.duration,
             payment_status: item.payment_status,
+            customer_name: item.customer_name
           };
 
           return ob;
@@ -179,12 +185,13 @@ function OrderSearch() {
         setDataOrder(data_get_new);
         // setShowTable(true);
       } catch (e) {
-        if (e.response.data == "Not Found") {
-          await Toast.fire({
-            icon: "warning",
-            title: "Không có mã đơn hàng cần tìm !",
-          });
-        }
+        console.log(e);
+        // if (e.response.data == "Not Found") {
+        //   await Toast.fire({
+        //     icon: "warning",
+        //     title: "Không có mã đơn hàng cần tìm !",
+        //   });
+        // }
         setIsActive(false);
         setDataOrder([]);
       }
@@ -235,7 +242,7 @@ function OrderSearch() {
           distance: item.distance,
           duration: item.duration,
           payment_status: item.payment_status,
-          customer_name: arr_customer_name[index],
+          customer_name: arr_customer_name[index]
         };
 
         return ob;
@@ -844,7 +851,29 @@ function OrderSearch() {
               border: "1px solid #ccc",
             }}
             value={order_id}
-            onChange={(e) => setOrderId(e.target.value)}
+            onChange={(e) => setOrderId(e.target.value.trim())}
+          />
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginRight: "20px",
+          }}
+        >
+          <label>Tên khách hàng</label>
+          <input
+            placeholder="Nhập vào tên khách hàng"
+            style={{
+              width: "fit-content",
+              borderRadius: "7px",
+              padding: "5px",
+              marginTop: "3px",
+              border: "1px solid #ccc",
+            }}
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
           />
         </div>
 
@@ -932,8 +961,8 @@ function OrderSearch() {
               <div className="d-flex">
                 <RangePicker
                   defaultValue={[
-                    dayjs("09/09/2023", dateFormat),
-                    dayjs("19/11/2023", dateFormat),
+                    dayjs("01/01/2019", dateFormat),
+                    dayjs("31/12/2023", dateFormat),
                   ]}
                   format={dateFormat}
                   onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
@@ -943,12 +972,12 @@ function OrderSearch() {
           </div>
           <button
             style={{
-              backgroundColor: "blue",
+              backgroundColor: "rgb(75, 192, 192)",
               padding: "5px",
               borderRadius: "5px",
               color: "white",
               cursor: "pointer",
-              border: "1px solid blue",
+              border: "1px solid rgb(75, 192, 192)",
               marginTop: "10px",
             }}
             onClick={() => findDataRange()}

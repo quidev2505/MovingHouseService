@@ -4,7 +4,16 @@ import {
   SyncOutlined,
   FileExcelOutlined,
 } from "@ant-design/icons";
-import { Image, Table, Avatar, Tag, Input, Space, Button } from "antd";
+import {
+  Image,
+  Table,
+  Avatar,
+  Tag,
+  Input,
+  Space,
+  Button,
+  DatePicker,
+} from "antd";
 import axios from "axios";
 import Highlighter from "react-highlight-words";
 
@@ -17,6 +26,14 @@ import * as XLSX from "xlsx"; //Xử lý file Excel
 import LoadingOverlayComponent from "../../../../../Components/LoadingOverlayComponent";
 import { Toast } from "../../../../../Components/ToastColor";
 
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+
+const { RangePicker } = DatePicker;
+
+const dateFormat = "DD/MM/YYYY";
+
 function RatingService() {
   const [customerName, setCustomerName] = useState("");
   const [orderId, setOrderId] = useState("");
@@ -26,6 +43,95 @@ function RatingService() {
   const [showTable, setShowTable] = useState(false);
 
   const [isActive, setIsActive] = useState(false);
+
+  //Khoảng thời gian
+  const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState("31/12/2023"); //Thời gian cuối
+
+  //Thiết lập lọc theo khoảng thời gian
+  const changeRangeTime = (a, b, c) => {
+    //b là range thời gian
+    setStartRange(b[0]);
+    setEndRange(b[1]);
+  };
+
+  const isDateInRange = (date, startDate, endDate) => {
+    // Lấy ngày, tháng, năm của ngày cần kiểm tra
+    const [day, month, year] = date.split("/");
+
+    // Lấy ngày, tháng, năm của ngày bắt đầu và ngày kết thúc
+    const [startDay, startMonth, startYear] = startDate.split("/");
+    const [endDay, endMonth, endYear] = endDate.split("/");
+
+    // console.log(date)
+    // console.log(startDate)
+    // console.log(endDate)
+
+    //Trường hợp chỉ đưa về 1 giá trị đúng và các trường hợp còn lại sai hết
+
+    // So sánh ngày, tháng, năm của ngày cần kiểm tra với ngày bắt đầu và ngày kết thúc
+    //So sánh năm trước
+    if (year >= startYear && year <= endYear) {
+      if (day >= startDay && day <= endDay) {
+        // Nếu ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
+        if (month >= startMonth || (month === startMonth && day >= startDay)) {
+          // Nếu tháng cần kiểm tra lớn hơn hoặc bằng tháng bắt đầu, hoặc tháng bằng tháng bắt đầu và ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
+          if (month <= endMonth || (month === endMonth && day <= endDay)) {
+            // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng kết thúc, hoặc tháng bằng tháng kết thúc và ngày cần kiểm tra nhỏ hơn hoặc bằng ngày kết thúc
+            if (year <= endYear && year >= startYear) {
+              // Nếu năm cần kiểm tra nằm trong khoảng năm của ngày bắt đầu và ngày kết thúc
+              return true;
+            }
+          }
+        } else {
+          // Nếu tháng cần kiểm tra nhỏ hơn tháng bắt đầu
+          return false;
+        }
+      } else {
+        //Nếu ngày bắt đầu và ngày kết thúc đều nhỏ hơn ngày hiện tại và tháng bắng nhau
+        if (
+          day > startDay &&
+          day > endDay &&
+          month == startMonth &&
+          month == endMonth
+        ) {
+          return false;
+        }
+
+        //Nếu tháng bằng nhau
+        if (day < startDay && month == startMonth) {
+          return false;
+        } else {
+          // Nếu ngày cần kiểm tra nhỏ hơn ngày bắt đầu
+          if (month >= startMonth && month <= endMonth) {
+            // Nếu tháng cần kiểm tra lớn hơn tháng bắt đầu
+            return true;
+          } else {
+            // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng bắt đầu
+            return false;
+          }
+        }
+      }
+    }
+
+    return false;
+  };
+
+  //Tìm dữ liệu theo khoảng thời gian cho trước
+  const findDataRange = () => {
+    setIsActive(true);
+    setShowTable(true);
+
+    const arr_result = [];
+    dataRatingService.forEach((item, index) => {
+      if (isDateInRange(item.rating_date.split(",")[1], startRange, endRange)) {
+        arr_result.push(item);
+      }
+    });
+
+    setIsActive(false);
+    setDataRatingService(arr_result);
+  };
 
   const findData = async () => {
     //Kiểm tra xem đã nhập 1 trong 3 ô chưa
@@ -418,11 +524,11 @@ function RatingService() {
             [
               "Số thứ tự",
               "Tên khách hàng",
-							"Mã đơn hàng",
-							"Số sao đánh giá",
-							"Bình luận",
-							"Tên dịch vụ",
-							"Ngày đánh giá"
+              "Mã đơn hàng",
+              "Số sao đánh giá",
+              "Bình luận",
+              "Tên dịch vụ",
+              "Ngày đánh giá",
             ],
           ]);
 
@@ -564,6 +670,68 @@ function RatingService() {
             onClick={() => findDataAll()}
           >
             TẤT CẢ
+          </button>
+        </div>
+      </div>
+
+      <div
+        className="d-flex mt-5"
+        style={{
+          margin: "0 auto",
+          marginBottom: "18px",
+          border: "1px solid  rgb(37, 196, 196)",
+          padding: "20px",
+          borderRadius: "5px",
+        }}
+      >
+        {/* Nút liệt kê tất cả */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginRight: "20px",
+            justifyContent: "flex-end",
+          }}
+        >
+          <div
+            style={{
+              padding: "5px",
+              border: "1px solid #ccc",
+              boxShadow: "1px 1px 2px #ccc",
+              borderRadius: "5px",
+              display: "flex",
+              height: "fit-content",
+              display: "200px",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <h6 className="text-center fw-bold">Thời gian đánh giá</h6>
+              <div className="d-flex">
+                <RangePicker
+                  defaultValue={[
+                    dayjs("01/01/2019", dateFormat),
+                    dayjs("31/12/2023", dateFormat),
+                  ]}
+                  format={dateFormat}
+                  onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
+                />
+              </div>
+            </div>
+          </div>
+          <button
+            style={{
+              backgroundColor: "rgb(75, 192, 192)",
+              padding: "5px",
+              borderRadius: "5px",
+              color: "white",
+              cursor: "pointer",
+              border: "1px solid rgb(75, 192, 192)",
+              marginTop: "10px",
+            }}
+            onClick={() => findDataRange()}
+          >
+            TÌM KIẾM
           </button>
         </div>
       </div>
