@@ -20,6 +20,8 @@ import {
 import * as XLSX from "xlsx"; //Xử lý file Excel
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
+
+import { Toast } from "../../../../Components/ToastColor";
 function ReportDeliveryArea({ deliveryAreaPass }) {
   const [reportDeliveryArea, setReportDeliveryArea] = useState([]);
   //Tổng đơn theo thống kê
@@ -428,18 +430,20 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
   useEffect(() => {
     //Gọi API
     getDataDeliveryArea();
-  }, [deliveryAreaPass, reportDeliveryArea]);
+  }, [deliveryAreaPass]);
 
   useEffect(() => {
     //Hiển thị dữ liệu xã, huyện, tỉnh
     api_call_location();
   }, []);
 
+  const [dataLocation, setDataLocation] = useState([]);
   const api_call_location = async () => {
     const data_map = await axios.get(
       "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
     );
 
+    setDataLocation(data_map.data);
     showLocationData(data_map.data);
   };
 
@@ -451,12 +455,12 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     for (const x of data) {
       citis.options[citis.options.length] = new Option(x.Name, x.Id);
     }
+
     citis.onchange = function() {
       districts.length = 1;
       wards.length = 1;
       if (this.value != "") {
         const result = data.filter((n) => n.Id === this.value);
-        // setCity(result.Name)
 
         for (const k of result[0].Districts) {
           districts.options[districts.options.length] = new Option(
@@ -466,6 +470,7 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
         }
       }
     };
+
     districts.onchange = function() {
       wards.length = 1;
       const dataCity = data.filter((n) => n.Id === citis.value);
@@ -475,8 +480,6 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
           (n) => n.Id === this.value
         )[0].Wards;
 
-        console.log(dataWards);
-
         for (const w of dataWards) {
           wards.options[wards.options.length] = new Option(w.Name, w.Id);
         }
@@ -484,9 +487,136 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     };
   };
 
+  //Tỉnh, quận, phường
+  const [provinces, setProvinces] = useState("");
+  const [districts, setDistricts] = useState("");
+  const [wards, setWards] = useState("");
+
   const findLocation = () => {
-    // console.log(document.getElementById("city").value);
+    var citis_value = document.getElementById("city").value; //Tỉnh
+    var districts_value = document.getElementById("district").value; //Quận
+    var wards_value = document.getElementById("ward").value; //Phường
+
+    var string_location = "";
+    for (let i = 0; i < dataLocation.length; i++) {
+      if (dataLocation[i].Id == citis_value) {
+        //Bắt đầu là tỉnh
+        string_location += dataLocation[i].Name + "-";
+        //Bắt đầu tới quận
+        let dataDistrict = dataLocation[i].Districts;
+
+        for (let j = 0; j < dataDistrict.length; j++) {
+          if (dataDistrict[j].Id == districts_value) {
+            string_location += dataDistrict[j].Name + "-";
+            //Bắt đầu tới phường
+            let dataWards = dataDistrict[j].Wards;
+            for (let z = 0; z < dataWards.length; z++) {
+              if (dataWards[z].Id == wards_value) {
+                string_location += dataWards[z].Name;
+                break;
+              }
+            }
+            break;
+          }
+        }
+        break;
+      }
+    }
+
+    findLocationFinsh(string_location);
   };
+
+  //Sau khi đã nhấn tìm kiếm
+  const findLocationFinsh = async (stringLocation) => {
+    try {
+      //Xử lý phường, quận, tỉnh/thành phố
+      const split_location = stringLocation.split("-");
+      const phuong = split_location[2];
+      const quan = split_location[1];
+      const thanhpho = split_location[0];
+
+      const complete_location = `${phuong}, ${quan}, ${thanhpho}`;
+
+      const callBoundingBox = await axios.get(
+        `https://geocode.maps.co/search?q=${complete_location}&format=json`
+      );
+
+      const dataBoundingBox = callBoundingBox.data[0].boundingbox;
+      filterLocation(dataBoundingBox);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  //Lọc dữ liệu địa điểm cho đơn hàng
+  const filterLocation = async (dataBoundingBox) => {
+    try {
+      // Cho chạy vòng lặp lọc dữ liệu
+      const data_result = await Promise.all(
+        reportDeliveryArea.map(async (item) => {
+          const fromLocationData = item.fromLocation;
+          const dataFromLocation = await axios.get(
+            `https://geocode.maps.co/search?q=${fromLocationData}&format=json`,
+            {
+              debounce: 500, // Trì hoãn 500 mili giây trước khi gửi yêu cầu API
+            }
+          );
+
+          // console.group();
+          // console.log(fromLocationData);
+          const point = {
+            lat: dataFromLocation.data[0]?.lat,
+            lon: dataFromLocation.data[0]?.lon,
+          };
+
+          // Check if the point is in the bounding box
+          const isInside = isPointInBoundingBox(point, dataBoundingBox);
+          // console.log(isInside);
+          // console.groupEnd();
+
+          if (isInside == true) {
+            return item;
+          }
+        })
+      );
+
+      if (data_result) {
+        const dataNewResult = data_result.filter((item) => {
+          return item != undefined;
+        });
+
+        setReportDeliveryArea(dataNewResult);
+        let total = 0;
+        dataNewResult.forEach((item, index) => {
+          total += item.totalOrder;
+        });
+        setTotalReport(total);
+      }
+    } catch (e) {
+      await Toast.fire({
+        icon: "warning",
+        title: "Vui lòng thử lại !",
+      });
+      console.log(e);
+    }
+  };
+
+  function isPointInBoundingBox(point, boundingBox) {
+    const lat = parseFloat(point.lat);
+    const lon = parseFloat(point.lon);
+
+    const minLat = parseFloat(boundingBox[0]);
+    const maxLat = parseFloat(boundingBox[1]);
+    const minLon = parseFloat(boundingBox[2]);
+    const maxLon = parseFloat(boundingBox[3]);
+
+    // console.log(point);
+    // console.log(boundingBox);
+    // console.log(
+    //   lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon
+    // );
+    return lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon;
+  }
 
   const onChange = (pagination, filters, sorter, extra) => {
     if (
@@ -658,6 +788,8 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
                   style={{ marginRight: "10px" }}
                   class="form-select form-select-sm mb-3"
                   id="city"
+                  value={provinces}
+                  onChange={(e) => setProvinces(e.target.value)}
                   aria-label=".form-select-sm"
                 >
                   <option value="" selected>
@@ -670,6 +802,8 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
                   class="form-select form-select-sm mb-3"
                   id="district"
                   aria-label=".form-select-sm"
+                  value={districts}
+                  onChange={(e) => setDistricts(e.target.value)}
                 >
                   <option value="" selected>
                     Chọn quận huyện
@@ -681,6 +815,8 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
                   class="form-select form-select-sm mb-3"
                   id="ward"
                   aria-label=".form-select-sm"
+                  value={wards}
+                  onChange={(e) => setWards(e.target.value)}
                 >
                   <option value="" selected>
                     Chọn phường xã

@@ -797,6 +797,18 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
                 onClick={() => filterRangeDate()}
               />
             </p>
+            <p
+              style={{
+                fontSize: "10px",
+                display: "flex",
+                fontWeight: "400",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "-10px",
+              }}
+            >
+              (Ngày bắt đầu)
+            </p>
             <div className="d-flex">
               <RangePicker
                 defaultValue={[
@@ -835,6 +847,18 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
               {" "}
               <FilterOutlined />
               &nbsp; Ngày thống kê
+            </p>
+            <p
+              style={{
+                fontSize: "10px",
+                display: "flex",
+                fontWeight: "400",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "-10px",
+              }}
+            >
+              (Ngày bắt đầu)
             </p>
             <DatePicker
               onChange={onChange}
@@ -970,7 +994,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
           <FileExcelOutlined />
         </div>
         <Table
-        style={{margin:"10px"}}
+          style={{ margin: "10px" }}
           columns={columnVenueMonthData}
           dataSource={reportVenueMonthData}
           onChange={onChangeTable}

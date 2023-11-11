@@ -786,6 +786,18 @@ function ReportVenueYear({ yearPass }) {
                   onClick={() => filterRangeDate()}
                 />
               </p>
+              <p
+                style={{
+                  fontSize: "10px",
+                  display: "flex",
+                  fontWeight: "400",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "-10px",
+                }}
+              >
+                (Ngày bắt đầu)
+              </p>
               <div className="d-flex">
                 <RangePicker
                   defaultValue={[
