@@ -266,14 +266,16 @@ const ratingDriverController = {
             //Khu vực xử lý dữ liệu nhập vào
             let new_arr = data_all.filter((item) => {
                 // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-                let word_Change_VN = ratingDriverController.removeVietnameseTones(fullnameDriver != '' ? item.driver_name : fullnameCustomer != '' ? item.customer_name : '');
-                let word_search = ratingDriverController.removeVietnameseTones(fullnameDriver || fullnameCustomer);
-                // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-                let search = fullnameDriver || fullnameCustomer
+                let word_Change_VN_fullnameDriver = ratingDriverController.removeVietnameseTones(item.driver_name);
+                let word_Change_VN_fullnameCustomer = ratingDriverController.removeVietnameseTones(item.customer_name);
 
-                return search.toLowerCase() === ""
-                    ? item
-                    : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
+
+                let word_search_driver = ratingDriverController.removeVietnameseTones(fullnameDriver);
+                let word_search_customer = ratingDriverController.removeVietnameseTones(fullnameCustomer);
+
+
+                return word_Change_VN_fullnameDriver.toLowerCase().includes(word_search_driver.toLowerCase()) &&
+                    word_Change_VN_fullnameCustomer.toLowerCase().includes(word_search_customer.toLowerCase())
             });
 
             setTimeout(() => {

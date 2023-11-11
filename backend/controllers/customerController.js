@@ -220,17 +220,18 @@ const customerController = {
 
             //Khu vực xử lý dữ liệu nhập vào
             let new_arr = data_all.filter((item) => {
-    
-                    // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-                    let word_Change_VN = customerController.removeVietnameseTones(fullname != '' ? item.fullname : phonenumber != '' ? item.phonenumber : address != '' ? item?.address : '');
-                    let word_search = customerController.removeVietnameseTones(fullname || phonenumber || address);
-                    // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-                    let search = fullname || phonenumber || address
+                // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
+                let word_change_VN_fullname = customerController.removeVietnameseTones(item.fullname)
+                let word_change_VN_phonenumber = customerController.removeVietnameseTones(item.phonenumber)
+                let word_change_VN_address = customerController.removeVietnameseTones(item.address)
 
-                    return search.toLowerCase() === ""
-                        ? item
-                        : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
-                
+                let word_search_fullname = customerController.removeVietnameseTones(fullname)
+                let word_search_phonenumber = customerController.removeVietnameseTones(phonenumber)
+                let word_search_address = customerController.removeVietnameseTones(address)
+
+                return word_change_VN_fullname.toLowerCase().includes(word_search_fullname.toLowerCase()) &&
+                    word_change_VN_phonenumber.toLowerCase().includes(word_search_phonenumber.toLowerCase()) &&
+                    word_change_VN_address.toLowerCase().includes(word_search_address.toLowerCase())
 
             });
 

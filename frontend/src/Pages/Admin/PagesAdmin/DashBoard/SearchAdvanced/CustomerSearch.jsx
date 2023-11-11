@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   FileSearchOutlined,
   SyncOutlined,
@@ -47,8 +47,6 @@ function CustomerSearch() {
 
       const data_get = api_call.data;
 
-
-
       const data_get_new = data_get.map((item, index) => {
         const ob = {
           key: index,
@@ -61,24 +59,50 @@ function CustomerSearch() {
           totalOrderComplete: item.totalOrderComplete,
           totalOrderCancel: item.totalOrderCancel,
           totalPayment: item.totalPayment,
-          createdAt: item.createdAt
+          createdAt: item.createdAt,
         };
 
         return ob;
       });
 
-      // console.log(data_get);
-      setIsActive(false);
-      setDataCustomer(data_get_new);
-      // setShowTable(true);
+      //Kiểm tra nếu dữ liệu trả về là rỗng
+      if (data_get_new.length == 0) {
+        await Toast.fire({
+          icon: "warning",
+          title: "Không có dữ liệu cần tìm !",
+        });
+        setIsActive(false);
+        setDataCustomer([]);
+      } else {
+        setIsActive(false);
+        setDataCustomer(data_get_new);
+      }
+
+      // if (data_get_new[0] == undefined) {
+      //   await Toast.fire({
+      //     icon: "warning",
+      //     title: "Không có dữ liệu cần tìm !",
+      //   });
+
+      //   setDataCustomer([]);
+      // } else {
+      //   // console.log(data_get);
+      //   setIsActive(false);
+      //   setDataCustomer(data_get_new);
+      //   // setShowTable(true);
+      // }
     }
   };
 
   // Khi nhấn vào nút tìm tất cả
   const findDataAll = async () => {
+    //Cho tất cả các trường dữ liệu là rỗng khi đưa vào
     setIsActive(true);
     setShowTable(true);
 
+    setPhoneNumber("");
+    setFullName("");
+    setAddress("");
     // setShowTable(false);
     const api_call = await axios.post("/v1/customer/findCustomerAdvanced", {
       phonenumber,
@@ -100,7 +124,7 @@ function CustomerSearch() {
         totalOrderComplete: item.totalOrderComplete,
         totalOrderCancel: item.totalOrderCancel,
         totalPayment: item.totalPayment,
-        createdAt: item.createdAt
+        createdAt: item.createdAt,
       };
 
       return ob;
@@ -515,7 +539,7 @@ function CustomerSearch() {
                 totalCommentBlog: item.totalCommentBlog,
                 totalOrderComplete: item.totalOrderComplete,
                 totalOrderCancel: item.totalOrderCancel,
-                totalPayment: item.totalPayment.toLocaleString() + 'đ',
+                totalPayment: item.totalPayment.toLocaleString() + "đ",
               };
             });
 
@@ -769,6 +793,7 @@ function CustomerSearch() {
                 <FileExcelOutlined />
               </div>
             </div>
+
             <Table
               rowSelection={rowSelection}
               columns={columnCustomer}

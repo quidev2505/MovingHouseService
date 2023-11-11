@@ -54,6 +54,7 @@
     "maplibre-gl": "^3.3.1",
     "moment": "^2.29.4",
     "path-browserify": "^1.0.1",
+    "polygon": "^1.0.2",
     "popper.js": "^1.16.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

@@ -55,7 +55,7 @@ function DriverSearch() {
       });
 
       const data_get = api_call.data;
-      console.log(data_get);
+
       const data_get_new = data_get.map((item, index) => {
         const ob = {
           key: index,
@@ -80,9 +80,21 @@ function DriverSearch() {
         return ob;
       });
 
+      //Kiểm tra nếu dữ liệu trả về là rỗng
+      if (data_get_new.length == 0) {
+        await Toast.fire({
+          icon: "warning",
+          title: "Không có dữ liệu cần tìm !",
+        });
+        setIsActive(false);
+        setDataDriver([]);
+      } else {
+        setIsActive(false);
+        setDataDriver(data_get_new);
+      }
+
       // console.log(data_get);
-      setIsActive(false);
-      setDataDriver(data_get_new);
+
       // setShowTable(true);
     }
   };
@@ -91,6 +103,11 @@ function DriverSearch() {
   const findDataAll = async () => {
     setIsActive(true);
     setShowTable(true);
+
+    setPhoneNumber("");
+    setFullName("");
+    setAddress("");
+    setProfileCode("");
 
     // setShowTable(false);
     const api_call = await axios.post("/v1/driver/findDriverAdvanced", {
@@ -127,7 +144,6 @@ function DriverSearch() {
       return ob;
     });
 
-    console.log(data_get_new);
     // console.log(data_get);
     setIsActive(false);
     setDataDriver(data_get_new);

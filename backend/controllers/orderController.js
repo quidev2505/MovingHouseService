@@ -697,14 +697,15 @@ const orderController = {
                         //Khu vực xử lý dữ liệu nhập vào
                         let new_arr = arr_result.filter((item) => {
                             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-                            let word_Change_VN = orderController.removeVietnameseTones(customerName != '' ? item.customer_name : '');
-                            let word_search = orderController.removeVietnameseTones(customerName);
-                            // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-                            let search = customerName
+                            let word_Change_VN_customerName = orderController.removeVietnameseTones(item.customer_name);
+                            let word_Change_VN_orderId = orderController.removeVietnameseTones(item.order_id);
 
-                            return search.toLowerCase() === ""
-                                ? item
-                                : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
+                            let word_search_customerName = orderController.removeVietnameseTones(customerName);
+                            let word_search_orderId = orderController.removeVietnameseTones(order_id);
+
+
+                            return word_Change_VN_customerName.toLowerCase().includes(word_search_customerName.toLowerCase()) &&
+                                word_Change_VN_orderId.toLowerCase().includes(word_search_orderId.toLowerCase())
                         });
 
                         setTimeout(() => {

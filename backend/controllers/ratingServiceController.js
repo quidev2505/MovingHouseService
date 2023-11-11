@@ -294,14 +294,15 @@ const ratingServiceController = {
             //Khu vực xử lý dữ liệu nhập vào
             let new_arr = data_all.filter((item) => {
                 // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-                let word_Change_VN = ratingServiceController.removeVietnameseTones(customerName != '' ? item.customer_name : orderId != '' ? item.order_id : '');
-                let word_search = ratingServiceController.removeVietnameseTones(customerName || orderId);
-                // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-                let search = customerName || orderId
+                let word_Change_VN_customerName = ratingServiceController.removeVietnameseTones(item.customer_name);
+                let word_Change_VN_orderId = ratingServiceController.removeVietnameseTones(item.order_id);
 
-                return search.toLowerCase() === ""
-                    ? item
-                    : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
+                let word_search_customerName = ratingServiceController.removeVietnameseTones(customerName);
+                let word_search_orderId = ratingServiceController.removeVietnameseTones(orderId);
+
+
+                return word_Change_VN_customerName.toLowerCase().includes(word_search_customerName.toLowerCase()) &&
+                    word_Change_VN_orderId.toLowerCase().includes(word_search_orderId.toLowerCase())
             });
 
             setTimeout(() => {

@@ -165,9 +165,21 @@ function RatingService() {
         return ob;
       });
 
+      //Kiểm tra nếu dữ liệu trả về là rỗng
+      if (data_get_new.length == 0) {
+        await Toast.fire({
+          icon: "warning",
+          title: "Không có dữ liệu cần tìm !",
+        });
+        setIsActive(false);
+        setDataRatingService([]);
+      } else {
+        setIsActive(false);
+        setDataRatingService(data_get_new);
+      }
+
       // console.log(data_get);
-      setIsActive(false);
-      setDataRatingService(data_get_new);
+
       // setShowTable(true);
     }
   };
@@ -177,7 +189,8 @@ function RatingService() {
     setIsActive(true);
     setShowTable(true);
 
-    // setShowTable(false);
+    setCustomerName("");
+    setOrderId("");
 
     const api_call = await axios.post("/v1/ratingService/findRatingService", {
       customerName,

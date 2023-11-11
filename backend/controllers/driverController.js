@@ -405,14 +405,20 @@ const driverController = {
             //Khu vực xử lý dữ liệu nhập vào
             let new_arr = data_all.filter((item) => {
                 // Chuyển đổi tất cả các chuỗi có dấu sang không dấu
-                let word_Change_VN = driverController.removeVietnameseTones(fullname != '' ? item.fullname : phonenumber != '' ? item.phonenumber : address != '' ? item?.address : profile_code != '' ? item.profile_code : '');
-                let word_search = driverController.removeVietnameseTones(fullname || phonenumber || address || profile_code);
-                // Kiểm tra xem chuỗi đã được chuyển đổi có chứa từ khóa tìm kiếm hay không
-                let search = fullname || phonenumber || address || profile_code
+                let word_change_VN_fullname = driverController.removeVietnameseTones(item.fullname)
+                let word_change_VN_phonenumber = driverController.removeVietnameseTones(item.phonenumber)
+                let word_change_VN_address = driverController.removeVietnameseTones(item.address)
+                let word_change_VN_profile_code = driverController.removeVietnameseTones(item.profile_code)
 
-                return search.toLowerCase() === ""
-                    ? item
-                    : word_Change_VN.toLowerCase().includes(word_search.toLowerCase());
+                let word_search_fullname = driverController.removeVietnameseTones(fullname)
+                let word_search_phonenumber = driverController.removeVietnameseTones(phonenumber)
+                let word_search_address = driverController.removeVietnameseTones(address)
+                let word_search_profile_code = driverController.removeVietnameseTones(profile_code)
+
+                return word_change_VN_fullname.toLowerCase().includes(word_search_fullname.toLowerCase()) &&
+                    word_change_VN_phonenumber.toLowerCase().includes(word_search_phonenumber.toLowerCase()) &&
+                    word_change_VN_address.toLowerCase().includes(word_search_address.toLowerCase()) &&
+                    word_change_VN_profile_code.toLowerCase().includes(word_search_profile_code.toLowerCase())
             });
 
             // //Dùng vòng lặp lướt qua các đơn hàng đã thanh toán

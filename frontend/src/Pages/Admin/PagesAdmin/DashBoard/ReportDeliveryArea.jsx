@@ -430,6 +430,64 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     getDataDeliveryArea();
   }, [deliveryAreaPass, reportDeliveryArea]);
 
+  useEffect(() => {
+    //Hiển thị dữ liệu xã, huyện, tỉnh
+    api_call_location();
+  }, []);
+
+  const api_call_location = async () => {
+    const data_map = await axios.get(
+      "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+    );
+
+    showLocationData(data_map.data);
+  };
+
+  const showLocationData = (data) => {
+    var citis = document.getElementById("city"); //Tỉnh
+    var districts = document.getElementById("district"); //Quận
+    var wards = document.getElementById("ward"); //Phường
+
+    for (const x of data) {
+      citis.options[citis.options.length] = new Option(x.Name, x.Id);
+    }
+    citis.onchange = function() {
+      districts.length = 1;
+      wards.length = 1;
+      if (this.value != "") {
+        const result = data.filter((n) => n.Id === this.value);
+        // setCity(result.Name)
+
+        for (const k of result[0].Districts) {
+          districts.options[districts.options.length] = new Option(
+            k.Name,
+            k.Id
+          );
+        }
+      }
+    };
+    districts.onchange = function() {
+      wards.length = 1;
+      const dataCity = data.filter((n) => n.Id === citis.value);
+
+      if (this.value != "") {
+        const dataWards = dataCity[0].Districts.filter(
+          (n) => n.Id === this.value
+        )[0].Wards;
+
+        console.log(dataWards);
+
+        for (const w of dataWards) {
+          wards.options[wards.options.length] = new Option(w.Name, w.Id);
+        }
+      }
+    };
+  };
+
+  const findLocation = () => {
+    // console.log(document.getElementById("city").value);
+  };
+
   const onChange = (pagination, filters, sorter, extra) => {
     if (
       filters.status == null &&
@@ -561,6 +619,75 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
               Tổng tất cả đơn hàng:&nbsp;
               {totalReport.toLocaleString()} đ
             </Tag>
+          </div>
+          {/* Chọn khu vực cụ thể ~ chỉ chính xác tương đối */}
+          <div>
+            <div
+              style={{
+                border: "1px solid orange",
+                borderRadius: "10px",
+                margin: "10px",
+                padding: "10px",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "15px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {" "}
+                <FilterOutlined />
+                &nbsp; Địa chỉ bắt đầu{" "}
+                <SearchOutlined
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "orange",
+                    color: "white",
+                    padding: "10px",
+                    marginLeft: "10px",
+                  }}
+                  onClick={() => findLocation()}
+                />
+              </p>
+              {/* Chọn tỉnh, quận, xã */}
+              <div className="d-flex">
+                <select
+                  style={{ marginRight: "10px" }}
+                  class="form-select form-select-sm mb-3"
+                  id="city"
+                  aria-label=".form-select-sm"
+                >
+                  <option value="" selected>
+                    Chọn tỉnh thành
+                  </option>
+                </select>
+
+                <select
+                  style={{ marginRight: "10px" }}
+                  class="form-select form-select-sm mb-3"
+                  id="district"
+                  aria-label=".form-select-sm"
+                >
+                  <option value="" selected>
+                    Chọn quận huyện
+                  </option>
+                </select>
+
+                <select
+                  style={{ marginRight: "10px" }}
+                  class="form-select form-select-sm mb-3"
+                  id="ward"
+                  aria-label=".form-select-sm"
+                >
+                  <option value="" selected>
+                    Chọn phường xã
+                  </option>
+                </select>
+              </div>
+            </div>
           </div>
           {/* Nút xuất ra file excel */}
           <div

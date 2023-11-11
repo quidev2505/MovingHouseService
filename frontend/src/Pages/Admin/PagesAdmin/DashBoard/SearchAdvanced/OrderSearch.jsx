@@ -174,15 +174,27 @@ function OrderSearch() {
             distance: item.distance,
             duration: item.duration,
             payment_status: item.payment_status,
-            customer_name: item.customer_name
+            customer_name: item.customer_name,
           };
 
           return ob;
         });
 
+        //Kiểm tra nếu dữ liệu trả về là rỗng
+        if (data_get_new.length == 0) {
+          await Toast.fire({
+            icon: "warning",
+            title: "Không có dữ liệu cần tìm !",
+          });
+          setIsActive(false);
+          setDataOrder([]);
+        } else {
+          setIsActive(false);
+          setDataOrder(data_get_new);
+        }
+
         // console.log(data_get);
-        setIsActive(false);
-        setDataOrder(data_get_new);
+
         // setShowTable(true);
       } catch (e) {
         console.log(e);
@@ -204,6 +216,9 @@ function OrderSearch() {
     setShowTable(true);
 
     const typeFilter = "Tất cả";
+
+    setOrderId("")
+    setCustomerName("")
 
     const api_call = await axios.post("/v1/order/findDataOrder", {
       order_id,
@@ -242,7 +257,7 @@ function OrderSearch() {
           distance: item.distance,
           duration: item.duration,
           payment_status: item.payment_status,
-          customer_name: arr_customer_name[index]
+          customer_name: arr_customer_name[index],
         };
 
         return ob;
