@@ -6,17 +6,10 @@ import InfoCustomer from './InfoCustomer';
 import { LogBox } from 'react-native';
 import { useEffect } from "react"
 
-import registerNNPushToken, { getPushDataObject } from 'native-notify';
+// import registerNNPushToken, { getPushDataObject } from 'native-notify';
 const Tab = createBottomTabNavigator();
 
 function HomeScreenCustomer() {
-    registerNNPushToken(13517, 'dgTdxEATT0B2p3KZWHDHVd');
-
-    // let pushDataObject = getPushDataObject();
-    // useEffect(() => {
-    //     console.log(pushDataObject);
-    // }, []);
-
 
     console.disableYellowBox = true;
     //Ignore all log notifications

@@ -9,6 +9,7 @@ import BackButton from "../../Components/BackButton";
 
 import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
 
+
 export default function CustomerLogin({ navigation }) {
     const [alertState, setAlertState] = useState(false)
     const [mess, setMess] = useState("Đăng nhập thành công !")
@@ -32,17 +33,23 @@ export default function CustomerLogin({ navigation }) {
 
     //Khi xác nhận Form
     const onSubmit = async (data) => {
-        if (data) {
-            await axios.post(`${api_url}/v1/auth/login`, data).then((data_login) => {
-                setAlertState(true)
-                storeData(data_login.data)
-                setMess("Đăng nhập thành công !")
-                navigation.navigate('HomeScreenCustomer')
-            }).catch((e) => {
-                setAlertState(true)
-                setMess("Đăng nhập thất bại ! Sai tên tài khoản hoặc mật khẩu !")
-            })
+        try {
+          
+            if (data) {
+                await axios.post(`${api_url}/v1/auth/login`, data).then((data_login) => {
+                    setAlertState(true)
+                    storeData(data_login.data)
+                    setMess("Đăng nhập thành công !")
+                    navigation.navigate('HomeScreenCustomer')
+                }).catch((e) => {
+                    setAlertState(true)
+                    setMess("Đăng nhập thất bại ! Sai tên tài khoản hoặc mật khẩu !")
+                })
+            }
+        } catch (e) {
+            console.log(e)
         }
+
     }
 
     //Hàm check xem đã đăng nhập lần nào chưa ?

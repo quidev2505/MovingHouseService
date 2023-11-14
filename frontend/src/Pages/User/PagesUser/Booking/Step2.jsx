@@ -64,7 +64,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
             return ob;
           });
 
-          console.log(arr_result)
+          console.log(arr_result);
           setDataList(arr_result);
         }
       })
@@ -313,10 +313,12 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
             .getDirections({
               origin: `${fromLocation.lat}, ${fromLocation.lng}`,
               destination: `${ob.lat}, ${ob.lng}`,
+              alternatives: true,
               vehicle: "car",
             })
             .send()
             .then(function(response) {
+              console.log(response)
               var directions = response.body;
               var route = directions.routes[0];
 

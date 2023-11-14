@@ -6,10 +6,12 @@ import api_url from "../../api_url";
 import axios from "axios";
 
 import { Avatar } from '@rneui/themed';
+import { registerIndieID, unregisterIndieDevice } from 'native-notify';
 
 import { Ionicons } from '@expo/vector-icons';
 function InfoCustomer({ navigation }) {
     const [dataCustomer, setDataCustomer] = useState({})
+    const [dataPhonenumberExpo, setDataPhonenumberExpo] = useState({})
 
     //Lấy thông tin khách hàng
     const get_info_customer = async () => {
@@ -17,6 +19,10 @@ function InfoCustomer({ navigation }) {
             const value_local = await AsyncStorage.getItem('already_login_customer');
             const dataLocal = JSON.parse(value_local)
             if (dataLocal) {
+                // Native Notify Indie Push Registration Code
+                registerIndieID(dataLocal.phonenumber, 13517, 'dgTdxEATT0B2p3KZWHDHVd');
+                // End of Native Notify Code
+                setDataPhonenumberExpo(dataLocal.phonenumber)
                 const id = dataLocal._id;
 
                 if (id) {
@@ -54,6 +60,9 @@ function InfoCustomer({ navigation }) {
 
 
     const createTwoButtonAlert = () => {
+        // Native Notify Indie Push Registration Code
+        unregisterIndieDevice(dataPhonenumberExpo, 13517, 'xmmYdFdEmeO1apoZvNDbgd');
+        // End of Native Notify Code
         Alert.alert('Thông báo', 'Bạn muốn đăng xuất khỏi tài khoản ?', [
             {
                 text: 'Hủy',
@@ -67,6 +76,9 @@ function InfoCustomer({ navigation }) {
 
     const log_out_local = async () => {
         try {
+            // Native Notify Indie Push Registration Code
+            unregisterIndieDevice(dataPhonenumberExpo, 13517, 'dgTdxEATT0B2p3KZWHDHVd');
+            // End of Native Notify Code
             await AsyncStorage.removeItem('already_login_customer')
             navigation.navigate("CustomerLogin")
         } catch (e) {

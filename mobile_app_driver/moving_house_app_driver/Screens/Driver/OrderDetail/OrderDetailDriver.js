@@ -208,13 +208,14 @@ function OrderDetailDriver({ route, navigation }) {
         //Nếu mà chưa có ai nhấn trước
         if (check_order_receiver.data.order_receiver == null) {
             const ob = {
+                subID: `${data_user.data.phonenumber}`,
                 appId: 13517,
                 appToken: "dgTdxEATT0B2p3KZWHDHVd",
                 title: "[🚚] Đã có tài xế nhận đơn hàng của bạn ! [🚚]",
                 body: `[📦] Khách hàng: ${data_user.data.fullname} [📦]`,
                 dateSent: Date.now(),
             }
-            axios.post('https://app.nativenotify.com/api/notification', ob).then((data) => {
+            axios.post('https://app.nativenotify.com/api/indie/notification', ob).then((data) => {
                 console.log()
             }).catch((e) => console.log(e))
 
