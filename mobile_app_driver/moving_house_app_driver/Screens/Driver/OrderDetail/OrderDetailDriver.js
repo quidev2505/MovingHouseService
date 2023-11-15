@@ -212,9 +212,11 @@ function OrderDetailDriver({ route, navigation }) {
                 appId: 13517,
                 appToken: "dgTdxEATT0B2p3KZWHDHVd",
                 title: "[🚚] Đã có tài xế nhận đơn hàng của bạn ! [🚚]",
-                body: `[📦] Khách hàng: ${data_user.data.fullname} [📦]`,
+                message: `[📦]  Tài xế: ${dataOrderDetail.fullname_driver} [📦]`,
                 dateSent: Date.now(),
             }
+
+            console.log(ob)
             axios.post('https://app.nativenotify.com/api/indie/notification', ob).then((data) => {
                 console.log()
             }).catch((e) => console.log(e))

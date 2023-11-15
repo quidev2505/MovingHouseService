@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 function MapNavigationDriver() {
   const params = useParams();
 
+
   const draw_two_location = () => {
     var location = params.location;
     var latStart = location.split("-")[0];

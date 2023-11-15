@@ -24,15 +24,16 @@ function StepByStep({ route, navigation }) {
     const get_location = async (from_location, to_location, fromLocationDetail, toLocationDetail) => {
         // let fromLocationReceive = await axios.get(`https://nominatim.openstreetmap.org/search?q=${from_location}&format=json`)
 
-        let fromLocationReceive = await axios.get(`https://geocode.maps.co/search?q=${from_location}&format=json`)
+        let fromLocationReceive = await axios.get(`https://rsapi.goong.io/geocode?address=${from_location}&api_key=5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy`)
+
 
         const ob_from_location = {
-            lat: fromLocationReceive.data[0]?.lat,
-            lon: fromLocationReceive.data[0]?.lon,
-            name: fromLocationDetail
+            lat: fromLocationReceive.data.results[0].geometry.location.lat,
+            lon: fromLocationReceive.data.results[0].geometry.location.lng,
+            name: fromLocationReceive.data.results[0].formatted_address
         }
 
-        console.log(ob_from_location)
+
         setFromLocation(ob_from_location)
 
 
@@ -40,7 +41,7 @@ function StepByStep({ route, navigation }) {
 
 
 
-        let toLocationReceive = await axios.get(`https://geocode.maps.co/search?q=${to_location}&format=json`)
+        let toLocationReceive = await axios.get(`https://rsapi.goong.io/geocode?address=${to_location}&api_key=5aqYNFbo45HBk3GB5hqCRX2FlXEBioT41FsZopYy`)
 
 
         // if (!toLocationReceive) {
@@ -48,12 +49,12 @@ function StepByStep({ route, navigation }) {
         // }
 
         const ob_to_location = {
-            lat: toLocationReceive.data[0]?.lat,
-            lon: toLocationReceive.data[0]?.lon,
-            name: toLocationDetail
+            lat: toLocationReceive.data.results[0].geometry.location.lat,
+            lon: toLocationReceive.data.results[0].geometry.location.lng,
+            name: toLocationReceive.data.results[0].formatted_address
         }
 
-        console.log(ob_to_location)
+
         setToLocation(ob_to_location)
 
 
@@ -176,6 +177,8 @@ function StepByStep({ route, navigation }) {
                 });
             }
 
+            console.log(fromLocation.lat, fromLocation.lon, toLocation.lat, toLocation.lon, data_order.order_id)
+
             return (
                 <View>
                     <Text style={{ backgroundColor: "green", color: "white", padding: 5, marginTop: 20, fontSize: 20 }}>Trạng thái: Đang vận chuyển hàng hóa</Text>
@@ -215,6 +218,19 @@ function StepByStep({ route, navigation }) {
 
 
             const updateStatusOrder = async () => {
+                const ob = {
+                    subID: `${data_user.phonenumber}`,
+                    appId: 13517,
+                    appToken: "dgTdxEATT0B2p3KZWHDHVd",
+                    title: "[🚚] Đã đến điểm nhận hàng [🚚]",
+                    dateSent: Date.now(),
+                }
+
+                console.log(ob)
+                axios.post('https://app.nativenotify.com/api/indie/notification', ob).then((data) => {
+                    console.log()
+                }).catch((e) => console.log(e))
+
                 //Cập nhật đơn hàng
                 await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
                     status: "Đã đến điểm nhận hàng"
@@ -284,6 +300,19 @@ function StepByStep({ route, navigation }) {
                     status: "Đã hủy",
                     reason_cancel: reasonCancel
                 }).then((data) => {
+                    const ob = {
+                        subID: `${data_user.phonenumber}`,
+                        appId: 13517,
+                        appToken: "dgTdxEATT0B2p3KZWHDHVd",
+                        title: "[🚚] Giao hàng không thành công ! [🚚]",
+                        message: `Lí do hủy đơn: ${reasonCancel}`,
+                        dateSent: Date.now(),
+                    }
+
+                    console.log(ob)
+                    axios.post('https://app.nativenotify.com/api/indie/notification', ob).then((data) => {
+                        console.log()
+                    }).catch((e) => console.log(e))
                     Alert.alert('Thông báo', 'Hủy đơn hàng thành công !', [
                         { text: 'Xác nhận', onPress: () => navigation.navigate("NHẬN ĐƠN") },
                     ]);
@@ -507,7 +536,7 @@ function StepByStep({ route, navigation }) {
                             </View>
                             <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                                 <Text style={{ fontWeight: "bold", fontSize: 20 }}>Tổng chi phí phải trả: </Text>
-                                <Text style={{ fontSize: 25, color: "green" }}>{Number(data_order.totalOrder + Number(sumFeeMore) - Number(sumFeeOffset)).toLocaleString() } đ</Text>
+                                <Text style={{ fontSize: 25, color: "green" }}>{Number(data_order.totalOrder + Number(sumFeeMore) - Number(sumFeeOffset)).toLocaleString()} đ</Text>
                             </View>
                         </View>
                     </View>
@@ -619,15 +648,19 @@ function StepByStep({ route, navigation }) {
                     let arr_driver = data_order.driver_name;
 
                     const ob = {
+                        subID: `${data_user.phonenumber}`,
                         appId: 13517,
                         appToken: "dgTdxEATT0B2p3KZWHDHVd",
                         title: "[📑] Đơn hàng của bạn đã giao thành công ! [📑]",
-                        body: `[⭐] Hãy vào mục "Đơn hàng hoàn tất" và đánh giá dịch vụ của chúng tôi nhé. Xin cảm ơn ![⭐]`,
+                        message: `[⭐] Hãy vào mục "Đơn hàng hoàn tất" và đánh giá dịch vụ của chúng tôi nhé. Xin cảm ơn ![⭐]`,
                         dateSent: Date.now(),
                     }
-                    axios.post('https://app.nativenotify.com/api/notification', ob).then((data) => {
-                        console.log(data)
+
+                    console.log(ob)
+                    axios.post('https://app.nativenotify.com/api/indie/notification', ob).then((data) => {
+                        console.log()
                     }).catch((e) => console.log(e))
+
 
                     arr_driver.forEach(async (item, index) => {
                         let arr_driver = await axios.get(`${api_url}/v1/driver/getdriver_with_fullname/${item}`)

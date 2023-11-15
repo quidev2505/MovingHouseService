@@ -58,7 +58,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
               location: {
                 lat: item.geometry.location.lat,
                 lon: item.geometry.location.lng,
-                display_name: item.display_name,
+                display_name: item.formatted_address,
               },
             };
             return ob;
@@ -225,7 +225,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
               location: {
                 lat: item.geometry.location.lat,
                 lon: item.geometry.location.lng,
-                display_name: item.display_name,
+                display_name: item.formatted_address,
               },
             };
             return ob;
@@ -318,7 +318,7 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
             })
             .send()
             .then(function(response) {
-              console.log(response)
+              console.log(response);
               var directions = response.body;
               var route = directions.routes[0];
 

@@ -32,17 +32,24 @@ export default function DriverLogin({ navigation }) {
 
     //Khi xác nhận Form
     const onSubmit = async (data) => {
-        if (data) {
-            await axios.post(`${api_url}/v1/driverAccount/login`, data).then((data_login) => {
-                setAlertState(true)
-                storeData(data_login.data)
-                setMess("Đăng nhập thành công !")
-                navigation.navigate('HomeScreenDriver')
-            }).catch((e) => {
-                setAlertState(true)
-                setMess("Đăng nhập thất bại ! Sai tên tài khoản hoặc mật khẩu !")
-            })
+        try {
+            if (data) {
+                await axios.post(`${api_url}/v1/driverAccount/login`, data).then((data_login) => {
+                    console.log(data_login.data)
+                    setAlertState(true)
+                    storeData(data_login.data)
+                    setMess("Đăng nhập thành công !")
+                    navigation.navigate('HomeScreenDriver')
+                }).catch((e) => {
+                    console.log(e)
+                    setAlertState(true)
+                    setMess("Đăng nhập thất bại ! Sai tên tài khoản hoặc mật khẩu !")
+                })
+            }
+        } catch (e) {
+            console.log(e)
         }
+
     }
 
     //Hàm check xem đã đăng nhập lần nào chưa ?
@@ -78,12 +85,13 @@ export default function DriverLogin({ navigation }) {
 
                 <View style={{ backgroundColor: "white", borderRadius: 5, padding: 10, marginBottom: 25, marginTop: -30 }}>
                     <Text style={{ fontSize: 50, color: "black", textAlign: "center" }}>Đăng Nhập</Text>
-                    <Text style={{ fontSize:25, color: "black", textAlign: "center", color: "#ccc" }}>( Dành cho tài xế ) </Text>
+                    <Text style={{ fontSize: 25, color: "black", textAlign: "center", color: "#ccc" }}>( Dành cho tài xế ) </Text>
                 </View>
 
 
                 <View style={{
-                    backgroundColor: "white", padding: 15, borderRadius: 5 }}>
+                    backgroundColor: "white", padding: 15, borderRadius: 5
+                }}>
                     <Controller
                         control={control}
                         rules={{
@@ -168,7 +176,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         width: 350,
         borderWidth: 1.3,
-        borderColor:"#ccc"
+        borderColor: "#ccc"
     },
     error: {
         color: "red",

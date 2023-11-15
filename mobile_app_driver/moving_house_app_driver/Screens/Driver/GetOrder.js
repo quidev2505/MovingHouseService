@@ -198,11 +198,11 @@ function GetOrder({ navigation }) {
 
     useEffect(() => {
 
-        // setInterval(() => {
+        setInterval(() => {
 
 
-        get_info_all_order();
-        // },5000)
+            get_info_all_order();
+        }, 5000)
 
     }, [])
 
@@ -279,9 +279,9 @@ function GetOrder({ navigation }) {
 
 
                 {/* Lọc ra đơn hiện đang có và đơn đã nhận hàng. */}
-                <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", marginTop: 10, height: 50, borderWidth: 0.5, borderColor: "#ccc", backgroundColor:"white", padding:5 }}>
+                <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", marginTop: 10, height: 50, borderWidth: 0.5, borderColor: "#ccc", backgroundColor: "white", padding: 5 }}>
                     <TouchableOpacity style={{ backgroundColor: colorTab ? 'orange' : '#ccc', padding: 5, borderRadius: 5, height: "fit-content" }} onPress={() => filterOrder("Hiện có")}>
-                        <Text style={{ color: "white", fontWeight: "bold",fontSize:16 }}>Danh sách đơn hiện có</Text>
+                        <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>Danh sách đơn hiện có</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ backgroundColor: colorTab ? '#ccc' : 'orange', color: "white", padding: 5, borderRadius: 5, height: "fit-content" }} onPress={() => filterOrder("Đã nhận")}>
                         <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>Danh sách đơn đã nhận</Text>
@@ -290,7 +290,7 @@ function GetOrder({ navigation }) {
 
 
                 {/* Ô nhập tìm kiếm theo mã đơn hàng */}
-                <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width:310, height: 30, margin: 10, marginLeft: 25, marginTop: 30 }}>
+                <View style={{ display: "flex", flexDirection: "row", padding: 10, alignItems: "center", justifyContent: "center", width: 310, height: 30, margin: 10, marginLeft: 25, marginTop: 30 }}>
                     <View style={{ backgroundColor: "white", display: "flex", flexDirection: "row", alignItems: "center", borderRadius: 8 }}>
                         <Input
                             value={inputSearch}
@@ -299,7 +299,7 @@ function GetOrder({ navigation }) {
                         />
                         <TouchableOpacity style={{ lineHeight: 60, borderColor: "#ccc", marginLeft: 15, marginBottom: -12 }} onPress={() => searchFilter(inputSearch)}>
                             <Ionicons
-                                style={{ color: "black", marginTop:-10 }}
+                                style={{ color: "black", marginTop: -10 }}
                                 name="search-circle"
                                 size={30}
                             />
