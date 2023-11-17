@@ -43,6 +43,7 @@ import LoadingOverlayComponent from "../../../../Components/LoadingOverlayCompon
 
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import ContractDelivery from "../../../ContractDelivery";
 dayjs.extend(customParseFormat);
 
 const { RangePicker } = DatePicker;
@@ -118,6 +119,7 @@ function OrderUser() {
                 vehicle_name: item.vehicle_name,
                 totalOrder: item.totalOrder,
                 reason_cancel: item.reason_cancel,
+                electronic_signature: item.electronic_signature
               };
 
               data_order.push(ob_order);
@@ -1157,12 +1159,20 @@ function OrderUser() {
   const reason_cancel_order = useRef("Chưa xác định");
 
   //Mở modal hợp đồng vận chuyển
-  const modal_contract_delivery = (id_order_detail, order_id) => {
-    Modal.success({
-      title: "Hợp đồng vận chuyển",
-      content: <></>,
-      onOk() {},
-    });
+  const modal_contract_delivery = async (id_order_detail, order_id) => {
+    try {
+      Modal.success({
+        title: "Hợp đồng vận chuyển",
+        content: (
+          <>
+            <ContractDelivery orderData={order_id}/>
+          </>
+        ),
+        onOk() {},
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //Mở modal hủy đơn hàng
