@@ -60,14 +60,15 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "Đang tìm tài xế"
+        default: "Đang xử lý"
     },
-    //6 trạng thái
-    // 1.Đang tìm tài xế
-    // 2.Đang thực hiện
-    // 3.Thanh toán hóa đơn
-    // 4. Đã Hoàn thành
-    // 5. Đã hủy
+    //7 trạng thái
+    //1. Đang xử lý
+    // 2.Đang tìm tài xế
+    // 3.Đang thực hiện
+    // 4.Thanh toán hóa đơn
+    // 5. Đã Hoàn thành
+    // 6. Đã hủy
     //Nếu đã hủy đơn hàng
     reason_cancel: {
         type: String,

@@ -95,7 +95,7 @@ function BookingUser() {
   const create_order = async () => {
     let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
     const object_data = {
-      totalOrder: data_from_local.totalOrder,
+      totalOrder: data_from_local?.totalOrder,
       service_name: data_from_local.step1.select_service,
       date_start: data_from_local.step1.moving_date,
       time_start: data_from_local.step1.moving_time,

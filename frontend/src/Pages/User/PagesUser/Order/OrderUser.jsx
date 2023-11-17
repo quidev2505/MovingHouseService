@@ -21,6 +21,7 @@ import {
   StarOutlined,
   ColumnWidthOutlined,
   FileExcelOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -596,7 +597,6 @@ function OrderUser() {
                 ""
               )}
 
-
               <div
                 className="d-flex"
                 style={{
@@ -823,6 +823,10 @@ function OrderUser() {
 
       filters: [
         {
+          text: "Đang xử lý",
+          value: "Đang xử lý",
+        },
+        {
           text: "Đang tìm tài xế",
           value: "Đang tìm tài xế",
         },
@@ -844,14 +848,16 @@ function OrderUser() {
           value: "Đã hủy",
         },
       ],
-      defaultFilteredValue: ["Đang tìm tài xế"],
+      defaultFilteredValue: ["Đang xử lý"],
       onFilter: (value, record) => record.status.indexOf(value) === 0,
       render: (status, reason_cancel) => (
         <>
           <div className="d-flex">
             <Tag
               color={
-                status === "Đang tìm tài xế"
+                status === "Đang xử lý"
+                  ? "rgb(129, 66, 255)"
+                  : status === "Đang tìm tài xế"
                   ? "blue"
                   : status === "Đã hủy"
                   ? "volcano"
@@ -865,7 +871,9 @@ function OrderUser() {
               }
               key={status}
             >
-              {status === "Đang tìm tài xế"
+              {status === "Đang xử lý"
+                ? "Đang xử lý"
+                : status === "Đang tìm tài xế"
                 ? "Đang tìm tài xế"
                 : status === "Đã hủy"
                 ? "Đã hủy"
@@ -1043,6 +1051,36 @@ function OrderUser() {
       ),
     },
     {
+      title: "Hợp đồng vận chuyển",
+      dataIndex: "id_order_detail",
+      key: "id_order_detail",
+      render: (id_order_detail, order_id) => (
+        <Space size="middle" className="icon_hover">
+          <div
+            onClick={() => modal_contract_delivery(id_order_detail, order_id)}
+            style={{
+              backgroundColor: "purple",
+              borderRadius: "50%",
+              padding: "5px",
+              display: "flex",
+              cursor: "pointer",
+              width: "30px",
+              height: "30px",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FormOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
+          </div>
+        </Space>
+      ),
+    },
+    {
       title: "Hủy đơn hàng",
       key: "action",
       render: (order_id, driver_name) => (
@@ -1117,6 +1155,15 @@ function OrderUser() {
   ];
 
   const reason_cancel_order = useRef("Chưa xác định");
+
+  //Mở modal hợp đồng vận chuyển
+  const modal_contract_delivery = (id_order_detail, order_id) => {
+    Modal.success({
+      title: "Hợp đồng vận chuyển",
+      content: <></>,
+      onOk() {},
+    });
+  };
 
   //Mở modal hủy đơn hàng
   const modal_cancel_order = (order_id) => {
