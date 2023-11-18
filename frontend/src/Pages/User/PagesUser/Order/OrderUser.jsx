@@ -106,7 +106,11 @@ function OrderUser() {
           data_filter &&
             data_filter.data.forEach((item, index) => {
               ob_order = {
+                address_customer: id_customer.data.address,
+                gender_customer: id_customer.data.gender,
+                phonenumber_customer: user.phonenumber,
                 id_order_detail: item.order_detail_id,
+                customer_full_name: user.fullname,
                 STT: index + 1,
                 order_id: item.order_id,
                 service_name: item.service_name,
@@ -119,7 +123,7 @@ function OrderUser() {
                 vehicle_name: item.vehicle_name,
                 totalOrder: item.totalOrder,
                 reason_cancel: item.reason_cancel,
-                electronic_signature: item.electronic_signature
+                electronic_signature: item.electronic_signature,
               };
 
               data_order.push(ob_order);
@@ -1161,11 +1165,15 @@ function OrderUser() {
   //Mở modal hợp đồng vận chuyển
   const modal_contract_delivery = async (id_order_detail, order_id) => {
     try {
+      const data_new = await axios.get(
+        `/v1/order/viewOrderDetail/${id_order_detail}`
+      );
+
       Modal.success({
         title: "Hợp đồng vận chuyển",
         content: (
           <>
-            <ContractDelivery orderData={order_id}/>
+            <ContractDelivery orderData={order_id} orderDataDetail={data_new} />
           </>
         ),
         onOk() {},

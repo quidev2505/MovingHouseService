@@ -9,7 +9,7 @@ import SignaturePad from "react-signature-pad";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import axios from "axios";
 
-function ContractDelivery({ orderData }) {
+function ContractDelivery({ orderData, orderDataDetail }) {
   let sigPad = useRef({});
 
   useEffect(() => {
@@ -54,7 +54,7 @@ function ContractDelivery({ orderData }) {
   const pdfJSX = () => {
     return (
       <>
-        <div style={{ width: "800px", padding: "20px", paddingTop: "10px" }}>
+        <div style={{ width: "800px", padding: "20px", paddingTop: "30px" }}>
           <p
             style={{
               textAlign: "center",
@@ -115,7 +115,9 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <strong>
-              <span style={{ fontSize: "12pt" }}>CHUYỂN NHÀ TRỌN GÓI</span>
+              <span style={{ fontSize: "12pt" }}>
+                {orderData.service_name.toUpperCase()}
+              </span>
             </strong>
           </p>
           <p
@@ -123,10 +125,13 @@ function ContractDelivery({ orderData }) {
               textAlign: "center",
               color: "rgb(0, 0, 0)",
               fontSize: "12pt",
+              fontWeight: "bold",
             }}
           >
-            <span style={{ fontSize: "12pt" }}>Số:……./</span>
-            <span style={{ fontSize: "12pt" }}>HĐ….</span>
+            <span style={{ fontSize: "12pt" }}>
+              Số:{orderData.date_created.split(",")[1]}/
+            </span>
+            <span style={{ fontSize: "12pt" }}>HĐVC</span>
           </p>
           <p
             style={{
@@ -180,7 +185,8 @@ function ContractDelivery({ orderData }) {
           >
             <em>
               <span style={{ fontSize: "12pt" }}>
-                Hôm nay, ngày...tháng...năm.... tại……………………….Chúng tôi gồm:
+                Hôm nay, ngày {orderData.date_created.split(",")[1]}, chúng tôi
+                gồm:
               </span>
             </em>
           </p>
@@ -192,23 +198,14 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <strong>
-              <span style={{ fontSize: "12pt" }}>Bên A:</span>
+              <span style={{ fontSize: "12pt", textDecoration: "underline" }}>
+                Bên A:
+              </span>
             </strong>
             <span style={{ fontSize: "12pt" }}>&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>MSDN:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              {orderData.gender_customer == "Nam" ? "ÔNG" : "BÀ"}{" "}
+              {orderData.customer_full_name.toUpperCase()}
             </span>
           </p>
           <p
@@ -220,31 +217,7 @@ function ContractDelivery({ orderData }) {
           >
             <span style={{ fontSize: "12pt" }}>Điện thoại:&nbsp;</span>
             <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>Tài khoản:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>Đại diện:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+              {orderData.phonenumber_customer}
             </span>
           </p>
           <p
@@ -256,7 +229,7 @@ function ContractDelivery({ orderData }) {
           >
             <span style={{ fontSize: "12pt" }}>Địa chỉ:&nbsp;</span>
             <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+              {orderData.address_customer}
             </span>
           </p>
           <p
@@ -267,11 +240,12 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <strong>
-              <span style={{ fontSize: "12pt" }}>Bên B:&nbsp;</span>
+              <span style={{ fontSize: "12pt", textDecoration: "underline" }}>
+                Bên B:&nbsp;
+              </span>
             </strong>
-            <span style={{ fontSize: "12pt" }}>………</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………….
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              CÔNG TY DỊCH VỤ DỌN NHÀ - FAST MOVE COMPANY
             </span>
           </p>
           <p
@@ -279,11 +253,17 @@ function ContractDelivery({ orderData }) {
               textAlign: "justify",
               color: "rgb(0, 0, 0)",
               fontSize: "12pt",
+              display: "flex",
             }}
           >
-            <span style={{ fontSize: "12pt" }}>MSDN:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+            <span>
+              <span style={{ fontSize: "12pt" }}>Đại diện:&nbsp;</span>
+              <span style={{ fontSize: "12pt" }}>BÀ HUỲNH THỊ TÂN</span>
+            </span>
+
+            <span style={{ marginLeft: "40px" }}>
+              <span style={{ fontSize: "12pt" }}>Chức vụ:&nbsp;</span>
+              <span style={{ fontSize: "12pt" }}>Quản lý</span>
             </span>
           </p>
           <p
@@ -294,22 +274,9 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>Điện thoại:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
+            <span style={{ fontSize: "12pt" }}>0992356425</span>
           </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>Đại diện:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
-          </p>
+
           <p
             style={{
               textAlign: "justify",
@@ -319,7 +286,7 @@ function ContractDelivery({ orderData }) {
           >
             <span style={{ fontSize: "12pt" }}>Địa chỉ:&nbsp;</span>
             <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+              Số 24 Độc Lập, Phường Tân Thành, Quận Tân Phú, TP.HCM
             </span>
           </p>
           <p
@@ -348,7 +315,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 1: NỘI DUNG CÔNG VIỆC
+                <span style={{ textDecoration: "underline" }}>Điều 1: </span>
+                NỘI DUNG CÔNG VIỆC
               </span>
             </strong>
           </p>
@@ -362,8 +330,7 @@ function ContractDelivery({ orderData }) {
             <span style={{ fontSize: "12pt" }}>
               1.1. Bên A giao cho bên B thực hiện các công việc sau: Tháo gỡ,
               đóng gói, bao bọc đồ, tài sản và vật dụng trong văn phòng (nhà ở)
-              của bên A (được liệt kê trong danh mục vận chuyển kèm theo hợp
-              đồng này).
+              của bên A (được liệt kê trong chi tiết đơn hàng).
             </span>
           </p>
           <p
@@ -384,12 +351,12 @@ function ContractDelivery({ orderData }) {
               textAlign: "justify",
               color: "rgb(0, 0, 0)",
               fontSize: "12pt",
-              marginTop: "40px",
             }}
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 2: THỜI GIAN VÀ ĐỊA ĐIỂM THỰC HIỆN
+                <span style={{ textDecoration: "underline" }}>Điều 2: </span>
+                THỜI GIAN VÀ ĐỊA ĐIỂM THỰC HIỆN
               </span>
             </strong>
           </p>
@@ -412,8 +379,8 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>
-              - Bên B thực hiện tháo gỡ và đóng gói đồ vào ..... giờ,
-              ngày...tháng...năm...
+              - Bên B thực hiện tháo gỡ và đóng gói đồ vào{" "}
+              {orderData.time_get_item}
             </span>
           </p>
           <p
@@ -428,18 +395,7 @@ function ContractDelivery({ orderData }) {
               bên B trước 02 ngày).
             </span>
           </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              Thời gian thực hiện công việc có sự thay đổi:&nbsp;
-            </span>
-            <span style={{ fontSize: "12pt" }}>……………………………………</span>
-          </p>
+          <br></br>
           <p
             style={{
               textAlign: "justify",
@@ -457,7 +413,9 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>- Từ địa chỉ:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>……………………………………</span>
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              {orderData.router.split("->")[0]}
+            </span>
           </p>
           <p
             style={{
@@ -467,7 +425,9 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>- Đến địa chỉ:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>……………………………………</span>
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              {orderData.router.split("->")[1]}
+            </span>
           </p>
           <p
             style={{
@@ -501,7 +461,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 3: TRÁCH NHIỆM CỦA CÁC BÊN
+                <span style={{ textDecoration: "underline" }}>Điều 3: </span>
+                TRÁCH NHIỆM CỦA CÁC BÊN
               </span>
             </strong>
           </p>
@@ -592,7 +553,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 4. GIÁ TRỊ HỢP ĐỒNG VÀ PHƯƠNG THỨC THANH TOÁN
+                <span style={{ textDecoration: "underline" }}>Điều 4: </span>
+                GIÁ TRỊ HỢP ĐỒNG VÀ PHƯƠNG THỨC THANH TOÁN
               </span>
             </strong>
           </p>
@@ -604,49 +566,25 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>4.1. Giá trị hợp đồng là:</span>
-            <span style={{ fontSize: "12pt" }}>&nbsp;…………………..</span>
-            <span style={{ fontSize: "12pt" }}>
-              &nbsp;(Đơn vị: VNĐ, chưa bao gồm 10% thuế VAT)
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              &nbsp;{orderData.totalOrder.toLocaleString()}
             </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>Viết bằng chữ:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              ……………………………………………………………………..
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              4.2. Phương thức thanh toán
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              - Ngay sau khi hai bên thống nhất khối lượng công việc, giá cả và
-              ký hợp đồng, bên A đặt cọc trước cho bên B là 10% giá trị hợp
-              đồng. Số tiền đặt trước là:
-            </span>
-            <span style={{ fontSize: "12pt" }}>&nbsp;……………</span>
             <span style={{ fontSize: "12pt" }}>&nbsp;(Đơn vị: VNĐ)</span>
           </p>
+
+          <p
+            style={{
+              textAlign: "justify",
+              color: "rgb(0, 0, 0)",
+              fontSize: "12pt",
+            }}
+          >
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              4.2. Phương thức thanh toán:{" "}
+              {orderDataDetail.data[0].payment_method}
+            </span>
+          </p>
+
           <p
             style={{
               textAlign: "justify",
@@ -655,56 +593,14 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>
-              Số tiền viết bằng chữ:&nbsp;
-            </span>
-            <span style={{ fontSize: "12pt" }}>………………………………………………………</span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              - Sau khi hoàn thành công việc, bên A tiến hành nghiệm thu và đánh
-              giá chất lượng công việc. Sau khi nhận biên bản nghiệm thu, thanh
-              lý hợp đồng, hóa đơn VAT, bên A có trách nhiệm thanh toán cho bên
-              B số tiền là 90% giá trị hợp đồng còn lại.
+              - Các công việc sau khi đã thực hiện xong, Bên A tiến hành nghiệm
+              thu kiểm tra chất lượng đạt yêu cầu và nhận đủ giấy tờ kèm theo,
+              Hóa đơn tài chính hợp lệ. Bên A phải thanh toán cho bên B 100% giá
+              trị hợp đồng trong vòng 15 ngày (ngày làm việc) sau khi hoàn tất
+              thủ tục thanh lý hợp đồng.
             </span>
           </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>4.3. Hình thức thanh toán</span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              - Trực tiếp bằng tiền mặt cho đại điện bên B &nbsp; &nbsp; &nbsp;
-              &nbsp;&nbsp;
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              - Chuyển khoản qua ngân hàng
-            </span>
-          </p>
+
           <p
             style={{
               textAlign: "justify",
@@ -714,7 +610,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 5: ĐIỀU KHOẢN THI HÀNH
+                <span style={{ textDecoration: "underline" }}>Điều 5: </span>
+                ĐIỀU KHOẢN THI HÀNH
               </span>
             </strong>
           </p>
@@ -755,7 +652,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 6. HIỆU LỰC HỢP ĐỒNG
+                <span style={{ textDecoration: "underline" }}>Điều 6: </span>
+                HIỆU LỰC HỢP ĐỒNG
               </span>
             </strong>
           </p>
@@ -774,6 +672,7 @@ function ContractDelivery({ orderData }) {
               bên phải chấp hành.
             </span>
           </p>
+          <br></br>
           <p
             style={{
               textAlign: "justify",
@@ -808,7 +707,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 7. ĐIỀU KHOẢN VÀ ĐIỀU KIỆN CHUNG
+                <span style={{ textDecoration: "underline" }}>Điều 7: </span>
+                ĐIỀU KHOẢN VÀ ĐIỀU KIỆN CHUNG
               </span>
             </strong>
           </p>
@@ -849,6 +749,17 @@ function ContractDelivery({ orderData }) {
                       <span style={{ fontSize: "12pt" }}>
                         (Ký, ghi rõ họ tên)
                       </span>
+                      <p style={{ fontSize: "12pt", marginLeft: "15px" }}>
+                        <img
+                          src={orderData.electronic_signature}
+                          width="200"
+                          height="80"
+                          style={{ objectFit: "cover" }}
+                        ></img>
+                      </p>
+                      <p style={{ fontSize: "12pt", marginLeft: "50px" }}>
+                        {orderData.customer_full_name.toUpperCase()}
+                      </p>
                     </em>
                   </p>
                 </td>
@@ -862,6 +773,17 @@ function ContractDelivery({ orderData }) {
                       <span style={{ fontSize: "12pt" }}>
                         (Ký, ghi rõ họ tên)
                       </span>
+                      <p style={{ fontSize: "12pt", marginLeft: "15px" }}>
+                        <img
+                          src="./img/signature.png"
+                          width="200"
+                          height="80"
+                          style={{ objectFit: "cover" }}
+                        ></img>
+                      </p>
+                      <p style={{ fontSize: "12pt", marginLeft: "50px" }}>
+                        HUỲNH THỊ TÂN
+                      </p>
                     </em>
                   </p>
                 </td>
@@ -954,7 +876,9 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <strong>
-              <span style={{ fontSize: "12pt" }}>CHUYỂN NHÀ TRỌN GÓI</span>
+              <span style={{ fontSize: "12pt" }}>
+                {orderData.service_name.toUpperCase()}
+              </span>
             </strong>
           </p>
           <p
@@ -962,10 +886,13 @@ function ContractDelivery({ orderData }) {
               textAlign: "center",
               color: "rgb(0, 0, 0)",
               fontSize: "12pt",
+              fontWeight: "bold",
             }}
           >
-            <span style={{ fontSize: "12pt" }}>Số:……./</span>
-            <span style={{ fontSize: "12pt" }}>HĐ….</span>
+            <span style={{ fontSize: "12pt" }}>
+              Số:{orderData.date_created.split(",")[1]}/
+            </span>
+            <span style={{ fontSize: "12pt" }}>HĐVC</span>
           </p>
           <p
             style={{
@@ -1019,7 +946,8 @@ function ContractDelivery({ orderData }) {
           >
             <em>
               <span style={{ fontSize: "12pt" }}>
-                Hôm nay, ngày...tháng...năm.... tại……………………….Chúng tôi gồm:
+                Hôm nay, ngày {orderData.date_created.split(",")[1]}, chúng tôi
+                gồm:
               </span>
             </em>
           </p>
@@ -1031,23 +959,14 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <strong>
-              <span style={{ fontSize: "12pt" }}>Bên A:</span>
+              <span style={{ fontSize: "12pt", textDecoration: "underline" }}>
+                Bên A:
+              </span>
             </strong>
             <span style={{ fontSize: "12pt" }}>&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>MSDN:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              {orderData.gender_customer == "Nam" ? "ÔNG" : "BÀ"}{" "}
+              {orderData.customer_full_name.toUpperCase()}
             </span>
           </p>
           <p
@@ -1059,31 +978,7 @@ function ContractDelivery({ orderData }) {
           >
             <span style={{ fontSize: "12pt" }}>Điện thoại:&nbsp;</span>
             <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>Tài khoản:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>Đại diện:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+              {orderData.phonenumber_customer}
             </span>
           </p>
           <p
@@ -1095,7 +990,7 @@ function ContractDelivery({ orderData }) {
           >
             <span style={{ fontSize: "12pt" }}>Địa chỉ:&nbsp;</span>
             <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+              {orderData.address_customer}
             </span>
           </p>
           <p
@@ -1106,11 +1001,12 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <strong>
-              <span style={{ fontSize: "12pt" }}>Bên B:&nbsp;</span>
+              <span style={{ fontSize: "12pt", textDecoration: "underline" }}>
+                Bên B:&nbsp;
+              </span>
             </strong>
-            <span style={{ fontSize: "12pt" }}>………</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………….
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              CÔNG TY DỊCH VỤ DỌN NHÀ - FAST MOVE COMPANY
             </span>
           </p>
           <p
@@ -1118,11 +1014,17 @@ function ContractDelivery({ orderData }) {
               textAlign: "justify",
               color: "rgb(0, 0, 0)",
               fontSize: "12pt",
+              display: "flex",
             }}
           >
-            <span style={{ fontSize: "12pt" }}>MSDN:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+            <span>
+              <span style={{ fontSize: "12pt" }}>Đại diện:&nbsp;</span>
+              <span style={{ fontSize: "12pt" }}>BÀ HUỲNH THỊ TÂN</span>
+            </span>
+
+            <span style={{ marginLeft: "40px" }}>
+              <span style={{ fontSize: "12pt" }}>Chức vụ:&nbsp;</span>
+              <span style={{ fontSize: "12pt" }}>Quản lý</span>
             </span>
           </p>
           <p
@@ -1133,22 +1035,9 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>Điện thoại:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
+            <span style={{ fontSize: "12pt" }}>0992356425</span>
           </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>Đại diện:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
-            </span>
-          </p>
+
           <p
             style={{
               textAlign: "justify",
@@ -1158,7 +1047,7 @@ function ContractDelivery({ orderData }) {
           >
             <span style={{ fontSize: "12pt" }}>Địa chỉ:&nbsp;</span>
             <span style={{ fontSize: "12pt" }}>
-              …………………………………………………………………………….
+              Số 24 Độc Lập, Phường Tân Thành, Quận Tân Phú, TP.HCM
             </span>
           </p>
           <p
@@ -1187,7 +1076,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 1: NỘI DUNG CÔNG VIỆC
+                <span style={{ textDecoration: "underline" }}>Điều 1: </span>
+                NỘI DUNG CÔNG VIỆC
               </span>
             </strong>
           </p>
@@ -1201,8 +1091,7 @@ function ContractDelivery({ orderData }) {
             <span style={{ fontSize: "12pt" }}>
               1.1. Bên A giao cho bên B thực hiện các công việc sau: Tháo gỡ,
               đóng gói, bao bọc đồ, tài sản và vật dụng trong văn phòng (nhà ở)
-              của bên A (được liệt kê trong danh mục vận chuyển kèm theo hợp
-              đồng này).
+              của bên A (được liệt kê trong chi tiết đơn hàng).
             </span>
           </p>
           <p
@@ -1227,7 +1116,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 2: THỜI GIAN VÀ ĐỊA ĐIỂM THỰC HIỆN
+                <span style={{ textDecoration: "underline" }}>Điều 2: </span>
+                THỜI GIAN VÀ ĐỊA ĐIỂM THỰC HIỆN
               </span>
             </strong>
           </p>
@@ -1250,8 +1140,8 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>
-              - Bên B thực hiện tháo gỡ và đóng gói đồ vào ..... giờ,
-              ngày...tháng...năm...
+              - Bên B thực hiện tháo gỡ và đóng gói đồ vào{" "}
+              {orderData.time_get_item}
             </span>
           </p>
           <p
@@ -1266,18 +1156,7 @@ function ContractDelivery({ orderData }) {
               bên B trước 02 ngày).
             </span>
           </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              Thời gian thực hiện công việc có sự thay đổi:&nbsp;
-            </span>
-            <span style={{ fontSize: "12pt" }}>……………………………………</span>
-          </p>
+
           <p
             style={{
               textAlign: "justify",
@@ -1295,7 +1174,9 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>- Từ địa chỉ:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>……………………………………</span>
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              {orderData.router.split("->")[0]}
+            </span>
           </p>
           <p
             style={{
@@ -1305,7 +1186,9 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>- Đến địa chỉ:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>……………………………………</span>
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              {orderData.router.split("->")[1]}
+            </span>
           </p>
           <p
             style={{
@@ -1339,7 +1222,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 3: TRÁCH NHIỆM CỦA CÁC BÊN
+                <span style={{ textDecoration: "underline" }}>Điều 3: </span>
+                TRÁCH NHIỆM CỦA CÁC BÊN
               </span>
             </strong>
           </p>
@@ -1430,7 +1314,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 4. GIÁ TRỊ HỢP ĐỒNG VÀ PHƯƠNG THỨC THANH TOÁN
+                <span style={{ textDecoration: "underline" }}>Điều 4: </span>
+                GIÁ TRỊ HỢP ĐỒNG VÀ PHƯƠNG THỨC THANH TOÁN
               </span>
             </strong>
           </p>
@@ -1442,49 +1327,25 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>4.1. Giá trị hợp đồng là:</span>
-            <span style={{ fontSize: "12pt" }}>&nbsp;…………………..</span>
-            <span style={{ fontSize: "12pt" }}>
-              &nbsp;(Đơn vị: VNĐ, chưa bao gồm 10% thuế VAT)
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              &nbsp;{orderData.totalOrder.toLocaleString()}
             </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>Viết bằng chữ:&nbsp;</span>
-            <span style={{ fontSize: "12pt" }}>
-              ……………………………………………………………………..
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              4.2. Phương thức thanh toán
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              - Ngay sau khi hai bên thống nhất khối lượng công việc, giá cả và
-              ký hợp đồng, bên A đặt cọc trước cho bên B là 10% giá trị hợp
-              đồng. Số tiền đặt trước là:
-            </span>
-            <span style={{ fontSize: "12pt" }}>&nbsp;……………</span>
             <span style={{ fontSize: "12pt" }}>&nbsp;(Đơn vị: VNĐ)</span>
           </p>
+
+          <p
+            style={{
+              textAlign: "justify",
+              color: "rgb(0, 0, 0)",
+              fontSize: "12pt",
+            }}
+          >
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+              4.2. Phương thức thanh toán:{" "}
+              {orderDataDetail.data[0].payment_method}
+            </span>
+          </p>
+
           <p
             style={{
               textAlign: "justify",
@@ -1493,56 +1354,14 @@ function ContractDelivery({ orderData }) {
             }}
           >
             <span style={{ fontSize: "12pt" }}>
-              Số tiền viết bằng chữ:&nbsp;
-            </span>
-            <span style={{ fontSize: "12pt" }}>………………………………………………………</span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              - Sau khi hoàn thành công việc, bên A tiến hành nghiệm thu và đánh
-              giá chất lượng công việc. Sau khi nhận biên bản nghiệm thu, thanh
-              lý hợp đồng, hóa đơn VAT, bên A có trách nhiệm thanh toán cho bên
-              B số tiền là 90% giá trị hợp đồng còn lại.
+              - Các công việc sau khi đã thực hiện xong, Bên A tiến hành nghiệm
+              thu kiểm tra chất lượng đạt yêu cầu và nhận đủ giấy tờ kèm theo,
+              Hóa đơn tài chính hợp lệ. Bên A phải thanh toán cho bên B 100% giá
+              trị hợp đồng trong vòng 15 ngày (ngày làm việc) sau khi hoàn tất
+              thủ tục thanh lý hợp đồng.
             </span>
           </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>4.3. Hình thức thanh toán</span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              - Trực tiếp bằng tiền mặt cho đại điện bên B &nbsp; &nbsp; &nbsp;
-              &nbsp;&nbsp;
-            </span>
-          </p>
-          <p
-            style={{
-              textAlign: "justify",
-              color: "rgb(0, 0, 0)",
-              fontSize: "12pt",
-            }}
-          >
-            <span style={{ fontSize: "12pt" }}>
-              - Chuyển khoản qua ngân hàng
-            </span>
-          </p>
+
           <p
             style={{
               textAlign: "justify",
@@ -1552,7 +1371,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 5: ĐIỀU KHOẢN THI HÀNH
+                <span style={{ textDecoration: "underline" }}>Điều 5: </span>
+                ĐIỀU KHOẢN THI HÀNH
               </span>
             </strong>
           </p>
@@ -1593,7 +1413,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 6. HIỆU LỰC HỢP ĐỒNG
+                <span style={{ textDecoration: "underline" }}>Điều 6: </span>
+                HIỆU LỰC HỢP ĐỒNG
               </span>
             </strong>
           </p>
@@ -1646,7 +1467,8 @@ function ContractDelivery({ orderData }) {
           >
             <strong>
               <span style={{ fontSize: "12pt" }}>
-                Điều 7. ĐIỀU KHOẢN VÀ ĐIỀU KIỆN CHUNG
+                <span style={{ textDecoration: "underline" }}>Điều 7: </span>
+                ĐIỀU KHOẢN VÀ ĐIỀU KIỆN CHUNG
               </span>
             </strong>
           </p>
@@ -1687,6 +1509,17 @@ function ContractDelivery({ orderData }) {
                       <span style={{ fontSize: "12pt" }}>
                         (Ký, ghi rõ họ tên)
                       </span>
+                      <p style={{ fontSize: "12pt", marginLeft: "15px" }}>
+                        <img
+                          src={orderData.electronic_signature}
+                          width="200"
+                          height="80"
+                          style={{ objectFit: "cover" }}
+                        ></img>
+                      </p>
+                      <p style={{ fontSize: "12pt" }}>
+                        {orderData.customer_full_name.toUpperCase()}
+                      </p>
                     </em>
                   </p>
                 </td>
@@ -1700,6 +1533,15 @@ function ContractDelivery({ orderData }) {
                       <span style={{ fontSize: "12pt" }}>
                         (Ký, ghi rõ họ tên)
                       </span>
+                      <p style={{ fontSize: "12pt", marginLeft: "15px" }}>
+                        <img
+                          src="./img/signature.png"
+                          width="200"
+                          height="80"
+                          style={{ objectFit: "cover" }}
+                        ></img>
+                      </p>
+                      <p style={{ fontSize: "12pt" }}>HUỲNH THỊ TÂN</p>
                     </em>
                   </p>
                 </td>
@@ -1753,7 +1595,13 @@ function ContractDelivery({ orderData }) {
             </p>
           </div>
 
-          <div style={{ border: "2px solid #ccc", borderRadius:"10px" }}>
+          <div
+            style={{
+              border: "2px solid #ccc",
+              borderRadius: "10px",
+              opacity: orderData.electronic_signature != null ? "0.6" : "1",
+            }}
+          >
             <SignaturePad ref={sigPad} penColor="black" />
           </div>
 
