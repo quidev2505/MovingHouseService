@@ -54,7 +54,11 @@ function ReportVenueYear({ yearPass }) {
   //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
   // eslint-disable-next-line arrow-body-style
   const disabledDate = (current) => {
-    return current.year() != yearPassFilter;
+    return (
+      current.year() != "2021" &&
+      current.year() != "2022" &&
+      current.year != "2023"
+    );
   };
 
   const getDataVenueYear = async () => {
@@ -597,8 +601,17 @@ function ReportVenueYear({ yearPass }) {
         if (month <= endMonth || (month === endMonth && day <= endDay)) {
           // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng kết thúc, hoặc tháng bằng tháng kết thúc và ngày cần kiểm tra nhỏ hơn hoặc bằng ngày kết thúc
           if (year <= endYear && year >= startYear) {
+            console.log(date);
+            console.log(startDate);
+            console.log(endDate);
+            console.log(year);
+            console.log(startYear);
+            console.log(endYear);
+
             // Nếu năm cần kiểm tra nằm trong khoảng năm của ngày bắt đầu và ngày kết thúc
             return true;
+          } else {
+            return false;
           }
         }
       } else {

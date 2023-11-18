@@ -61,11 +61,11 @@ function LoginAdmin() {
                         {/* //Img icon */}
                         <div style={{ textAlign: "left" }}>
                           <img
-                            src="/img/logo_main.png"
-                            alt="anh_logo"
+                            alt=""
+                            src="./img/logo_new_version.png"
                             style={{
-                              width: "105px",
-                              height: "58px",
+                              width: "91px",
+                              height: "84px",
                               objectFit: "contain",
                               margiBottom: "13px",
                               marginTop: "-44px",

@@ -48,9 +48,19 @@ function ReportOrder({ orderPass }) {
   //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
   // eslint-disable-next-line arrow-body-style
   const disabledDate = (current) => {
-    return (
-      current.year() != 2023 && current.year() != 2022 && current.year() != 2021
-    );
+    try {
+      return (
+        current.year() != 2023 &&
+        current.year() != 2022 &&
+        current.year() != 2021
+      );
+    } catch (e) {
+      Swal.fire({
+        title: "Vui lòng chọn lại khoảng thời gian !",
+        icon: "warning",
+        confirmButtonText: "Xác nhận",
+      });
+    }
   };
 
   var totalReportCal = 0;
@@ -60,18 +70,21 @@ function ReportOrder({ orderPass }) {
       orderFilterNew = "Đã hủy";
       break;
     case 2:
-      orderFilterNew = "Đang tìm tài xế";
+      orderFilterNew = "Đang xử lý";
       break;
     case 3:
-      orderFilterNew = "Đang thực hiện";
+      orderFilterNew = "Đang tìm tài xế";
       break;
     case 4:
-      orderFilterNew = "Thanh toán hóa đơn";
+      orderFilterNew = "Đang thực hiện";
       break;
     case 5:
-      orderFilterNew = "Đã hoàn thành";
+      orderFilterNew = "Thanh toán hóa đơn";
       break;
     case 6:
+      orderFilterNew = "Đã hoàn thành";
+      break;
+    case 7:
       orderFilterNew = "Tất cả";
       break;
     default:
@@ -375,6 +388,10 @@ function ReportOrder({ orderPass }) {
           value: "Đã hủy",
         },
         {
+          text: "Đang xử lý",
+          value: "Đang xử lý",
+        },
+        {
           text: "Đang tìm tài xế",
           value: "Đang tìm tài xế",
         },
@@ -406,7 +423,9 @@ function ReportOrder({ orderPass }) {
                   ? "#FFCE56"
                   : status === "Thanh toán hóa đơn"
                   ? "#4BC0C0"
-                  : "#8142FF",
+                  : status === "Đang xử lý"
+                  ? "#151515"
+                  : "#FF7D2C",
             }}
           >
             {status}

@@ -62,8 +62,8 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: "Đang xử lý"
     },
-    //7 trạng thái
-    //1. Đang xử lý
+    //6 trạng thái
+    // 1.Đang xử lý
     // 2.Đang tìm tài xế
     // 3.Đang thực hiện
     // 4.Thanh toán hóa đơn
@@ -71,9 +71,9 @@ const orderSchema = new mongoose.Schema({
     // 6. Đã hủy
     //Nếu đã hủy đơn hàng
     //Chữ kí điện thử để xác thực xem có kí tên vào hợp đồng chưa
-    electronic_signature:{
+    electronic_signature: {
         type: String,
-        default:null
+        default: null
     },
     reason_cancel: {
         type: String,

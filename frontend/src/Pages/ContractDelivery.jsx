@@ -36,8 +36,9 @@ function ContractDelivery({ orderData, orderDataDetail }) {
           position: "center",
           icon: "success",
           title: "Cập nhật chữ ký điện tử thành công",
-          showConfirmButton: false,
-          timer: 1000,
+          text: "Hãy chờ bộ phận quản trị duyệt hợp đồng của bạn !",
+          showConfirmButton: true,
+          timer: 3000,
         });
       })
       .catch((e) => {
@@ -45,6 +46,7 @@ function ContractDelivery({ orderData, orderDataDetail }) {
           position: "center",
           icon: "warning",
           title: "Cập nhật chữ ký điện tử thất bại",
+          text: "Cần cập nhật lại hợp đồng do có lỗi !",
           showConfirmButton: false,
           timer: 1000,
         });
@@ -579,8 +581,10 @@ function ContractDelivery({ orderData, orderDataDetail }) {
               fontSize: "12pt",
             }}
           >
-            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+            <span style={{ fontSize: "12pt" }}>
               4.2. Phương thức thanh toán:{" "}
+            </span>
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
               {orderDataDetail.data[0].payment_method}
             </span>
           </p>
@@ -1340,8 +1344,10 @@ function ContractDelivery({ orderData, orderDataDetail }) {
               fontSize: "12pt",
             }}
           >
-            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
+            <span style={{ fontSize: "12pt" }}>
               4.2. Phương thức thanh toán:{" "}
+            </span>
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
               {orderDataDetail.data[0].payment_method}
             </span>
           </p>

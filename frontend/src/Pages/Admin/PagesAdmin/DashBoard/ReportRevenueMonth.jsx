@@ -918,7 +918,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                fontSize: "12px",
+                fontSize: "10px",
               }}
             >
               Tổng doanh thu:&nbsp;
@@ -932,7 +932,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
                 display: "flex",
                 alignItems: "center",
                 marginTop: 5,
-                fontSize: "11px",
+                fontSize: "10px",
               }}
             >
               Tổng chi phí phát sinh:&nbsp;
@@ -950,7 +950,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                fontSize: "12px",
+                fontSize: "10px",
               }}
             >
               Tổng chi phí đền bù:&nbsp;
@@ -963,7 +963,7 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
                 display: "flex",
                 alignItems: "center",
                 marginTop: 5,
-                fontSize: "11px",
+                fontSize: "10px",
               }}
             >
               Tổng lợi nhuận:&nbsp;

@@ -307,11 +307,12 @@ function DashBoardAdmin() {
     ],
   };
 
-  const [arrayOrderType, setArrOrderType] = useState([0, 0, 0, 0, 0]);
+  const [arrayOrderType, setArrOrderType] = useState([0, 0, 0, 0, 0, 0]);
   //Thống kê đơn hàng
   const dataPieOrder = {
     labels: [
       "ĐÃ HỦY",
+      "ĐANG XỬ LÝ",
       "ĐANG TÌM TÀI XẾ",
       "ĐANG THỰC HIỆN",
       "THANH TOÁN HÓA ĐƠN",
@@ -323,17 +324,19 @@ function DashBoardAdmin() {
         data: arrayOrderType,
         backgroundColor: [
           "#ff6384",
+          "#884DFF",
           "#36a2eb",
           "#ffce56",
           "#4bc0c0",
-          "#9966ff",
+          "#FF914D",
         ],
         borderColor: [
           "rgba(255, 99, 132, 1)",
+          "rgb(136, 77, 255)",
           "rgba(54, 162, 235, 1)",
           "rgba(255, 206, 86, 1)",
           "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
+          "rgba(255, 145, 77,1)",
         ],
         borderWidth: 1,
       },
@@ -537,7 +540,7 @@ function DashBoardAdmin() {
       }
       case "THỐNG KÊ ĐƠN HÀNG": {
         //Mảng chứa dữ liệu các năm (3 năm)
-        const arr_sum_order_type = [0, 0, 0, 0, 0];
+        const arr_sum_order_type = [0, 0, 0, 0, 0, 0];
 
         //Tính doanh thu theo từng năm
         arr_order.forEach((item, index) => {
@@ -549,24 +552,29 @@ function DashBoardAdmin() {
                 index_check = 0;
                 break;
               }
-              case "Đang tìm tài xế": {
+              case "Đang xử lý": {
                 index_check = 1;
                 break;
               }
-              case "Đang thực hiện": {
+              case "Đang tìm tài xế": {
                 index_check = 2;
                 break;
               }
-              case "Thanh toán hóa đơn": {
+              case "Đang thực hiện": {
                 index_check = 3;
                 break;
               }
-              case "Đã hoàn thành": {
+              case "Thanh toán hóa đơn": {
                 index_check = 4;
                 break;
               }
+              case "Đã hoàn thành": {
+                index_check = 5;
+                break;
+              }
               default: {
-                alert("no case for this !");
+                index_check = 3;
+
                 break;
               }
             }
@@ -579,24 +587,29 @@ function DashBoardAdmin() {
                 index_check = 0;
                 break;
               }
-              case "Đang tìm tài xế": {
+              case "Đang xử lý": {
                 index_check = 1;
                 break;
               }
-              case "Đang thực hiện": {
+              case "Đang tìm tài xế": {
                 index_check = 2;
                 break;
               }
-              case "Thanh toán hóa đơn": {
+              case "Đang thực hiện": {
                 index_check = 3;
                 break;
               }
-              case "Đã hoàn thành": {
+              case "Thanh toán hóa đơn": {
                 index_check = 4;
                 break;
               }
+              case "Đã hoàn thành": {
+                index_check = 5;
+                break;
+              }
               default: {
-                alert("no case for this !");
+                index_check = 3;
+
                 break;
               }
             }
@@ -1237,7 +1250,7 @@ function DashBoardAdmin() {
 
   //Xử lý khi click vào trạng thái đơn hàng bất kì
   const chartRefOrder = useRef();
-  const [orderPass, setOrderPass] = useState(5);
+  const [orderPass, setOrderPass] = useState(6);
 
   const onClickFilterOrder = (event) => {
     try {
@@ -1761,7 +1774,7 @@ function DashBoardAdmin() {
                               width: "70px",
                               cursor: "pointer",
                             }}
-                            onClick={() => setOrderPass(6)}
+                            onClick={() => setOrderPass(7)}
                           >
                             <FilterOutlined />
                             Tất cả
