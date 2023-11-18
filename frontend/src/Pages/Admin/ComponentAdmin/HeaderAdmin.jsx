@@ -39,7 +39,9 @@ function HeaderAdmin() {
   const items = [
     {
       label: (
-        <span style={{ color: "#f1a062" }}>{check_admin_login.username}</span>
+        <span style={{ color: "#f1a062" }}>
+          {check_admin_login.username} ({check_admin_login.department})
+        </span>
       ),
       key: "0",
     },

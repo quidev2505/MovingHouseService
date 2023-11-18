@@ -424,7 +424,7 @@ function ReportOrder({ orderPass }) {
                   : status === "Thanh toán hóa đơn"
                   ? "#4BC0C0"
                   : status === "Đang xử lý"
-                  ? "#151515"
+                  ? "#722CFF"
                   : "#FF7D2C",
             }}
           >

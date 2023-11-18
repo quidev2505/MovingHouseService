@@ -330,7 +330,10 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
           <td
             style={{
               fontWeight: "500",
-              color: "black",
+              color:
+                deliveryArea == "TPHCM và các tỉnh lân cận"
+                  ? "#FFC534"
+                  : "#fc5400",
             }}
           >
             {deliveryArea}
@@ -369,6 +372,10 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
           value: "Đã hủy",
         },
         {
+          text: "Đang xử lý",
+          value: "Đang xử lý",
+        },
+        {
           text: "Đang tìm tài xế",
           value: "Đang tìm tài xế",
         },
@@ -400,7 +407,9 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
                   ? "#FFCE56"
                   : status === "Thanh toán hóa đơn"
                   ? "#4BC0C0"
-                  : "#8142FF",
+                  : status === "Đang xử lý"
+                  ? "#722CFF"
+                  : "#FF7D2C",
             }}
           >
             {status}

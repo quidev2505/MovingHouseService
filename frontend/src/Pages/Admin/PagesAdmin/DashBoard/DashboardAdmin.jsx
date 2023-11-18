@@ -351,8 +351,8 @@ function DashBoardAdmin() {
       {
         label: "Thống kê số đơn hàng theo khu vực giao hàng",
         data: arrayDeliveryAreaType,
-        backgroundColor: ["#ffce56", "#4bc0c0"],
-        borderColor: ["rgba(255, 206, 86, 1)", "rgba(75, 192, 192, 1)"],
+        backgroundColor: ["#ffce56", "#ef0404"],
+        borderColor: ["rgba(255, 206, 86, 1)", "rgba(239, 4, 4,1)"],
         borderWidth: 1,
       },
     ],

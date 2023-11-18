@@ -7,8 +7,12 @@ import BottomCssContent from "../BottomCssContent";
 import LoadingOverlayComponent from "../../../../Components/LoadingOverlayComponent";
 import Highlighter from "react-highlight-words";
 
+import ContractDeliveryAdmin from "../ContractDeliveryAdmin";
+
 import * as XLSX from "xlsx"; //Xử lý file Excel
 import { Link } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 
 import {
   Space,
@@ -46,6 +50,7 @@ import {
   ReloadOutlined,
   FileExcelOutlined,
   FilterOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 
 import axios from "axios";
@@ -80,6 +85,12 @@ function OrderAdmin() {
 
   // const [statusOrder, setStatusOrder] = useState();
 
+  const check_admin_login = useSelector(
+    (state) => state.admin.login?.currentAdmin
+  );
+
+
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -109,19 +120,22 @@ function OrderAdmin() {
     },
     {
       key: "2",
-      label: "ĐANG TÌM TÀI XẾ",
+      label: "ĐANG XỬ LÝ",
     },
     {
       key: "3",
-      label: "ĐANG THỰC HIỆN",
+      label: "ĐANG TÌM TÀI XẾ",
     },
-
     {
       key: "4",
-      label: "THANH TOÁN HÓA ĐƠN",
+      label: "ĐANG THỰC HIỆN",
     },
     {
       key: "5",
+      label: "THANH TOÁN HÓA ĐƠN",
+    },
+    {
+      key: "6",
       label: "ĐÃ HOÀN THÀNH",
     },
   ];
@@ -132,16 +146,20 @@ function OrderAdmin() {
     let result = "";
     if (input_activeKey === "1") {
       result = "Đã hủy";
-    } else if (input_activeKey === "2") {
-      result = "Đang tìm tài xế";
+    }
+    if (input_activeKey === "2") {
+      result = "Đang xử lý";
     }
     if (input_activeKey === "3") {
-      result = "Đang thực hiện";
+      result = "Đang tìm tài xế";
     }
     if (input_activeKey === "4") {
-      result = "Thanh toán hóa đơn";
+      result = "Đang thực hiện";
     }
     if (input_activeKey === "5") {
+      result = "Thanh toán hóa đơn";
+    }
+    if (input_activeKey === "6") {
       result = "Đã hoàn thành";
     }
 
@@ -156,19 +174,22 @@ function OrderAdmin() {
         break;
       case "2":
         setActiveKeyTab("2");
-        show_order_customer("Đang tìm tài xế");
+        show_order_customer("Đang xử lý");
         break;
       case "3":
         setActiveKeyTab("3");
-        show_order_customer("Đang thực hiện");
+        show_order_customer("Đang tìm tài xế");
         break;
       case "4":
         setActiveKeyTab("4");
-
-        show_order_customer("Thanh toán hóa đơn");
+        show_order_customer("Đang thực hiện");
         break;
       case "5":
         setActiveKeyTab("5");
+        show_order_customer("Thanh toán hóa đơn");
+        break;
+      case "6":
+        setActiveKeyTab("6");
         show_order_customer("Đã hoàn thành");
         break;
       default:
@@ -362,14 +383,17 @@ function OrderAdmin() {
                     }
                   >
                     <option value="Chưa xác định">Chưa xác định</option>
-                    <option value="1.Người mua thay đổi ý định mua hàng">
-                      1.Người mua thay đổi ý định mua hàng
+                    <option
+                      value="(Hủy bởi QTV) - 1.Người mua thay đổi ý định mua
+                      hàng"
+                    >
+                      (Hủy bởi QTV) - 1.Người mua thay đổi ý định mua hàng
                     </option>
-                    <option value="2.Không thể liên hệ khách hàng">
-                      2.Không thể liên hệ khách hàng
+                    <option value="(Hủy bởi QTV) - 2.Không thể liên hệ khách hàng">
+                      (Hủy bởi QTV) - 2.Không thể liên hệ khách hàng
                     </option>
-                    <option value="3.Khách hàng đổi thời gian vận chuyển">
-                      3.Khách hàng đổi thời gian vận chuyển
+                    <option value="(Hủy bởi QTV) - 3.Khách hàng đổi thời gian vận chuyển">
+                      (Hủy bởi QTV) - 3.Khách hàng đổi thời gian vận chuyển
                     </option>
                   </select>
                   <div className="d-flex" style={{ marginTop: "20px" }}>
@@ -516,7 +540,9 @@ function OrderAdmin() {
                 driver_name: item.driver_name,
                 vehicle_name: item.vehicle_name,
                 totalOrder: item.totalOrder,
+                customer_id: item.customer_id,
                 customer_name: arr_customer_name[arr_index[index]],
+                electronic_signature: item.electronic_signature,
               };
               data_order.push(ob_order);
             });
@@ -680,6 +706,52 @@ function OrderAdmin() {
       ),
   });
 
+  const [checkModalContract, setCheckModalContract] = useState(true);
+
+  useEffect(() => {
+    Modal.destroyAll();
+  }, [checkModalContract]);
+
+  //Mở modal hợp đồng vận chuyển
+  const modal_contract_delivery = async (id_order_detail, order_id) => {
+    try {
+      const data_new = await axios.get(
+        `/v1/order/viewOrderDetail/${id_order_detail}`
+      );
+
+      const data_customer = await axios.get(`
+      /v1/customer/get_customer_with_id/${order_id.customer_id}`);
+
+      //Lấy tên khách hàng
+      let user_customer = await axios.get(
+        `/v1/customer/get_info_user_with_customer_name/${order_id.customer_name}`
+      );
+
+      order_id.address_customer = data_customer.data.address;
+      order_id.customer_full_name = data_customer.data.fullname;
+      order_id.phonenumber_customer = user_customer.data.phonenumber;
+      order_id.gender_customer = data_customer.data.gender;
+
+      Modal.success({
+        title: "Hợp đồng vận chuyển",
+        content: (
+          <>
+            <ContractDeliveryAdmin
+              orderData={order_id}
+              orderDataDetail={data_new}
+              checkModalContract={checkModalContract}
+              setCheckModalContract={setCheckModalContract}
+              departmentAdmin={check_admin_login.department}
+            />
+          </>
+        ),
+        onOk() {},
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   //Table Area
   const columns = [
     {
@@ -711,7 +783,9 @@ function OrderAdmin() {
                   ? "gold"
                   : status === "Thanh toán hóa đơn"
                   ? "magenta"
-                  : "#87d068"
+                  : status === "Đã hoàn thành"
+                  ? "#87d068"
+                  : "purple"
               }
               key={status}
             >
@@ -723,6 +797,8 @@ function OrderAdmin() {
                 ? "Đang thực hiện"
                 : status === "Thanh toán hóa đơn"
                 ? "Thanh toán hóa đơn"
+                : status === "Đang xử lý"
+                ? "Đang xử lý"
                 : "Đã hoàn thành"}
             </Tag>
           </div>
@@ -751,11 +827,20 @@ function OrderAdmin() {
       key: "time_get_item",
       render: (time_get_item) => (
         <>
-          <div style={{ fontWeight: "400", fontSize: "14px" }}>
+          <div
+            style={{
+              fontWeight: "400",
+              fontSize: "14px",
+            }}
+          >
             {time_get_item?.split("-")[0]}
           </div>
           <div
-            style={{ fontWeight: "400", fontSize: "13px", color: "#737373" }}
+            style={{
+              fontWeight: "400",
+              fontSize: "13px",
+              color: "#737373",
+            }}
           >
             {time_get_item?.split("-")[1]}
           </div>
@@ -889,6 +974,36 @@ function OrderAdmin() {
       ),
     },
     {
+      title: "Hợp đồng vận chuyển",
+      dataIndex: "id_order_detail",
+      key: "id_order_detail",
+      render: (id_order_detail, order_id) => (
+        <Space size="middle" className="icon_hover">
+          <div
+            onClick={() => modal_contract_delivery(id_order_detail, order_id)}
+            style={{
+              backgroundColor: "purple",
+              borderRadius: "50%",
+              padding: "5px",
+              display: "flex",
+              cursor: "pointer",
+              width: "30px",
+              height: "30px",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FormOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
+          </div>
+        </Space>
+      ),
+    },
+    {
       title: "Thao tác",
       key: "action",
       render: (order_id, driver_name) => (
@@ -907,7 +1022,12 @@ function OrderAdmin() {
               justifyContent: "center",
             }}
           >
-            <EditOutlined style={{ color: "white", fontWeight: "bold" }} />
+            <EditOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
           </div>
         </Space>
       ),
@@ -1255,7 +1375,10 @@ function OrderAdmin() {
 
               <div
                 className="d-flex"
-                style={{ justifyContent: "space-between", marginTop: "30px" }}
+                style={{
+                  justifyContent: "space-between",
+                  marginTop: "30px",
+                }}
               >
                 <p
                   style={{
@@ -1278,7 +1401,12 @@ function OrderAdmin() {
                           objectFit: "contain",
                         }}
                       />
-                      <span style={{ marginLeft: "5px", fontSize: "13px" }}>
+                      <span
+                        style={{
+                          marginLeft: "5px",
+                          fontSize: "13px",
+                        }}
+                      >
                         Tiền mặt
                       </span>
                     </div>
@@ -1293,7 +1421,12 @@ function OrderAdmin() {
                           objectFit: "contain",
                         }}
                       />
-                      <span style={{ marginLeft: "5px", fontSize: "13px" }}>
+                      <span
+                        style={{
+                          marginLeft: "5px",
+                          fontSize: "13px",
+                        }}
+                      >
                         Chuyển khoản
                       </span>
                     </div>
@@ -1303,16 +1436,23 @@ function OrderAdmin() {
 
               <div
                 className="d-flex"
-                style={{ justifyContent: "space-between" }}
+                style={{
+                  justifyContent: "space-between",
+                }}
               >
                 <p>Phí thuê xe vận chuyển ({item.distance})</p>
                 <p>{item.vehicle_price.toLocaleString()} đ</p>
               </div>
               <div
                 className="d-flex"
-                style={{ justifyContent: "space-between" }}
+                style={{
+                  justifyContent: "space-between",
+                }}
               >
-                <p>Nhân công bốc vác (x{item.man_power_quantity})</p>
+                <p>
+                  Nhân công bốc vác (x
+                  {item.man_power_quantity})
+                </p>
                 <p>{item.man_power_price.toLocaleString()} đ</p>
               </div>
 
@@ -1320,7 +1460,9 @@ function OrderAdmin() {
                 {item.moving_fee.map((item, index) => (
                   <div
                     className="d-flex"
-                    style={{ justifyContent: "space-between" }}
+                    style={{
+                      justifyContent: "space-between",
+                    }}
                   >
                     <p>{item.name.split("(")[0]}</p>
                     <p>{item.price.toLocaleString()} đ</p>
@@ -1330,7 +1472,9 @@ function OrderAdmin() {
                 {item.service_fee.map((item, index) => (
                   <div
                     className="d-flex"
-                    style={{ justifyContent: "space-between" }}
+                    style={{
+                      justifyContent: "space-between",
+                    }}
                   >
                     <p>{item.name.split("(")[0]}</p>
                     <p>{item.price.toLocaleString()} đ</p>
@@ -1339,7 +1483,9 @@ function OrderAdmin() {
 
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
                   <p>Tổng thanh toán cũ</p>
                   <p className="fw-bold">
@@ -1351,7 +1497,9 @@ function OrderAdmin() {
                   <>
                     <div
                       className="d-flex"
-                      style={{ justifyContent: "space-between" }}
+                      style={{
+                        justifyContent: "space-between",
+                      }}
                     >
                       <p className="fw-bold">* Chi phí phát sinh: </p>
                       <p className="fw-bold"></p>
@@ -1359,7 +1507,9 @@ function OrderAdmin() {
 
                     <div
                       className="d-flex"
-                      style={{ justifyContent: "space-between" }}
+                      style={{
+                        justifyContent: "space-between",
+                      }}
                     >
                       <p>{item.more_fee_name}</p>
                       <p className="fw-bold" style={{ color: "green" }}>
@@ -1376,7 +1526,9 @@ function OrderAdmin() {
                   <>
                     <div
                       className="d-flex"
-                      style={{ justifyContent: "space-between" }}
+                      style={{
+                        justifyContent: "space-between",
+                      }}
                     >
                       <p className="fw-bold">* Chi phí đền bù: </p>
                       <p className="fw-bold"></p>
@@ -1384,7 +1536,9 @@ function OrderAdmin() {
 
                     <div
                       className="d-flex"
-                      style={{ justifyContent: "space-between" }}
+                      style={{
+                        justifyContent: "space-between",
+                      }}
                     >
                       <p>{item.offset_fee_name}</p>
                       <p className="fw-bold" style={{ color: "red" }}>
@@ -1398,7 +1552,10 @@ function OrderAdmin() {
 
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between", marginTop: "25px" }}
+                  style={{
+                    justifyContent: "space-between",
+                    marginTop: "25px",
+                  }}
                 >
                   <p
                     style={{
@@ -1416,7 +1573,10 @@ function OrderAdmin() {
 
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between", marginTop: "25px" }}
+                  style={{
+                    justifyContent: "space-between",
+                    marginTop: "25px",
+                  }}
                 >
                   <p
                     style={{
@@ -1711,7 +1871,10 @@ function OrderAdmin() {
             >
               <div
                 className="d-flex"
-                style={{ justifyContent: "flex-end", overflow: "hidden" }}
+                style={{
+                  justifyContent: "flex-end",
+                  overflow: "hidden",
+                }}
               >
                 <div
                   className="d-flex"
@@ -1728,7 +1891,10 @@ function OrderAdmin() {
                     id="find_service"
                     className="form-control form-control-lg"
                     placeholder="(Lọc theo Mã đơn hàng, Tên khách hàng, Tên tài xế)"
-                    style={{ fontSize: "17px", borderRadius: "3px" }}
+                    style={{
+                      fontSize: "17px",
+                      borderRadius: "3px",
+                    }}
                     value={searchAllOrder}
                     onChange={(e) => setSearchAllOrder(e.target.value)}
                   />
@@ -1785,7 +1951,10 @@ function OrderAdmin() {
                       id="find_service"
                       className="form-control form-control-lg"
                       placeholder="Tìm kiếm theo mã đơn hàng hoặc tên dịch vụ"
-                      style={{ fontSize: "17px", borderRadius: "3px" }}
+                      style={{
+                        fontSize: "17px",
+                        borderRadius: "3px",
+                      }}
                       onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
@@ -1932,7 +2101,10 @@ function OrderAdmin() {
                           }
                         />{" "}
                         <ColumnWidthOutlined
-                          style={{ color: "orange", margin: "10px" }}
+                          style={{
+                            color: "orange",
+                            margin: "10px",
+                          }}
                         />
                         <input
                           type="text"

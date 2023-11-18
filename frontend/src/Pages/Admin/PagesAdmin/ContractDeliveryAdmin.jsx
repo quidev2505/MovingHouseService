@@ -9,11 +9,12 @@ import SignaturePad from "react-signature-pad";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import axios from "axios";
 
-function ContractDelivery({
+function ContractDeliveryAdmin({
+  checkModalContract,
+  setCheckModalContract,
   orderData,
   orderDataDetail,
-  checkModal,
-  setCheckModal,
+  departmentAdmin,
 }) {
   let sigPad = useRef({});
 
@@ -26,49 +27,57 @@ function ContractDelivery({
     sigPad.current.fromDataURL(orderData.electronic_signature);
   }, []);
 
-  function clearSign() {
-    sigPad.current.clear();
-  }
-
-  async function finishSign() {
-    const data_update_signal = sigPad.current.toDataURL();
+  //Duyệt hợp đồng
+  const duyetHD = async () => {
     Swal.fire({
-      title: "Bạn đã đọc xong hợp đồng và đồng ý với điều khoản hợp đồng ?",
+      title:
+        "Duyệt hợp đồng này (Đơn hàng chuyển sang trạng thái - Đang tìm tài xế) ?",
       showDenyButton: true,
       confirmButtonText: "Xác nhận",
       denyButtonText: "Hủy",
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        axios
+        await axios
           .patch(`/v1/order/updateonefield_order/${orderData.order_id}`, {
-            electronic_signature: data_update_signal,
+            status: "Đang tìm tài xế",
           })
           .then((data) => {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Cập nhật chữ ký điện tử thành công",
-              text: "Hãy chờ bộ phận quản trị duyệt hợp đồng của bạn !",
-              showConfirmButton: true,
-              timer: 3000,
-            });
-            setCheckModal(false);
+            Swal.fire("Duyệt đơn thành công !", "", "success");
+            setCheckModalContract(false);
           })
           .catch((e) => {
-            Swal.fire({
-              position: "center",
-              icon: "warning",
-              title: "Cập nhật chữ ký điện tử thất bại",
-              text: "Cần cập nhật lại hợp đồng do có lỗi !",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-            setCheckModal(false);
+            console.log(e);
           });
       }
     });
-  }
+  };
+
+  //Hủy hợp đồng
+  const huyHD = async () => {
+    Swal.fire({
+      title: "Hủy hợp đồng này (Đơn hàng chuyển sang trạng thái - Đã hủy) ?",
+      showDenyButton: true,
+      confirmButtonText: "Xác nhận",
+      denyButtonText: "Hủy",
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        await axios
+          .patch(`/v1/order/updateonefield_order/${orderData.order_id}`, {
+            status: "Đã hủy",
+            reason_cancel: "(Hủy bởi QTV) - Hợp đồng gặp sai xót",
+          })
+          .then((data) => {
+            Swal.fire("Hủy hợp đồng thành công !", "", "success");
+            setCheckModalContract(false);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    });
+  };
 
   const pdfJSX = () => {
     return (
@@ -433,7 +442,7 @@ function ContractDelivery({
           >
             <span style={{ fontSize: "12pt" }}>- Từ địa chỉ:&nbsp;</span>
             <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
-              {orderData.router.split("->")[0]}
+              {orderData.router.split("-")[0]}
             </span>
           </p>
           <p
@@ -445,7 +454,7 @@ function ContractDelivery({
           >
             <span style={{ fontSize: "12pt" }}>- Đến địa chỉ:&nbsp;</span>
             <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
-              {orderData.router.split("->")[1]}
+              {orderData.router.split("-")[1]}
             </span>
           </p>
           <p
@@ -1196,7 +1205,7 @@ function ContractDelivery({
           >
             <span style={{ fontSize: "12pt" }}>- Từ địa chỉ:&nbsp;</span>
             <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
-              {orderData.router.split("->")[0]}
+              {orderData.router.split("-")[0]}
             </span>
           </p>
           <p
@@ -1208,7 +1217,7 @@ function ContractDelivery({
           >
             <span style={{ fontSize: "12pt" }}>- Đến địa chỉ:&nbsp;</span>
             <span style={{ fontSize: "12pt", fontWeight: "bold" }}>
-              {orderData.router.split("->")[1]}
+              {orderData.router.split("-")[1]}
             </span>
           </p>
           <p
@@ -1628,29 +1637,31 @@ function ContractDelivery({
             <SignaturePad ref={sigPad} penColor="black" />
           </div>
 
-          {/* Nút nhấn */}
-          <div
-            style={{
-              display:
-                orderData.electronic_signature != null ? "none" : "block",
-              marginTop: "10px",
-            }}
-          >
-            <button
-              className="btn btn-warning text-white"
-              onClick={clearSign}
-              style={{ marginRight: "20px" }}
-            >
-              Xóa
-            </button>
-            <button className="btn btn-success text-white" onClick={finishSign}>
-              Xác nhận
-            </button>
-          </div>
+          {/* Khu vực xác thực hợp đồng */}
+          {orderData.status == "Đang xử lý" &&
+          orderData.electronic_signature != null &&
+          departmentAdmin == "Quản lý" ? (
+            <>
+              <div style={{ marginTop: "10px" }}>
+                <button
+                  className="btn btn-primary"
+                  style={{ marginRight: "10px" }}
+                  onClick={duyetHD}
+                >
+                  Duyệt hợp đồng
+                </button>
+                <button className="btn btn-danger" onClick={huyHD}>
+                  Hủy hợp đồng
+                </button>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </>
   );
 }
 
-export default ContractDelivery;
+export default ContractDeliveryAdmin;

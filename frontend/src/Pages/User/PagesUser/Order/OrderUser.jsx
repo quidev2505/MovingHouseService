@@ -1161,6 +1161,13 @@ function OrderUser() {
   ];
 
   const reason_cancel_order = useRef("Chưa xác định");
+  
+  const [checkModal, setCheckModal] = useState(true)
+
+  //Tắt Modal
+  useEffect(() => {
+    Modal.destroyAll()
+  }, [checkModal])
 
   //Mở modal hợp đồng vận chuyển
   const modal_contract_delivery = async (id_order_detail, order_id) => {
@@ -1173,7 +1180,12 @@ function OrderUser() {
         title: "Hợp đồng vận chuyển",
         content: (
           <>
-            <ContractDelivery orderData={order_id} orderDataDetail={data_new} />
+            <ContractDelivery
+              orderData={order_id}
+              orderDataDetail={data_new}
+              checkModal={checkModal}
+              setCheckModal={setCheckModal}
+            />
           </>
         ),
         onOk() {},

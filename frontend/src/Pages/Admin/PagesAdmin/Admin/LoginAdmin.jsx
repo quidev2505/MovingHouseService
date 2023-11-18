@@ -66,7 +66,7 @@ function LoginAdmin() {
                             style={{
                               width: "91px",
                               height: "84px",
-                              objectFit: "contain",
+                              objectFit: "cover",
                               margiBottom: "13px",
                               marginTop: "-44px",
                             }}
