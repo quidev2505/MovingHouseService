@@ -140,7 +140,17 @@ function HeaderAdmin() {
                   localStorage.setItem("menu", "/admin/order");
                 }}
               >
-                {item.content} Mã đơn hàng:{" "}
+                <span
+                  style={{
+                    color:
+                      item.content == "Có đơn hàng mới vừa được tạo !"
+                        ? "#3396c5"
+                        : "rgb(255, 78, 116)",
+                  }}
+                >
+                  {item.content}
+                </span>
+                Mã đơn hàng:{" "}
                 <span style={{ color: "red" }}>{item.order_id}</span>
               </p>
               <div

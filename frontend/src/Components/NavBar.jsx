@@ -112,7 +112,17 @@ const NavBar = () => {
                   localStorage.setItem("menu", "/user/order");
                 }}
               >
-                {item.content} Mã đơn hàng:{" "}
+                <span
+                  style={{
+                    color:
+                      item.content == "Có đơn hàng mới vừa được tạo !"
+                        ? "#3396c5"
+                        : "rgb(255, 78, 116)",
+                  }}
+                >
+                  {item.content}
+                </span>{" "}
+                Mã đơn hàng:{" "}
                 <span style={{ color: "red" }}>{item.order_id}</span>
               </p>
               <div
@@ -225,7 +235,11 @@ const NavBar = () => {
                 <Link
                   to="/"
                   className="nav-link"
-                  style={{ color: "#E16D2A", backgroundColor: "#F2E6E6", borderRadius:"20px" }}
+                  style={{
+                    color: "#E16D2A",
+                    backgroundColor: "#F2E6E6",
+                    borderRadius: "20px",
+                  }}
                 >
                   <FaPhone></FaPhone> &nbsp;(+84) 992356425
                 </Link>

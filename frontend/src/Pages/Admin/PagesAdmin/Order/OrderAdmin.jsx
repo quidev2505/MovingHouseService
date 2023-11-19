@@ -89,8 +89,6 @@ function OrderAdmin() {
     (state) => state.admin.login?.currentAdmin
   );
 
-
-
   const showDrawer = () => {
     setOpen(true);
   };
@@ -303,12 +301,12 @@ function OrderAdmin() {
   const [listDriver, setListDriver] = useState("");
 
   //Hủy đơn hàng
-  const cancelOrder = async (order_id, driver_name) => {
+  const cancelOrder = async (order_id, driver_name, customer_id) => {
     if (reason_cancel_order.current === "Chưa xác định") {
       Swal.fire({
         position: "center",
         icon: "warning",
-        title: "Vui lòng cập nhất lý do hủy đơn",
+        title: "Vui lòng cập nhật lý do hủy đơn",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -321,7 +319,13 @@ function OrderAdmin() {
 
       await axios
         .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, ob)
-        .then((data) => {
+        .then(async (data) => {
+          await axios.post(`/v1/notification/createNotification`, {
+            customer_id: order_id.customer_id,
+            order_id: order_id.order_id,
+            status_order: `(QTV) - Có đơn hàng vừa bị hủy !`,
+          });
+
           Swal.fire({
             position: "center",
             icon: "success",
@@ -349,7 +353,7 @@ function OrderAdmin() {
   };
 
   //Update order
-  const handle_update_order = (order_id, driver_name) => {
+  const handle_update_order = (order_id, driver_name, customer_id) => {
     Modal.success({
       title: "Cập nhật đơn hàng",
       content: (
@@ -405,7 +409,9 @@ function OrderAdmin() {
                         fontWeight: "bold",
                         marginLeft: "20px",
                       }}
-                      onClick={() => cancelOrder(order_id, driver_name)}
+                      onClick={() =>
+                        cancelOrder(order_id, driver_name, customer_id)
+                      }
                     >
                       Hủy đơn hàng
                     </button>
@@ -1006,10 +1012,10 @@ function OrderAdmin() {
     {
       title: "Thao tác",
       key: "action",
-      render: (order_id, driver_name) => (
+      render: (order_id, driver_name,customer_id) => (
         <Space size="middle" className="icon_hover">
           <div
-            onClick={() => handle_update_order(order_id, driver_name)}
+            onClick={() => handle_update_order(order_id, driver_name,customer_id)}
             style={{
               backgroundColor: "red",
               borderRadius: "50%",

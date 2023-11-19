@@ -5,10 +5,12 @@ const notiticationController = {
     createNotification: async (req, res) => {
         try {
             const data_input = req.body;
+            console.log(data_input)
 
             const data_notification = await new Notification({
+                id_customer: req.body.customer_id,
                 order_id: data_input.order_id,
-                status_order: data_input.status_order
+                content: data_input.status_order
             })
 
             //Save Data Notificatiooon

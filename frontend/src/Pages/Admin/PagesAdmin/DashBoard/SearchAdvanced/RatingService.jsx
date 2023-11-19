@@ -63,58 +63,20 @@ function RatingService() {
     const [startDay, startMonth, startYear] = startDate.split("/");
     const [endDay, endMonth, endYear] = endDate.split("/");
 
-    // console.log(date)
-    // console.log(startDate)
-    // console.log(endDate)
+    // Chuyển đổi ngày thành mili giây
+    const dateInMiliseconds = new Date(`${year}-${month}-${day}`).getTime();
+    const startDateInMiliseconds = new Date(
+      `${startYear}-${startMonth}-${startDay}`
+    ).getTime();
+    const endDateInMiliseconds = new Date(
+      `${endYear}-${endMonth}-${endDay}`
+    ).getTime();
 
-    //Trường hợp chỉ đưa về 1 giá trị đúng và các trường hợp còn lại sai hết
-
-    // So sánh ngày, tháng, năm của ngày cần kiểm tra với ngày bắt đầu và ngày kết thúc
-    //So sánh năm trước
-    if (year >= startYear && year <= endYear) {
-      if (day >= startDay && day <= endDay) {
-        // Nếu ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
-        if (month >= startMonth || (month === startMonth && day >= startDay)) {
-          // Nếu tháng cần kiểm tra lớn hơn hoặc bằng tháng bắt đầu, hoặc tháng bằng tháng bắt đầu và ngày cần kiểm tra lớn hơn hoặc bằng ngày bắt đầu
-          if (month <= endMonth || (month === endMonth && day <= endDay)) {
-            // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng kết thúc, hoặc tháng bằng tháng kết thúc và ngày cần kiểm tra nhỏ hơn hoặc bằng ngày kết thúc
-            if (year <= endYear && year >= startYear) {
-              // Nếu năm cần kiểm tra nằm trong khoảng năm của ngày bắt đầu và ngày kết thúc
-              return true;
-            }
-          }
-        } else {
-          // Nếu tháng cần kiểm tra nhỏ hơn tháng bắt đầu
-          return false;
-        }
-      } else {
-        //Nếu ngày bắt đầu và ngày kết thúc đều nhỏ hơn ngày hiện tại và tháng bắng nhau
-        if (
-          day > startDay &&
-          day > endDay &&
-          month == startMonth &&
-          month == endMonth
-        ) {
-          return false;
-        }
-
-        //Nếu tháng bằng nhau
-        if (day < startDay && month == startMonth) {
-          return false;
-        } else {
-          // Nếu ngày cần kiểm tra nhỏ hơn ngày bắt đầu
-          if (month >= startMonth && month <= endMonth) {
-            // Nếu tháng cần kiểm tra lớn hơn tháng bắt đầu
-            return true;
-          } else {
-            // Nếu tháng cần kiểm tra nhỏ hơn hoặc bằng tháng bắt đầu
-            return false;
-          }
-        }
-      }
-    }
-
-    return false;
+    // Kiểm tra xem ngày nằm trong khoảng thời gian hay không
+    return (
+      dateInMiliseconds >= startDateInMiliseconds &&
+      dateInMiliseconds <= endDateInMiliseconds
+    );
   };
 
   //Tìm dữ liệu theo khoảng thời gian cho trước

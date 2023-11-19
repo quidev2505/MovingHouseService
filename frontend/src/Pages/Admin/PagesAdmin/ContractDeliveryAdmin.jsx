@@ -42,8 +42,22 @@ function ContractDeliveryAdmin({
           .patch(`/v1/order/updateonefield_order/${orderData.order_id}`, {
             status: "Đang tìm tài xế",
           })
-          .then((data) => {
+          .then(async (data) => {
             Swal.fire("Duyệt đơn thành công !", "", "success");
+            await axios
+              .post(`https://app.nativenotify.com/api/notification`, {
+                appId: 13475,
+                appToken: "xmmYdFdEmeO1apoZvNDbgd",
+                title: "[🚛] Có đơn hàng mới ! [🚛]",
+                body: `[📅] - ID đơn hàng: ${orderData.order_id} [📅]`,
+                dateSent: Date.now(),
+              })
+              .then((data1) => {
+                console.log(data1);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
             setCheckModalContract(false);
           })
           .catch((e) => {
@@ -68,8 +82,22 @@ function ContractDeliveryAdmin({
             status: "Đã hủy",
             reason_cancel: "(Hủy bởi QTV) - Hợp đồng gặp sai xót",
           })
-          .then((data) => {
+          .then(async(data) => {
             Swal.fire("Hủy hợp đồng thành công !", "", "success");
+            await axios
+              .post(`https://app.nativenotify.com/api/notification`, {
+                appId: 13475,
+                appToken: "xmmYdFdEmeO1apoZvNDbgd",
+                title: "[🚛] Đã bị hủy đơn hàng ! [🚛]",
+                body: `[📅] - ID đơn hàng: ${orderData.order_id} - Lí do:(Hủy bởi QTV) - Hợp đồng gặp sai xót  [📅]`,
+                dateSent: Date.now(),
+              })
+              .then((data1) => {
+                console.log(data1);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
             setCheckModalContract(false);
           })
           .catch((e) => {

@@ -75,6 +75,7 @@ function OrderUser() {
   };
 
   const [dataOrder, setDataOrder] = useState([]);
+  const [idCustomer, setIdCustomer] = useState();
 
   const user = useSelector((state) => state.auth.login.currentUser); //Lấy User hiện tại ra
   const show_order_customer = async () => {
@@ -83,6 +84,8 @@ function OrderUser() {
     let id_customer = await axios.get(
       `/v1/customer/get_customer_with_fullname/${user.fullname}`
     );
+
+    setIdCustomer(id_customer.data._id);
 
     if (id_customer) {
       await axios
@@ -916,6 +919,7 @@ function OrderUser() {
       title: "Thời gian lấy hàng",
       dataIndex: "time_get_item",
       key: "time_get_item",
+      ...getColumnSearchProps("time_get_item"),
       render: (time_get_item) => (
         <>
           <div style={{ fontWeight: "400", fontSize: "14px" }}>
@@ -1091,7 +1095,7 @@ function OrderUser() {
       key: "action",
       render: (order_id, driver_name) => (
         <Space size="middle" className="icon_hover">
-          {driver_name.driver_name.length === 0 ? (
+          {order_id.status === "Đang xử lý" ? (
             <>
               <div
                 onClick={() => modal_cancel_order(order_id)}
@@ -1161,13 +1165,13 @@ function OrderUser() {
   ];
 
   const reason_cancel_order = useRef("Chưa xác định");
-  
-  const [checkModal, setCheckModal] = useState(true)
+
+  const [checkModal, setCheckModal] = useState(true);
 
   //Tắt Modal
   useEffect(() => {
-    Modal.destroyAll()
-  }, [checkModal])
+    Modal.destroyAll();
+  }, [checkModal]);
 
   //Mở modal hợp đồng vận chuyển
   const modal_contract_delivery = async (id_order_detail, order_id) => {
@@ -1225,14 +1229,17 @@ function OrderUser() {
                 onChange={(e) => (reason_cancel_order.current = e.target.value)}
               >
                 <option value="Chưa xác định">Chưa xác định</option>
-                <option value="1.Tôi muốn đổi thời gian giao hàng">
-                  1.Tôi muốn đổi thời gian giao hàng
+                <option value="(Hủy bởi KH) - 1.Tôi muốn đổi thời gian giao hàng">
+                  (Hủy bởi KH) - 1.Tôi muốn đổi thời gian giao hàng
                 </option>
-                <option value="2.Tôi muốn đổi địa chỉ khác">
-                  2.Tôi muốn đổi địa chỉ khác
+                <option value="(Hủy bởi KH) - 2.Tôi muốn đổi địa chỉ khác">
+                  (Hủy bởi KH) - 2.Tôi muốn đổi địa chỉ khác
                 </option>
-                <option value="3.Tôi không muốn sử dụng dịch vụ này">
-                  3.Tôi không muốn sử dụng dịch vụ này
+                <option value="(Hủy bởi KH) - 3.Tôi không muốn sử dụng dịch vụ này">
+                  (Hủy bởi KH) - 3.Tôi không muốn sử dụng dịch vụ này
+                </option>
+                <option value="(Hủy bởi KH) - 4.Hợp đồng có sai xót">
+                  (Hủy bởi KH) - 4.Hợp đồng có sai xót
                 </option>
               </select>
               <div className="d-flex" style={{ marginTop: "20px" }}>
@@ -1275,7 +1282,13 @@ function OrderUser() {
 
       await axios
         .patch(`/v1/order/updateonefield_order/${order_id.order_id}`, ob)
-        .then((data) => {
+        .then(async (data) => {
+          await axios.post(`/v1/notification/createNotification`, {
+            customer_id: idCustomer,
+            order_id: order_id.order_id,
+            status_order: `(KH) - Có đơn hàng vừa bị hủy !`,
+          });
+
           Swal.fire({
             position: "center",
             icon: "success",
