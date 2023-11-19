@@ -93,49 +93,53 @@ function BookingUser() {
 
   //Tạo đơn hàng
   const create_order = async () => {
-    let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
-    const object_data = {
-      totalOrder: data_from_local?.totalOrder,
-      service_name: data_from_local.step1.select_service,
-      date_start: data_from_local.step1.moving_date,
-      time_start: data_from_local.step1.moving_time,
-      distance: data_from_local.step2.distance,
-      duration: data_from_local.step2.duration,
-      fromLocation: data_from_local.step2.fromLocation.name,
-      fromLocation_detail: data_from_local.step2.from_location_detail,
-      toLocation: data_from_local.step2.toLocation.name,
-      deliveryArea: data_from_local.step2.deliveryArea,
-      toLocation_detail: data_from_local.step2.to_location_detail,
-      price_vehicle: data_from_local.step3.priceStep3,
-      vehicle_name: data_from_local.step3.vehicle_choose.vehicle_name,
-      man_power_quantity: data_from_local.step4.man_power_count.quantity_man,
-      man_power_price: data_from_local.step4.man_power_count.total_price_man,
-      payment_method: data_from_local.step4.payment_method,
-      note_driver: data_from_local.step4.noteDriver,
-      customer_id: data_from_local.step4.customer_id,
-      moving_fee: data_from_local.step4.moving_fee,
-      service_fee: data_from_local.step4.service_fee,
-      item_detail: data_from_local.step4.dataChooseItem,
-    };
+    try {
+      let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+      const object_data = {
+        totalOrder: data_from_local?.totalOrder,
+        service_name: data_from_local.step1.select_service,
+        date_start: data_from_local.step1.moving_date,
+        time_start: data_from_local.step1.moving_time,
+        distance: data_from_local.step2.distance,
+        duration: data_from_local.step2.duration,
+        fromLocation: data_from_local.step2.fromLocation.name,
+        fromLocation_detail: data_from_local.step2.from_location_detail,
+        toLocation: data_from_local.step2.toLocation.name,
+        deliveryArea: data_from_local.step2.deliveryArea,
+        toLocation_detail: data_from_local.step2.to_location_detail,
+        price_vehicle: data_from_local.step3.priceStep3,
+        vehicle_name: data_from_local.step3.vehicle_choose.vehicle_name,
+        man_power_quantity: data_from_local.step4.man_power_count.quantity_man,
+        man_power_price: data_from_local.step4.man_power_count.total_price_man,
+        payment_method: data_from_local.step4.payment_method,
+        note_driver: data_from_local.step4.noteDriver,
+        customer_id: data_from_local.step4.customer_id,
+        moving_fee: data_from_local.step4.moving_fee,
+        service_fee: data_from_local.step4.service_fee,
+        item_detail: data_from_local.step4.dataChooseItem,
+      };
 
-    if (object_data) {
-      await axios
-        .post("/v1/order/create_order", object_data)
-        .then(async (data) => {
-          setCurrent(current + 1);
-          console.log(data);
-        })
-        .catch((e) => {
-          console.log(e);
-          Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: "Đặt dịch vụ thất bại !",
-            text: "Hãy thử lại !",
-            showConfirmButton: false,
-            timer: 1000,
+      if (object_data) {
+        await axios
+          .post("/v1/order/create_order", object_data)
+          .then(async (data) => {
+            setCurrent(current + 1);
+            console.log(data);
+          })
+          .catch((e) => {
+            console.log(e);
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Đặt dịch vụ thất bại !",
+              text: "Hãy thử lại !",
+              showConfirmButton: false,
+              timer: 1000,
+            });
           });
-        });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -300,7 +304,7 @@ function BookingUser() {
                   fontSize: "20px",
                 }}
               >
-                {totalOrder.toLocaleString()} đ
+                {totalOrder?.toLocaleString()} đ
               </h3>
             </div>
             <div

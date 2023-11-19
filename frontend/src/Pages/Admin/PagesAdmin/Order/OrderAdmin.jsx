@@ -1012,10 +1012,12 @@ function OrderAdmin() {
     {
       title: "Thao tác",
       key: "action",
-      render: (order_id, driver_name,customer_id) => (
+      render: (order_id, driver_name, customer_id) => (
         <Space size="middle" className="icon_hover">
           <div
-            onClick={() => handle_update_order(order_id, driver_name,customer_id)}
+            onClick={() =>
+              handle_update_order(order_id, driver_name, customer_id)
+            }
             style={{
               backgroundColor: "red",
               borderRadius: "50%",
@@ -1654,7 +1656,9 @@ function OrderAdmin() {
                 driver_name: item.driver_name,
                 vehicle_name: item.vehicle_name,
                 totalOrder: item.totalOrder,
+                customer_id: item.customer_id,
                 customer_name: arr_customer_name[index],
+                electronic_signature: item.electronic_signature,
               };
               data_order.push(ob_order);
             });

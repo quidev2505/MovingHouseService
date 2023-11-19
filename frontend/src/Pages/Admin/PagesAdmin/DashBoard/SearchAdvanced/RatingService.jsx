@@ -48,6 +48,16 @@ function RatingService() {
   const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
   const [endRange, setEndRange] = useState("31/12/2023"); //Thời gian cuối
 
+  //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
+  // eslint-disable-next-line arrow-body-style
+  const disabledDate = (current) => {
+    return (
+      current.year() != "2021" &&
+      current.year() != "2022" &&
+      current.year() != "2023"
+    );
+  };
+
   //Thiết lập lọc theo khoảng thời gian
   const changeRangeTime = (a, b, c) => {
     //b là range thời gian
@@ -685,9 +695,10 @@ function RatingService() {
               <div className="d-flex">
                 <RangePicker
                   defaultValue={[
-                    dayjs("01/01/2019", dateFormat),
+                    dayjs("01/01/2021", dateFormat),
                     dayjs("31/12/2023", dateFormat),
                   ]}
+                  disabledDate={disabledDate}
                   format={dateFormat}
                   onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
                 />

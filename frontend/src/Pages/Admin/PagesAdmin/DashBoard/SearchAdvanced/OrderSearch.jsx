@@ -57,6 +57,16 @@ function OrderSearch() {
     setEndRange(b[1]);
   };
 
+  //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
+  // eslint-disable-next-line arrow-body-style
+  const disabledDate = (current) => {
+    return (
+      current.year() != "2021" &&
+      current.year() != "2022" &&
+      current.year() != "2023"
+    );
+  };
+
   const isDateInRange = (date, startDate, endDate) => {
     // Lấy ngày, tháng, năm của ngày cần kiểm tra
     const [day, month, year] = date.split("/");
@@ -938,9 +948,10 @@ function OrderSearch() {
               <div className="d-flex">
                 <RangePicker
                   defaultValue={[
-                    dayjs("01/01/2019", dateFormat),
+                    dayjs("01/01/2021", dateFormat),
                     dayjs("31/12/2023", dateFormat),
                   ]}
+                  disabledDate={disabledDate}
                   format={dateFormat}
                   onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
                 />

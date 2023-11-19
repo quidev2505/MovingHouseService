@@ -1238,8 +1238,8 @@ function OrderUser() {
                 <option value="(Hủy bởi KH) - 3.Tôi không muốn sử dụng dịch vụ này">
                   (Hủy bởi KH) - 3.Tôi không muốn sử dụng dịch vụ này
                 </option>
-                <option value="(Hủy bởi KH) - 4.Hợp đồng có sai xót">
-                  (Hủy bởi KH) - 4.Hợp đồng có sai xót
+                <option value="(Hủy bởi KH) - 4.Hợp đồng có sai sót">
+                  (Hủy bởi KH) - 4.Hợp đồng có sai sót
                 </option>
               </select>
               <div className="d-flex" style={{ marginTop: "20px" }}>

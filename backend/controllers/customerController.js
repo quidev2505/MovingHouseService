@@ -59,6 +59,7 @@ const customerController = {
 
             const data_customer = await Customer.findOne({ _id: id_customer })
 
+
             if (data_customer) {
                 res.status(200).json(data_customer)
             } else {

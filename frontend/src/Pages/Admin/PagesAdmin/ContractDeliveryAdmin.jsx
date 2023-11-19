@@ -80,24 +80,16 @@ function ContractDeliveryAdmin({
         await axios
           .patch(`/v1/order/updateonefield_order/${orderData.order_id}`, {
             status: "Đã hủy",
-            reason_cancel: "(Hủy bởi QTV) - Hợp đồng gặp sai xót",
+            reason_cancel: "(Hủy bởi QTV) - Hợp đồng gặp sai sót",
           })
-          .then(async(data) => {
+          .then(async (data) => {
             Swal.fire("Hủy hợp đồng thành công !", "", "success");
-            await axios
-              .post(`https://app.nativenotify.com/api/notification`, {
-                appId: 13475,
-                appToken: "xmmYdFdEmeO1apoZvNDbgd",
-                title: "[🚛] Đã bị hủy đơn hàng ! [🚛]",
-                body: `[📅] - ID đơn hàng: ${orderData.order_id} - Lí do:(Hủy bởi QTV) - Hợp đồng gặp sai xót  [📅]`,
-                dateSent: Date.now(),
-              })
-              .then((data1) => {
-                console.log(data1);
-              })
-              .catch((e) => {
-                console.log(e);
-              });
+            await axios.post(`/v1/notification/createNotification`, {
+              customer_id: orderData.customer_id,
+              order_id: orderData.order_id,
+              status_order: `(QTV) - Có đơn hàng vừa bị hủy !`,
+            });
+
             setCheckModalContract(false);
           })
           .catch((e) => {
