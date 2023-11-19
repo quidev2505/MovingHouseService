@@ -541,28 +541,37 @@ function ReportCustomer({ customerPass }) {
               justifyContent: "space-between",
             }}
           >
-            <Tag
-              icon={<SyncOutlined spin />}
-              color="#ff671d"
+            <div
               style={{
-                display: "flex",
-                alignItems: "center",
+                border: "1px solid orange",
+                borderRadius: "10px",
+                margin: "10px",
+                padding: "10px",
               }}
             >
-              Số lượng khách hàng: {reportCustomer.length}
-            </Tag>
-            <Tag
-              icon={<SyncOutlined spin />}
-              color="#4bc0c0"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "5px",
-              }}
-            >
-              Tổng tất cả thanh toán:&nbsp;
-              {totalReport.toLocaleString()} đ
-            </Tag>
+              <Tag
+                icon={<SyncOutlined spin />}
+                color="#ff671d"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Số lượng khách hàng: {reportCustomer.length}
+              </Tag>
+              <Tag
+                icon={<SyncOutlined spin />}
+                color="#4bc0c0"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "5px",
+                }}
+              >
+                Tổng tất cả thanh toán:&nbsp;
+                {totalReport.toLocaleString()} đ
+              </Tag>
+            </div>
           </div>
           {/* Nút xuất ra file excel */}
           <div

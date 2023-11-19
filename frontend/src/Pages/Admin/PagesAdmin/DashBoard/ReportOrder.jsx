@@ -586,7 +586,7 @@ function ReportOrder({ orderPass }) {
     let total = 0;
     let arr_result = [];
     reportOrder.forEach((item, index) => {
-      if (isDateInRange(item.date_end.split(",")[0], startRange, endRange)) {
+      if (isDateInRange(item.date_created.split(",")[1], startRange, endRange)) {
         total += item.totalOrder;
         arr_result.push(item);
       }
@@ -623,28 +623,37 @@ function ReportOrder({ orderPass }) {
               alignItems: "flex-start",
             }}
           >
-            <Tag
-              icon={<SyncOutlined spin />}
-              color="#ff671d"
+            <div
               style={{
-                display: "flex",
-                alignItems: "center",
+                border: "1px solid orange",
+                borderRadius: "10px",
+                margin: "10px",
+                padding: "10px",
               }}
             >
-              Số lượng đơn hàng: {reportOrder.length}
-            </Tag>
-            <Tag
-              icon={<SyncOutlined spin />}
-              color="#4bc0c0"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "5px",
-              }}
-            >
-              Tổng tất cả đơn hàng:&nbsp;
-              {totalReport.toLocaleString()} đ
-            </Tag>
+              <Tag
+                icon={<SyncOutlined spin />}
+                color="#ff671d"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Số lượng đơn hàng: {reportOrder.length}
+              </Tag>
+              <Tag
+                icon={<SyncOutlined spin />}
+                color="#4bc0c0"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "5px",
+                }}
+              >
+                Tổng tất cả đơn hàng:&nbsp;
+                {totalReport.toLocaleString()} đ
+              </Tag>
+            </div>
           </div>
           {/* Thống kê theo khoảng thời gian từ đâu đến đâu. */}
           <div>

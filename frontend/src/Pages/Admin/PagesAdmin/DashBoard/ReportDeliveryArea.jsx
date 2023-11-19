@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Image, Table, Avatar, Input, Space, Button, Tag } from "antd";
+import {
+  Image,
+  Table,
+  Avatar,
+  Input,
+  Space,
+  Button,
+  Tag,
+  DatePicker,
+} from "antd";
 import Highlighter from "react-highlight-words";
 import {
   EditOutlined,
@@ -22,10 +31,41 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
 
 import { Toast } from "../../../../Components/ToastColor";
+
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+
+const { RangePicker } = DatePicker;
+
+const dateFormat = "DD/MM/YYYY";
+
 function ReportDeliveryArea({ deliveryAreaPass }) {
   const [reportDeliveryArea, setReportDeliveryArea] = useState([]);
+  // /Khoảng thời gian
+  const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
+  const [endRange, setEndRange] = useState("31/12/2023"); //Thời gian cuối
   //Tổng đơn theo thống kê
   const [totalReport, setTotalReport] = useState(0);
+
+  //Giới hạn chọn ngày thống kê trong phạm vi cho trước (năm hiện tại)
+  // eslint-disable-next-line arrow-body-style
+  const disabledDate = (current) => {
+    try {
+      return (
+        current.year() != 2023 &&
+        current.year() != 2022 &&
+        current.year() != 2021
+      );
+    } catch (e) {
+      Swal.fire({
+        title: "Vui lòng chọn lại khoảng thời gian !",
+        icon: "warning",
+        confirmButtonText: "Xác nhận",
+      });
+    }
+  };
+
   var totalReportCal = 0;
   var deliveryAreaFilterNew = "";
   switch (deliveryAreaPass) {
@@ -441,6 +481,13 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     getDataDeliveryArea();
   }, [deliveryAreaPass]);
 
+  //Thiết lập lọc theo khoảng thời gian
+  const changeRangeTime = (a, b, c) => {
+    //b là range thời gian
+    setStartRange(b[0]);
+    setEndRange(b[1]);
+  };
+
   useEffect(() => {
     //Hiển thị dữ liệu xã, huyện, tỉnh
     api_call_location();
@@ -540,17 +587,24 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     try {
       //Xử lý phường, quận, tỉnh/thành phố
       const split_location = stringLocation.split("-");
-      const phuong = split_location[2];
-      const quan = split_location[1];
-      const thanhpho = split_location[0];
 
-      const complete_location = `${phuong}, ${quan}, ${thanhpho}`;
+      let complete_location = "";
+      split_location.forEach((item, index) => {
+        complete_location += item + ",";
+      });
+
+      console.log(complete_location);
+      // const phuong = split_location[2];
+      // const quan = split_location[1];
+      // const thanhpho = split_location[0];
+
+      // const complete_location = `${phuong}, ${quan}, ${thanhpho}`;
 
       const callBoundingBox = await axios.get(
         `https://geocode.maps.co/search?q=${complete_location}&format=json`
       );
 
-      const dataBoundingBox = callBoundingBox.data[0].boundingbox;
+      const dataBoundingBox = callBoundingBox.data[0]?.boundingbox;
       filterLocation(dataBoundingBox);
     } catch (e) {
       console.log(e);
@@ -594,6 +648,7 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
           return item != undefined;
         });
 
+        console.log(dataNewResult);
         setReportDeliveryArea(dataNewResult);
         let total = 0;
         dataNewResult.forEach((item, index) => {
@@ -610,6 +665,7 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     }
   };
 
+  //Kiểm tra xem 1 điểm có nằm trong vùng vị trí không
   function isPointInBoundingBox(point, boundingBox) {
     const lat = parseFloat(point.lat);
     const lon = parseFloat(point.lon);
@@ -618,6 +674,18 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     const maxLat = parseFloat(boundingBox[1]);
     const minLon = parseFloat(boundingBox[2]);
     const maxLon = parseFloat(boundingBox[3]);
+
+    // minimum latitude, minimum longitude, maximum latitude, maximum longitude  
+
+    // Tọa độ trái dưới
+    // Tọa độ phải dưới
+    // Tọa độ phải trên
+    // Tọa độ trái trên
+
+    //     Tọa độ vĩ độ của điểm lớn hơn hoặc bằng tọa độ vĩ độ thấp nhất của bounding box và nhỏ hơn hoặc bằng tọa độ vĩ độ cao nhất của bounding box.
+    // Tọa độ kinh độ của điểm lớn hơn hoặc bằng tọa độ kinh độ thấp nhất của bounding box và nhỏ hơn hoặc bằng tọa độ kinh độ cao nhất của bounding box.
+
+    // Ví dụ, nếu tọa độ của điểm là (10.777, 106.667) và bounding box là (10.75, 106.65, 10.8, 106.68), thì điểm sẽ nằm trong bounding box.
 
     // console.log(point);
     // console.log(boundingBox);
@@ -716,6 +784,54 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
       });
   };
 
+  const isDateInRange = (date, startDate, endDate) => {
+    // Lấy ngày, tháng, năm của ngày cần kiểm tra
+    const [day, month, year] = date.split("/");
+
+    // Lấy ngày, tháng, năm của ngày bắt đầu và ngày kết thúc
+    const [startDay, startMonth, startYear] = startDate.split("/");
+    const [endDay, endMonth, endYear] = endDate.split("/");
+
+    // Chuyển đổi ngày thành mili giây
+    const dateInMiliseconds = new Date(`${year}-${month}-${day}`).getTime();
+    const startDateInMiliseconds = new Date(
+      `${startYear}-${startMonth}-${startDay}`
+    ).getTime();
+    const endDateInMiliseconds = new Date(
+      `${endYear}-${endMonth}-${endDay}`
+    ).getTime();
+
+    // Kiểm tra xem ngày nằm trong khoảng thời gian hay không
+    return (
+      dateInMiliseconds >= startDateInMiliseconds &&
+      dateInMiliseconds <= endDateInMiliseconds
+    );
+  };
+
+  //Lọc theo khoảng thời gian
+  const filterRangeDate = () => {
+    // console.log(reportVenueMonthData);
+    // console.log(startRange)
+    // console.log(endRange);
+    if (startRange == "" && endRange == "") {
+      getDataDeliveryArea();
+    }
+    let total = 0;
+    let arr_result = [];
+    reportDeliveryArea.forEach((item, index) => {
+      if (
+        isDateInRange(item.date_created.split(",")[1], startRange, endRange)
+      ) {
+        total += item.totalOrder;
+        arr_result.push(item);
+      }
+    });
+
+    setTotalReport(total);
+
+    setReportDeliveryArea(arr_result);
+  };
+
   return (
     <>
       {/* KHU VỰC DỮ LIỆU THỐNG KÊ DẠNG BẢNG */}
@@ -727,37 +843,52 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
           marginTop: "50px",
         }}
       >
-        <div className="d-flex" style={{ justifyContent: "space-between" }}>
+        <div
+          className="d-flex"
+          style={{
+            justifyContent: "space-between",
+          }}
+        >
           <div
             className="d-flex"
             style={{
               alignItems: "center",
               padding: "10px",
-              justifyContent: "space-between",
+              flexDirection: "column",
+              alignItems: "flex-start",
             }}
           >
-            <Tag
-              icon={<SyncOutlined spin />}
-              color="#ff671d"
+            <div
               style={{
-                display: "flex",
-                alignItems: "center",
+                border: "1px solid orange",
+                borderRadius: "10px",
+                margin: "10px",
+                padding: "10px",
               }}
             >
-              Số lượng đơn hàng: {reportDeliveryArea.length}
-            </Tag>
-            <Tag
-              icon={<SyncOutlined spin />}
-              color="#4bc0c0"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "5px",
-              }}
-            >
-              Tổng tất cả đơn hàng:&nbsp;
-              {totalReport.toLocaleString()} đ
-            </Tag>
+              <Tag
+                icon={<SyncOutlined spin />}
+                color="#ff671d"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Số lượng đơn hàng: {reportDeliveryArea.length}
+              </Tag>
+              <Tag
+                icon={<SyncOutlined spin />}
+                color="#4bc0c0"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "5px",
+                }}
+              >
+                Tổng tất cả đơn hàng:&nbsp;
+                {totalReport.toLocaleString()} đ
+              </Tag>
+            </div>
           </div>
           {/* Chọn khu vực cụ thể ~ chỉ chính xác tương đối */}
           <div>
@@ -794,7 +925,9 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
               {/* Chọn tỉnh, quận, xã */}
               <div className="d-flex">
                 <select
-                  style={{ marginRight: "10px" }}
+                  style={{
+                    marginRight: "10px",
+                  }}
                   class="form-select form-select-sm mb-3"
                   id="city"
                   value={provinces}
@@ -807,7 +940,9 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
                 </select>
 
                 <select
-                  style={{ marginRight: "10px" }}
+                  style={{
+                    marginRight: "10px",
+                  }}
                   class="form-select form-select-sm mb-3"
                   id="district"
                   aria-label=".form-select-sm"
@@ -820,7 +955,9 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
                 </select>
 
                 <select
-                  style={{ marginRight: "10px" }}
+                  style={{
+                    marginRight: "10px",
+                  }}
                   class="form-select form-select-sm mb-3"
                   id="ward"
                   aria-label=".form-select-sm"
@@ -831,6 +968,63 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
                     Chọn phường xã
                   </option>
                 </select>
+              </div>
+            </div>
+          </div>
+          {/* Thống kê theo khoảng thời gian từ đâu đến đâu. */}
+          <div>
+            <div
+              style={{
+                border: "1px solid orange",
+                borderRadius: "10px",
+                margin: "10px",
+                padding: "10px",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "15px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {" "}
+                <FilterOutlined />
+                &nbsp; Khoảng thời gian{" "}
+                <SearchOutlined
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "orange",
+                    color: "white",
+                    padding: "10px",
+                    marginLeft: "10px",
+                  }}
+                  onClick={() => filterRangeDate()}
+                />
+              </p>
+              <p
+                style={{
+                  fontSize: "10px",
+                  display: "flex",
+                  fontWeight: "400",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "-10px",
+                }}
+              >
+                (Ngày tạo đơn)
+              </p>
+              <div className="d-flex">
+                <RangePicker
+                  defaultValue={[
+                    dayjs("01/01/2021", dateFormat),
+                    dayjs("31/12/2023", dateFormat),
+                  ]}
+                  disabledDate={disabledDate}
+                  format={dateFormat}
+                  onCalendarChange={(a, b, c) => changeRangeTime(a, b, c)}
+                />
               </div>
             </div>
           </div>
