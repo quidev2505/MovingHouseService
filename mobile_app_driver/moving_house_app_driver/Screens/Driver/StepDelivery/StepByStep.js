@@ -669,9 +669,6 @@ function StepByStep({ route, navigation }) {
 
                         arr_delivery_id_driver.push(data_order.order_id);
 
-
-
-
                         if (arr_delivery_id_driver) {
                             //Cập nhật lịch sử đơn hàng cho tài xế
                             await axios.patch(`${api_url}/v1/driver/updateonefield_driver_withname/${item}`, {
@@ -682,14 +679,29 @@ function StepByStep({ route, navigation }) {
                             await axios.patch(`${api_url}/v1/order/updateonefield_order/${data_order.order_id}`, {
                                 date_end: date_end,
                                 status: "Đã hoàn thành",
-                            }).then((data) => {
-                                Alert.alert('Thông báo', 'Hoàn tất giao nhận đơn hàng !', [
-                                    { text: 'Xác nhận', onPress: () => navigation.navigate('ĐƠN HÀNG') },
-                                ]);
+                            }).then(async (data) => {
+                                console.log(data.data)
+                                console.log('vao roi')
+
+                                //Gửi Email cho khách hàng khi đã giao xong đơn hàng !
+                                await axios.get(`${api_url}/v1/order/sendEmailToCustomerWithIdOrderDetail/${data_order.order_id}`).then((data) => {
+
+                                    Alert.alert('Thông báo', 'Hoàn tất giao nhận đơn hàng !', [
+                                        { text: 'Xác nhận', onPress: () => navigation.navigate('ĐƠN HÀNG') },
+                                    ]);
+                                }).catch((e) => {
+                                    console.log(e)
+                                })
+
+
 
                             }).catch((e) => {
                                 console.log(e)
                             })
+
+
+
+
                         }
                     })
 

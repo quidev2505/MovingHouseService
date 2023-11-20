@@ -49,6 +49,10 @@ router.get(`/getRating_Order/:order_id`, orderController.getRatingOrder)
 //Lấy thông tin đơn hàng
 router.post('/findDataOrder', orderController.findDataOrder);
 
+//Gửi Email khi đã giao hàng thành công
+router.get('/sendEmailToCustomerWithIdOrderDetail/:id_order', orderController.sendEmailToCustomer);
+
+
 // //Update one field Blog
 // router.patch('/updateonefield_blog/:id', blogController.updateOneFieldBlog)
 

@@ -1,10 +1,12 @@
 const Order = require('../models/Order');
 const OrderDetail = require('../models/OrderDetail');
 const Customer = require("../models/Customer");
+const User = require("../models/User");
 const RatingDriver = require("../models/RatingDriver")
 const RatingService = require("../models/RatingService")
 const Driver = require("../models/Driver")
 const Notification = require('../models/Notification');
+const nodemailer = require("nodemailer");
 const fs = require('fs');
 
 
@@ -733,6 +735,236 @@ const orderController = {
         } catch (e) {
             console.log(e)
         }
+    },
+
+    //Gửi email cho khách hàng khi đã hoàn thành đơn hàng
+    sendEmailToCustomer: async (req, res) => {
+        //Lấy 2 loại giá trị cho dễ sử dụng
+        // 1.Order
+        // 2.Order_detail
+        try {
+            const idOrderInput = req.params.id_order;
+
+            const dataOrder = await Order.findOne({ order_id: idOrderInput });// Dữ liệu đơn hàng
+
+            //Lấy customer_id ra
+            const customer_id = dataOrder.customer_id
+            //Lấy fullname ra
+            const dataCustomer = await Customer.findOne({ _id: customer_id });
+            const fullname_customer = dataCustomer.fullname
+
+            //Lấy Email khách hàng ra
+            const dataUser = await User.findOne({ fullname: fullname_customer });
+            const emailCustomer = dataUser.email; //Email để gửi khách hàng
+
+            if (dataOrder) {
+                const dataOrderDetail = await OrderDetail.findOne({ _id: dataOrder.order_detail_id })
+
+                // Khu vực gửi email
+                // Nodemailer - Send email!
+                const transporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        user: process.env.USER_GGMAIL,
+                        pass: process.env.PASS_GGMAIL
+                    }
+                });
+
+                //Khu vực tính phí di chuyển
+                var phidichuyen = ""
+                dataOrderDetail.moving_fee.forEach((item, index) => {
+                    phidichuyen += '<li>' + item.name + '</li>'
+                })
+
+                //Khu vực tính phí dịch vụ
+                var phidichvu = ""
+                dataOrderDetail.service_fee.forEach((item, index) => {
+                    phidichvu += '<li>' + item.name + '</li>'
+                })
+
+                //Khu vực liệt kê vật dụng
+                var dichvu = ""
+                dataOrderDetail.item_detail.forEach((item, index) => {
+                    dichvu += '<li>' + item + '</li>'
+                })
+
+
+                const mailOptions = {
+                    from: `Fast Move Company <${process.env.USER_GGMAIL}>`,
+                    to: `${emailCustomer}`,
+                    subject: " 🚚 [Fast Move Company] [HÓA ĐƠN VẬN CHUYỂN]",
+                    html: `
+                        <div style="padding:10px">
+                            <h1 style="color:orange, text-align:center">HÓA ĐƠN VẬN CHUYỂN</h1>
+                            <div>
+                                <h4>Thông tin vận chuyển</h4>
+                                <div style="display:flex, justify-content:space-between, border:1px solid #ccc, padding:5px">
+                                    <div style="border:1px solid #ccc, border-radius:10px, padding:10px">
+                                        <p>
+                                           - Dịch vụ: ${dataOrder.service_name}
+                                        </p>
+                                        <p>
+                                           - Ngày vận chuyển: ${dataOrder.date_start} - ${dataOrder.time_start}
+                                        </p>
+                                        <p>
+                                           - Ngày hoàn thành: ${dataOrder.date_start} - ${dataOrder.date_end}
+                                        </p>
+                                        <p>
+                                            <span style="font-weight:bold">- Địa chỉ:</span>
+                                            <p>+ Từ địa điểm: ${dataOrder.fromLocation} - ${dataOrderDetail.fromLocation_detail}</p>
+                                            <p>+ Đến địa điểm: ${dataOrder.toLocation} - ${dataOrderDetail.toLocation_detail}</p>
+                                        </p>
+                                    </div>
+                                    <div style="border:1px solid #ccc, border-radius:10px, padding:10px">
+                                        <p>
+                                            - Phương tiện vận chuyển: ${dataOrder.vehicle_name} - Giá cả: <span style="font-weight:bold"> ${dataOrderDetail.vehicle_price.toLocaleString()} đ</span>
+                                        </p>
+                                        <p>
+                                            - Tài xế vận chuyển: ${dataOrder.order_receiver}
+                                        </p>
+                                        <p>
+                                            - Phương thức thanh toán: ${dataOrderDetail.payment_method}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>* Dưới đây là bảng liệt kê đầy đủ thông tin dịch vụ khách hàng chọn:</p>
+                            <table border="1">
+                                <thead>
+                                    <th style="border:1px solid #ccc">
+                                        STT
+                                    </th>
+                                    <th style="border:1px solid #ccc">
+                                        Tên hàng hóa, dịch vụ, chi phí
+                                    </th>
+                                    <th style="border:1px solid #ccc">
+                                        Cụ thể
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr style="border:1px solid #ccc">
+                                        <td>1</td>
+                                        <td>
+                                            Phí di chuyển
+                                        </td>
+                                        <td>
+                                            <ol>
+                                                ${phidichuyen}    
+                                            </ol>
+                                        </td>
+                                    </tr>
+                                    <tr style="border:1px solid #ccc">
+                                        <td>2</td>
+                                        <td>
+                                            Phí dịch vụ
+                                        </td>
+                                        <td>
+                                            <ol>
+                                                ${phidichvu}    
+                                            </ol>
+                                        </td>
+                                    </tr>
+                                    <tr style="border:1px solid #ccc">
+                                        <td>3</td>
+                                        <td>
+                                            Vật dụng 
+                                        </td>
+                                        <td>
+                                            <ol>
+                                                ${dichvu}
+                                            </ol>
+                                        </td>
+                                    </tr>
+                                    <tr style="border:1px solid #ccc">
+                                        <td>4</td>
+                                        <td>
+                                            Nhân công bốc vác
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    Số lượng: ${dataOrderDetail.man_power_quantity}
+                                                </li>
+                                                <li>
+                                                    Giá cả: ${dataOrderDetail.man_power_price}
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr style="border:1px solid #ccc">
+                                        <td>5</td>
+                                        <td>
+                                            Phí bổ sung
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li style="font-size:8">
+                                                    Nội dung phí: ${dataOrderDetail.more_fee_name != "" ? dataOrderDetail.more_fee_name : 'Không có'}
+                                                </li>
+                                                <li style="font-size:8">
+                                                    Giá cả phí: ${dataOrderDetail.more_fee_price != null ? dataOrderDetail.more_fee_price.toLocaleString() + 'đ' : 'Không có'}
+                                                </li>
+                                            </ul>
+
+                                        </td>
+                                    </tr>
+                                    <tr style="border:1px solid #ccc">
+                                        <td>6</td>
+                                        <td>
+                                            Phí dền bù
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li style="font-size:8">
+                                                Nội dung phí: ${dataOrderDetail.offset_fee_name != "" ? dataOrderDetail.offset_fee_name : 'Không có'}
+                                                </li>
+                                                <li style="font-size:8">
+                                                    Giá cả phí: ${dataOrderDetail.offset_fee_price != null ? dataOrderDetail.offset_fee_price.toLocaleString() + 'đ' : 'Không có'}
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr style="border:1px solid #ccc">
+
+                                        <td colspan="3"  style="color:red">Ghi chú cho tài xế: ${dataOrderDetail.note_driver}</td>
+                                    </tr>
+                                    <tr style="border:1px solid #ccc">
+                                    <td colspan="3" style="color:green">
+                                    
+ Tổng thanh toán: ${dataOrderDetail.totalOrderNew.toLocaleString()} đ       
+                                    </td>
+                                       
+                                    </tr>
+                                </tbody >
+                            </table >
+                        </div >
+    `
+                }
+
+                //Nodemailer 
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        console.log("Email sent:" + info.response);
+                    }
+                })
+
+
+                res.status(200).json('Send Email Successfully !');
+            }
+
+
+        } catch (e) {
+            console.log(e)
+            res.status(201).json('Error !');
+
+        }
+
+
+
+
+
     }
 
 
