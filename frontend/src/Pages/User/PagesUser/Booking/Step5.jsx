@@ -24,41 +24,45 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   const [dataStep5, setDataStep5] = useState({});
   //Lấy dữ liệu từ localStorage ra hiển thị
   const get_data_from_local = () => {
-    let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
-    const totalOrder = get_total_order(data_from_local);
+    try {
+      let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+      const totalOrder = get_total_order(data_from_local);
 
-    data_from_local.totalOrder = totalOrder;
-    localStorage.setItem("order_moving", JSON.stringify(data_from_local));
+      data_from_local.totalOrder = totalOrder;
+      localStorage.setItem("order_moving", JSON.stringify(data_from_local));
 
-    const object_data = {
-      service_name: data_from_local.step1.select_service,
-      moving_date: data_from_local.step1.moving_date,
-      moving_time: data_from_local.step1.moving_time,
-      distance: data_from_local.step2.distance,
-      duration: data_from_local.step2.duration,
-      fromLocation: data_from_local.step2.fromLocation.name,
-      from_location_detail: data_from_local.step2.from_location_detail,
-      toLocation: data_from_local.step2.toLocation.name,
-      deliveryArea: data_from_local.step2.deliveryArea,
-      to_location_detail: data_from_local.step2.to_location_detail,
-      price_vehicle: data_from_local.step3.priceStep3,
-      name_vehicle: data_from_local.step3.vehicle_choose.vehicle_name,
-      man_power: {
-        quantity: data_from_local.step4?.man_power_count.quantity_man,
-        price: data_from_local.step4?.man_power_count.total_price_man,
-      },
-      moving_fee: data_from_local.step4?.moving_fee,
-      service_fee: data_from_local.step4?.service_fee,
-      noteDriver: data_from_local.step4?.noteDriver,
-      dataChooseItem: data_from_local.step4?.dataChooseItem,
-      totalOrder: totalOrder,
-    };
+      const object_data = {
+        service_name: data_from_local.step1.select_service,
+        moving_date: data_from_local.step1.moving_date,
+        moving_time: data_from_local.step1.moving_time,
+        distance: data_from_local.step2.distance,
+        duration: data_from_local.step2.duration,
+        fromLocation: data_from_local.step2.fromLocation.name,
+        from_location_detail: data_from_local.step2.from_location_detail,
+        toLocation: data_from_local.step2.toLocation.name,
+        deliveryArea: data_from_local.step2.deliveryArea,
+        to_location_detail: data_from_local.step2.to_location_detail,
+        price_vehicle: data_from_local.step3.priceStep3,
+        name_vehicle: data_from_local.step3.vehicle_choose.vehicle_name,
+        man_power: {
+          quantity: data_from_local.step4?.man_power_count.quantity_man,
+          price: data_from_local.step4?.man_power_count.total_price_man,
+        },
+        moving_fee: data_from_local.step4?.moving_fee,
+        service_fee: data_from_local.step4?.service_fee,
+        noteDriver: data_from_local.step4?.noteDriver,
+        dataChooseItem: data_from_local.step4?.dataChooseItem,
+        totalOrder: totalOrder,
+      };
 
-    if (object_data) {
-      setDataStep5(object_data);
+      if (object_data) {
+        setDataStep5(object_data);
+      }
+
+      setTotalOrder(object_data.totalOrder);
+    } catch (e) {
+      console.log(e);
     }
-
-    setTotalOrder(object_data.totalOrder);
   };
 
   const get_total_order = (dataInput) => {
@@ -88,20 +92,24 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   };
 
   const check_payment_success = () => {
-    let check_success = localStorage.getItem("success_payment_vnpay");
-    if (check_success) {
-      let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
-      data_from_local.step4.payment_method = "Thanh toán VNPAY";
-      localStorage.setItem("order_moving", JSON.stringify(data_from_local));
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Thanh toán VNPAY thành công !",
-        text: "Chuyển sang bước kế tiếp !",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-      setCheckFill(true);
+    try {
+      let check_success = localStorage.getItem("success_payment_vnpay");
+      if (check_success) {
+        let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+        data_from_local.step4.payment_method = "Thanh toán VNPAY";
+        localStorage.setItem("order_moving", JSON.stringify(data_from_local));
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Thanh toán VNPAY thành công !",
+          text: "Chuyển sang bước kế tiếp !",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        setCheckFill(true);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -113,17 +121,21 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
   //Thanh toán trực tuyến
   const vnpay = async () => {
-    await axios
-      .post(`/v1/vnpay/create_payment_url`, {
-        totalOrder: dataStep5.totalOrder,
-      })
-      .then((data) => {
-        localStorage.setItem("success_payment_vnpay", true);
-        window.location.href = data.data;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    try {
+      await axios
+        .post(`/v1/vnpay/create_payment_url`, {
+          totalOrder: dataStep5.totalOrder,
+        })
+        .then((data) => {
+          localStorage.setItem("success_payment_vnpay", true);
+          window.location.href = data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -281,7 +293,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                 </span>
                 <span className="fw-bold">
                   {dataStep5.man_power
-                    ? dataStep5.man_power.price.toLocaleString()
+                    ? dataStep5.man_power.price?.toLocaleString()
                     : ""}{" "}
                   đ
                 </span>
@@ -295,7 +307,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                     >
                       <span>{item.name.split("(")[0]} &nbsp;</span>
                       <span className="fw-bold">
-                        {item.price ? item.price.toLocaleString() : ""} đ
+                        {item.price ? item.price?.toLocaleString() : ""} đ
                       </span>
                     </div>
                   </>
@@ -310,7 +322,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                     >
                       <span>{item.name.split("(")[0]} &nbsp;</span>
                       <span className="fw-bold">
-                        {item.price ? item.price.toLocaleString() : ""} đ
+                        {item.price ? item.price?.toLocaleString() : ""} đ
                       </span>
                     </div>
                   </>
