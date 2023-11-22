@@ -178,6 +178,7 @@ function App() {
 
           {/* Order Admin CRUD */}
           <Route path="/admin/order" element={<OrderAdmin />} />
+          <Route path="/admin/order/:id_order" element={<OrderAdmin />} />
           {/* End order admin CRUD */}
 
 

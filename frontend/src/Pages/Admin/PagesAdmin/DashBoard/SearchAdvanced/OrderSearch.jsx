@@ -95,27 +95,29 @@ function OrderSearch() {
 
   //Tìm dữ liệu theo khoảng thời gian cho trước
   const findDataRange = () => {
-    setFilterRange(true);
-    setIsActive(true);
-    setShowTable(true);
+    if (startRange == "" && endRange == "") {
+      setIsActive(true);
+      setShowTable(true);
+      findDataAll();
+      setIsActive(false);
+    } else {
+      setFilterRange(true);
+      setIsActive(true);
+      setShowTable(true);
 
-    console.log(dataOrder);
+      const arr_result = [];
+      dataOrder.forEach((item, index) => {
+        if (isDateInRange(item.date_start, startRange, endRange)) {
+          arr_result.push(item);
+        }
+      });
 
-    const arr_result = [];
-    dataOrder.forEach((item, index) => {
-      if (isDateInRange(item.date_start, startRange, endRange)) {
-        arr_result.push(item);
-      }
-    });
-
-    setDataOrder(arr_result);
-    setIsActive(false);
-
-    console.log(dataOrder);
+      setDataOrder(arr_result);
+      setIsActive(false);
+    }
   };
 
   const findData = async () => {
-    console.log("kich hoat");
     //Kiểm tra xem đã nhập 1 trong 3 ô chưa
     if (order_id == "" && customerName == "") {
       await Toast.fire({
@@ -197,12 +199,8 @@ function OrderSearch() {
     setIsActive(true);
     setShowTable(true);
 
-    console.log(filter_check);
-    console.log(filterRange);
-
     if (filter_check && filterRange) {
       setFilterRange(false);
-      console.log("da vao");
     }
 
     if (!filterRange) {
@@ -263,8 +261,6 @@ function OrderSearch() {
       setIsActive(true);
       setShowTable(true);
 
-      console.log(dataOrder);
-
       setFilterCheck(true);
 
       const arr_result = [];
@@ -277,8 +273,6 @@ function OrderSearch() {
       setIsActive(false);
 
       setDataOrder(arr_result);
-
-      console.log(dataOrder);
     }
   };
 

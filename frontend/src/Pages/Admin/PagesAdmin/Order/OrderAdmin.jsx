@@ -13,6 +13,7 @@ import * as XLSX from "xlsx"; //Xử lý file Excel
 import { Link } from "react-router-dom";
 
 import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Space,
@@ -33,8 +34,6 @@ import {
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
 import "sweetalert2/src/sweetalert2.scss";
-
-import { useNavigate } from "react-router-dom";
 
 import htmlReactParser from "html-react-parser";
 
@@ -64,6 +63,7 @@ const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
 
 function OrderAdmin() {
+  const params = useParams();
   const nav = useNavigate();
   const [dataOrder, setDataOrder] = useState([]);
   const [open, setOpen] = useState(false);
@@ -1611,11 +1611,22 @@ function OrderAdmin() {
 
   // //Search Realtime
   const [search, setSearch] = useState("");
-  useEffect(() => {
-    show_order_customer(check_active(activeKeyTab));
-  }, [search]);
 
   const [searchAllOrder, setSearchAllOrder] = useState("");
+
+  useEffect(() => {
+    show_order_customer(check_active(activeKeyTab));
+
+    //Kiểm tra xem có id_order không?
+    if (params.id_order != "") {
+      console.log(params.id_order);
+
+      setSearchAllOrder(params.id_order);
+      setTimeout(() => {
+        search_all_order();
+      }, 1100);
+    }
+  }, [search, searchAllOrder]);
 
   //Tìm tất cả đơn hàng
   const search_all_order = async () => {
@@ -1662,6 +1673,8 @@ function OrderAdmin() {
               };
               data_order.push(ob_order);
             });
+
+          console.log(searchAllOrder);
 
           let new_arr = data_order.filter((item) => {
             // Chuyển đổi tất cả các chuỗi có dấu sang không dấu

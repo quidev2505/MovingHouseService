@@ -44,6 +44,8 @@ function RatingService() {
 
   const [isActive, setIsActive] = useState(false);
 
+  const [filterRange, setFilterRange] = useState(false);
+
   //Khoảng thời gian
   const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
   const [endRange, setEndRange] = useState("31/12/2023"); //Thời gian cuối
@@ -67,11 +69,16 @@ function RatingService() {
 
   const isDateInRange = (date, startDate, endDate) => {
     // Lấy ngày, tháng, năm của ngày cần kiểm tra
-    const [day, month, year] = date.split("/");
+    let [day, month, year] = date.split("/");
 
     // Lấy ngày, tháng, năm của ngày bắt đầu và ngày kết thúc
     const [startDay, startMonth, startYear] = startDate.split("/");
     const [endDay, endMonth, endYear] = endDate.split("/");
+
+    
+    if (day.length == 1) {
+      day = "0" + day;
+    }
 
     // Chuyển đổi ngày thành mili giây
     const dateInMiliseconds = new Date(`${year}-${month}-${day}`).getTime();
@@ -91,18 +98,29 @@ function RatingService() {
 
   //Tìm dữ liệu theo khoảng thời gian cho trước
   const findDataRange = () => {
-    setIsActive(true);
-    setShowTable(true);
+    if (startRange == "" && endRange == "") {
+      setIsActive(true);
+      setShowTable(true);
 
-    const arr_result = [];
-    dataRatingService.forEach((item, index) => {
-      if (isDateInRange(item.rating_date.split(",")[1], startRange, endRange)) {
-        arr_result.push(item);
-      }
-    });
+      findDataAll();
+      setIsActive(false);
+    } else {
+      setFilterRange(true);
+      setIsActive(true);
+      setShowTable(true);
 
-    setIsActive(false);
-    setDataRatingService(arr_result);
+      const arr_result = [];
+      dataRatingService.forEach((item, index) => {
+        if (
+          isDateInRange(item.rating_date.split(",")[1], startRange, endRange)
+        ) {
+          arr_result.push(item);
+        }
+      });
+
+      setIsActive(false);
+      setDataRatingService(arr_result);
+    }
   };
 
   const findData = async () => {
@@ -156,6 +174,7 @@ function RatingService() {
     }
   };
 
+  const [filter_check, setFilterCheck] = useState(false);
   // Khi nhấn vào nút tìm tất cả
   const findDataAll = async () => {
     setIsActive(true);
@@ -164,32 +183,54 @@ function RatingService() {
     setCustomerName("");
     setOrderId("");
 
-    const api_call = await axios.post("/v1/ratingService/findRatingService", {
-      customerName,
-      orderId,
-    });
+    if (filter_check && filterRange) {
+      setFilterRange(false);
+    }
 
-    const data_get = api_call.data;
+    if (!filterRange) {
+      const api_call = await axios.post("/v1/ratingService/findRatingService", {
+        customerName,
+        orderId,
+      });
 
-    const data_get_new = data_get.map((item, index) => {
-      const ob = {
-        key: index,
-        customer_name: item.customer_name,
-        order_id: item.order_id,
-        star: item.star,
-        comment: item.comment,
-        service_name: item.service_name,
-        rating_date: item.rating_date,
-      };
+      const data_get = api_call.data;
 
-      return ob;
-    });
+      const data_get_new = data_get.map((item, index) => {
+        const ob = {
+          key: index,
+          customer_name: item.customer_name,
+          order_id: item.order_id,
+          star: item.star,
+          comment: item.comment,
+          service_name: item.service_name,
+          rating_date: item.rating_date,
+        };
 
-    // console.log(data_get);
-    setIsActive(false);
-    setDataRatingService(data_get_new);
+        return ob;
+      });
 
-    // setShowTable(true);
+      // console.log(data_get); 
+      setIsActive(false);
+      setDataRatingService(data_get_new);
+
+      // setShowTable(true);
+    } else {
+      setIsActive(true);
+      setShowTable(true);
+      setFilterCheck(true);
+
+      const arr_result = [];
+      dataRatingService.forEach((item, index) => {
+        if (
+          isDateInRange(item.rating_date.split(",")[1], startRange, endRange)
+        ) {
+          arr_result.push(item);
+        }
+      });
+
+      setIsActive(false);
+      setDataRatingService(arr_result);
+    }
   };
 
   //Tính năng lọc theo Search

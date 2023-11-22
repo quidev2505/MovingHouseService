@@ -136,7 +136,7 @@ function HeaderAdmin() {
                   fontWeight: "bold",
                 }}
                 onClick={() => {
-                  navigate("/admin/order");
+                  navigate(`/admin/order/${item.order_id}`);
                   localStorage.setItem("menu", "/admin/order");
                 }}
               >
