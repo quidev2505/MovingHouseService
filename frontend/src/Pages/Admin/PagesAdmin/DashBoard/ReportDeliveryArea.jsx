@@ -553,6 +553,10 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     var districts_value = document.getElementById("district").value; //Quận
     var wards_value = document.getElementById("ward").value; //Phường
 
+    if (citis_value == "" && districts_value == "" && wards_value == "") {
+      getDataDeliveryArea();
+    }
+
     var string_location = "";
     for (let i = 0; i < dataLocation.length; i++) {
       if (dataLocation[i].Id == citis_value) {
@@ -605,40 +609,59 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
       );
 
       const dataBoundingBox = callBoundingBox.data[0]?.boundingbox;
-      filterLocation(dataBoundingBox);
+      filterLocation(dataBoundingBox, complete_location);
     } catch (e) {
       console.log(e);
     }
   };
 
   //Lọc dữ liệu địa điểm cho đơn hàng
-  const filterLocation = async (dataBoundingBox) => {
+  const filterLocation = async (dataBoundingBox, complete_location) => {
     try {
+      //Xử lý lấy tên tỉnh ra so sánh. VD: Thành phố Cần thơ => Cần thơ
+      const split_city_split = complete_location.split(",")[0];
+
+      const split_city_next = split_city_split.split(" ");
+
+      const string_city_split =
+        split_city_next[split_city_next.length - 2] +
+        " " +
+        split_city_next[split_city_next.length - 1];
+
       // Cho chạy vòng lặp lọc dữ liệu
       const data_result = await Promise.all(
         reportDeliveryArea.map(async (item) => {
-          const fromLocationData = item.fromLocation;
-          const dataFromLocation = await axios.get(
-            `https://geocode.maps.co/search?q=${fromLocationData}&format=json`,
-            {
-              debounce: 500, // Trì hoãn 500 mili giây trước khi gửi yêu cầu API
+          const fromLocationData = item.fromLocation.toUpperCase();
+          console.log(fromLocationData);
+          console.log(string_city_split);
+
+          if (fromLocationData.includes(string_city_split.toUpperCase())) {
+            console.log(fromLocationData);
+            console.log(string_city_split);
+
+            const dataFromLocation = await axios.get(
+              `https://rsapi.goong.io/geocode?address=${fromLocationData}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`,
+              {
+                debounce: 500, // Trì hoãn 500 mili giây trước khi gửi yêu cầu API
+              }
+            );
+
+            const data_get = dataFromLocation.data.results[0];
+            // console.group();
+            // console.log(fromLocationData);
+            const point = {
+              lat: data_get.geometry.location?.lat,
+              lon: data_get.geometry.location?.lng,
+            };
+
+            // Check if the point is in the bounding box
+            const isInside = isPointInBoundingBox(point, dataBoundingBox);
+            // console.log(isInside);
+            // console.groupEnd();
+
+            if (isInside == true) {
+              return item;
             }
-          );
-
-          // console.group();
-          // console.log(fromLocationData);
-          const point = {
-            lat: dataFromLocation.data[0]?.lat,
-            lon: dataFromLocation.data[0]?.lon,
-          };
-
-          // Check if the point is in the bounding box
-          const isInside = isPointInBoundingBox(point, dataBoundingBox);
-          // console.log(isInside);
-          // console.groupEnd();
-
-          if (isInside == true) {
-            return item;
           }
         })
       );
@@ -675,7 +698,7 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
     const minLon = parseFloat(boundingBox[2]);
     const maxLon = parseFloat(boundingBox[3]);
 
-    // minimum latitude, minimum longitude, maximum latitude, maximum longitude  
+    // minimum latitude, minimum longitude, maximum latitude, maximum longitude
 
     // Tọa độ trái dưới
     // Tọa độ phải dưới

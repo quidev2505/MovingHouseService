@@ -1705,7 +1705,10 @@ function DashBoardAdmin() {
                         </div>
 
                         {/* Khu vực bảng thống kê theo năm */}
-                        <ReportRevenueYear yearPass={yearPass} />
+                        <ReportRevenueYear
+                          yearPass={yearPass}
+                          setYearPass={setYearPass}
+                        />
                       </>
                     ) : filterDashBoard === "THỐNG KÊ ĐƠN HÀNG" ? (
                       <>
@@ -1782,7 +1785,10 @@ function DashBoardAdmin() {
                         </div>
 
                         {/* Khu vực bảng thống kê đơn hàng */}
-                        <ReportOrder orderPass={orderPass} />
+                        <ReportOrder
+                          orderPass={orderPass}
+                          setOrderPass={setOrderPass}
+                        />
                       </>
                     ) : filterDashBoard === "THỐNG KÊ KHU VỰC GIAO HÀNG" ? (
                       <>

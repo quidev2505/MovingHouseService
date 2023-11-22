@@ -39,7 +39,7 @@ const { RangePicker } = DatePicker;
 
 const dateFormat = "DD/MM/YYYY";
 
-function ReportVenueYear({ yearPass }) {
+function ReportVenueYear({ yearPass, setYearPass }) {
   const [reportVenueYearData, setReportVenueYearData] = useState([]);
   // /Khoảng thời gian
   const [startRange, setStartRange] = useState("01/01/2023"); //Thời gian bắt đầu
@@ -49,7 +49,7 @@ function ReportVenueYear({ yearPass }) {
   const [totalReportProfit, setTotalReportProfit] = useState(0); //Tổng lợi nhuận
   const [totalReportFee, setTotalReportFee] = useState(0); //Tổng chi phí đền bù
   const [totalReportMoreFee, setTotalReportMoreFee] = useState(0); //Tổng chi phí phát sinh
-  const yearPassFilter = yearPass === "2023" ? yearPass : "202" + yearPass;
+  var yearPassFilter = yearPass === "2023" ? yearPass : "202" + yearPass;
 
   const dataReportTemp = useRef([]);
 
@@ -66,95 +66,118 @@ function ReportVenueYear({ yearPass }) {
   const getDataVenueYear = async () => {
     console.log(yearPassFilter);
     try {
-      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
-      var arr_order = call_api_order.data;
+      if (yearPassFilter == "2025") {
+        let total = 0;
+        let arr_result = [];
 
-      //Tính tổng chi phí, lợi nhuận (lợi nhuận = doanh thu - chi phí)
-      var call_api_order_detail = await axios.get(
-        `/v1/order/viewAllOrderDetail`
-      );
-      var arr_order_detail = call_api_order_detail.data;
+        reportVenueYearData.forEach((item, index) => {
+          if (
+            isDateInRange(item.date_end.split(",")[0], startRange, endRange)
+          ) {
+            total += item.totalOrder;
+            arr_result.push(item);
+          }
+        });
 
-      //Xử lý những đơn đã hoàn thành và date_end != null
-      //Tính doanh thu theo từng tháng
-      let arr_solve = [];
-      let count = 0;
-      var totalReportCal = 0;
-      var totalReportCalProfit = 0;
-      var totalReportCalFee = 0;
-      var totalReportCalMoreFee = 0;
-      arr_order.forEach((item, index) => {
-        if (
-          item.status === "Đã hoàn thành" &&
-          item.date_end !== null &&
-          item.date_start.split("/")[2] == yearPassFilter
-        ) {
-          count++;
-          for (let i = 0; i < arr_order_detail.length; i++) {
-            if (arr_order_detail[i]._id == item.order_detail_id) {
-              const ob = {
-                stt: count,
-                order_id: item.order_id,
-                date_start: item.date_start,
-                date_end: item.date_end,
-                year_show: item.date_start.split("/")[2],
-                totalOrder: item.totalOrder,
-                moreFeeName: arr_order_detail[i].more_fee_name,
-                moreFeePrice: arr_order_detail[i].more_fee_price,
-                offsetFeeName: arr_order_detail[i].offset_fee_name,
-                offsetFeePrice: arr_order_detail[i].offset_fee_price,
-                profit: arr_order_detail[i].totalOrderNew,
-              };
-              totalReportCal += item.totalOrder;
-              totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
-              totalReportCalFee += Number(
-                isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
-              );
-              totalReportCalMoreFee += Number(
-                isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
-              );
-              arr_solve.push(ob);
+        console.log(arr_result);
+        setTotalReport(total);
+
+        setReportVenueYearData(arr_result);
+      } else {
+        var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
+        var arr_order = call_api_order.data;
+
+        //Tính tổng chi phí, lợi nhuận (lợi nhuận = doanh thu - chi phí)
+        var call_api_order_detail = await axios.get(
+          `/v1/order/viewAllOrderDetail`
+        );
+        var arr_order_detail = call_api_order_detail.data;
+
+        //Xử lý những đơn đã hoàn thành và date_end != null
+        //Tính doanh thu theo từng tháng
+        let arr_solve = [];
+        let count = 0;
+        var totalReportCal = 0;
+        var totalReportCalProfit = 0;
+        var totalReportCalFee = 0;
+        var totalReportCalMoreFee = 0;
+        arr_order.forEach((item, index) => {
+          if (
+            item.status === "Đã hoàn thành" &&
+            item.date_end !== null &&
+            item.date_start.split("/")[2] == yearPassFilter
+          ) {
+            count++;
+            for (let i = 0; i < arr_order_detail.length; i++) {
+              if (arr_order_detail[i]._id == item.order_detail_id) {
+                const ob = {
+                  stt: count,
+                  order_id: item.order_id,
+                  date_start: item.date_start,
+                  date_end: item.date_end,
+                  year_show: item.date_start.split("/")[2],
+                  totalOrder: item.totalOrder,
+                  moreFeeName: arr_order_detail[i].more_fee_name,
+                  moreFeePrice: arr_order_detail[i].more_fee_price,
+                  offsetFeeName: arr_order_detail[i].offset_fee_name,
+                  offsetFeePrice: arr_order_detail[i].offset_fee_price,
+                  profit: arr_order_detail[i].totalOrderNew,
+                };
+                totalReportCal += item.totalOrder;
+                totalReportCalProfit += Number(
+                  isNaN(ob.profit) ? 0 : ob.profit
+                );
+                totalReportCalFee += Number(
+                  isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+                );
+                totalReportCalMoreFee += Number(
+                  isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
+                );
+                arr_solve.push(ob);
+              }
+            }
+          } else if (
+            yearPassFilter == "2024" &&
+            item.status === "Đã hoàn thành" &&
+            item.date_end !== null
+          ) {
+            count++;
+            for (let i = 0; i < arr_order_detail.length; i++) {
+              if (arr_order_detail[i]._id == item.order_detail_id) {
+                const ob = {
+                  stt: count,
+                  order_id: item.order_id,
+                  date_start: item.date_start,
+                  date_end: item.date_end,
+                  year_show: item.date_start.split("/")[2],
+                  totalOrder: item.totalOrder,
+                  moreFeeName: arr_order_detail[i].more_fee_name,
+                  moreFeePrice: arr_order_detail[i].more_fee_price,
+                  offsetFeeName: arr_order_detail[i].offset_fee_name,
+                  offsetFeePrice: arr_order_detail[i].offset_fee_price,
+                  profit: arr_order_detail[i].totalOrderNew,
+                };
+                totalReportCal += item.totalOrder;
+                totalReportCalProfit += Number(
+                  isNaN(ob.profit) ? 0 : ob.profit
+                );
+                totalReportCalFee += Number(
+                  isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+                );
+                totalReportCalMoreFee += Number(
+                  isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
+                );
+                arr_solve.push(ob);
+              }
             }
           }
-        } else if (
-          yearPassFilter == "2024" &&
-          item.status === "Đã hoàn thành" &&
-          item.date_end !== null
-        ) {
-          count++;
-          for (let i = 0; i < arr_order_detail.length; i++) {
-            if (arr_order_detail[i]._id == item.order_detail_id) {
-              const ob = {
-                stt: count,
-                order_id: item.order_id,
-                date_start: item.date_start,
-                date_end: item.date_end,
-                year_show: item.date_start.split("/")[2],
-                totalOrder: item.totalOrder,
-                moreFeeName: arr_order_detail[i].more_fee_name,
-                moreFeePrice: arr_order_detail[i].more_fee_price,
-                offsetFeeName: arr_order_detail[i].offset_fee_name,
-                offsetFeePrice: arr_order_detail[i].offset_fee_price,
-                profit: arr_order_detail[i].totalOrderNew,
-              };
-              totalReportCal += item.totalOrder;
-              totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
-              totalReportCalFee += Number(
-                isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
-              );
-              totalReportCalMoreFee += Number(
-                isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
-              );
-              arr_solve.push(ob);
-            }
-          }
-        }
-      });
-      setTotalReport(totalReportCal);
-      setTotalReportProfit(totalReportCalProfit);
-      setTotalReportFee(totalReportCalFee);
-      setTotalReportMoreFee(totalReportCalMoreFee);
-      setReportVenueYearData(arr_solve);
+        });
+        setTotalReport(totalReportCal);
+        setTotalReportProfit(totalReportCalProfit);
+        setTotalReportFee(totalReportCalFee);
+        setTotalReportMoreFee(totalReportCalMoreFee);
+        setReportVenueYearData(arr_solve);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -612,21 +635,26 @@ function ReportVenueYear({ yearPass }) {
     // console.log(startRange)
     // console.log(endRange);
     if (startRange == "" && endRange == "") {
+      setYearPass("4");
+
       getDataVenueYear();
     } else {
-      let total = 0;
-      let arr_result = [];
+      setYearPass("5");
 
-      reportVenueYearData.forEach((item, index) => {
-        if (isDateInRange(item.date_end.split(",")[0], startRange, endRange)) {
-          total += item.totalOrder;
-          arr_result.push(item);
-        }
-      });
+      // let total = 0;
+      // let arr_result = [];
 
-      setTotalReport(total);
+      // reportVenueYearData.forEach((item, index) => {
+      //   if (isDateInRange(item.date_end.split(",")[0], startRange, endRange)) {
+      //     total += item.totalOrder;
+      //     arr_result.push(item);
+      //   }
+      // });
 
-      setReportVenueYearData(arr_result);
+      // console.log(yearPassFilter);
+      // setTotalReport(total);
+
+      // setReportVenueYearData(arr_result);
     }
   };
 

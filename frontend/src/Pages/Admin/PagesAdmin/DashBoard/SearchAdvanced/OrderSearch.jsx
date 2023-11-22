@@ -46,6 +46,8 @@ function OrderSearch() {
 
   const [isActive, setIsActive] = useState(false);
 
+  const [filterRange, setFilterRange] = useState(false);
+
   //Khoảng thời gian
   const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
   const [endRange, setEndRange] = useState("31/12/2023"); //Thời gian cuối
@@ -93,8 +95,11 @@ function OrderSearch() {
 
   //Tìm dữ liệu theo khoảng thời gian cho trước
   const findDataRange = () => {
+    setFilterRange(true);
     setIsActive(true);
     setShowTable(true);
+
+    console.log(dataOrder);
 
     const arr_result = [];
     dataOrder.forEach((item, index) => {
@@ -103,11 +108,14 @@ function OrderSearch() {
       }
     });
 
-    setIsActive(false);
     setDataOrder(arr_result);
+    setIsActive(false);
+
+    console.log(dataOrder);
   };
 
   const findData = async () => {
+    console.log("kich hoat");
     //Kiểm tra xem đã nhập 1 trong 3 ô chưa
     if (order_id == "" && customerName == "") {
       await Toast.fire({
@@ -182,63 +190,95 @@ function OrderSearch() {
     }
   };
 
+  const [filter_check, setFilterCheck] = useState(false);
+
   // Khi nhấn vào nút tìm tất cả
   const findDataAll = async () => {
     setIsActive(true);
     setShowTable(true);
 
-    const typeFilter = "Tất cả";
+    console.log(filter_check);
+    console.log(filterRange);
 
-    setOrderId("");
-    setCustomerName("");
+    if (filter_check && filterRange) {
+      setFilterRange(false);
+      console.log("da vao");
+    }
 
-    const api_call = await axios.post("/v1/order/findDataOrder", {
-      order_id,
-      typeFilter,
-    });
+    if (!filterRange) {
+      const typeFilter = "Tất cả";
 
-    const data_get = api_call.data;
+      setOrderId("");
+      setCustomerName("");
 
-    let arr_CI = [];
-    data_get.forEach((item, index) => {
-      arr_CI.push(item.customer_id);
-    });
-
-    if (arr_CI) {
-      let arr_data_get = await axios.post(
-        `/v1/customer/getArrFullName`,
-        arr_CI
-      );
-
-      const arr_customer_name = arr_data_get.data;
-
-      const data_get_new = data_get.map((item, index) => {
-        const ob = {
-          key: index,
-          order_id: item.order_id,
-          date_created: item.date_created,
-          service_name: item.service_name,
-          date_start: item.date_start,
-          date_end: item.date_end,
-          fromLocation: item.fromLocation,
-          toLocation: item.toLocation,
-          vehicle_name: item.vehicle_name,
-          driver_name: item.driver_name,
-          totalOrder: item.totalOrder,
-          status: item.status,
-          distance: item.distance,
-          duration: item.duration,
-          payment_status: item.payment_status,
-          customer_name: arr_customer_name[index],
-        };
-
-        return ob;
+      const api_call = await axios.post("/v1/order/findDataOrder", {
+        order_id,
+        typeFilter,
       });
 
-      // console.log(data_get);
+      const data_get = api_call.data;
+
+      let arr_CI = [];
+      data_get.forEach((item, index) => {
+        arr_CI.push(item.customer_id);
+      });
+
+      if (arr_CI) {
+        let arr_data_get = await axios.post(
+          `/v1/customer/getArrFullName`,
+          arr_CI
+        );
+
+        const arr_customer_name = arr_data_get.data;
+
+        const data_get_new = data_get.map((item, index) => {
+          const ob = {
+            key: index,
+            order_id: item.order_id,
+            date_created: item.date_created,
+            service_name: item.service_name,
+            date_start: item.date_start,
+            date_end: item.date_end,
+            fromLocation: item.fromLocation,
+            toLocation: item.toLocation,
+            vehicle_name: item.vehicle_name,
+            driver_name: item.driver_name,
+            totalOrder: item.totalOrder,
+            status: item.status,
+            distance: item.distance,
+            duration: item.duration,
+            payment_status: item.payment_status,
+            customer_name: arr_customer_name[index],
+          };
+
+          return ob;
+        });
+
+        // console.log(data_get);
+        setIsActive(false);
+        setDataOrder(data_get_new);
+        // setShowTable(true);
+      }
+    } else {
+      setIsActive(true);
+      setShowTable(true);
+
+      console.log(dataOrder);
+
+      setFilterCheck(true);
+
+      const arr_result = [];
+      dataOrder.forEach((item, index) => {
+        if (isDateInRange(item.date_start, startRange, endRange)) {
+          arr_result.push(item);
+        }
+      });
+
       setIsActive(false);
-      setDataOrder(data_get_new);
-      // setShowTable(true);
+
+      setDataOrder(arr_result);
+
+      console.log(dataOrder);
     }
   };
 

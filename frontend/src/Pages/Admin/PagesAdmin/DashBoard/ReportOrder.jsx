@@ -37,7 +37,7 @@ dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 
 const dateFormat = "DD/MM/YYYY";
-function ReportOrder({ orderPass }) {
+function ReportOrder({ orderPass, setOrderPass }) {
   const [reportOrder, setReportOrder] = useState([]);
   // /Khoảng thời gian
   const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
@@ -88,6 +88,7 @@ function ReportOrder({ orderPass }) {
       orderFilterNew = "Tất cả";
       break;
     default:
+      orderFilterNew = "filter_range";
       break;
   }
 
@@ -95,51 +96,68 @@ function ReportOrder({ orderPass }) {
     console.log(orderPass);
     console.log(orderFilterNew);
     try {
-      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
-      var arr_order = call_api_order.data;
+      if (orderFilterNew == "filter_range") {
+        let total = 0;
+        let arr_result = [];
+        reportOrder.forEach((item, index) => {
+          if (
+            isDateInRange(item.date_created.split(",")[1], startRange, endRange)
+          ) {
+            total += item.totalOrder;
+            arr_result.push(item);
+          }
+        });
 
-      //Xử lý những đơn đã hoàn thành và date_end != null
-      //Tính doanh thu theo từng tháng
-      let arr_solve = [];
-      let count = 0;
-      arr_order.forEach((item, index) => {
-        if (orderFilterNew == item.status) {
-          count++;
-          const ob = {
-            stt: count,
-            order_id: item.order_id,
-            date_created: item.date_created,
-            service_name: item.service_name,
-            date_start: item.date_start,
-            date_end: item.date_end,
-            //Tổng doanh thu
-            totalOrder: item.totalOrder,
-            status: item.status,
-          };
+        setTotalReport(total);
 
-          totalReportCal += item.totalOrder;
-          arr_solve.push(ob);
-        } else if (orderFilterNew == "Tất cả") {
-          count++;
-          const ob = {
-            stt: count,
-            order_id: item.order_id,
-            date_created: item.date_created,
-            service_name: item.service_name,
-            date_start: item.date_start,
-            date_end: item.date_end,
-            totalOrder: item.totalOrder,
-            status: item.status,
-          };
+        setReportOrder(arr_result);
+      } else {
+        var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
+        var arr_order = call_api_order.data;
 
-          totalReportCal += item.totalOrder;
-          arr_solve.push(ob);
-        }
-      });
+        //Xử lý những đơn đã hoàn thành và date_end != null
+        //Tính doanh thu theo từng tháng
+        let arr_solve = [];
+        let count = 0;
+        arr_order.forEach((item, index) => {
+          if (orderFilterNew == item.status) {
+            count++;
+            const ob = {
+              stt: count,
+              order_id: item.order_id,
+              date_created: item.date_created,
+              service_name: item.service_name,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              //Tổng doanh thu
+              totalOrder: item.totalOrder,
+              status: item.status,
+            };
 
-      setTotalReport(totalReportCal);
+            totalReportCal += item.totalOrder;
+            arr_solve.push(ob);
+          } else if (orderFilterNew == "Tất cả") {
+            count++;
+            const ob = {
+              stt: count,
+              order_id: item.order_id,
+              date_created: item.date_created,
+              service_name: item.service_name,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              totalOrder: item.totalOrder,
+              status: item.status,
+            };
 
-      setReportOrder(arr_solve);
+            totalReportCal += item.totalOrder;
+            arr_solve.push(ob);
+          }
+        });
+
+        setTotalReport(totalReportCal);
+
+        setReportOrder(arr_solve);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -581,20 +599,11 @@ function ReportOrder({ orderPass }) {
     // console.log(startRange)
     // console.log(endRange);
     if (startRange == "" && endRange == "") {
+      setOrderPass(7);
       getDataOrder();
+    } else {
+      setOrderPass("filter");
     }
-    let total = 0;
-    let arr_result = [];
-    reportOrder.forEach((item, index) => {
-      if (isDateInRange(item.date_created.split(",")[1], startRange, endRange)) {
-        total += item.totalOrder;
-        arr_result.push(item);
-      }
-    });
-
-    setTotalReport(total);
-
-    setReportOrder(arr_result);
   };
 
   return (
