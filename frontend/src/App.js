@@ -119,6 +119,8 @@ function App() {
           {/* Trang User  */}
           <Route path="/user/booking" element={<BookingUser />} />
           <Route path="/user/order" element={<OrderUser />} />
+          {/* Trường hợp nhấn từ thông báo */}
+          <Route path="/user/order/:id_order" element={<OrderUser />} /> 
           <Route path="/user/order/rating/:order_id" element={<RatingOrder />} />
           <Route path="/user/info_user" element={<InfoUser />} />
           <Route path="/user/info_user/change_password/:id_user" element={<ChangePasswordUser />} />

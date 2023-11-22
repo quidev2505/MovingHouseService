@@ -256,7 +256,9 @@ const orderController = {
         try {
             const customer_id = req.params.id_customer;
 
-            const data_order = await Order.find({ customer_id: customer_id });
+            const data_order = await Order.find({ customer_id: customer_id }).sort({
+                createdAt: -1
+            });
 
 
 

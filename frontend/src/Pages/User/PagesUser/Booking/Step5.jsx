@@ -69,12 +69,12 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     try {
       let total = 0;
       let price_moving_fee = 0;
-      dataInput.step4?.moving_fee.forEach((item, index) => {
+      dataInput.step4.moving_fee.forEach((item, index) => {
         price_moving_fee += item.price;
       });
 
       let price_service_fee = 0;
-      dataInput.step4?.service_fee.forEach((item, index) => {
+      dataInput.step4.service_fee.forEach((item, index) => {
         price_service_fee += item.price;
       });
 

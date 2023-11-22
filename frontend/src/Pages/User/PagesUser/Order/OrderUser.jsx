@@ -8,7 +8,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 
 import "sweetalert2/src/sweetalert2.scss";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import * as XLSX from "xlsx"; //Xử lý file Excel
 
@@ -55,7 +55,11 @@ function OrderUser() {
   const [open, setOpen] = useState(false);
   const [DomOrderDetail, setDomOrderDetail] = useState();
 
+  const params = useParams();
+
   const [orderCount, setOrderCount] = useState(0);
+
+  const [clickNotify, setClickNotify] = useState(false);
 
   //Khoảng thời gian
   const [startRange, setStartRange] = useState("01/01/2021"); //Thời gian bắt đầu
@@ -64,6 +68,8 @@ function OrderUser() {
   //Khoảng tổng giá đơn hàng
   const [startRangePrice, setStartRangePrice] = useState(1); //Giá bắt đầu
   const [endRangePrice, setEndRangePrice] = useState(90); //Giá kết thúc
+
+  const [fdefault, setFDefault] = useState("Đang xử lý");
 
   const nav = useNavigate();
 
@@ -657,7 +663,11 @@ function OrderUser() {
   const [search, setSearch] = useState("");
   useEffect(() => {
     show_order_customer();
-  }, [search, startRange, endRange, startRangePrice, endRangePrice]);
+
+    if (params.id_order) {
+      setSearch(params.id_order);
+    }
+  }, [startRange, endRange, startRangePrice, endRangePrice, params, search]);
 
   function removeVietnameseTones(str) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -694,6 +704,7 @@ function OrderUser() {
   //Tính năng lọc theo Search
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [filteredInfo, setFilteredInfo] = useState({});
   const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -812,7 +823,8 @@ function OrderUser() {
       ),
   });
 
-  //Table Area
+  //Table Area -> Column lúc nhấn vào đơn hàng
+
   const columns = [
     {
       title: "STT",
@@ -857,7 +869,357 @@ function OrderUser() {
           value: "Đã hủy",
         },
       ],
-      defaultFilteredValue: ["Đang xử lý"],
+      filterResetToDefaultFilteredValue: true,
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
+      render: (status, reason_cancel) => (
+        <>
+          <div className="d-flex">
+            <Tag
+              color={
+                status === "Đang xử lý"
+                  ? "rgb(129, 66, 255)"
+                  : status === "Đang tìm tài xế"
+                  ? "blue"
+                  : status === "Đã hủy"
+                  ? "volcano"
+                  : status === "Đang thực hiện"
+                  ? "gold"
+                  : status === "Xác nhận hóa đơn"
+                  ? "purple"
+                  : status === "Thanh toán hóa đơn"
+                  ? "magenta"
+                  : "#87d068"
+              }
+              key={status}
+            >
+              {status === "Đang xử lý"
+                ? "Đang xử lý"
+                : status === "Đang tìm tài xế"
+                ? "Đang tìm tài xế"
+                : status === "Đã hủy"
+                ? "Đã hủy"
+                : status === "Đang thực hiện"
+                ? "Đang thực hiện"
+                : status === "Xác nhận hóa đơn"
+                ? "Xác nhận hóa đơn"
+                : status === "Thanh toán hóa đơn"
+                ? "Thanh toán hóa đơn"
+                : "Đã hoàn thành"}
+            </Tag>
+          </div>
+
+          {reason_cancel.reason_cancel !== null ? (
+            <>
+              <p style={{ marginTop: "10px" }}>
+                <span className="fw-bold">Lý do:</span>{" "}
+                {reason_cancel.reason_cancel}
+              </p>
+            </>
+          ) : (
+            ""
+          )}
+        </>
+      ),
+    },
+    {
+      title: "Tên dịch vụ",
+      dataIndex: "service_name",
+      key: "service_name",
+      ...getColumnSearchProps("service_name"),
+    },
+    {
+      title: "Thời gian lấy hàng",
+      dataIndex: "time_get_item",
+      key: "time_get_item",
+      ...getColumnSearchProps("time_get_item"),
+      render: (time_get_item) => (
+        <>
+          <div style={{ fontWeight: "400", fontSize: "14px" }}>
+            {time_get_item.split("-")[0]}
+          </div>
+          <div
+            style={{
+              fontWeight: "400",
+              fontSize: "13px",
+              color: "#737373",
+            }}
+          >
+            {time_get_item.split("-")[1]}
+          </div>
+        </>
+      ),
+    },
+    {
+      title: "Lộ trình",
+      dataIndex: "router",
+      key: "router",
+      ...getColumnSearchProps("router"),
+      render: (router) => (
+        <>
+          <div className="col" style={{ fontSize: "12px" }}>
+            <div className="d-flex">
+              <span
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  backgroundColor: "red",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "4px",
+                  color: "white",
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                }}
+              >
+                1
+              </span>
+              <p>{router.split("->")[0]}</p>
+            </div>
+
+            <div className="d-flex">
+              <span
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  backgroundColor: "#00bab3",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "4px",
+                  color: "white",
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                }}
+              >
+                2
+              </span>
+              <p>{router.split("->")[1]}</p>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      title: "Tài xế",
+      dataIndex: "driver_name",
+      key: "driver_name",
+      ...getColumnSearchProps("driver_name"),
+      render: (driver_name) => (
+        <div>
+          {driver_name && driver_name.length === 0 ? (
+            <span style={{ color: "#ccc" }}>Chưa xác định</span>
+          ) : (
+            driver_name &&
+            driver_name.map((item, index) => {
+              return (
+                <tr>
+                  <td>
+                    <span className="fw-bold">{index + 1}.</span> {item}
+                  </td>
+                </tr>
+              );
+            })
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Loại xe",
+      dataIndex: "vehicle_name",
+      key: "vehicle_name",
+    },
+    {
+      title: "Giá",
+      dataIndex: "totalOrder",
+      key: "totalOrder",
+      sorter: (a, b) => a.totalOrder - b.totalOrder,
+      render: (totalOrder) => (
+        <div className="fw-bold" style={{ color: "red" }}>
+          {totalOrder.toLocaleString()} đ
+        </div>
+      ),
+    },
+    {
+      title: "Xem chi tiết",
+      dataIndex: "id_order_detail",
+      key: "id_order_detail",
+      render: (id_order_detail, order_id) => (
+        <div
+          onClick={() => {
+            showDrawer();
+            view_detail_order(
+              id_order_detail,
+              order_id.date_created,
+              order_id.date_end,
+              order_id.driver_name
+            );
+          }}
+          style={{
+            backgroundColor: "#29251b",
+            borderRadius: "50%",
+            padding: "5px",
+            display: "flex",
+            cursor: "pointer",
+            width: "30px",
+            height: "30px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <FolderViewOutlined style={{ color: "white", fontWeight: "bold" }} />
+        </div>
+      ),
+    },
+    {
+      title: "Hợp đồng vận chuyển",
+      dataIndex: "id_order_detail",
+      key: "id_order_detail",
+      render: (id_order_detail, order_id) => (
+        <Space size="middle" className="icon_hover">
+          <div
+            onClick={() => modal_contract_delivery(id_order_detail, order_id)}
+            style={{
+              backgroundColor: "purple",
+              borderRadius: "50%",
+              padding: "5px",
+              display: "flex",
+              cursor: "pointer",
+              width: "30px",
+              height: "30px",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FormOutlined
+              style={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
+          </div>
+        </Space>
+      ),
+    },
+    {
+      title: "Hủy đơn hàng",
+      key: "action",
+      render: (order_id, driver_name) => (
+        <Space size="middle" className="icon_hover">
+          {order_id.status === "Đang xử lý" ? (
+            <>
+              <div
+                onClick={() => modal_cancel_order(order_id)}
+                style={{
+                  backgroundColor: "red",
+                  borderRadius: "50%",
+                  padding: "5px",
+                  display: "flex",
+                  cursor: "pointer",
+                  width: "30px",
+                  height: "30px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <DeleteOutlined
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                />
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </Space>
+      ),
+    },
+    {
+      title: "Đánh giá",
+      key: "rating",
+      render: (order_id) => (
+        <Space size="middle" className="icon_hover">
+          {order_id.status === "Đã hoàn thành" ? (
+            <>
+              <div
+                onClick={() => {
+                  nav(`/user/order/rating/${order_id.order_id}`);
+                }}
+                style={{
+                  backgroundColor: "blue",
+                  borderRadius: "50%",
+                  padding: "5px",
+                  display: "flex",
+                  cursor: "pointer",
+                  width: "30px",
+                  height: "30px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <StarOutlined
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                />
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </Space>
+      ),
+    },
+  ];
+
+  const column_notify = [
+    {
+      title: "STT",
+      dataIndex: "STT",
+      key: "STT",
+    },
+    {
+      title: "ID",
+      dataIndex: "order_id",
+      key: "order_id",
+      render: (order_id) => <div className="fw-bold">{order_id}</div>,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+
+      filters: [
+        {
+          text: "Đang xử lý",
+          value: "Đang xử lý",
+        },
+        {
+          text: "Đang tìm tài xế",
+          value: "Đang tìm tài xế",
+        },
+        {
+          text: "Đang thực hiện",
+          value: "Đang thực hiện",
+        },
+
+        {
+          text: "Thanh toán hóa đơn",
+          value: "Thanh toán hóa đơn",
+        },
+        {
+          text: "Đã hoàn thành",
+          value: "Đã hoàn thành",
+        },
+        {
+          text: "Đã hủy",
+          value: "Đã hủy",
+        },
+      ],
+      filterResetToDefaultFilteredValue: true,
       onFilter: (value, record) => record.status.indexOf(value) === 0,
       render: (status, reason_cancel) => (
         <>

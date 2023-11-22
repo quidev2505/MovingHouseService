@@ -1619,14 +1619,15 @@ function OrderAdmin() {
 
     //Kiểm tra xem có id_order không?
     if (params.id_order != "") {
-      console.log(params.id_order);
-
       setSearchAllOrder(params.id_order);
       setTimeout(() => {
         search_all_order();
-      }, 1100);
+      }, 1000);
     }
-  }, [search, searchAllOrder]);
+  }, [search, searchAllOrder, params]);
+
+
+
 
   //Tìm tất cả đơn hàng
   const search_all_order = async () => {

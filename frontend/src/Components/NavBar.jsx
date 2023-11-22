@@ -108,7 +108,7 @@ const NavBar = () => {
                   fontWeight: "bold",
                 }}
                 onClick={() => {
-                  navigate("/user/order");
+                  navigate(`/user/order/${item.order_id}`);
                   localStorage.setItem("menu", "/user/order");
                 }}
               >
