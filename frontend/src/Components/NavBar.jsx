@@ -25,6 +25,12 @@ import { Toast } from "./ToastColor";
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
+
+  //Gắn access Token vào request header
+  axios.defaults.headers = {
+    token: `Bearer ${user.accessToken}`,
+  };
+
   const dispatch = useDispatch();
   // const id = user?._id;
   const navigate = useNavigate();
@@ -46,13 +52,8 @@ const NavBar = () => {
   //Xóa thông báo
   const deleteNotify = async (id_input) => {
     try {
-      const config = {
-        headers: {
-          token: `Bearer ${user.accessToken}`,
-        },
-      };
       await axios
-        .delete(`/v1/notification/deleteNotify/${id_input}`, config)
+        .delete(`/v1/notification/deleteNotify/${id_input}`)
         .then((data) => {
           Toast.fire({
             icon: "success",
@@ -73,15 +74,8 @@ const NavBar = () => {
 
   const call_notification = async (idCustomer) => {
     try {
-      const config = {
-        headers: {
-          token: `Bearer ${user.accessToken}`,
-        },
-      };
-
       const data_call_api = await axios.get(
-        `/v1/notification/showNotificationWithID/${idCustomer}`,
-        config
+        `/v1/notification/showNotificationWithID/${idCustomer}`
       );
 
       // console.log(data_call_api);

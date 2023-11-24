@@ -55,11 +55,6 @@ const ChatBotIcon = () => {
           label: "Quy trình dọn nhà",
           trigger: "work_process",
         },
-        {
-          value: "Kết thúc",
-          label: "Kết thúc",
-          trigger: "ket_thuc",
-        },
       ],
     },
     //Chuyển trang
@@ -252,7 +247,7 @@ const ChatBotIcon = () => {
     },
     {
       id: "show_result",
-      message: "Giá thuê xe vận chuyển là: ",
+      message: "Bảng thông tin giá thuê xe vận chuyển là: ",
       trigger: "review",
     },
     {
@@ -479,7 +474,7 @@ const ChatBotIcon = () => {
           const stepsNew = [
             {
               id: "show_result",
-              message: "Giá thuê xe vận chuyển là ",
+              message: "Bảng thông tin giá thuê xe vận chuyển là: ",
               trigger: "review",
             },
             {
@@ -621,11 +616,6 @@ const ChatBotIcon = () => {
                   value: "Quy trình dọn nhà",
                   label: "Quy trình dọn nhà",
                   trigger: "work_process",
-                },
-                {
-                  value: "Kết thúc",
-                  label: "Kết thúc",
-                  trigger: "ket_thuc",
                 },
               ],
             },
@@ -829,7 +819,7 @@ const ChatBotIcon = () => {
             },
             {
               id: "show_result",
-              message: "Giá thuê xe vận chuyển là: ",
+              message: "Bảng thông tin giá thuê xe vận chuyển là: ",
               trigger: "review",
             },
             {
