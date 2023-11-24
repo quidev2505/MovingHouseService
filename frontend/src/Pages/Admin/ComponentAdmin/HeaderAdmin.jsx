@@ -77,109 +77,131 @@ function HeaderAdmin() {
 
   //Xóa thông báo
   const deleteNotify = async (id_input) => {
-    await axios
-      .delete(`/v1/notification/deleteNotify/${id_input}`)
-      .then((data) => {
-        Toast.fire({
-          icon: "success",
-          title: "Xóa thông báo thành công !",
+    try {
+      const config = {
+        headers: {
+          token: `Bearer ${check_admin_login.accessToken}`,
+        },
+      };
+
+      await axios
+        .delete(`/v1/notification/deleteNotify/${id_input}`, config)
+        .then((data) => {
+          Toast.fire({
+            icon: "success",
+            title: "Xóa thông báo thành công !",
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+          Toast.fire({
+            icon: "warning",
+            title: "Xóa thông báo thất bại!",
+          });
         });
-      })
-      .catch((e) => {
-        console.log(e);
-        Toast.fire({
-          icon: "warning",
-          title: "Xóa thông báo thất bại!",
-        });
-      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const call_notification = async () => {
-    const data_call_api = await axios.get(`/v1/notification/showNotification`);
+    try {
+      const config = {
+        headers: {
+          token: `Bearer ${check_admin_login.accessToken}`,
+        },
+      };
+      const data_call_api = await axios.get(
+        `/v1/notification/showNotification`,
+        config
+      );
 
-    const data_notify = data_call_api.data;
+      const data_notify = data_call_api.data;
 
-    setNumberNotify(data_notify.length);
+      setNumberNotify(data_notify.length);
 
-    const DOM_NOTIFY = data_notify.map((item, index) => {
-      return (
-        <>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              border: "1px solid #0dcaf0",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "10px",
-              borderRadius: "10px",
-              marginBottom: "10px",
-            }}
-          >
-            <p
-              style={{
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                backgroundColor: "green",
-              }}
-            ></p>
+      const DOM_NOTIFY = data_notify.map((item, index) => {
+        return (
+          <>
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
+                border: "1px solid #0dcaf0",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "10px",
+                borderRadius: "10px",
+                marginBottom: "10px",
               }}
             >
               <p
                 style={{
-                  color: "#3396c5",
-                  fontWeight: "bold",
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  backgroundColor: "green",
                 }}
-                onClick={() => {
-                  navigate(`/admin/order/${item.order_id}`);
-                  localStorage.setItem("menu", "/admin/order");
-                }}
-              >
-                <span
-                  style={{
-                    color:
-                      item.content == "Có đơn hàng mới vừa được tạo !"
-                        ? "#3396c5"
-                        : "rgb(255, 78, 116)",
-                  }}
-                >
-                  {item.content}
-                </span>
-                Mã đơn hàng:{" "}
-                <span style={{ color: "red" }}>{item.order_id}</span>
-              </p>
+              ></p>
               <div
-                className="d-flex"
                 style={{
-                  justifyContent: "space-between",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                <p style={{ color: "#ccc" }}>
-                  {moment(item.createdAt).fromNow()}
-                </p>
-                <CloseCircleFilled
+                <p
                   style={{
-                    fontSize: "17px",
-                    zIndex: "99999",
+                    color: "#3396c5",
+                    fontWeight: "bold",
                   }}
                   onClick={() => {
-                    document.querySelector(".notify").style.display = "none";
-                    deleteNotify(item._id);
+                    navigate(`/admin/order/${item.order_id}`);
+                    localStorage.setItem("menu", "/admin/order");
                   }}
-                />
+                >
+                  <span
+                    style={{
+                      color:
+                        item.content == "Có đơn hàng mới vừa được tạo !"
+                          ? "#3396c5"
+                          : "rgb(255, 78, 116)",
+                    }}
+                  >
+                    {item.content}
+                  </span>
+                  Mã đơn hàng:{" "}
+                  <span style={{ color: "red" }}>{item.order_id}</span>
+                </p>
+                <div
+                  className="d-flex"
+                  style={{
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <p style={{ color: "#ccc" }}>
+                    {moment(item.createdAt).fromNow()}
+                  </p>
+                  <CloseCircleFilled
+                    style={{
+                      fontSize: "17px",
+                      zIndex: "99999",
+                    }}
+                    onClick={() => {
+                      document.querySelector(".notify").style.display = "none";
+                      deleteNotify(item._id);
+                    }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      );
-    });
+          </>
+        );
+      });
 
-    setDomNotify(DOM_NOTIFY);
+      setDomNotify(DOM_NOTIFY);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {

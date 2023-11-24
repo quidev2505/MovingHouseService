@@ -304,7 +304,7 @@ function InfoUser() {
                       }}
                       disabled={hide}
                     >
-                      Xác nhận
+                      Cập nhật
                     </button>
                   </td>
                 </tr>

@@ -3,8 +3,12 @@ const Admin = require('../models/Admin');
 const nodemailer = require("nodemailer");
 const OTP = require('one-time-password')
 
+const jwt = require('jsonwebtoken');
+
 const bcrypt = require('bcrypt');
 
+
+let arrayRefreshToken = []
 const adminController = {
     //Login
     loginAdmin: async (req, res) => {
@@ -25,12 +29,30 @@ const adminController = {
                 }
             }
 
+            if (admin_account && validPassword) {
+                //Tạo Access Token
+                const accessToken = adminController.generateAccessToken(admin_account);
+
+                //Tạo Refresh Token
+                const refreshToken = adminController.generateRefreshToken(admin_account);
+
+                arrayRefreshToken.push(refreshToken)
+                // console.log('mang luc moi dang nhap', arrayRefreshToken)
+
+                res.cookie("refreshToken", refreshToken, {
+                    httpOnly: true,
+                    secure: false,
+                    path: "/",
+                    sameSite: "strict",
+                })
+
+                //Khi đăng nhập thành công
+                const { password, ...others } = admin_account._doc;
+                return res.status(200).json({ ...others, accessToken })
+            }
 
 
 
-            //Khi đăng nhập thành công
-            const { password, ...others } = admin_account._doc;
-            return res.status(200).json(others)
 
         } catch (err) {
             console.log(err)
@@ -38,6 +60,32 @@ const adminController = {
         }
     },
 
+
+
+    //GENERATE ACCESS TOKEN
+    generateAccessToken: (admin_account) => {
+        return jwt.sign(
+            {
+                id: admin_account.id,
+            },
+            process.env.JWT_ACCESS_KEY,
+            {
+                expiresIn: "10d"
+            }
+        );
+    },
+
+    //GENERATE REFRESH TOKEN
+    generateRefreshToken: (admin_account) => {
+        return jwt.sign({
+            id: admin_account.id,
+        },
+            process.env.JWT_REFRESH_KEY,
+            {
+                expiresIn: "365d"
+            }
+        )
+    },
 
     //Change Password
     changePasswrod: async (req, res) => {

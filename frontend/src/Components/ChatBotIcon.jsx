@@ -40,11 +40,6 @@ const ChatBotIcon = () => {
       message: "Chào bạn {previousValue},	bạn có yêu cầu gì ạ ?",
       trigger: "menu",
     },
-    {
-      id: "continue_request",
-      message: "Bạn có yêu cầu gì tiếp theo không ạ?",
-      trigger: "menu",
-    },
     //Đưa ra 3 yêu cầu
     {
       id: "menu",
@@ -92,7 +87,7 @@ const ChatBotIcon = () => {
       trigger: "process_content",
     },
     {
-      id: "work_process",
+      id: "process_content",
       component: (
         <>
           <table
@@ -188,7 +183,7 @@ const ChatBotIcon = () => {
         </>
       ),
       end: false,
-      trigger: "continue_request",
+      trigger: "ket_thuc",
     },
     //Báo giá
     {
@@ -333,7 +328,7 @@ const ChatBotIcon = () => {
         </>
       ),
       end: false,
-      trigger: "continue_request",
+      trigger: "ket_thuc",
     },
     {
       id: "ket_thuc",
@@ -607,11 +602,6 @@ const ChatBotIcon = () => {
               message: "Chào bạn {previousValue},	bạn có yêu cầu gì ạ ?",
               trigger: "menu",
             },
-            {
-              id: "continue_request",
-              message: "Bạn có yêu cầu gì tiếp theo không ạ?",
-              trigger: "menu",
-            },
             //Đưa ra 3 yêu cầu
             {
               id: "menu",
@@ -766,7 +756,7 @@ const ChatBotIcon = () => {
                 </>
               ),
               end: false,
-              trigger: "continue_request",
+              trigger: "ket_thuc",
             },
             //Báo giá
             {

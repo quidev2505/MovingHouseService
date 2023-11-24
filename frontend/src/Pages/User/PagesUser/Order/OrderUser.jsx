@@ -1668,7 +1668,13 @@ function OrderUser() {
     }
   };
 
-  const onChange = (pagination, filters, sorter, extra) => {};
+  const onChange = (pagination, filters, sorter, extra) => {
+    //Cập nhật lại giá trị sau khi filter
+    setOrderCount(extra.currentDataSource.length);
+    setDataOrder(extra.currentDataSource);
+
+    console.log("params", pagination, filters, sorter, extra);
+  };
 
   //Thiết lập lọc theo khoảng thời gian
   const changeRangeTime = (a, b, c) => {

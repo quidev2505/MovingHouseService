@@ -6,7 +6,7 @@ const middlewareController = {
         const token = req.headers.token;
         // console.log('Token ne cac ban:'+token)
         if (token) {
-            //Bearer 123456789
+            //Bearer 123456789 => 123456789
             const accessToken = token.split(" ")[1];
             jwt.verify(accessToken, process.env.JWT_ACCESS_KEY, (err, user) => {
                 if (err) {
