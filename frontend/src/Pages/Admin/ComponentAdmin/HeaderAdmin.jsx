@@ -36,7 +36,7 @@ function HeaderAdmin() {
 
   //Gắn access Token vào request header
   axios.defaults.headers = {
-    token: `Bearer  ${check_admin_login.accessToken}`,
+    token: `Bearer ${check_admin_login.accessToken}`,
   };
 
   const items = [

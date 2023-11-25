@@ -246,7 +246,7 @@ function LoadingOrder({ navigation }) {
                                         </View>
                                     </View>
 
-                                    {item.status === "Đang thực hiện" ? (
+                                    {(item.status !== "Đang xử lý" && item.status !== "Đang tìm tài xế") ? (
                                         <>
                                             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrderTracking', { status: "Đang tải", order_id: item.order_id })}>
                                                 <Text style={styles.buttonText}>Theo dõi đơn hàng 🗺️</Text>

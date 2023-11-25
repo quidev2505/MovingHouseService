@@ -45,18 +45,19 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         price_vehicle: data_from_local.step3.priceStep3,
         name_vehicle: data_from_local.step3.vehicle_choose.vehicle_name,
         man_power: {
-          quantity: data_from_local.step4?.man_power_count.quantity_man,
-          price: data_from_local.step4?.man_power_count.total_price_man,
+          quantity: data_from_local.step4.man_power_count.quantity_man,
+          price: data_from_local.step4.man_power_count.total_price_man,
         },
-        moving_fee: data_from_local.step4?.moving_fee,
-        service_fee: data_from_local.step4?.service_fee,
-        noteDriver: data_from_local.step4?.noteDriver,
-        dataChooseItem: data_from_local.step4?.dataChooseItem,
+        moving_fee: data_from_local.step4.moving_fee,
+        service_fee: data_from_local.step4.service_fee,
+        noteDriver: data_from_local.step4.noteDriver,
+        dataChooseItem: data_from_local.step4.dataChooseItem,
         totalOrder: totalOrder,
       };
 
       if (object_data) {
         setDataStep5(object_data);
+        setIsActive(false);
       }
 
       setTotalOrder(object_data.totalOrder);
@@ -115,7 +116,9 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
   useEffect(() => {
     check_payment_success();
-    get_data_from_local();
+    setTimeout(() => {
+      get_data_from_local();
+    }, 1200);
     setIsActive(false);
   }, []);
 
@@ -293,7 +296,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                 </span>
                 <span className="fw-bold">
                   {dataStep5.man_power
-                    ? dataStep5.man_power.price?.toLocaleString()
+                    ? dataStep5.man_power.price.toLocaleString()
                     : ""}{" "}
                   đ
                 </span>
@@ -307,7 +310,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                     >
                       <span>{item.name.split("(")[0]} &nbsp;</span>
                       <span className="fw-bold">
-                        {item.price ? item.price?.toLocaleString() : ""} đ
+                        {item.price ? item.price.toLocaleString() : ""} đ
                       </span>
                     </div>
                   </>
@@ -322,7 +325,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
                     >
                       <span>{item.name.split("(")[0]} &nbsp;</span>
                       <span className="fw-bold">
-                        {item.price ? item.price?.toLocaleString() : ""} đ
+                        {item.price ? item.price.toLocaleString() : ""} đ
                       </span>
                     </div>
                   </>
