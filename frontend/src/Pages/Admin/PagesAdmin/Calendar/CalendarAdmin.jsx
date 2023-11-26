@@ -236,54 +236,58 @@ function CalendarAdmin() {
   };
 
   const get_info_all_driver = async () => {
-    const dataDriver = await axios.get(`/v1/driver/show_all_driver`);
-    let arrDriver = [];
-    let arrPosition = [];
-    //Lọc lấy tài xế ở trạng thái sẵn sàng
-    dataDriver.data.forEach((item, index) => {
-      if (item.status === "Sẵn sàng") {
+    try {
+      const dataDriver = await axios.get(`/v1/driver/show_all_driver`);
+      let arrDriver = [];
+      let arrPosition = [];
+      //Lọc lấy tài xế ở trạng thái sẵn sàng
+      dataDriver.data.forEach((item, index) => {
+        if (item.status === "Sẵn sàng") {
+          const ob = {
+            current_position: item.current_position,
+            fullname: item.fullname,
+            avatar: item.avatar,
+            vehicle_type: item.vehicle_type,
+            star_average: item.star_average,
+          };
+          arrPosition.push(item.current_position);
+          arrDriver.push(ob);
+        }
+      });
+
+      //Cho chạy vòng lặp lấy lat và lon và kèm hình ảnh và tên tài xế
+      const arr_position_for_map = await Promise.all(
+        arrPosition.map(async (item, index) => {
+          let data_arr = await axios.get(
+            `https://geocode.maps.co/search?q=${item}&format=json`
+          );
+          const data_map_arr = data_arr.data[0];
+          const ob = {
+            display_name: data_map_arr.display_name,
+            lat: data_map_arr.lat,
+            lon: data_map_arr.lon,
+          };
+
+          return ob;
+        })
+      );
+
+      //Kết hợp 2 mảng lại với nhau
+      const arrResult = [];
+      arrDriver.forEach((item, index) => {
         const ob = {
-          current_position: item.current_position,
-          fullname: item.fullname,
-          avatar: item.avatar,
-          vehicle_type: item.vehicle_type,
-          star_average: item.star_average,
-        };
-        arrPosition.push(item.current_position);
-        arrDriver.push(ob);
-      }
-    });
-
-    //Cho chạy vòng lặp lấy lat và lon và kèm hình ảnh và tên tài xế
-    const arr_position_for_map = await Promise.all(
-      arrPosition.map(async (item, index) => {
-        let data_arr = await axios.get(
-          `https://geocode.maps.co/search?q=${item}&format=json`
-        );
-        const data_map_arr = data_arr.data[0];
-        const ob = {
-          display_name: data_map_arr.display_name,
-          lat: data_map_arr.lat,
-          lon: data_map_arr.lon,
+          item,
+          position: arr_position_for_map[index],
         };
 
-        return ob;
-      })
-    );
+        arrResult.push(ob);
+      });
 
-    //Kết hợp 2 mảng lại với nhau
-    const arrResult = [];
-    arrDriver.forEach((item, index) => {
-      const ob = {
-        item,
-        position: arr_position_for_map[index],
-      };
-
-      arrResult.push(ob);
-    });
-
-    //Lấy thông tin bản đồ
-    showMapDriver(arrResult);
+      //Lấy thông tin bản đồ
+      showMapDriver(arrResult);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const [domListDriver, setDomListDriver] = useState();

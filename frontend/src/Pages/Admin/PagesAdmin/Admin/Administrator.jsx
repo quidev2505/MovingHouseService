@@ -702,58 +702,62 @@ function Administrator() {
 
   //Khóa tài khoản quản trị viên
   const lock_account_admin = async (username) => {
-    let username_admin = username.username;
-    let data_account_admin = await axios.get(
-      `/v1/admin/getadmin_account/${username_admin}`
-    );
+    try {
+      let username_admin = username.username;
+      let data_account_admin = await axios.get(
+        `/v1/admin/getadmin_account/${username_admin}`
+      );
 
-    let status_account_admin = data_account_admin.data.status_account;
-    Swal.fire({
-      title: "Bạn muốn thay đổi trạng thái tài khoản ?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xác nhận",
-    })
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          await axios
-            .patch(`/v1/admin/lockadmin_account/${username_admin}`, {
-              status_account: !status_account_admin,
-            })
-            .then((data) => {
-              get_admin();
-              Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Thay đổi trạng thái tài khoản thành công !",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-            })
-            .catch((e) => {
-              Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "Thay đổi trạng thái tài khoản thất bại !",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-              console.log(e);
-            });
-        }
+      let status_account_admin = data_account_admin.data.status_account;
+      Swal.fire({
+        title: "Bạn muốn thay đổi trạng thái tài khoản ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Xác nhận",
       })
-      .catch((e) => {
-        Swal.fire({
-          position: "center",
-          icon: "warning",
-          title: "Thay đổi trạng thái tài khoản thất bại !",
-          showConfirmButton: false,
-          timer: 1200,
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            await axios
+              .patch(`/v1/admin/lockadmin_account/${username_admin}`, {
+                status_account: !status_account_admin,
+              })
+              .then((data) => {
+                get_admin();
+                Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: "Thay đổi trạng thái tài khoản thành công !",
+                  showConfirmButton: false,
+                  timer: 1200,
+                });
+              })
+              .catch((e) => {
+                Swal.fire({
+                  position: "center",
+                  icon: "warning",
+                  title: "Thay đổi trạng thái tài khoản thất bại !",
+                  showConfirmButton: false,
+                  timer: 1200,
+                });
+                console.log(e);
+              });
+          }
+        })
+        .catch((e) => {
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: "Thay đổi trạng thái tài khoản thất bại !",
+            showConfirmButton: false,
+            timer: 1200,
+          });
+          console.log(e);
         });
-        console.log(e);
-      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //Khóa tài khoản quản khàng

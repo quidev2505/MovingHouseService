@@ -82,24 +82,28 @@ function ServicePrice() {
   const [dataFee, setDataFee] = useState([]);
 
   const get_fee_service = async () => {
-    await axios.get(`/v1/service_fee/list_service_fee`).then((data) => {
-      let data_service_fee = data.data;
-      // eslint-disable-next-line
-      let arrDOMFee = data_service_fee.map((item, index) => {
-        if (item.status) {
-          return (
-            <tr>
-              <td>{item.fee_name}</td>
-              <td>
-                {item.price.toLocaleString()} đ / {item.unit}
-              </td>
-            </tr>
-          );
-        }
-      });
+    try {
+      await axios.get(`/v1/service_fee/list_service_fee`).then((data) => {
+        let data_service_fee = data.data;
+        // eslint-disable-next-line
+        let arrDOMFee = data_service_fee.map((item, index) => {
+          if (item.status) {
+            return (
+              <tr>
+                <td>{item.fee_name}</td>
+                <td>
+                  {item.price.toLocaleString()} đ / {item.unit}
+                </td>
+              </tr>
+            );
+          }
+        });
 
-      setDataFee(arrDOMFee);
-    });
+        setDataFee(arrDOMFee);
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const [dataLoading, setDataLoading] = useState([]);

@@ -31,22 +31,90 @@ function DriverSearch() {
   const [isActive, setIsActive] = useState(false);
 
   const findData = async () => {
-    //Kiểm tra xem đã nhập 1 trong 3 ô chưa
-    if (
-      profile_code == "" &&
-      phonenumber == "" &&
-      fullname == "" &&
-      address == "" &&
-      licensePlate == ""
-    ) {
-      await Toast.fire({
-        icon: "warning",
-        title: "Vui lòng nhập ít nhất 1 ô dữ liệu tìm kiếm !",
-      });
-    } else {
+    try {
+      //Kiểm tra xem đã nhập 1 trong 3 ô chưa
+      if (
+        profile_code == "" &&
+        phonenumber == "" &&
+        fullname == "" &&
+        address == "" &&
+        licensePlate == ""
+      ) {
+        await Toast.fire({
+          icon: "warning",
+          title: "Vui lòng nhập ít nhất 1 ô dữ liệu tìm kiếm !",
+        });
+      } else {
+        setIsActive(true);
+        setShowTable(true);
+
+        const api_call = await axios.post("/v1/driver/findDriverAdvanced", {
+          profile_code,
+          phonenumber,
+          fullname,
+          address,
+        });
+
+        const data_get = api_call.data;
+
+        const data_get_new = data_get.map((item, index) => {
+          const ob = {
+            key: index,
+            profile_code: item.profile_code,
+            fullname: item.fullname,
+            phonenumber: item.phonenumber,
+            date_of_birth: item.date_of_birth,
+            citizen_id: item.citizen_id,
+            address: item.address,
+            avatar: item.avatar,
+            gender: item.gender,
+            star_average: item.star_average,
+            vehicle_type: item.vehicle_type,
+            location_delivery: item.location_delivery,
+            id_delivery: item.id_delivery.length,
+            id_rating: item.id_rating.length,
+            license_plate: item.license_plate,
+            current_position: item.current_position,
+            status: item.status,
+          };
+
+          return ob;
+        });
+
+        //Kiểm tra nếu dữ liệu trả về là rỗng
+        if (data_get_new.length == 0) {
+          await Toast.fire({
+            icon: "warning",
+            title: "Không có dữ liệu cần tìm !",
+          });
+          setIsActive(false);
+          setDataDriver([]);
+        } else {
+          setIsActive(false);
+          setDataDriver(data_get_new);
+        }
+
+        // console.log(data_get);
+
+        // setShowTable(true);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // Khi nhấn vào nút tìm tất cả
+  const findDataAll = async () => {
+    try {
       setIsActive(true);
       setShowTable(true);
 
+      setPhoneNumber("");
+      setFullName("");
+      setAddress("");
+      setProfileCode("");
+
+      // setShowTable(false);
       const api_call = await axios.post("/v1/driver/findDriverAdvanced", {
         profile_code,
         phonenumber,
@@ -55,6 +123,7 @@ function DriverSearch() {
       });
 
       const data_get = api_call.data;
+      console.log(data_get);
 
       const data_get_new = data_get.map((item, index) => {
         const ob = {
@@ -80,74 +149,13 @@ function DriverSearch() {
         return ob;
       });
 
-      //Kiểm tra nếu dữ liệu trả về là rỗng
-      if (data_get_new.length == 0) {
-        await Toast.fire({
-          icon: "warning",
-          title: "Không có dữ liệu cần tìm !",
-        });
-        setIsActive(false);
-        setDataDriver([]);
-      } else {
-        setIsActive(false);
-        setDataDriver(data_get_new);
-      }
-
       // console.log(data_get);
-
+      setIsActive(false);
+      setDataDriver(data_get_new);
       // setShowTable(true);
+    } catch (e) {
+      console.log(e);
     }
-  };
-
-  // Khi nhấn vào nút tìm tất cả
-  const findDataAll = async () => {
-    setIsActive(true);
-    setShowTable(true);
-
-    setPhoneNumber("");
-    setFullName("");
-    setAddress("");
-    setProfileCode("");
-
-    // setShowTable(false);
-    const api_call = await axios.post("/v1/driver/findDriverAdvanced", {
-      profile_code,
-      phonenumber,
-      fullname,
-      address,
-    });
-
-    const data_get = api_call.data;
-    console.log(data_get);
-
-    const data_get_new = data_get.map((item, index) => {
-      const ob = {
-        key: index,
-        profile_code: item.profile_code,
-        fullname: item.fullname,
-        phonenumber: item.phonenumber,
-        date_of_birth: item.date_of_birth,
-        citizen_id: item.citizen_id,
-        address: item.address,
-        avatar: item.avatar,
-        gender: item.gender,
-        star_average: item.star_average,
-        vehicle_type: item.vehicle_type,
-        location_delivery: item.location_delivery,
-        id_delivery: item.id_delivery.length,
-        id_rating: item.id_rating.length,
-        license_plate: item.license_plate,
-        current_position: item.current_position,
-        status: item.status,
-      };
-
-      return ob;
-    });
-
-    // console.log(data_get);
-    setIsActive(false);
-    setDataDriver(data_get_new);
-    // setShowTable(true);
   };
 
   //Tính năng lọc theo Search
@@ -730,17 +738,21 @@ function DriverSearch() {
 
   //Gọi API thông tin thêm
   const moreData = async () => {
-    if (infoChoose != "Chưa chọn") {
-      setIsActiveMore(true);
-      const api_more_data = await axios.get(`/v1/driver/findMoreDriverInfo`);
-      console.log(api_more_data.data);
-      setIsActiveMore(false);
-      setDataDistance(api_more_data.data);
-    } else {
-      await Toast.fire({
-        icon: "warning",
-        title: "Vui lòng chọn 1 loại thông tin thêm !",
-      });
+    try {
+      if (infoChoose != "Chưa chọn") {
+        setIsActiveMore(true);
+        const api_more_data = await axios.get(`/v1/driver/findMoreDriverInfo`);
+        console.log(api_more_data.data);
+        setIsActiveMore(false);
+        setDataDistance(api_more_data.data);
+      } else {
+        await Toast.fire({
+          icon: "warning",
+          title: "Vui lòng chọn 1 loại thông tin thêm !",
+        });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

@@ -6,7 +6,7 @@ import { RobotOutlined, CloseOutlined } from "@ant-design/icons";
 
 import { useNavigate } from "react-router-dom";
 
-import { Toast } from "../Components/ToastColor";
+import { Toast } from "../Components/ToastColor"
 
 import axios from "axios";
 
@@ -129,11 +129,11 @@ const ChatBotIcon = () => {
                 </td>
               </tr>
               <tr style={{ borderBottom: "1px solid #ccc" }}>
-                <td>Bước 3: Ký hợp đồng điện tử</td>
+                <td>Bước 3: Xác thực hợp đồng vận chuyển</td>
                 <td style={{ borderLeft: "1px solid #ccc" }}>
-                  Khách hàng sẽ nhận được hợp đồng điện tử từ Fast Move Company
-                  xác nhận trực tiếp trên Website. Khách hàng có thể ký kết hợp
-                  đồng điện tử bằng cách sử dụng chữ ký điện tử.
+                  Khách hàng sẽ nhận được hợp đồng từ hệ thống Fast Move Company
+                  và xác thực hợp đồng trực tiếp trên Website. Khách hàng sẽ chờ
+                  đợi sự xét duyệt hợp đồng từ quản trị viên.
                 </td>
               </tr>
               <tr style={{ borderBottom: "1px solid #ccc" }}>
@@ -695,12 +695,12 @@ const ChatBotIcon = () => {
                         </td>
                       </tr>
                       <tr style={{ borderBottom: "1px solid #ccc" }}>
-                        <td>Bước 3: Ký hợp đồng điện tử</td>
+                        <td>Bước 3: Xác thực hợp đồng vận chuyển</td>
                         <td style={{ borderLeft: "1px solid #ccc" }}>
-                          Khách hàng sẽ nhận được hợp đồng điện tử từ Fast Move
-                          Company xác nhận trực tiếp trên Website. Khách hàng có
-                          thể ký kết hợp đồng điện tử bằng cách sử dụng chữ ký
-                          điện tử.
+                          Khách hàng sẽ nhận được hợp đồng từ hệ thống Fast Move
+                          Company và xác thực hợp đồng trực tiếp trên Website.
+                          Khách hàng sẽ chờ đợi sự xét duyệt hợp đồng từ quản
+                          trị viên.
                         </td>
                       </tr>
                       <tr style={{ borderBottom: "1px solid #ccc" }}>

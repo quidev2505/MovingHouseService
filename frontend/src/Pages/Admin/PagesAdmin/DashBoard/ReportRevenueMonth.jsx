@@ -64,101 +64,107 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
   };
 
   const getDataVenueMonth = async () => {
-    var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
-    var arr_order = call_api_order.data;
+    try {
+      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
+      var arr_order = call_api_order.data;
 
-    //Tính tổng chi phí, lợi nhuận (lợi nhuận = doanh thu - chi phí)
-    var call_api_order_detail = await axios.get(`/v1/order/viewAllOrderDetail`);
-    var arr_order_detail = call_api_order_detail.data;
+      //Tính tổng chi phí, lợi nhuận (lợi nhuận = doanh thu - chi phí)
+      var call_api_order_detail = await axios.get(
+        `/v1/order/viewAllOrderDetail`
+      );
+      var arr_order_detail = call_api_order_detail.data;
 
-    //Xử lý những đơn đã hoàn thành và date_end != null
-    //Tính doanh thu theo từng tháng
-    let arr_solve = [];
-    let count = 0;
-    var totalReportCal = 0;
-    var totalReportCalProfit = 0;
-    var totalReportCalFee = 0;
-    var totalReportCalMoreFee = 0;
-    arr_order.forEach((item, index) => {
-      if (
-        item.status === "Đã hoàn thành" &&
-        item.date_end !== null &&
-        item.date_start.split("/")[1] == monthPassFilter &&
-        item.date_start.split("/")[2] == yearFilter
-      ) {
-        count++;
-        for (let i = 0; i < arr_order_detail.length; i++) {
-          if (arr_order_detail[i]._id == item.order_detail_id) {
-            const ob = {
-              stt: count,
-              order_id: item.order_id,
-              date_start: item.date_start,
-              date_end: item.date_end,
-              month_show: item.date_start.split("/")[1],
-              totalOrder: item.totalOrder,
-              moreFeeName: arr_order_detail[i].more_fee_name,
-              moreFeePrice: arr_order_detail[i].more_fee_price,
-              offsetFeeName: arr_order_detail[i].offset_fee_name,
-              offsetFeePrice: arr_order_detail[i].offset_fee_price,
-              profit: arr_order_detail[i].totalOrderNew,
-            };
+      //Xử lý những đơn đã hoàn thành và date_end != null
+      //Tính doanh thu theo từng tháng
+      let arr_solve = [];
+      let count = 0;
+      var totalReportCal = 0;
+      var totalReportCalProfit = 0;
+      var totalReportCalFee = 0;
+      var totalReportCalMoreFee = 0;
+      arr_order.forEach((item, index) => {
+        if (
+          item.status === "Đã hoàn thành" &&
+          item.date_end !== null &&
+          item.date_start.split("/")[1] == monthPassFilter &&
+          item.date_start.split("/")[2] == yearFilter
+        ) {
+          count++;
+          for (let i = 0; i < arr_order_detail.length; i++) {
+            if (arr_order_detail[i]._id == item.order_detail_id) {
+              const ob = {
+                stt: count,
+                order_id: item.order_id,
+                date_start: item.date_start,
+                date_end: item.date_end,
+                month_show: item.date_start.split("/")[1],
+                totalOrder: item.totalOrder,
+                moreFeeName: arr_order_detail[i].more_fee_name,
+                moreFeePrice: arr_order_detail[i].more_fee_price,
+                offsetFeeName: arr_order_detail[i].offset_fee_name,
+                offsetFeePrice: arr_order_detail[i].offset_fee_price,
+                profit: arr_order_detail[i].totalOrderNew,
+              };
 
-            totalReportCal += item.totalOrder;
-            totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
-            totalReportCalFee += Number(
-              isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
-            );
-            totalReportCalMoreFee += Number(
-              isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
-            );
-            arr_solve.push(ob);
-            break;
+              totalReportCal += item.totalOrder;
+              totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
+              totalReportCalFee += Number(
+                isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+              );
+              totalReportCalMoreFee += Number(
+                isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
+              );
+              arr_solve.push(ob);
+              break;
+            }
+          }
+        } else if (
+          monthPassFilter == "00" &&
+          item.status === "Đã hoàn thành" &&
+          item.date_end !== null &&
+          item.date_start.split("/")[2] == yearFilter
+        ) {
+          count++;
+          for (let i = 0; i < arr_order_detail.length; i++) {
+            if (arr_order_detail[i]._id == item.order_detail_id) {
+              const ob = {
+                stt: count,
+                order_id: item.order_id,
+                date_start: item.date_start,
+                date_end: item.date_end,
+                month_show: item.date_start.split("/")[1],
+                totalOrder: item.totalOrder,
+                moreFeeName: arr_order_detail[i].more_fee_name,
+                moreFeePrice: arr_order_detail[i].more_fee_price,
+                offsetFeeName: arr_order_detail[i].offset_fee_name,
+                offsetFeePrice: arr_order_detail[i].offset_fee_price,
+                profit: arr_order_detail[i].totalOrderNew,
+              };
+
+              totalReportCal += item.totalOrder;
+              totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
+              totalReportCalFee += Number(
+                isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
+              );
+              totalReportCalMoreFee += Number(
+                isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
+              );
+              arr_solve.push(ob);
+              break;
+            }
           }
         }
-      } else if (
-        monthPassFilter == "00" &&
-        item.status === "Đã hoàn thành" &&
-        item.date_end !== null &&
-        item.date_start.split("/")[2] == yearFilter
-      ) {
-        count++;
-        for (let i = 0; i < arr_order_detail.length; i++) {
-          if (arr_order_detail[i]._id == item.order_detail_id) {
-            const ob = {
-              stt: count,
-              order_id: item.order_id,
-              date_start: item.date_start,
-              date_end: item.date_end,
-              month_show: item.date_start.split("/")[1],
-              totalOrder: item.totalOrder,
-              moreFeeName: arr_order_detail[i].more_fee_name,
-              moreFeePrice: arr_order_detail[i].more_fee_price,
-              offsetFeeName: arr_order_detail[i].offset_fee_name,
-              offsetFeePrice: arr_order_detail[i].offset_fee_price,
-              profit: arr_order_detail[i].totalOrderNew,
-            };
+      });
 
-            totalReportCal += item.totalOrder;
-            totalReportCalProfit += Number(isNaN(ob.profit) ? 0 : ob.profit);
-            totalReportCalFee += Number(
-              isNaN(ob.offsetFeePrice) ? 0 : ob.offsetFeePrice
-            );
-            totalReportCalMoreFee += Number(
-              isNaN(ob.moreFeePrice) ? 0 : ob.moreFeePrice
-            );
-            arr_solve.push(ob);
-            break;
-          }
-        }
-      }
-    });
+      setTotalReport(totalReportCal);
+      setTotalReportProfit(totalReportCalProfit);
+      setTotalReportFee(totalReportCalFee);
+      setTotalReportMoreFee(totalReportCalMoreFee);
 
-    setTotalReport(totalReportCal);
-    setTotalReportProfit(totalReportCalProfit);
-    setTotalReportFee(totalReportCalFee);
-    setTotalReportMoreFee(totalReportCalMoreFee);
-
-    setReportVenueMonthData(arr_solve);
+      setReportVenueMonthData(arr_solve);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //Tính năng lọc theo Search
@@ -542,42 +548,46 @@ function ReportVenueMonth({ yearFilter, monthPass }) {
 
   //Khi nhấn nút search thống kê ngày
   const filterDate = async () => {
-    if (dayFilter == "") {
-      //Gọi API
-      getDataVenueMonth();
-    } else {
-      var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
-      var arr_order = call_api_order.data;
+    try {
+      if (dayFilter == "") {
+        //Gọi API
+        getDataVenueMonth();
+      } else {
+        var call_api_order = await axios.get(`/v1/order/viewAllOrder`);
+        var arr_order = call_api_order.data;
 
-      //Xử lý những đơn đã hoàn thành và date_end != null
-      //Tính doanh thu theo từng tháng
-      let arr_solve = [];
-      let count = 0;
-      var totalReportCal = 0;
-      arr_order.forEach((item, index) => {
-        if (
-          item.status === "Đã hoàn thành" &&
-          item.date_end !== null &&
-          item.date_end.split(",")[0] === dayFilter
-        ) {
-          count++;
-          const ob = {
-            stt: count,
-            order_id: item.order_id,
-            date_start: item.date_start,
-            date_end: item.date_end,
-            month_show: item.date_start.split("/")[1],
-            totalOrder: item.totalOrder,
-          };
+        //Xử lý những đơn đã hoàn thành và date_end != null
+        //Tính doanh thu theo từng tháng
+        let arr_solve = [];
+        let count = 0;
+        var totalReportCal = 0;
+        arr_order.forEach((item, index) => {
+          if (
+            item.status === "Đã hoàn thành" &&
+            item.date_end !== null &&
+            item.date_end.split(",")[0] === dayFilter
+          ) {
+            count++;
+            const ob = {
+              stt: count,
+              order_id: item.order_id,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              month_show: item.date_start.split("/")[1],
+              totalOrder: item.totalOrder,
+            };
 
-          totalReportCal += item.totalOrder;
-          arr_solve.push(ob);
-        }
-      });
+            totalReportCal += item.totalOrder;
+            arr_solve.push(ob);
+          }
+        });
 
-      setTotalReport(totalReportCal);
+        setTotalReport(totalReportCal);
 
-      setReportVenueMonthData(arr_solve);
+        setReportVenueMonthData(arr_solve);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

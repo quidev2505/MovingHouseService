@@ -393,104 +393,112 @@ function Step2({ check_fill, setCheckFill, current, setCurrent }) {
   };
 
   const changeLocation = async (lng, lat) => {
-    Toast.fire({
-      icon: "warning",
-      title: "Xin vui lòng chờ cập nhật lại địa điểm !",
-    });
-    const data = await axios.get(
-      `https://geocode.maps.co/reverse?lat=${lat}&lon=${lng}&1`
-    );
-    let data_location = data.data;
-    // // Sử dụng DOM parser để parse đoạn String XML
-    // const parser = new DOMParser();
-    // const doc = parser.parseFromString(data_location, "text/xml");
+    try {
+      Toast.fire({
+        icon: "warning",
+        title: "Xin vui lòng chờ cập nhật lại địa điểm !",
+      });
+      const data = await axios.get(
+        `https://geocode.maps.co/reverse?lat=${lat}&lon=${lng}&1`
+      );
+      let data_location = data.data;
+      // // Sử dụng DOM parser để parse đoạn String XML
+      // const parser = new DOMParser();
+      // const doc = parser.parseFromString(data_location, "text/xml");
 
-    // // Lấy ra element <result>
-    // const resultElement = doc.querySelector("result");
+      // // Lấy ra element <result>
+      // const resultElement = doc.querySelector("result");
 
-    // // Lấy ra text content của element <result>
-    // const resultText = resultElement.textContent;
+      // // Lấy ra text content của element <result>
+      // const resultText = resultElement.textContent;
 
-    // Trả về text content của element <result>
-    const ob = {
-      lat: Number(lat),
-      lon: Number(lng),
-      display_name: data_location.display_name,
-    };
+      // Trả về text content của element <result>
+      const ob = {
+        lat: Number(lat),
+        lon: Number(lng),
+        display_name: data_location.display_name,
+      };
 
-    const ob_new = {
-      lat: Number(lat),
-      lng: Number(lng),
-      name: data_location.display_name,
-    };
+      const ob_new = {
+        lat: Number(lat),
+        lng: Number(lng),
+        name: data_location.display_name,
+      };
 
-    setLocationFromChoose(ob);
-    // draw_between_two_location(ob, toLocation);
+      setLocationFromChoose(ob);
+      // draw_between_two_location(ob, toLocation);
 
-    //Thực hiện set vào localStorage
-    let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
-    let step2 = data_from_local.step2;
-    step2.fromLocation = ob_new;
+      //Thực hiện set vào localStorage
+      let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+      let step2 = data_from_local.step2;
+      step2.fromLocation = ob_new;
 
-    localStorage.setItem("order_moving", JSON.stringify(data_from_local));
+      localStorage.setItem("order_moving", JSON.stringify(data_from_local));
 
-    // get_location_from_choose();
+      // get_location_from_choose();
 
-    setTimeout(() => {
-      setCurrent(current - 1);
       setTimeout(() => {
-        setCurrent(current + 0);
-      }, 4000);
-    }, 2000);
+        setCurrent(current - 1);
+        setTimeout(() => {
+          setCurrent(current + 0);
+        }, 4000);
+      }, 2000);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const changeLocation_To = async (lng, lat) => {
-    const data = await axios.get(
-      `https://geocode.maps.co/reverse?lat=${lat}&lon=${lng}&1`
-    );
-    let data_location = data.data;
-    // console.log(data_location);
-    // // Sử dụng DOM parser để parse đoạn String XML
-    // const parser = new DOMParser();
-    // const doc = parser.parseFromString(data_location, "text/xml");
+    try {
+      const data = await axios.get(
+        `https://geocode.maps.co/reverse?lat=${lat}&lon=${lng}&1`
+      );
+      let data_location = data.data;
+      // console.log(data_location);
+      // // Sử dụng DOM parser để parse đoạn String XML
+      // const parser = new DOMParser();
+      // const doc = parser.parseFromString(data_location, "text/xml");
 
-    // // Lấy ra element <result>
-    // const resultElement = doc.querySelector("result");
+      // // Lấy ra element <result>
+      // const resultElement = doc.querySelector("result");
 
-    // // Lấy ra text content của element <result>
-    // const resultText = resultElement.textContent;
+      // // Lấy ra text content của element <result>
+      // const resultText = resultElement.textContent;
 
-    // Trả về text content của element <result>
-    const ob = {
-      lat: Number(lat),
-      lon: Number(lng),
-      display_name: data_location.display_name,
-    };
+      // Trả về text content của element <result>
+      const ob = {
+        lat: Number(lat),
+        lon: Number(lng),
+        display_name: data_location.display_name,
+      };
 
-    const ob_new = {
-      lat: Number(lat),
-      lng: Number(lng),
-      name: data_location.display_name,
-    };
+      const ob_new = {
+        lat: Number(lat),
+        lng: Number(lng),
+        name: data_location.display_name,
+      };
 
-    setLocationToChoose(ob);
-    // draw_between_two_location(ob, toLocation);
+      setLocationToChoose(ob);
+      // draw_between_two_location(ob, toLocation);
 
-    //Thực hiện set vào localStorage
-    let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
-    let step2 = data_from_local.step2;
-    step2.toLocation = ob_new;
+      //Thực hiện set vào localStorage
+      let data_from_local = JSON.parse(localStorage.getItem("order_moving"));
+      let step2 = data_from_local.step2;
+      step2.toLocation = ob_new;
 
-    localStorage.setItem("order_moving", JSON.stringify(data_from_local));
+      localStorage.setItem("order_moving", JSON.stringify(data_from_local));
 
-    // get_location_from_choose();
+      // get_location_from_choose();
 
-    setTimeout(() => {
-      setCurrent(current - 1);
       setTimeout(() => {
-        setCurrent(current + 0);
-      }, 4000);
-    }, 2000);
+        setCurrent(current - 1);
+        setTimeout(() => {
+          setCurrent(current + 0);
+        }, 4000);
+      }, 2000);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //Tính năng tính khoảng cách giữa 2 điểm và tính thời gian hoàn tất.

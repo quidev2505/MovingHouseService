@@ -258,41 +258,45 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   ]);
 
   const get_data_item = async (dataChooseItem, kichthuocxe) => {
-    const arr_soluong = [];
-    const arr_tenVatDung = [];
+    try {
+      const arr_soluong = [];
+      const arr_tenVatDung = [];
 
-    //Lấy ra mảng số lượng
-    dataChooseItem.forEach((item, index) => {
-      let soluong_string = item.split("")[item.length - 2];
-      arr_soluong.push(soluong_string);
-    });
-
-    //Lấy ra tên vật dụng
-    dataChooseItem.forEach((item, index) => {
-      let teb_string = item.split("(")[0];
-      arr_tenVatDung.push(teb_string);
-    });
-
-    let arr_kichthuoc = [];
-    arr_tenVatDung.forEach(async (item, index) => {
-      await axios.get(`/v1/item/get_size_with_name/${item}`).then((data) => {
-        arr_kichthuoc.push(data.data);
-      });
-    });
-
-    setTimeout(() => {
-      let multiple_size = arr_kichthuoc.map((item, index) => {
-        return tachSo(item.toString());
+      //Lấy ra mảng số lượng
+      dataChooseItem.forEach((item, index) => {
+        let soluong_string = item.split("")[item.length - 2];
+        arr_soluong.push(soluong_string);
       });
 
-      console.log(multiple_size);
-      console.log(arr_soluong);
-      const kichthuocxe_m3 = tachSoXe(kichthuocxe);
+      //Lấy ra tên vật dụng
+      dataChooseItem.forEach((item, index) => {
+        let teb_string = item.split("(")[0];
+        arr_tenVatDung.push(teb_string);
+      });
 
-      const result = tinhSoXe(multiple_size, arr_soluong, kichthuocxe_m3);
+      let arr_kichthuoc = [];
+      arr_tenVatDung.forEach(async (item, index) => {
+        await axios.get(`/v1/item/get_size_with_name/${item}`).then((data) => {
+          arr_kichthuoc.push(data.data);
+        });
+      });
 
-      localStorage.setItem("vehicle_count", result);
-    }, 1000);
+      setTimeout(() => {
+        let multiple_size = arr_kichthuoc.map((item, index) => {
+          return tachSo(item.toString());
+        });
+
+        console.log(multiple_size);
+        console.log(arr_soluong);
+        const kichthuocxe_m3 = tachSoXe(kichthuocxe);
+
+        const result = tinhSoXe(multiple_size, arr_soluong, kichthuocxe_m3);
+
+        localStorage.setItem("vehicle_count", result);
+      }, 1000);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   //Hàm tính số lượng

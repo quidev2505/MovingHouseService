@@ -196,83 +196,87 @@ function OrderSearch() {
 
   // Khi nhấn vào nút tìm tất cả
   const findDataAll = async () => {
-    setIsActive(true);
-    setShowTable(true);
-
-    if (filter_check && filterRange) {
-      setFilterRange(false);
-    }
-
-    if (!filterRange) {
-      const typeFilter = "Tất cả";
-
-      setOrderId("");
-      setCustomerName("");
-
-      const api_call = await axios.post("/v1/order/findDataOrder", {
-        order_id,
-        typeFilter,
-      });
-
-      const data_get = api_call.data;
-
-      let arr_CI = [];
-      data_get.forEach((item, index) => {
-        arr_CI.push(item.customer_id);
-      });
-
-      if (arr_CI) {
-        let arr_data_get = await axios.post(
-          `/v1/customer/getArrFullName`,
-          arr_CI
-        );
-
-        const arr_customer_name = arr_data_get.data;
-
-        const data_get_new = data_get.map((item, index) => {
-          const ob = {
-            key: index,
-            order_id: item.order_id,
-            date_created: item.date_created,
-            service_name: item.service_name,
-            date_start: item.date_start,
-            date_end: item.date_end,
-            fromLocation: item.fromLocation,
-            toLocation: item.toLocation,
-            vehicle_name: item.vehicle_name,
-            driver_name: item.driver_name,
-            totalOrder: item.totalOrder,
-            status: item.status,
-            distance: item.distance,
-            duration: item.duration,
-            payment_status: item.payment_status,
-            customer_name: arr_customer_name[index],
-          };
-
-          return ob;
-        });
-
-        // console.log(data_get);
-        setIsActive(false);
-        setDataOrder(data_get_new);
-        // setShowTable(true);
-      }
-    } else {
+    try {
       setIsActive(true);
       setShowTable(true);
 
-      setFilterCheck(true);
+      if (filter_check && filterRange) {
+        setFilterRange(false);
+      }
 
-      const arr_result = [];
-      dataOrder.forEach((item, index) => {
-        if (isDateInRange(item.date_start, startRange, endRange)) {
-          arr_result.push(item);
+      if (!filterRange) {
+        const typeFilter = "Tất cả";
+
+        setOrderId("");
+        setCustomerName("");
+
+        const api_call = await axios.post("/v1/order/findDataOrder", {
+          order_id,
+          typeFilter,
+        });
+
+        const data_get = api_call.data;
+
+        let arr_CI = [];
+        data_get.forEach((item, index) => {
+          arr_CI.push(item.customer_id);
+        });
+
+        if (arr_CI) {
+          let arr_data_get = await axios.post(
+            `/v1/customer/getArrFullName`,
+            arr_CI
+          );
+
+          const arr_customer_name = arr_data_get.data;
+
+          const data_get_new = data_get.map((item, index) => {
+            const ob = {
+              key: index,
+              order_id: item.order_id,
+              date_created: item.date_created,
+              service_name: item.service_name,
+              date_start: item.date_start,
+              date_end: item.date_end,
+              fromLocation: item.fromLocation,
+              toLocation: item.toLocation,
+              vehicle_name: item.vehicle_name,
+              driver_name: item.driver_name,
+              totalOrder: item.totalOrder,
+              status: item.status,
+              distance: item.distance,
+              duration: item.duration,
+              payment_status: item.payment_status,
+              customer_name: arr_customer_name[index],
+            };
+
+            return ob;
+          });
+
+          // console.log(data_get);
+          setIsActive(false);
+          setDataOrder(data_get_new);
+          // setShowTable(true);
         }
-      });
+      } else {
+        setIsActive(true);
+        setShowTable(true);
 
-      setIsActive(false);
+        setFilterCheck(true);
 
-      setDataOrder(arr_result);
+        const arr_result = [];
+        dataOrder.forEach((item, index) => {
+          if (isDateInRange(item.date_start, startRange, endRange)) {
+            arr_result.push(item);
+          }
+        });
+
+        setIsActive(false);
+
+        setDataOrder(arr_result);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
