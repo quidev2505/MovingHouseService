@@ -34,9 +34,16 @@ function HeaderAdmin() {
     (state) => state.admin.login?.currentAdmin
   );
 
-  //Gắn access Token vào request header
-  axios.defaults.headers = {
-    token: `Bearer ${check_admin_login.accessToken}`,
+  //Gắn access Token vào request header gắn 1 cái không cần gắn riêng nhưng ảnh hưởng đến các lời gọi API phía dưới
+  // axios.defaults.headers = {
+  //   token: `Bearer ${check_admin_login.accessToken}`,
+  // };
+
+  //Token attach request header
+  const ob_token_header = {
+    headers: {
+      token: `Bearer ${check_admin_login.accessToken}`,
+    },
   };
 
   const items = [
@@ -82,7 +89,7 @@ function HeaderAdmin() {
   const deleteNotify = async (id_input) => {
     try {
       await axios
-        .delete(`/v1/notification/deleteNotify/${id_input}`)
+        .delete(`/v1/notification/deleteNotify/${id_input}`, ob_token_header)
         .then((data) => {
           Toast.fire({
             icon: "success",
@@ -104,7 +111,8 @@ function HeaderAdmin() {
   const call_notification = async () => {
     try {
       const data_call_api = await axios.get(
-        `/v1/notification/showNotification`
+        `/v1/notification/showNotification`,
+        ob_token_header
       );
 
       const data_notify = data_call_api.data;

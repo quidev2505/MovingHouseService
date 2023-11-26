@@ -70,10 +70,10 @@ const orderSchema = new mongoose.Schema({
     // 5. Đã Hoàn thành
     // 6. Đã hủy
     //Nếu đã hủy đơn hàng
-    //Chữ kí điện thử để xác thực xem có kí tên vào hợp đồng chưa
-    electronic_signature: {
-        type: String,
-        default: null
+    //Xác nhận
+    accept_contract: {
+        type: Boolean,
+        default: false
     },
     reason_cancel: {
         type: String,

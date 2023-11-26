@@ -54,22 +54,26 @@ function AddAdministrator() {
 
   //Tạo tài khoản và mật khẩu ngẫu nhiên
   const get_account_admin = async () => {
-    let data_account = await axios.get(`/v1/admin/show_all_admin`);
-    let index_dataAccount = Number(data_account.data.length + 1);
+    try {
+      let data_account = await axios.get(`/v1/admin/show_all_admin`);
+      let index_dataAccount = Number(data_account.data.length + 1);
 
-    //Tạo ra tên đăng nhập
-    const user_name_create = "QT399900" + index_dataAccount;
+      //Tạo ra tên đăng nhập
+      const user_name_create = "QT399900" + index_dataAccount;
 
-    // Tạo và in mật khẩu
-    const password = generateRandomPassword();
+      // Tạo và in mật khẩu
+      const password = generateRandomPassword();
 
-    if (user_name_create && password) {
-      const ob_create_random_account = {
-        username: user_name_create,
-        password: password,
-      };
+      if (user_name_create && password) {
+        const ob_create_random_account = {
+          username: user_name_create,
+          password: password,
+        };
 
-      setCreateAccountRandom(ob_create_random_account);
+        setCreateAccountRandom(ob_create_random_account);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

@@ -495,12 +495,16 @@ function ReportDeliveryArea({ deliveryAreaPass }) {
 
   const [dataLocation, setDataLocation] = useState([]);
   const api_call_location = async () => {
-    const data_map = await axios.get(
-      "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-    );
+    try {
+      const data_map = await axios.get(
+        "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+      );
 
-    setDataLocation(data_map.data);
-    showLocationData(data_map.data);
+      setDataLocation(data_map.data);
+      showLocationData(data_map.data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const showLocationData = (data) => {

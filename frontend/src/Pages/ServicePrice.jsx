@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleRight } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-
 //Import Component Chatbot
 import ChatBotIcon from "../Components/ChatBotIcon";
 
@@ -109,49 +108,53 @@ function ServicePrice() {
   const [weightType, setWeightType] = useState();
 
   const get_vehicle = async () => {
-    await axios.get(`/v1/vehicle/list_movingFee`).then((data) => {
-      let data_result = data.data;
+    try {
+      await axios.get(`/v1/vehicle/list_movingFee`).then((data) => {
+        let data_result = data.data;
 
-      // eslint-disable-next-line
-      let arrDOMHire = data_result.map((item, index) => {
-        if (item.status) {
-          return (
-            <tr>
-              <td>{item.name}</td>
-              <td>{item.priceFirst10km.toLocaleString()} đ</td>
-              <td>{item.priceFrom11to45.toLocaleString()} đ</td>
-              <td>{item.pricePer45km.toLocaleString()} đ</td>
-              <td>{item.waiting_fee.toLocaleString()} đ</td>
-            </tr>
-          );
-        }
+        // eslint-disable-next-line
+        let arrDOMHire = data_result.map((item, index) => {
+          if (item.status) {
+            return (
+              <tr>
+                <td>{item.name}</td>
+                <td>{item.priceFirst10km.toLocaleString()} đ</td>
+                <td>{item.priceFrom11to45.toLocaleString()} đ</td>
+                <td>{item.pricePer45km.toLocaleString()} đ</td>
+                <td>{item.waiting_fee.toLocaleString()} đ</td>
+              </tr>
+            );
+          }
+        });
+
+        let weightTypeSelect = data_result.map((item, index) => (
+          <option value={item.name}>{item.name}</option>
+        ));
+
+        setWeightType(weightTypeSelect);
+
+        setDataHire(arrDOMHire);
+
+        // eslint-disable-next-line
+        let arrDOMLoading = data_result.map((item, index) => {
+          if (item.status) {
+            return (
+              <tr>
+                <td>{item.name}</td>
+                <td>{item.TwowayFloor_loadingFee.toLocaleString()} đ</td>
+                <td>{item.OnewayFloor_loadingFee.toLocaleString()} đ</td>
+                <td>{item.Twoway_loadingFee.toLocaleString()} đ</td>
+                <td>{item.Oneway_loadingFee.toLocaleString()} đ</td>
+              </tr>
+            );
+          }
+        });
+
+        setDataLoading(arrDOMLoading);
       });
-
-      let weightTypeSelect = data_result.map((item, index) => (
-        <option value={item.name}>{item.name}</option>
-      ));
-
-      setWeightType(weightTypeSelect);
-
-      setDataHire(arrDOMHire);
-
-      // eslint-disable-next-line
-      let arrDOMLoading = data_result.map((item, index) => {
-        if (item.status) {
-          return (
-            <tr>
-              <td>{item.name}</td>
-              <td>{item.TwowayFloor_loadingFee.toLocaleString()} đ</td>
-              <td>{item.OnewayFloor_loadingFee.toLocaleString()} đ</td>
-              <td>{item.Twoway_loadingFee.toLocaleString()} đ</td>
-              <td>{item.Oneway_loadingFee.toLocaleString()} đ</td>
-            </tr>
-          );
-        }
-      });
-
-      setDataLoading(arrDOMLoading);
-    });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -166,7 +169,7 @@ function ServicePrice() {
       {/* Công cụ tra cứu giá cước thuê xe tải - Start Service Search Price Hire Lorry*/}
       <LoadingOverlayComponent status={isActive}>
         <div className="tool_search_price_hireLorry">
-          <ChatBotIcon/>
+          <ChatBotIcon />
           <div
             className="imgService container d-flex"
             style={{ alignItems: "center", justifyContent: "center" }}
@@ -310,8 +313,10 @@ function ServicePrice() {
                 <h2>Kết quả:</h2>
                 <p>
                   Giá cước ước tính cho xe{" "}
-                  <span style={{ color: "#e16c270", fontWeight:"bold" }}>{selectVehicle}</span> chạy{" "}
-                  {distance} km là{" "}
+                  <span style={{ color: "#e16c270", fontWeight: "bold" }}>
+                    {selectVehicle}
+                  </span>{" "}
+                  chạy {distance} km là{" "}
                   <span className="fw-bold"> {total.toLocaleString()} đ</span>
                 </p>
               </div>

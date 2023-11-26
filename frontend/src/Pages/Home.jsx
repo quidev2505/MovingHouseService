@@ -248,77 +248,81 @@ const Home = () => {
 
   //Lấy đánh giá khách hàng
   const get_rating_service = async () => {
-    let data_rating_service = await axios.get(
-      "/v1/ratingService/get_all_rating"
-    );
-    //Phản hồi từ phía khách hàng
-    const DOM_result = data_rating_service.data.map((item, index) => {
-      return (
-        <>
-          <div>
-            <div style={contentStyle}>
-              <div
-                className="d-flex"
-                style={{
-                  flexDirection: "column",
-                  marginTop: "-150px",
-                  paddingTop: "170px",
-                }}
-              >
-                <p
+    try {
+      let data_rating_service = await axios.get(
+        "/v1/ratingService/get_all_rating"
+      );
+      //Phản hồi từ phía khách hàng
+      const DOM_result = data_rating_service.data.map((item, index) => {
+        return (
+          <>
+            <div>
+              <div style={contentStyle}>
+                <div
+                  className="d-flex"
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    flexDirection: "column",
+                    marginTop: "-150px",
+                    paddingTop: "170px",
                   }}
                 >
-                  <img
-                    src={item.avatar}
-                    alt="anh_dai_dien"
+                  <p
                     style={{
-                      borderRadius: "50%",
-                      width: "60px",
-                      height: "60px",
-                      border: "2px solid white",
-                      marginBottom: "50px",
-                      objectFit: "cover",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
-                  />
-                </p>
+                  >
+                    <img
+                      src={item.avatar}
+                      alt="anh_dai_dien"
+                      style={{
+                        borderRadius: "50%",
+                        width: "60px",
+                        height: "60px",
+                        border: "2px solid white",
+                        marginBottom: "50px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </p>
 
-                <p>Dịch vụ: {item.service_name}</p>
-                <p>
-                  Đánh giá: <Rate disabled defaultValue={item.star} />
-                </p>
+                  <p>Dịch vụ: {item.service_name}</p>
+                  <p>
+                    Đánh giá: <Rate disabled defaultValue={item.star} />
+                  </p>
 
-                <p
-                  style={{
-                    width: "60%",
-                    margin: "0 auto",
-                    fontSize: "20px",
-                  }}
-                >
-                  {'"' + item.comment + '"'}
-                </p>
-                <p
-                  style={{
-                    marginTop: "30px",
-                    fontWeight: "bold",
-                    color: "orange",
-                  }}
-                >
-                  {item.customer_name}
-                </p>
+                  <p
+                    style={{
+                      width: "60%",
+                      margin: "0 auto",
+                      fontSize: "20px",
+                    }}
+                  >
+                    {'"' + item.comment + '"'}
+                  </p>
+                  <p
+                    style={{
+                      marginTop: "30px",
+                      fontWeight: "bold",
+                      color: "orange",
+                    }}
+                  >
+                    {item.customer_name}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      );
-    });
+          </>
+        );
+      });
 
-    console.log(DOM_result);
+      console.log(DOM_result);
 
-    setResponseCustomer(DOM_result);
+      setResponseCustomer(DOM_result);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {

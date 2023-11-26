@@ -652,47 +652,51 @@ function Administrator() {
 
   //Hàm thực hiện thay đổi bộ phận quản trị viên
   const changeDepartmentAccess = async (id) => {
-    //Cập nhật trong admin Account
-    let username_admin = id.username;
-    const id_admin_account = await axios.get(
-      `/v1/admin/get_admin_account_with_username/${username_admin}`
-    );
+    try {
+      //Cập nhật trong admin Account
+      let username_admin = id.username;
+      const id_admin_account = await axios.get(
+        `/v1/admin/get_admin_account_with_username/${username_admin}`
+      );
 
-    if (id_admin_account) {
-      await axios
-        .patch(
-          `/v1/admin/updateonefield_admin_account/${id_admin_account.data._id}`,
-          {
-            department: department.current,
-          }
-        )
-        .then(async (data) => {
-          //Cập nhật trong Admin
-          await axios
-            .patch(`/v1/admin/updateonefield_admin/${id.id}`, {
+      if (id_admin_account) {
+        await axios
+          .patch(
+            `/v1/admin/updateonefield_admin_account/${id_admin_account.data._id}`,
+            {
               department: department.current,
-            })
-            .then((data) => {
-              Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Thay đổi bộ phận quản trị viên thành công !",
-                showConfirmButton: false,
-                timer: 1200,
+            }
+          )
+          .then(async (data) => {
+            //Cập nhật trong Admin
+            await axios
+              .patch(`/v1/admin/updateonefield_admin/${id.id}`, {
+                department: department.current,
+              })
+              .then((data) => {
+                Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: "Thay đổi bộ phận quản trị viên thành công !",
+                  showConfirmButton: false,
+                  timer: 1200,
+                });
+                get_admin();
+                Modal.destroyAll();
+              })
+              .catch((e) => {
+                Swal.fire({
+                  position: "center",
+                  icon: "warning",
+                  title: "Thay đổi bộ phận quản trị viên thất bại !",
+                  showConfirmButton: false,
+                  timer: 1200,
+                });
               });
-              get_admin();
-              Modal.destroyAll();
-            })
-            .catch((e) => {
-              Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "Thay đổi bộ phận quản trị viên thất bại !",
-                showConfirmButton: false,
-                timer: 1200,
-              });
-            });
-        });
+          });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

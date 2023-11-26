@@ -15,23 +15,7 @@ function ContractDelivery({
   checkModal,
   setCheckModal,
 }) {
-  let sigPad = useRef({});
-
-  useEffect(() => {
-    var canvas = document.getElementsByTagName("canvas")[0];
-    canvas.width = 380;
-    canvas.height = 150;
-
-    //Kiểm tra đã có chữ ký chưa
-    sigPad.current.fromDataURL(orderData.electronic_signature);
-  }, []);
-
-  function clearSign() {
-    sigPad.current.clear();
-  }
-
   async function finishSign() {
-    const data_update_signal = sigPad.current.toDataURL();
     Swal.fire({
       title: "Bạn đã đọc xong hợp đồng và đồng ý với điều khoản hợp đồng ?",
       showDenyButton: true,
@@ -42,13 +26,13 @@ function ContractDelivery({
       if (result.isConfirmed) {
         axios
           .patch(`/v1/order/updateonefield_order/${orderData.order_id}`, {
-            electronic_signature: data_update_signal,
+            accept_contract: true,
           })
           .then((data) => {
             Swal.fire({
               position: "center",
               icon: "success",
-              title: "Cập nhật chữ ký điện tử thành công",
+              title: "Xác nhận hợp đồng vận chuyển thành công !",
               text: "Hãy chờ bộ phận quản trị duyệt hợp đồng của bạn !",
               showConfirmButton: true,
               timer: 3000,
@@ -59,7 +43,7 @@ function ContractDelivery({
             Swal.fire({
               position: "center",
               icon: "warning",
-              title: "Cập nhật chữ ký điện tử thất bại",
+              title: "Xác nhận hợp đồng vận chuyển thất bại !",
               text: "Cần cập nhật lại hợp đồng do có lỗi !",
               showConfirmButton: false,
               timer: 1000,
@@ -770,15 +754,13 @@ function ContractDelivery({
                       <span style={{ fontSize: "12pt" }}>
                         (Ký, ghi rõ họ tên)
                       </span>
-                      <p style={{ fontSize: "12pt", marginLeft: "15px" }}>
-                        <img
-                          src={orderData.electronic_signature}
-                          width="200"
-                          height="80"
-                          style={{ objectFit: "cover" }}
-                        ></img>
-                      </p>
-                      <p style={{ fontSize: "12pt", marginLeft: "50px" }}>
+                      <p
+                        style={{
+                          fontSize: "12pt",
+                          height: "30px",
+                        }}
+                      ></p>
+                      <p style={{ fontSize: "12pt" }}>
                         {orderData.customer_full_name.toUpperCase()}
                       </p>
                     </em>
@@ -794,17 +776,13 @@ function ContractDelivery({
                       <span style={{ fontSize: "12pt" }}>
                         (Ký, ghi rõ họ tên)
                       </span>
-                      <p style={{ fontSize: "12pt", marginLeft: "15px" }}>
-                        <img
-                          src="./img/signature.png"
-                          width="200"
-                          height="80"
-                          style={{ objectFit: "cover" }}
-                        ></img>
-                      </p>
-                      <p style={{ fontSize: "12pt", marginLeft: "50px" }}>
-                        HUỲNH THỊ TÂN
-                      </p>
+                      <p
+                        style={{
+                          fontSize: "12pt",
+                          height: "30px",
+                        }}
+                      ></p>
+                      <p style={{ fontSize: "12pt" }}>HUỲNH THỊ TÂN</p>
                     </em>
                   </p>
                 </td>
@@ -1532,14 +1510,13 @@ function ContractDelivery({
                       <span style={{ fontSize: "12pt" }}>
                         (Ký, ghi rõ họ tên)
                       </span>
-                      <p style={{ fontSize: "12pt", marginLeft: "15px" }}>
-                        <img
-                          src={orderData.electronic_signature}
-                          width="200"
-                          height="80"
-                          style={{ objectFit: "cover" }}
-                        ></img>
-                      </p>
+                      <p
+                        style={{
+                          fontSize: "12pt",
+                          marginLeft: "15px",
+                          height: "30px",
+                        }}
+                      ></p>
                       <p style={{ fontSize: "12pt" }}>
                         {orderData.customer_full_name.toUpperCase()}
                       </p>
@@ -1556,14 +1533,13 @@ function ContractDelivery({
                       <span style={{ fontSize: "12pt" }}>
                         (Ký, ghi rõ họ tên)
                       </span>
-                      <p style={{ fontSize: "12pt", marginLeft: "15px" }}>
-                        <img
-                          src="./img/signature.png"
-                          width="200"
-                          height="80"
-                          style={{ objectFit: "cover" }}
-                        ></img>
-                      </p>
+                      <p
+                        style={{
+                          fontSize: "12pt",
+                          marginLeft: "15px",
+                          height: "30px",
+                        }}
+                      ></p>
                       <p style={{ fontSize: "12pt" }}>HUỲNH THỊ TÂN</p>
                     </em>
                   </p>
@@ -1578,7 +1554,7 @@ function ContractDelivery({
             border: "1px solid orange",
             borderRadius: "10px",
             width: "400px",
-            height: "400px",
+            height: "fit-content",
             padding: "10px",
             marginLeft: "10px",
           }}
@@ -1603,50 +1579,43 @@ function ContractDelivery({
             <span>Trạng thái hợp đồng:&nbsp;</span>
             <span
               style={{
-                color: orderData.electronic_signature == null ? "red" : "green",
+                color: orderData.accept_contract == false ? "red" : "green",
                 fontWeight: "bold",
               }}
             >
-              {orderData.electronic_signature == null ? "Chưa ký" : "Đã ký"}
+              {orderData.accept_contract == false
+                ? "Chưa chấp thuận"
+                : "Đã chấp thuận"}
             </span>
           </div>
-          {/* Lưu ý */}
-          <div>
-            <p style={{ fontStyle: "italic", fontWeight: "bold" }}>
-              Đọc kỹ nội dung bên trong hợp đồng và ký tên vào bên dưới <br />
-              (Xác nhận hợp đồng với chữ ký điện tử){" "}
-            </p>
-          </div>
 
-          <div
-            style={{
-              border: "2px solid #ccc",
-              borderRadius: "10px",
-              opacity: orderData.electronic_signature != null ? "0.6" : "1",
-            }}
-          >
-            <SignaturePad ref={sigPad} penColor="black" />
-          </div>
+          {orderData.accept_contract == false ? (
+            <>
+              {/* Lưu ý */}
+              <div>
+                <p style={{ fontStyle: "italic", fontWeight: "bold" }}>
+                  Đọc kỹ nội dung bên trong hợp đồng và bấm nút chấp thuận ở bên
+                  dưới nếu đã đồng ý với điều khoản trong hợp đồng ! <br />{" "}
+                </p>
+              </div>
 
-          {/* Nút nhấn */}
-          <div
-            style={{
-              display:
-                orderData.electronic_signature != null ? "none" : "block",
-              marginTop: "10px",
-            }}
-          >
-            <button
-              className="btn btn-warning text-white"
-              onClick={clearSign}
-              style={{ marginRight: "20px" }}
-            >
-              Xóa
-            </button>
-            <button className="btn btn-success text-white" onClick={finishSign}>
-              Xác nhận
-            </button>
-          </div>
+              {/* Nút nhấn */}
+              <div
+                style={{
+                  marginTop: "10px",
+                }}
+              >
+                <button
+                  className="btn btn-success text-white"
+                  onClick={finishSign}
+                >
+                  Chấp thuận
+                </button>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </>

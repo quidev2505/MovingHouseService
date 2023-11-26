@@ -548,7 +548,7 @@ function OrderAdmin() {
                 totalOrder: item.totalOrder,
                 customer_id: item.customer_id,
                 customer_name: arr_customer_name[arr_index[index]],
-                electronic_signature: item.electronic_signature,
+                accept_contract: item.accept_contract,
               };
               data_order.push(ob_order);
             });
@@ -1625,9 +1625,6 @@ function OrderAdmin() {
       }, 1000);
     }
   }, [search, searchAllOrder, params]);
-
-
-
 
   //Tìm tất cả đơn hàng
   const search_all_order = async () => {

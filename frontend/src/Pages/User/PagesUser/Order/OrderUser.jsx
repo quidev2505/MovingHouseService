@@ -132,7 +132,7 @@ function OrderUser() {
                 vehicle_name: item.vehicle_name,
                 totalOrder: item.totalOrder,
                 reason_cancel: item.reason_cancel,
-                electronic_signature: item.electronic_signature,
+                accept_contract: item.accept_contract,
               };
 
               data_order.push(ob_order);

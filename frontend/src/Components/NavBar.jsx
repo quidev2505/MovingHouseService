@@ -26,10 +26,17 @@ import { Toast } from "./ToastColor";
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
 
-  //Gắn access Token vào request header
-  axios.defaults.headers = {
-    token: `Bearer ${user.accessToken}`,
+  //Token attach request header
+  const ob_token_header = {
+    headers: {
+      token: `Bearer ${user?.accessToken}`,
+    },
   };
+
+  // //Gắn access Token vào request header
+  // axios.defaults.headers = {
+  //   token: `Bearer ${user?.accessToken}`,
+  // };
 
   const dispatch = useDispatch();
   // const id = user?._id;
@@ -53,7 +60,7 @@ const NavBar = () => {
   const deleteNotify = async (id_input) => {
     try {
       await axios
-        .delete(`/v1/notification/deleteNotify/${id_input}`)
+        .delete(`/v1/notification/deleteNotify/${id_input}`, ob_token_header)
         .then((data) => {
           Toast.fire({
             icon: "success",
@@ -75,7 +82,8 @@ const NavBar = () => {
   const call_notification = async (idCustomer) => {
     try {
       const data_call_api = await axios.get(
-        `/v1/notification/showNotificationWithID/${idCustomer}`
+        `/v1/notification/showNotificationWithID/${idCustomer}`,
+        ob_token_header
       );
 
       // console.log(data_call_api);
@@ -138,13 +146,23 @@ const NavBar = () => {
                 </p>
                 <div
                   className="d-flex"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                  }}
                 >
-                  <p style={{ color: "#ccc", textAlign: "left" }}>
+                  <p
+                    style={{
+                      color: "#ccc",
+                      textAlign: "left",
+                    }}
+                  >
                     {moment(item.createdAt).fromNow()}
                   </p>
                   <CloseCircleFilled
-                    style={{ fontSize: "17px", zIndex: "99999" }}
+                    style={{
+                      fontSize: "17px",
+                      zIndex: "99999",
+                    }}
                     onClick={() => {
                       document.querySelector(".notify").style.display = "none";
                       deleteNotify(item._id);
@@ -295,7 +313,10 @@ const NavBar = () => {
                   {numberNotify ? (
                     <div
                       className="col"
-                      style={{ marginTop: "5px", marginLeft: "-5px" }}
+                      style={{
+                        marginTop: "5px",
+                        marginLeft: "-5px",
+                      }}
                     >
                       <Badge count={numberNotify}>
                         <BellFilled
@@ -377,7 +398,10 @@ const NavBar = () => {
                     {/* Đăng xuất */}
                     <div
                       className="col btn_logout"
-                      style={{ color: "red", fontSize: "20px" }}
+                      style={{
+                        color: "red",
+                        fontSize: "20px",
+                      }}
                       onClick={() => handleLogout()}
                     >
                       <FiLogOut></FiLogOut>
