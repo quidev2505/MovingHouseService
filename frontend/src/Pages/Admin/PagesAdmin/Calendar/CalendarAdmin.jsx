@@ -256,6 +256,8 @@ function CalendarAdmin() {
       });
 
       //Cho chạy vòng lặp lấy lat và lon và kèm hình ảnh và tên tài xế
+      console.log(arrPosition)
+
       const arr_position_for_map = await Promise.all(
         arrPosition.map(async (item, index) => {
           let data_arr = await axios.get(
