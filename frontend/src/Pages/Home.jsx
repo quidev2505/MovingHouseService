@@ -230,7 +230,7 @@ const Home = () => {
                       }}
                     >
                       <p>Trọng lượng tối đa: {item.capacity}</p>
-                      <p>Kích cỡ hàng hóa tối đa: {item.cago_size}</p>
+                      <p>Kích thước thùng xe: {item.cago_size}</p>
                       <p>Phù hợp cho: {item.suitable_for}</p>
                     </div>
                   </div>

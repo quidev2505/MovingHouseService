@@ -22,6 +22,7 @@ const vehicleSchema = new mongoose.Schema({
         required: true,
         default: true
     },
+    //Kích thước thùng xe
     cago_size:{
         type:String,
         required: true

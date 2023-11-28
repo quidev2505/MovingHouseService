@@ -207,7 +207,7 @@ function VehicleAdmin() {
       key: "capacity",
     },
     {
-      title: "Kích cỡ hàng hóa tối đa",
+      title: "Kích thước thùng xe",
       dataIndex: "cago_size",
       key: "cago_size",
     },

@@ -3,23 +3,23 @@ const mongoose = require('mongoose')
 const adminAccountSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true
+        required: true//
     },
     password: {
         type: String,
-        required: true
+        required: true//
     },
     status_account: {
         type: Boolean,
-        default: true
+        default: true//
     },//Bị cấm, hoạt động
     department: {
         type: String,
-        default: "Nhân sự"
+        default: "Nhân sự"//
     },
     avatar: {
         type: String,
-        required:true
+        required:true//
     },
     otp_code: {
         type: String,

@@ -315,7 +315,7 @@ function AddVehicle() {
                             className="label-color"
                             style={{ marginBottom: "5px" }}
                           >
-                            Kích cỡ hàng hóa tối đa
+                            Kích thước thùng xe
                           </label>
                           <div className="form-outline mb-3 form_input_handle">
                             <input

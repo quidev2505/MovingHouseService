@@ -127,7 +127,7 @@ function Step3({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
             <p>Thương hiệu: {objectVehicle.brand}</p>
             <div style={{ fontSize: "12px", fontWeight: "400" }}>
               <p>
-                <span>Kích cỡ hàng hóa tối đa: {objectVehicle.cago_size}</span>|{" "}
+                <span>Kích thước thùng xe: {objectVehicle.cago_size}</span>|{" "}
                 <span>Trọng lượng tối đa: {objectVehicle.capacity}</span>
               </p>
               <p className="fw-bold">
@@ -171,7 +171,7 @@ function Step3({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
           <p>Thương hiệu: {objectVehicle.brand}</p>
           <div style={{ fontSize: "12px", fontWeight: "400" }}>
             <p>
-              <span>Kích cỡ hàng hóa tối đa: {objectVehicle.cago_size}</span>|{" "}
+              <span>Kích thước thùng xe: {objectVehicle.cago_size}</span>|{" "}
               <span>Trọng lượng tối đa: {objectVehicle.capacity}</span>
             </p>
             <p className="fw-bold">Phù hợp cho: {objectVehicle.suitable_for}</p>
