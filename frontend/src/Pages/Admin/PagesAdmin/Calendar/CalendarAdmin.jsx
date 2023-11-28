@@ -256,23 +256,27 @@ function CalendarAdmin() {
       });
 
       //Cho chạy vòng lặp lấy lat và lon và kèm hình ảnh và tên tài xế
-      console.log(arrPosition)
+      console.log(arrPosition);
 
       const arr_position_for_map = await Promise.all(
         arrPosition.map(async (item, index) => {
           let data_arr = await axios.get(
-            `https://geocode.maps.co/search?q=${item}&format=json`
+            `https://rsapi.goong.io/geocode?address=${item}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
           );
-          const data_map_arr = data_arr.data[0];
+          const data_map_arr = data_arr.data.results[0];
+          console.log(data_map_arr)
           const ob = {
-            display_name: data_map_arr.display_name,
-            lat: data_map_arr.lat,
-            lon: data_map_arr.lon,
+            display_name: data_map_arr.formatted_address,
+            lat: data_map_arr.geometry.location.lat,
+            lon: data_map_arr.geometry.location.lng,
           };
 
           return ob;
         })
       );
+
+      console.log(arr_position_for_map)
+
 
       //Kết hợp 2 mảng lại với nhau
       const arrResult = [];

@@ -144,13 +144,23 @@ const customerController = {
                         email: data_object.email,
                         phonenumber: data_object.phonenumber
                     }
-                    const data_update_user = await User.findByIdAndUpdate({ _id: data_object.id_user }, user_update);
-                    if (data_update_user) {
-                        res.status(202).json(data_update_user);
-                    } else {
-                        res.status(502).json("update Fail");
 
+                    //Kiểm tra xem có tồn tại email trong hệ thống chưa (Trường hợp trùng email với tài khoản khác)
+                    const check_email_exist = await User.findOne({ email: data_object.email });
+                    if (check_email_exist._id != data_object.id_user) {//Đã tồn tại
+                        res.status(502).json("EmailAlready");
+                    } else {
+                        const data_update_user = await User.findByIdAndUpdate({ _id: data_object.id_user }, user_update);
+                        if (data_update_user) {
+                            res.status(202).json(data_update_user);
+                        } else {
+                            res.status(502).json("update Fail");
+
+                        }
                     }
+
+
+
                 }
             }
         } catch (e) {

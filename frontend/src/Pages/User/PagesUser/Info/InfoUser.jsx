@@ -77,13 +77,23 @@ function InfoUser() {
         })
         .catch((e) => {
           console.log(e);
-          Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: "Cập nhật thông tin cá nhân thất bại!",
-            showConfirmButton: false,
-            timer: 1200,
-          });
+          if (e.response.data == "EmailAlready") {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Email đã được đăng ký !",
+              showConfirmButton: false,
+              timer: 1200,
+            });
+          } else {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Cập nhật thông tin cá nhân thất bại!",
+              showConfirmButton: false,
+              timer: 1200,
+            });
+          }
         });
     }
   };
