@@ -61,7 +61,7 @@ function InfoCustomer({ navigation }) {
 
     const createTwoButtonAlert = () => {
         // Native Notify Indie Push Registration Code
-        unregisterIndieDevice(dataPhonenumberExpo, 13517, 'xmmYdFdEmeO1apoZvNDbgd');
+        //unregisterIndieDevice(dataPhonenumberExpo, 13517, 'xmmYdFdEmeO1apoZvNDbgd');
         // End of Native Notify Code
         Alert.alert('Thông báo', 'Bạn muốn đăng xuất khỏi tài khoản ?', [
             {
@@ -77,7 +77,7 @@ function InfoCustomer({ navigation }) {
     const log_out_local = async () => {
         try {
             // Native Notify Indie Push Registration Code
-            unregisterIndieDevice(dataPhonenumberExpo, 13517, 'dgTdxEATT0B2p3KZWHDHVd');
+          	//unregisterIndieDevice(dataPhonenumberExpo, 13517, 'dgTdxEATT0B2p3KZWHDHVd');
             // End of Native Notify Code
             await AsyncStorage.removeItem('already_login_customer')
             navigation.navigate("CustomerLogin")
