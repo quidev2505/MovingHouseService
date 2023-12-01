@@ -958,7 +958,7 @@ function DashBoardAdmin() {
     arr_total_order_service.sort((a, b) => b.star_average - a.star_average);
 
     // Sắp xếp mảng theo giá giảm dần theo lượt đánh giá
-    arr_total_order_service.sort((a, b) => b.rating - a.rating);
+  //  arr_total_order_service.sort((a, b) => b.rating - a.rating);
 
     const arr_final = arr_total_order_service.map((item, index) => {
       item.stt = index + 1;

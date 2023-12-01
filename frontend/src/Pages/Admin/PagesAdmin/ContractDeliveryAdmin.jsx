@@ -16,6 +16,8 @@ function ContractDeliveryAdmin({
   orderDataDetail,
   departmentAdmin,
 }) {
+
+  console.log(orderData)
   //Duyệt hợp đồng
   const duyetHD = async () => {
     Swal.fire({

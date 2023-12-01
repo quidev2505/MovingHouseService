@@ -28,7 +28,7 @@ function Step6() {
 
     setTimeout(() => {
       success_order();
-    }, 15000);
+    }, 5000);
   }, []);
 
   return (
