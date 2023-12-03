@@ -314,6 +314,8 @@ function CalendarAdmin() {
     const positionFirstData = firstData.position;
 
     goongjs.accessToken = "e463pcPnhB8NBBERWcmjUyA3C2aNrE3PPb6uONZu";
+
+
     var map = new goongjs.Map({
       container: "map",
       style: "https://tiles.goong.io/assets/goong_map_web.json",

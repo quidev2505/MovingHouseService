@@ -2099,7 +2099,7 @@ function DashBoardAdmin() {
                     marginBottom: "20px",
                   }}
                 >
-                  BẢNG XẾP HẠNG KHÁCH HÀNG TRỌNG ĐIỂM
+                  BẢNG XẾP HẠNG KHÁCH HÀNG TIỀM NĂNG
                 </h5>
 
                 <div
