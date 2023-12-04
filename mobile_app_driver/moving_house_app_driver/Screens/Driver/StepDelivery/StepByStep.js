@@ -12,13 +12,48 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from "react-native";
 
 
+import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
+
 
 function StepByStep({ route, navigation }) {
-    const [active, setActive] = useState(0);
+    const [active, setActive] = useState();
     const [titleHome, setTitleHome] = useState("")
 
     const [fromLocation, setFromLocation] = useState({})
     const [toLocation, setToLocation] = useState({})
+
+
+
+    //Kiểm tra xem đang ở trạng thái giao hàng nào
+    useEffect(() => {
+        // <ComeToGetOrder title="Đến điểm lấy hàng" />,
+        //     <BocHangHoa title="Hoàn thành bốc hàng hóa" />,
+        //     <MovingOrder title="Vận chuyển hàng hóa" />,
+        //     <ComeToReceiveOrder title="Đến điểm nhận hàng" />,
+        //     <VerifyStatusDelivery title="Xác nhận trạng thái giao hàng" />,
+        //     <PaymentOrder title="Thanh toán hóa đơn" />,
+        //     <CompleteDelivery title="Đã hoàn thành" />,
+        //0,1,2,3,4,5
+
+        //Kiểm tra xem đã lưu chưa
+        // Lưu trạng thái giai đoạn màn hình vào LocalStorage
+        storeStep(active)
+        // console.log(active)
+
+    }, [active])
+
+    //Lưu trạng thái màn hình vận chuyển vào local
+    const storeStep = async (active) => {
+        try {
+            console.log('luu', active)
+            await AsyncStorage.setItem('stepCurrent', JSON.stringify(active));
+        } catch (e) {
+            // saving error
+            console.log(e)
+        }
+    };
+
+
 
 
     const get_location = async (from_location, to_location, fromLocationDetail, toLocationDetail) => {
@@ -755,10 +790,31 @@ function StepByStep({ route, navigation }) {
     ];
 
 
+    //Lấy trạng thái ra
+    const getStep = async () => {
+        try {
+            const step_get = JSON.parse(await AsyncStorage.getItem('stepCurrent'))
+            console.log('ne', step_get)
+            if (step_get != null) {
+
+                setActive(step_get)
+            } else {
+                setActive(0)
+            }
+
+        } catch (e) {
+            // saving error
+            console.log(e)
+        }
+    };
+
 
     useEffect(() => {
         const { data_user, data_order, data_driver } = route.params;
         get_location(data_order.from_location, data_order.to_location, data_order.fromLocation_detail, data_order.toLocation_detail)
+        getStep();
+
+
         setDataOrder(data_order)
         setDataUser(data_user)
         setDataDriver(data_driver)

@@ -5,6 +5,11 @@ import { Button } from '@rneui/themed';
 
 import call from 'react-native-phone-call'
 
+
+
+import AsyncStorage from '@react-native-async-storage/async-storage'; //Lưu vào local
+
+
 function ContactCustomer({ route, navigation }) {
     const [dataUser, setDataUser] = useState({})
     const [dataOrderDetail, setDataOrderDetail] = useState({});
@@ -34,13 +39,31 @@ function ContactCustomer({ route, navigation }) {
         }
     }
 
+    //Lấy trạng thái ra
+    const getStep = async () => {
+        try {
+            const step_get = JSON.parse(await AsyncStorage.getItem('stepCurrent'))
+            console.log(step_get)
+            if (step_get != null) {
+
+                setNextStep(true)
+            }
+        } catch (e) {
+            // saving error
+            console.log(e)
+        }
+    };
+
+
     useEffect(() => {
         /* 2. Get the param */
         const { data_user, data_order } = route.params;
-  
-        
+
+        getStep();
+
         setDataUser(data_user)
         setDataOrderDetail(data_order)
+
     }, [])
 
     //Bước kế tiếp
@@ -96,7 +119,7 @@ function ContactCustomer({ route, navigation }) {
                 <View style={{ marginTop: 290 }}>
                     <View style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 90, backgroundColor: "white" }}>
                         <TouchableOpacity style={styles.button} onPress={() => {
-                            
+
                             setLoading(true)
                             setTimeout(() => {
                                 setNextStep(true)
