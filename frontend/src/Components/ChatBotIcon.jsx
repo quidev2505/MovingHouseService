@@ -6,7 +6,7 @@ import { RobotOutlined, CloseOutlined } from "@ant-design/icons";
 
 import { useNavigate } from "react-router-dom";
 
-import { Toast } from "../Components/ToastColor"
+import { Toast } from "../Components/ToastColor";
 
 import axios from "axios";
 
@@ -248,7 +248,8 @@ const ChatBotIcon = () => {
     {
       id: "show_result",
       message: "Bảng thông tin giá thuê xe vận chuyển là: ",
-      trigger: "review",
+      end: true
+      // trigger: "review",
     },
     {
       id: "review",
@@ -481,89 +482,106 @@ const ChatBotIcon = () => {
               id: "review",
               component: (
                 <>
-                  <table
-                    style={{
-                      border: "1px solid #ccc",
-                      width: "100%",
-                      borderRadius: "5px",
-                      padding: "5px",
-                    }}
-                  >
-                    <tbody>
-                      <tr style={{ borderBottom: "1px solid #ccc" }}>
-                        <td>Tên khách hàng</td>
-                        <td style={{ borderLeft: "1px solid #ccc" }}>
-                          {JSON.parse(
-                            localStorage.getItem("total_price_chatbot")
-                          )
-                            ? JSON.parse(
-                                localStorage.getItem("total_price_chatbot")
-                              ).customer_name
-                            : "Không xác định"}
-                        </td>
-                      </tr>
-                      <tr style={{ borderBottom: "1px solid #ccc" }}>
-                        <td>Từ địa điểm</td>
-                        <td style={{ borderLeft: "1px solid #ccc" }}>
-                          {JSON.parse(
-                            localStorage.getItem("total_price_chatbot")
-                          )
-                            ? JSON.parse(
-                                localStorage.getItem("total_price_chatbot")
-                              ).fromLocation
-                            : "Không xác định"}
-                        </td>
-                      </tr>
-                      <tr style={{ borderBottom: "1px solid #ccc" }}>
-                        <td>Đến địa điểm</td>
-                        <td style={{ borderLeft: "1px solid #ccc" }}>
-                          {JSON.parse(
-                            localStorage.getItem("total_price_chatbot")
-                          )
-                            ? JSON.parse(
-                                localStorage.getItem("total_price_chatbot")
-                              ).toLocation
-                            : "Không xác định"}
-                        </td>
-                      </tr>
-                      <tr style={{ borderBottom: "1px solid #ccc" }}>
-                        <td>Loại xe vận chuyển</td>
-                        <td style={{ borderLeft: "1px solid #ccc" }}>
-                          {JSON.parse(
-                            localStorage.getItem("total_price_chatbot")
-                          )
-                            ? JSON.parse(
-                                localStorage.getItem("total_price_chatbot")
-                              ).name_vehicle
-                            : "Không xác định"}
-                        </td>
-                      </tr>
-                      <tr style={{ borderBottom: "1px solid #ccc" }}>
-                        <td>Khoảng cách</td>
-                        <td style={{ borderLeft: "1px solid #ccc" }}>
-                          {JSON.parse(
-                            localStorage.getItem("total_price_chatbot")
-                          )
-                            ? JSON.parse(
-                                localStorage.getItem("total_price_chatbot")
-                              ).distance
-                            : "Không xác định"}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Tổng giá thuê xe</td>
-                        <td style={{ borderLeft: "1px solid #ccc" }}>
-                          {JSON.parse(
-                            localStorage.getItem("total_price_chatbot")
-                          )
-                            ? JSON.parse(
-                                localStorage.getItem("total_price_chatbot")
-                              ).total_price.toLocaleString() + "đ"
-                            : "Không xác định"}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="d-flex" style={{ flexDirection: "column" }}>
+                    <table
+                      style={{
+                        border: "1px solid #ccc",
+                        width: "100%",
+                        borderRadius: "5px",
+                        padding: "5px",
+                      }}
+                    >
+                      <tbody>
+                        <tr style={{ borderBottom: "1px solid #ccc" }}>
+                          <td>Tên khách hàng</td>
+                          <td style={{ borderLeft: "1px solid #ccc" }}>
+                            {JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )
+                              ? JSON.parse(
+                                  localStorage.getItem("total_price_chatbot")
+                                ).customer_name
+                              : "Không xác định"}
+                          </td>
+                        </tr>
+                        <tr style={{ borderBottom: "1px solid #ccc" }}>
+                          <td>Từ địa điểm</td>
+                          <td style={{ borderLeft: "1px solid #ccc" }}>
+                            {JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )
+                              ? JSON.parse(
+                                  localStorage.getItem("total_price_chatbot")
+                                ).fromLocation
+                              : "Không xác định"}
+                          </td>
+                        </tr>
+                        <tr style={{ borderBottom: "1px solid #ccc" }}>
+                          <td>Đến địa điểm</td>
+                          <td style={{ borderLeft: "1px solid #ccc" }}>
+                            {JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )
+                              ? JSON.parse(
+                                  localStorage.getItem("total_price_chatbot")
+                                ).toLocation
+                              : "Không xác định"}
+                          </td>
+                        </tr>
+                        <tr style={{ borderBottom: "1px solid #ccc" }}>
+                          <td>Loại xe vận chuyển</td>
+                          <td style={{ borderLeft: "1px solid #ccc" }}>
+                            {JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )
+                              ? JSON.parse(
+                                  localStorage.getItem("total_price_chatbot")
+                                ).name_vehicle
+                              : "Không xác định"}
+                          </td>
+                        </tr>
+                        <tr style={{ borderBottom: "1px solid #ccc" }}>
+                          <td>Khoảng cách</td>
+                          <td style={{ borderLeft: "1px solid #ccc" }}>
+                            {JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )
+                              ? JSON.parse(
+                                  localStorage.getItem("total_price_chatbot")
+                                ).distance
+                              : "Không xác định"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Tổng giá thuê xe</td>
+                          <td style={{ borderLeft: "1px solid #ccc" }}>
+                            {JSON.parse(
+                              localStorage.getItem("total_price_chatbot")
+                            )
+                              ? JSON.parse(
+                                  localStorage.getItem("total_price_chatbot")
+                                ).total_price.toLocaleString() + "đ"
+                              : "Không xác định"}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <p
+                      style={{
+                        marginTop: "10px",
+                        display: JSON.parse(
+                          localStorage.getItem("total_price_chatbot")
+                        )
+                          ? "none"
+                          : "block",
+                      }}
+                    >
+                      <span className="fw-bold">Lưu ý: </span>
+                      <span style={{ fontStyle: "italic" }}>
+                        Có thể do bạn đã nhập sai địa chỉ !
+                      </span>
+                    </p>
+                  </div>
                 </>
               ),
               end: false,
@@ -578,7 +596,7 @@ const ChatBotIcon = () => {
 
           setStepInput(stepsNew);
           setOpenChatbot(true);
-        }, 2000);
+        }, 2500);
 
         setTimeout(() => {
           const steps = [

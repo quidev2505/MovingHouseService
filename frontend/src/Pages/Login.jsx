@@ -96,6 +96,7 @@ function Login() {
                             {...register("email", {
                               required: true,
                               minLength: 5,
+                              pattern: /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g,
                               // pattern: /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@gmail\.com|@student\.ctu.edu.vn)/g ||
                             })}
                           />
@@ -105,9 +106,9 @@ function Login() {
                           {errors?.email?.type === "minLength" && (
                             <p>Chưa đủ kí tự !</p>
                           )}
-                          {/* {errors?.email?.type === "pattern" && (
+                          {errors?.email?.type === "pattern" && (
                             <p>Email chưa đúng định dạng !</p>
-                          )} */}
+                          )}
                         </div>
                         <div className="input-group mb-3 form-outline mb-4 form_input_handle">
                           <input

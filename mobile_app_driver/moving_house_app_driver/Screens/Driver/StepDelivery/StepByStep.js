@@ -718,17 +718,22 @@ function StepByStep({ route, navigation }) {
                                 console.log(data.data)
                                 console.log('vao roi')
 
+
+
                                 //Gửi Email cho khách hàng khi đã giao xong đơn hàng !
                                 await axios.get(`${api_url}/v1/order/sendEmailToCustomerWithIdOrderDetail/${data_order.order_id}`).then((data) => {
 
                                     Alert.alert('Thông báo', 'Hoàn tất giao nhận đơn hàng !', [
                                         { text: 'Xác nhận', onPress: () => navigation.navigate('ĐƠN HÀNG') },
                                     ]);
+
+
                                 }).catch((e) => {
                                     console.log(e)
                                 })
 
 
+                                await AsyncStorage.removeItem('stepCurrent')
 
                             }).catch((e) => {
                                 console.log(e)

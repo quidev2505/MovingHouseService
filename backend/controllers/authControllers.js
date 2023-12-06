@@ -123,7 +123,7 @@ const authControllers = {
                 })
 
 
-                //Loại bỏ password ra để bảo mật
+                //Loại bỏ password ra để bảo mật (che giấu password).
                 const { password, ...others } = user._doc;
                 res.status(200).json({ ...others, accessToken });
             }

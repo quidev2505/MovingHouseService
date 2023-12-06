@@ -41,6 +41,8 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
   const [dataItem, setDataItem] = useState([]);
 
+  const [countVehicle, setCountVehicle] = useState(1)
+
   const [dataChooseItem, setDataChooseItem] = useState([]);
 
   const [cickUpdate, setClickUpdate] = useState(true);
@@ -288,9 +290,19 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
         console.log(multiple_size);
         console.log(arr_soluong);
+
+        multiple_size.forEach((item, index)=>{
+          if(isNaN(item)){
+            multiple_size[index] = 1000000
+          }
+        })
+
+        console.log(multiple_size)
         const kichthuocxe_m3 = tachSoXe(kichthuocxe);
 
         const result = tinhSoXe(multiple_size, arr_soluong, kichthuocxe_m3);
+        setCountVehicle(result)
+
 
         localStorage.setItem("vehicle_count", result);
       }, 1000);
@@ -308,6 +320,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       tong_the_tich += item * mangsoluong[index];
     });
 
+    console.log(tong_the_tich)
     let thetichm3 = tong_the_tich / 1000000;
 
     console.log(thetichm3);
@@ -1054,7 +1067,11 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
           </span>
           &nbsp;
           <span style={{ fontWeight: "700", fontSize: "18px" }}>
-            Chi tiết hàng hóa
+            Chi tiết hàng hóa <br></br>
+            <span style={{fontSize:"15px"}}>
+            (Ước lượng số xe: {countVehicle} 🚛)
+
+            </span>
           </span>
         </div>
 

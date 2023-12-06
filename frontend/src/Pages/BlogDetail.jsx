@@ -199,7 +199,10 @@ function BlogDetail() {
           );
         }
       });
-      setBlogRelate(data_blog_relate);
+
+      //Xử lý arr
+      const arrFinal = data_blog_relate.filter((item) => item != undefined)
+      setBlogRelate(arrFinal);
     } catch (e) {
       console.log(e);
     }
@@ -438,7 +441,15 @@ function BlogDetail() {
             style={{ marginBottom: "150px", overflowX: "scroll " }}
           >
             <div className="row" style={{ justifyContent: "space-between" }}>
-              {blogRelate.length > 0 ? blogRelate : ''}
+              {blogRelate.length > 0 ? (
+                blogRelate
+              ) : (
+                <Alert
+                  style={{ marginBottom: "20px", fontWeight:"bold", textAlign:"center" }}
+                  message="Không có bài viết liên quan"
+                  type="success"
+                />
+              )}
             </div>
           </div>
         </div>

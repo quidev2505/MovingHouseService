@@ -18,6 +18,8 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
   //Thanh toán trực tuyến
   const [onlineMethod, setOnlineMethod] = useState(true);
 
+  const [checkVNPAY, setCheckVNPAY] = useState(false);
+
   //Phương thức thanh toán
   const [choosemethod, setChooseMethod] = useState("Thanh toán cho tài xế");
 
@@ -107,6 +109,7 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
           showConfirmButton: false,
           timer: 1000,
         });
+        setCheckVNPAY(true);
         setCheckFill(true);
       }
     } catch (e) {
@@ -451,158 +454,174 @@ function Step5({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
             </div>
           </div>
 
-          <h4
-            style={{
-              fontWeight: "700",
-              fontSize: "16px",
-              marginBottom: "20px",
-              marginTop: "30px",
-            }}
-          >
-            Vui lòng chọn phương thức thanh toán
-          </h4>
-
-          <div className="d-flex">
-            <div
-              onClick={() => {
-                setChooseMethod("Thanh toán cho tài xế");
-                setCheckFill(true);
-                setOnlineMethod(true);
-              }}
-              className="col-4 item_vehicle"
-              style={{
-                width: "fit-content",
-                height: "110px",
-                backgroundColor: "#f4f4f4",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "5px",
-                margin: "3px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column",
-                cursor: "pointer",
-                marginRight: "20px",
-              }}
-            >
-              <img
-                alt="anh_dai_dien_vehicle"
-                src="./img/ondelivery.png"
-                style={{ width: "75px", height: "44px", objectFit: "contain" }}
-              />
-              <p
+          {checkVNPAY == false ? (
+            <>
+              <h4
                 style={{
-                  fontSize: "14px",
                   fontWeight: "700",
-                  marginTop: "5px",
-                  color: "#266c26",
+                  fontSize: "16px",
+                  marginBottom: "20px",
+                  marginTop: "30px",
                 }}
               >
-                Thanh toán cho tài xế
-              </p>
-            </div>
+                Vui lòng chọn phương thức thanh toán
+              </h4>
 
-            <div
-              onClick={() => {
-                setChooseMethod("Thanh toán trực tuyến");
-                setCheckFill(false);
-                setOnlineMethod(false);
-              }}
-              className="col-4 item_vehicle"
-              style={{
-                width: "fit-content",
-                height: "110px",
-                backgroundColor: "#f4f4f4",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "5px",
-                margin: "3px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column",
-                cursor: "pointer",
-              }}
-            >
-              <img
-                alt="anh_dai_dien_vehicle"
-                src="./img/vnpay.webp"
-                style={{ width: "75px", height: "44px", objectFit: "contain" }}
-              />
-              <p
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "700",
-                  marginTop: "5px",
-                  color: "#179bd7",
-                }}
-              >
-                Thanh toán trực tuyến
-              </p>
-            </div>
+              <div className="d-flex">
+                <div
+                  onClick={() => {
+                    setChooseMethod("Thanh toán cho tài xế");
+                    setCheckFill(true);
+                    setOnlineMethod(true);
+                  }}
+                  className="col-4 item_vehicle"
+                  style={{
+                    width: "fit-content",
+                    height: "110px",
+                    backgroundColor: "#f4f4f4",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    padding: "5px",
+                    margin: "3px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    cursor: "pointer",
+                    marginRight: "20px",
+                  }}
+                >
+                  <img
+                    alt="anh_dai_dien_vehicle"
+                    src="./img/ondelivery.png"
+                    style={{
+                      width: "75px",
+                      height: "44px",
+                      objectFit: "contain",
+                    }}
+                  />
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "700",
+                      marginTop: "5px",
+                      color: "#266c26",
+                    }}
+                  >
+                    Thanh toán cho tài xế
+                  </p>
+                </div>
 
-            {/* Đây là thanh toán trực tuyến */}
-            <div>
-              <div
-                onClick={() => vnpay()}
-                className="btn_navigate_to col"
-                style={{
-                  display: onlineMethod ? "none" : "flex",
-                  padding: "10px",
-                  backgroundColor: "#fed03f",
-                  borderRadius: "5px",
-                  color: "white",
-                  marginLeft: "100px",
-                  cursor: "pointer",
-                  width: "100px",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                id="online_method_payment"
-              >
-                <img
-                  alt="anh"
-                  src="./img/payment.jpg"
-                  width="100px"
-                  height="100px"
-                  style={{ objectFit: "contain" }}
-                />
+                <div
+                  onClick={() => {
+                    setChooseMethod("Thanh toán trực tuyến");
+                    setCheckFill(false);
+                    setOnlineMethod(false);
+                  }}
+                  className="col-4 item_vehicle"
+                  style={{
+                    width: "fit-content",
+                    height: "110px",
+                    backgroundColor: "#f4f4f4",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    padding: "5px",
+                    margin: "3px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    cursor: "pointer",
+                  }}
+                >
+                  <img
+                    alt="anh_dai_dien_vehicle"
+                    src="./img/vnpay.webp"
+                    style={{
+                      width: "75px",
+                      height: "44px",
+                      objectFit: "contain",
+                    }}
+                  />
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "700",
+                      marginTop: "5px",
+                      color: "#179bd7",
+                    }}
+                  >
+                    Thanh toán trực tuyến
+                  </p>
+                </div>
+
+                {/* Đây là thanh toán trực tuyến */}
+                <div>
+                  <div
+                    onClick={() => vnpay()}
+                    className="btn_navigate_to col"
+                    style={{
+                      display: onlineMethod ? "none" : "flex",
+                      padding: "10px",
+                      backgroundColor: "#fed03f",
+                      borderRadius: "5px",
+                      color: "white",
+                      marginLeft: "100px",
+                      cursor: "pointer",
+                      width: "100px",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    id="online_method_payment"
+                  >
+                    <img
+                      alt="anh"
+                      src="./img/payment.jpg"
+                      width="100px"
+                      height="100px"
+                      style={{ objectFit: "contain" }}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div style={{ marginTop: "20px" }}>
-            {choosemethod === "Thanh toán cho tài xế" ? (
-              <>
-                <h4 style={{ color: "#266c26", fontWeight: "bold" }}>
-                  Thanh toán cho tài xế
-                </h4>
-                <p>
-                  Chỉ cần thanh toán cho tài xế sau khi đã hoàn thành công việc.
-                </p>
-              </>
-            ) : (
-              <>
-                <h4 style={{ color: "#179bd7", fontWeight: "bold" }}>
-                  Thanh toán trực tuyến
-                </h4>
-                <p>
-                  Thanh toán trực tuyến đơn giản với{" "}
-                  <span style={{ color: "#ed2129", fontWeight: "bold" }}>
-                    VNPAY
-                  </span>{" "}
-                  !
-                </p>
-              </>
-            )}
-          </div>
+              <div style={{ marginTop: "20px" }}>
+                {choosemethod === "Thanh toán cho tài xế" ? (
+                  <>
+                    <h4 style={{ color: "#266c26", fontWeight: "bold" }}>
+                      Thanh toán cho tài xế
+                    </h4>
+                    <p>
+                      Chỉ cần thanh toán cho tài xế sau khi đã hoàn thành công
+                      việc.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h4 style={{ color: "#179bd7", fontWeight: "bold" }}>
+                      Thanh toán trực tuyến
+                    </h4>
+                    <p>
+                      Thanh toán trực tuyến đơn giản với{" "}
+                      <span style={{ color: "#ed2129", fontWeight: "bold" }}>
+                        VNPAY
+                      </span>{" "}
+                      !
+                    </p>
+                  </>
+                )}
+              </div>
+            </>
+          ) : (
+            ""
+          )}
 
           <div
             style={{
               border: "1px solid #ea9868",
               borderRadius: "5px",
               padding: "5px",
+              marginTop:"10px"
             }}
           >
             <p className="fw-bold">- Lưu ý:</p>

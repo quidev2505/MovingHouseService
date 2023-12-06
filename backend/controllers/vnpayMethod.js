@@ -16,7 +16,7 @@ const vnpayMethodController = {
 
         let tmnCode = "OFD7D8R7";
         let secretKey = "PSDJHKOXWRGSOBHXPDOYHJUIXFQUJYUT"
-        let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+        let vnpUrl = "https://sandbox.v06160922npayment.vn/paymentv2/vpcpay.html"
         let returnUrl = "http://localhost:3000/user/booking"
         let orderId = moment(date).format('DDHHmmss');
         let amount = req.body.totalOrder;
