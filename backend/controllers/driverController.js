@@ -518,9 +518,13 @@ const driverController = {
                 }
             }
 
+
+
             if (arr_total_distance) {
                 setTimeout(() => {
-                    res.status(201).json(arr_total_distance)
+                    const arr_new = arr_total_distance.sort((a, b) => b.sumDistance - a.sumDistance)
+
+                    res.status(201).json(arr_new)
                 }, 1000)
             } else {
                 res.status(501).json('error')

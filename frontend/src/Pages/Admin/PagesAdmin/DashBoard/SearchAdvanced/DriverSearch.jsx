@@ -335,6 +335,7 @@ function DriverSearch() {
       title: "Ngày sinh",
       dataIndex: "date_of_birth",
       key: "date_of_birth",
+      ...getColumnSearchProps("date_of_birth"),
       render: (date_of_birth) => {
         return (
           <td
@@ -353,6 +354,7 @@ function DriverSearch() {
       title: "CCCD",
       dataIndex: "citizen_id",
       key: "citizen_id",
+      ...getColumnSearchProps("citizen_id"),
       render: (citizen_id) => {
         return (
           <td
@@ -470,6 +472,8 @@ function DriverSearch() {
       title: "Sao trung bình",
       dataIndex: "star_average",
       key: "star_average",
+      ...getColumnSearchProps("star_average"),
+
       render: (star_average) => {
         return (
           <td
@@ -556,6 +560,8 @@ function DriverSearch() {
       title: "Vị trí hiện tại",
       dataIndex: "current_position",
       key: "current_position",
+      ...getColumnSearchProps("current_position"),
+
       render: (current_position) => {
         return (
           <td

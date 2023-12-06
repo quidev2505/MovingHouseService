@@ -41,7 +41,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
 
   const [dataItem, setDataItem] = useState([]);
 
-  const [countVehicle, setCountVehicle] = useState(1)
+  const [countVehicle, setCountVehicle] = useState(1);
 
   const [dataChooseItem, setDataChooseItem] = useState([]);
 
@@ -230,11 +230,22 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
           soluongxe_trave * object_order_local.step3.priceStep3
         );
 
-        object_order_local.step3.vehicle_choose.vehicle_name =
-          object_order_local.step3.vehicle_choose.vehicle_name +
-          " (x" +
-          soluongxe_trave +
-          ")";
+        if (
+          object_order_local.step3.vehicle_choose.vehicle_name.search("x") > 0
+        ) {
+          //Có tên rồi thì thay đổi thành tên mới
+          object_order_local.step3.vehicle_choose.vehicle_name =
+            object_order_local.step3.vehicle_choose.vehicle_name.split("(")[0].trim() +
+            " (x" +
+            soluongxe_trave +
+            ")"
+        } else {
+          object_order_local.step3.vehicle_choose.vehicle_name =
+            object_order_local.step3.vehicle_choose.vehicle_name +
+            " (x" +
+            soluongxe_trave +
+            ")"
+        }
 
         //Tính giá cho xe
         object_order_local.totalOrder =
@@ -291,18 +302,17 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
         console.log(multiple_size);
         console.log(arr_soluong);
 
-        multiple_size.forEach((item, index)=>{
-          if(isNaN(item)){
-            multiple_size[index] = 1000000
+        multiple_size.forEach((item, index) => {
+          if (isNaN(item)) {
+            multiple_size[index] = 1000000;
           }
-        })
+        });
 
-        console.log(multiple_size)
+        console.log(multiple_size);
         const kichthuocxe_m3 = tachSoXe(kichthuocxe);
 
         const result = tinhSoXe(multiple_size, arr_soluong, kichthuocxe_m3);
-        setCountVehicle(result)
-
+        setCountVehicle(result);
 
         localStorage.setItem("vehicle_count", result);
       }, 1000);
@@ -320,7 +330,7 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
       tong_the_tich += item * mangsoluong[index];
     });
 
-    console.log(tong_the_tich)
+    console.log(tong_the_tich);
     let thetichm3 = tong_the_tich / 1000000;
 
     console.log(thetichm3);
@@ -331,7 +341,8 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
     console.log(theTichXeVan);
 
     // Tính số xe cần thiết
-    let soXeCanThiet = Math.ceil(thetichm3 / theTichXeVan);
+    const calculate = thetichm3 / theTichXeVan;
+    let soXeCanThiet = Math.ceil(calculate.toFixed(1)); //Tổng thể tích đồ vật / thể tích thùng xe.
 
     return soXeCanThiet;
   }
@@ -1068,9 +1079,8 @@ function Step4({ check_fill, setCheckFill, totalOrder, setTotalOrder }) {
           &nbsp;
           <span style={{ fontWeight: "700", fontSize: "18px" }}>
             Chi tiết hàng hóa <br></br>
-            <span style={{fontSize:"15px"}}>
-            (Ước lượng số xe: {countVehicle} 🚛)
-
+            <span style={{ fontSize: "15px" }}>
+              (Ước lượng số xe: {countVehicle} 🚛)
             </span>
           </span>
         </div>
